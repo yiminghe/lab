@@ -1,0 +1,256 @@
+﻿/**
+author : yiminghe
+version : v4(20090326)
+Any problem contact hym_sunrise@126.com
+
+**/
+
+
+div.windowContainer {
+    text-align:left;
+    position: absolute;
+    margin:0;
+    padding:0;
+    z-index: 20001;
+    /*ie6 手型保持*/
+    background:transparent url(../images/default/shadow-c.png) repeat scroll 0 0;
+    overflow:hidden;  
+}
+
+.window-header-l{
+	background:transparent url(../images/left-corners.png) no-repeat scroll 0 0;
+	padding-left:6px;
+	position:relative;
+	z-index:1;
+	
+}
+
+.window-header-r{
+	background:transparent url(../images/right-corners.png) no-repeat scroll right 0;
+	padding-right:6px;
+}
+
+.window-header-c {
+	background:transparent url(../images/top-bottom.png) repeat-x scroll 0 0;
+	overflow:hidden;
+	/*zoom:1;*/
+}
+
+
+
+.x-tool {
+	background:transparent url(../images/tool-sprites.gif) no-repeat scroll 0 0;
+	cursor:pointer;
+	float:right;
+	height:15px;
+	margin-left:2px;
+	overflow:hidden;
+	width:15px;
+	outline:0;
+	text-indent:-9999px;
+	display:block;
+}
+
+.x-tool-close {
+	background-position:0 0;
+}
+a.x-tool-close:hover {
+	background-position:-15px 0;
+}
+
+.x-tool-maximize {
+	background-position:0 -30px;
+}
+a.x-tool-maximize:hover {
+	background-position:-15px -30px;
+}
+
+.x-tool-minimize {
+    background-position:0 -15px;
+}
+
+a.x-tool-minimize:hover {
+    background-position:-15px -15px;
+}
+
+.x-tool-restore {
+	background-position:0 -45px;
+}
+
+a.x-tool-restore:hover {
+	background-position:-15px -45px;
+}
+
+
+
+
+.window-header-text {
+	overflow:hidden;
+  /*zoom:1; now in js*/ 
+  display:block;
+	/*-x-system-font:none;*/
+	color:#15428B;
+	font-family:tahoma,arial,verdana,sans-serif;
+	font-size:12px;
+	/*font-size-adjust:none;*/
+	/*font-stretch:normal;*/
+	font-style:normal;
+	font-variant:normal;
+	font-weight:bold;
+	line-height:normal;
+	padding:5px 0 4px;
+}
+
+.window-body {
+	left:0;
+	position:relative;
+	top:0;
+	z-index:1;
+	overflow:hidden;
+ 
+}
+
+.window-body-ml {
+	background:transparent url(../images/left-right.png) repeat-y scroll 0 0;
+	padding-left:6px;
+	
+}
+.window-body-mr {
+	background:transparent url(../images/left-right.png) repeat-y scroll right 0;
+	padding-right:6px;
+
+}
+
+div.x-window-dlg .window-body-mc {
+	border:0 none !important;
+	overflow:hidden !important;
+	/*padding:5px 10px;*/
+}
+
+div.x-window-plain .window-body-mc {
+	background:#C7D6E9 none repeat scroll 0 0 !important;
+	border-color:#DFE8F6 #A3BAE9 #A3BAE9 #DFE8F6;
+	border-style:solid;
+	border-width:1px;
+}
+
+.window-body-mc {	
+	border-color:#A3BAE9 #DFE8F6 #DFE8F6 #A3BAE9;
+	border-style:solid;
+	border-width:1px;
+	/*这个设置了高宽，防止子元素不设置高宽，会超出父元素*/
+	overflow:auto;
+	/*-x-system-font:none;*/
+	background:#DFE8F6 none repeat scroll 0 0;
+	border:1px solid #99BBE8;
+	margin:0;
+	padding:0;	
+}
+
+
+
+.window-body-bl{
+	background:transparent url(../images/left-corners.png) no-repeat scroll 0 bottom;
+	padding-left:6px;
+}
+
+.window-body-br{
+	background:transparent url(../images/right-corners.png) no-repeat scroll right bottom;
+	padding-right:6px;
+}
+
+.window-body-bc{
+	background:transparent url(../images/top-bottom.png) repeat-x scroll 0 bottom;
+
+}
+.window-body-br .nobutton{
+	font-size:0;
+	height:6px;
+	line-height:0;
+}
+
+/* Ghosting */
+.x-panel-ghost {
+    background:#cbddf3;
+    z-index:12000;
+    overflow:hidden;
+    position:absolute;
+    left:0;top:0;
+    /*
+    opacity:.65;
+    -moz-opacity:.65;
+    filter:alpha(opacity=65);
+    
+    now in js
+    */
+}
+
+.x-panel-ghost ul {
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-size:0;
+    line-height:0;
+    border:1px solid #99bbe8;
+    border-top:0 none;
+    display:block;
+}
+
+.x-panel-ghost * {
+    cursor:move !important;
+}
+.x-panel-ghost .window-header-l {
+    border-bottom:1px solid #99bbe8;
+}
+
+.x-window-dlg .ext-mb-icon {
+	float:left;
+	height:32px;
+	width:47px;
+	margin:0;
+	padding:0;
+}
+
+.x-window-dlg .ext-mb-error {
+	background:transparent url(../images/icon-error.gif) no-repeat scroll left top;
+}
+.x-window-dlg .ext-mb-warning {
+	background:transparent url(../images/icon-warning.gif) no-repeat scroll left top;
+}
+.x-window-dlg .ext-mb-info {
+	background:transparent url(../images/icon-info.gif) no-repeat scroll left top;
+}
+.x-window-dlg .ext-mb-question {
+	background:transparent url(../images/icon-question.gif) no-repeat scroll left top;
+}
+
+.x-window-proxy {
+	background:#C7DFFC none repeat scroll 0 0;
+	border:1px solid #99BBE8;
+	overflow:hidden;
+	position:absolute;
+}
+/*
+.x-window-maximized-ct {
+	overflow:hidden !important;
+}
+
+.x-window-maximized-ct .x-resizable-handle {
+	display:none;
+}
+
+.x-window-maximized-ct .window-header-l,.x-window-maximized-ct .window-header-r ,
+.x-window-maximized-ct .window-body-ml,.x-window-maximized-ct .window-body-mr,
+.x-window-maximized-ct .window-body-bl,.x-window-maximized-ct .window-body-br {
+	padding:0;
+}
+
+.x-window-maximized-ct .window-header-c {
+	padding-left:3px;
+	padding-right:3px;
+}
+
+.x-window-maximized-ct .window-body-mc {
+	border-left:0;
+	border-right:0;
+}*/

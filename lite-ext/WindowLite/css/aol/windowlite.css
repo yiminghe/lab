@@ -1,0 +1,189 @@
+﻿div.windowContainer {
+    text-align:left;
+    position: absolute;
+    margin:0;
+    padding:0;
+    z-index: 20001;
+    /*ie6 手型保持*/
+    background:transparent url(../../images/default/shadow-c.png) repeat scroll 0 0;
+    overflow:hidden;  
+}
+
+.window-header-l{	
+	padding-left:6px;
+	position:relative;
+	z-index:1;
+	background:#626B73 url(../../images/aol/blue_skin.png) repeat-x scroll 0 -3456px;
+}
+
+.window-header-r{
+	padding-right:6px;
+}
+
+.window-header-c {
+	overflow:hidden;
+	
+}
+
+.x-tool {
+	background:transparent url(../../images/tool-sprites.gif) no-repeat scroll 0 0;
+	cursor:pointer;
+	float:right;
+	height:15px;
+	margin-left:2px;
+	overflow:hidden;
+	width:15px;
+	outline:0;
+	text-indent:-9999px;
+	display:block;
+}
+
+.x-tool-close {
+	background-position:0 0;
+}
+a.x-tool-close:hover {
+	background-position:-15px 0;
+}
+
+.x-tool-maximize {
+	background-position:0 -30px;
+}
+a.x-tool-maximize:hover {
+	background-position:-15px -30px;
+}
+
+.x-tool-minimize {
+    background-position:0 -15px;
+}
+
+a.x-tool-minimize:hover {
+    background-position:-15px -15px;
+}
+
+.x-tool-restore {
+	background-position:0 -45px;
+}
+
+a.x-tool-restore:hover {
+	background-position:-15px -45px;
+}
+
+.window-header-text {
+	overflow:hidden;
+  display:block;
+	color:#FFFFFF;
+	font-family:tahoma,arial,verdana,sans-serif;
+	font-size:12px;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:bold;
+	line-height:normal;
+	/*padding:8px 0 8px 5px;*/
+	padding:5px 0 4px;
+}
+
+.window-body {
+	left:0;
+	position:relative;
+	top:0;
+	z-index:1;
+	overflow:hidden;
+}
+
+.window-body-ml {
+	background:#627A8E;
+	padding-left:6px;
+	
+}
+
+.window-body-mr {
+	background:#627A8E;
+	padding-right:6px;
+}
+
+.window-body-mc {
+	overflow:auto;
+	background:#E6EAEB url(../../images/aol/cols_stripe.gif) repeat-x scroll 0 0;
+	border:1px solid #CECECE;
+}
+
+.x-window-plain .window-body-mc {
+	border:none;
+	background:#627A8E;
+	color:white;
+}
+.window-body-bl{
+	background:#627A8E;
+	padding-left:6px;
+}
+
+.window-body-br{
+	padding-right:6px;
+}
+
+.window-body-bc{
+}
+
+.window-body-br .nobutton{
+	font-size:0;
+	height:6px;
+	line-height:0;
+}
+
+/* Ghosting */
+.x-panel-ghost {
+    background:#cbddf3;
+    z-index:12000;
+    overflow:hidden;
+    position:absolute;
+    left:0;top:0;
+}
+
+.x-panel-ghost ul {
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-size:0;
+    line-height:0;
+    border:1px solid #CECECE;
+    border-top:0 none;
+    display:block;
+}
+
+.x-panel-ghost * {
+    cursor:move !important;
+}
+.x-panel-ghost .window-header-l {
+    border-bottom:1px solid #CECECE;
+}
+
+.x-window-dlg .ext-mb-icon {
+	float:left;
+	height:32px;
+	width:47px;
+	margin:0;
+	padding:0;
+}
+
+.x-window-dlg .ext-mb-error {
+	background:transparent url(../../images/icon-error.gif) no-repeat scroll left top;
+}
+.x-window-dlg .ext-mb-warning {
+	background:transparent url(../../images/icon-warning.gif) no-repeat scroll left top;
+}
+.x-window-dlg .ext-mb-info {
+	background:transparent url(../../images/icon-info.gif) no-repeat scroll left top;
+}
+.x-window-dlg .ext-mb-question {
+	background:transparent url(../../images/icon-question.gif) no-repeat scroll left top;
+}
+
+.x-window-proxy {
+	background:#C7DFFC none repeat scroll 0 0;
+	border:1px solid #99BBE8;
+	overflow:hidden;
+	position:absolute;
+}
+/*.x-window-maximized-ct {
+	overflow:hidden !important;
+}*/
