@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>
+			日历测试
+		</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="../base/javascript/ext-core-min.js">
+</script>
+		<script type="text/javascript" src="javascript/calendarlite.js">
+</script>
+		<link rel="stylesheet" type="text/css" href="../base/css/core.css" /><!-- 自定义组件的css-->
+		<link rel="stylesheet" type="text/css" href="css/calendarlite.css" />
+	</head>
+	<body>
+		<p>
+			<button id='action_a'>显示日期</button><br />
+			<br />
+			<br />
+			<br />
+			<button id='action_b'>显示日期+时间 (英文,指定日期开始周计数)</button><br />
+		</p>
+		<div id="status"></div>
+		<p>
+			<br />
+			<br />
+			<br />
+		</p>
+		<form action="">
+			<input id="test" style="width:200px;" /><button id='action_c'>关联到input</button>
+		</form><script type="text/javascript">
+//<![CDATA[
+
+		Ext.onReady(function() {
+		Date.patterns = {
+		ISO8601Long:"Y-m-d H:i:s",
+		ISO8601Short:"Y-m-d",
+		ShortDate: "n/j/Y",
+		LongDate: "l, F d, Y",
+		FullDateTime: "l, F d, Y g:i:s A",
+		MonthDay: "F d",
+		ShortTime: "g:i A",
+		LongTime: "g:i:s A",
+		SortableDateTime: "Y-m-d\\TH:i:s",
+		UniversalSortableDateTime: "Y-m-d H:i:sO",
+		YearMonth: "F, Y"
+		};
+
+
+		/*
+		只显示日期
+		*/
+		var c=new Ext.ux.CalendarLite();
+
+		Ext.get('action_a').on('click',function(evt){
+		//显示在 x y 坐标
+		c.show(600,50);
+		evt.stopEvent();
+		});
+
+		//选择后处罚 select 事件
+		c.on('select',function(selectedDate) {
+		alert('you selected :' + selectedDate.toLocaleString());
+		//隐藏掉
+		this.hide();
+		});
+
+		c.on('week',function(selectedWeek) {
+		alert('you selected week :' + selectedWeek);
+
+		//隐藏掉
+		this.hide();
+		});
+
+
+		/*
+		显示日期+时间
+		*/
+		var c2=new Ext.ux.CalendarLite({
+		enableTime:true,
+		code:'en',
+		weekStartDate:new Date(97,6,13)
+		});
+
+		Ext.get('action_b').on('click',function(evt){
+		//显示在 x y 坐标
+		c2.show(600,400);
+		evt.stopEvent();
+		});
+
+		//选择后处罚 select 事件
+		c2.on('select',function(selectedDate) {
+		alert('you selected :' + selectedDate.toLocaleString());
+		//隐藏掉
+		this.hide();
+		});
+
+		c2.on('week',function(selectedWeek) {
+		alert('you selected week :' + selectedWeek);
+
+		//隐藏掉
+		this.hide();
+		});
+
+
+		/*
+		关联到input
+		*/
+
+		var c3=new Ext.ux.CalendarLite({
+		enableTime:true,
+		weekStartDate:new Date(97,6,13)
+		});
+
+		Ext.get('action_c').on('click',function(evt){
+		//显示在 x y 坐标
+		c3.show('test');
+		evt.stopEvent();
+		});
+
+		//选择后处罚 select 事件
+		c3.on('select',function(selectedDate,cur_input) {
+		alert('you selected :' + selectedDate.toLocaleString());
+		cur_input.dom.value=selectedDate.toLocaleString();
+		//隐藏掉
+		this.hide();
+		});
+
+		c3.on('week',function(selectedWeek,cur_input) {
+		alert('you selected week :' + selectedWeek);
+		cur_input.dom.value=selectedWeek;
+		//隐藏掉
+		this.hide();
+		});
+
+		});
+		//]]>
+
+		</script>
+	</body>
+</html>

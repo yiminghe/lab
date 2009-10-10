@@ -39,7 +39,7 @@ div.windowContainer {
 
 
 .x-tool {
-	background:transparent url(../images/tool-sprites.gif) no-repeat scroll 0 0;
+	background-image:url(../../base/images/tool-sprites.gif);
 	cursor:pointer;
 	float:right;
 	height:15px;

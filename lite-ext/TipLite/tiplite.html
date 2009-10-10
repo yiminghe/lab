@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>提醒 测试</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- 以下三个基础库必须 -->
+<script type="text/javascript" src="../base/javascript/ext-core-min.js"></script>
+
+<!-- 以下为自定义组件-->
+<script type="text/javascript" src="javascript/tiplite.js"></script>
+
+<!--以下为css -->
+<!-- 核心css，必须-->
+<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
+<!-- 自定义组件的css-->
+<link rel="stylesheet" type="text/css" href="css/tiplite.css" />
+
+<style type='text/css'>
+	.tip-target {
+		-x-system-font:none;
+		background:#DFE8F6 none repeat scroll 0 0;
+		border:1px dotted #99BBE8;
+		color:#15428B;
+		cursor:default;
+		overflow:hidden;
+		position:absolute;
+		font-family:tahoma,arial,sans-serif;
+		font-size:11px;
+		font-size-adjust:none;
+		font-stretch:normal;
+		font-style:normal;
+		font-variant:normal;
+		font-weight:bold;
+		line-height:normal;
+		margin:10px;
+		padding:5px 0;
+		text-align:center;
+		
+	}
+</style>
+
+<script type="text/javascript">
+//<![CDATA[
+
+Ext.onReady(function() {
+	
+	//注意全局单一实例 tip
+	var tip = Ext.ux.TipLiteManager.addTip( {
+		//标题
+		title:'测试',
+		//内容
+		html:'一点提醒一点提醒一点提醒<br/>一点提醒<br/>一点提醒<br/>',
+		//在哪个元素上提示
+		targetId:'tip_test',
+			
+		//显式设置宽度 px
+		//width:100,
+		//显式设置高度 px
+		//height:100,
+		
+		
+		//否则根据文字自动高宽，宽度最宽为300px后换行
+		
+		
+		//是否鼠标移出元素自动隐藏
+		autoHide:false
+		
+		});
+	Ext.ux.TipLiteManager.addTip( {
+		//标题
+		title:'测试',
+		//内容
+		html:'一点提醒',
+		//在哪个元素上提示
+		targetId:'tip_test2',
+				
+		//显式设置宽度 px
+		width:100,
+		//显式设置高度 px
+		height:100,
+		
+		
+		//否则根据文字自动高宽，宽度最宽为300px后换行
+		
+		
+		//是否鼠标移出元素自动隐藏
+		autoHide:true
+		
+		});
+
+
+Ext.ux.TipLiteManager.addTip( {
+		//标题
+		title:'测试',
+		//内容
+		html:'一点提醒2',
+		//在哪个元素上提示
+		targetId:'tip_test2',
+				
+		//显式设置宽度 px
+		width:100,
+		//显式设置高度 px
+		height:100,
+		
+		
+		//否则根据文字自动高宽，宽度最宽为300px后换行
+		
+		
+		//是否鼠标移出元素自动隐藏
+		autoHide:true
+		
+		});
+		
+		
+  //监听事件，出现，隐藏
+  tip.on('show',function(){
+  	//console.log('hello');
+  });
+  
+  tip.on('hide',function(){
+  	//console.log('88');
+  });
+ 
+ 
+ 	
+ 	Ext.get('close2').on("click",function(){
+ 		Ext.ux.TipLiteManager.removeTip(Ext.get("tip_test2"));
+ 	});
+ 
+});
+
+
+//]]>
+
+</script>
+
+</head>
+<body>
+
+<div id='tip_test' class='tip-target'>
+	示例1：<br/>
+	我带有关闭按钮，<br/>不自动隐藏
+</div>
+
+
+
+<div id='tip_test2' class='tip-target' style="left:200px;">
+	示例2：<br/>
+	我没有关闭按钮，但我会自动隐藏<br/>
+	我还设置了宽度高度<br/>
+</div>
+
+<br/><br/><br/><br/><br/><br/>
+<button id="close2">示例2提示功能去除</button>
+
+</body>
+</html>
