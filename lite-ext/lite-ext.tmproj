@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>WindowLite/windowlite_taskbar.html</string>
+	<string>AutocompleteLite/javascript/autocompletelite.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,35 +21,33 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>CalendarLite/calendarlite.html</key>
+		<key>AutocompleteLite/AutocompleteLite.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>71</integer>
+				<integer>81</integer>
 				<key>line</key>
-				<integer>7</integer>
+				<integer>8</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+			<integer>14</integer>
+		</dict>
+		<key>AutocompleteLite/javascript/autocompletelite.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>421</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>71</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
+			<key>firstVisibleLine</key>
+			<integer>408</integer>
 		</dict>
 		<key>CollapseLite/collapselite.html</key>
 		<dict>
@@ -109,20 +107,6 @@
 				<integer>25</integer>
 			</dict>
 		</dict>
-		<key>CollapseLite/javascript/collapselite.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>4</integer>
-		</dict>
 		<key>FormLite/formlite.html</key>
 		<dict>
 			<key>caret</key>
@@ -137,105 +121,11 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>FormLite/formlite_tip.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>23</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>5</integer>
-		</dict>
-		<key>TipLite/tiplite.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>69</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>WindowLite/windowlite_close_skin.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>69</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>WindowLite/windowlite_noclose_skin.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>69</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>WindowLite/windowlite_taskbar.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>69</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>multitreeWin/multiTree.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>CollapseLite/collapselite.html</string>
-		<string>FormLite/formlite.html</string>
-		<string>FormLite/formlite_tip.html</string>
-		<string>multitreeWin/multiTree.html</string>
-		<string>TipLite/tiplite.html</string>
-		<string>WindowLite/windowlite_close_skin.html</string>
-		<string>WindowLite/windowlite_noclose_skin.html</string>
-		<string>WindowLite/windowlite_taskbar.html</string>
-		<string>CalendarLite/calendarlite.html</string>
-		<string>CollapseLite/javascript/collapselite.js</string>
-		<string>CollapseLite/css/panel.css</string>
-		<string>CollapseLite/css/collapselite.css</string>
+		<string>AutocompleteLite/AutocompleteLite.html</string>
+		<string>AutocompleteLite/javascript/autocompletelite.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

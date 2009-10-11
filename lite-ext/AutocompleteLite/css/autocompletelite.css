@@ -1,0 +1,88 @@
+ul.x-combo-list-inner {
+		margin:0;
+		padding:0;
+		list-style-type:none;
+		background:white none repeat scroll 0 0;
+		overflow:auto;
+		text-align:left;
+		font-size:12px;
+}
+	
+ul.x-combo-list-inner li.x-combo-selected  {
+	background:#DFE8F6 none repeat scroll 0 0;
+	border:1px dotted #A3BAE9 !important;
+	cursor:pointer;	
+}
+
+ul.x-combo-list-inner li {
+	border:1px solid #FFFFFF;
+	padding:2px;
+	overflow:hidden;
+}
+
+.x-combo-list {
+	background:#DDECFE none repeat scroll 0 0;
+	border:1px solid #98C0F4;
+	overflow:hidden;
+	z-index:99999;
+	position:absolute;
+}
+
+
+.x-form-text {
+	height:18px;
+	line-height:18px;
+	background:#FFFFFF url(../images/text-bg.gif) repeat-x scroll 0 0;
+	border:1px solid #B5B8C8;
+	margin:0;
+	padding:1px 0 1px 0;
+}
+
+.x-form-trigger {
+	background:transparent url(../images/trigger.gif) no-repeat scroll 0 0;
+	border-color:#B5B8C8;
+	border-style:solid;
+	border-width:0px 0 1px 1px;
+	cursor:pointer;
+	height:21px;
+	width:17px;
+	position:absolute;
+	top:0;
+	right:0;
+}
+
+.ext-ie6 .x-form-trigger {
+	top:1px;
+}
+
+.x-trigger-wrap-focus .x-form-trigger {
+	border-bottom:1px solid #7EADD9;
+}
+.x-trigger-wrap-focus .x-form-trigger {
+	background-position:-51px 0;
+}
+
+.x-trigger-wrap {
+	position:relative;
+	font-size:12px;
+}
+.x-trigger-wrap .x-form-trigger-over {
+	background-position:-68px 0;
+}
+.x-trigger-wrap-focus .x-form-text {
+	border:1px solid #7EADD9;
+}
+
+.x-trigger-wrap .x-form-trigger-click {
+	background-position:-85px 0;
+}
+
+.x-trigger-wrap .labelTip {
+	color:gray;
+	position:absolute;
+	left:5px;
+	top:3px;
+}
+.ext-ie6 .x-trigger-wrap .labelTip {
+	top:6px;
+}
