@@ -50,7 +50,7 @@ line-height: 1em;
 	float:left;	
 }
 
-.mulTreeContainer ul li .labelText input {
+.mulTreeContainer ul li .labelText input ,ul.bottomNode li input {
 	margin:2px 4px;
 }
 
