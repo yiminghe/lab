@@ -309,7 +309,8 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
         this.bottomNodesContainer.on('click', this.checkboxOnClick, this);
         this.multiTreeWin.on('hide',
         function() {
-            if (this.currentSubMenu) this.currentSubMenu.hide();
+            this.currentSubMenu && this.currentSubMenu.hide();
+            this.shadow && this.shadow.hide();
             this.currentSubMenu = null;
         },
         this);
