@@ -180,9 +180,7 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
             cn: [
             {
             	tag:'div',
-            	style:{
-            		'float':'left'
-            	},
+            	cls:'labelText',
             	cn:[{
                 tag: 'input',
                 type: 'checkbox',
@@ -203,8 +201,7 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
             delete dataLi.cn;
             dataLi.html = info.label;
         } else if (info.children) {
-        		dataLi.cn[0].style.width="120px";
-        		dataLi.cn[0].style.overflow="hidden";
+        		
             dataLi.cn.unshift({
                 tag: 'div',
                 cls: 'x-tool x-tool-right-arrow'

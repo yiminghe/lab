@@ -43,6 +43,17 @@ padding: 1px 0;
 width: 160px;
 line-height: 1em;
 }
+
+.mulTreeContainer ul li .labelText {
+	overflow:hidden;
+	width:120px;
+	float:left;	
+}
+
+.mulTreeContainer ul li .labelText input {
+	margin:2px 4px;
+}
+
 .mulTreeContainer ul li {
 cursor: pointer;
 }
