@@ -32,7 +32,8 @@
 				            注意滚动条在firefox3中占据viewsize !
   v2.9.8.2(20090919) 全屏时firefox修正		
   v2.9.8.5(20090927) 增加minHeight,maxHeight配置，可单独调用constrainHeight.
-  v3(20091010) 重要更新：增加 taskbar 配置，可以出现 窗口管理栏了，参见 windowlite_taskbar.html            
+  v3(20091010) 重要更新：增加 taskbar 配置，可以出现 窗口管理栏了，参见 windowlite_taskbar.html
+    (20091014) 修正设置 containerId 时的定位行为            
 */
 Ext.namespace('Ext.ux');
 Ext.ux.WindowLite = function (config) {
