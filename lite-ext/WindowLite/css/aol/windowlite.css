@@ -13,7 +13,7 @@
 	padding-left:6px;
 	position:relative;
 	z-index:1;
-	background:#626B73 url(../../images/aol/blue_skin.png) repeat-x scroll 0 -3456px;
+	background:#626B73 url(../../../base/images/aol/blue_skin.png) repeat-x scroll 0 -3456px;
 }
 
 .window-header-r{
@@ -103,7 +103,7 @@ a.x-tool-restore:hover {
 
 .window-body-mc {
 	overflow:auto;
-	background:#E6EAEB url(../../images/aol/cols_stripe.gif) repeat-x scroll 0 0;
+	background:#E6EAEB url(../../../base/images/aol/cols_stripe.gif) repeat-x scroll 0 0;
 	border:1px solid #CECECE;
 }
 

@@ -8,7 +8,7 @@
 
 .tabpanel ul.tabpanel_nav {
 	display:block;
-	background:transparent url(../../images/aol/blue_skin.png) repeat-x scroll 0 -8208px;
+	background:transparent url(../../../base/images/aol/blue_skin.png) repeat-x scroll 0 -8208px;
 	border-bottom:1px solid #BBC4CE;
 	padding-left:12px;
 }
@@ -40,7 +40,7 @@
 }
 
 .tabpanel .tabpanel_nav li span.tab_inner {
-		background:transparent url(../../images/aol/blue_skin.png) repeat-x scroll 0 -8352px;
+		background:transparent url(../../../base/images/aol/blue_skin.png) repeat-x scroll 0 -8352px;
 		margin-top:9px;
 		padding:7px 8px 6px;
 		border-style:solid solid none;
@@ -94,7 +94,7 @@
 	border-bottom-color:#CECECE;
 	border-left-color:#CECECE;
 	border-right-color:#CECECE;
-	background:#E6EAEB url(../../images/aol/cols_stripe.gif) repeat-x scroll 0 0;
+	background:#E6EAEB url(../../../base/images/aol/cols_stripe.gif) repeat-x scroll 0 0;
 }
 
 .tabpanel .hiddenTab {

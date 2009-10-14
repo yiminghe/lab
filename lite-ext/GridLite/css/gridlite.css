@@ -56,7 +56,7 @@ table.gridLite thead .x-grid3-tool-desc {
 }
 
 table.gridLite tbody a.x-grid3-tool-group {
-	background:transparent url(../images/group-expand-sprite.gif) no-repeat scroll;
+	background:transparent url(../../base/images/group-expand-sprite.gif) no-repeat scroll;
 	text-indent:-100px;
 	height:15px;
 	display:block;

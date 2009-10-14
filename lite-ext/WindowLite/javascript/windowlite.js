@@ -550,9 +550,9 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         var width = parseInt(this.el.getStyle("width")); //提高效率，尽量用css属性
         var height = this.getHeight();
         var winScroll = Ext.getDoc().getScroll();
-        var diffW = Math.max(width + this.el.getLeft(true) - viewSize.width - winScroll.left, 0);
+        var diffW = Math.max(width + this.el.getX() - viewSize.width - winScroll.left, 0);
         var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-        var diffH = Math.max(height + this.el.getTop(true) - viewSize.height - winScroll.top, 0); //出现在边缘，需要width剪裁
+        var diffH = Math.max(height + this.el.getY() - viewSize.height - winScroll.top, 0); //出现在边缘，需要width剪裁
         if (diffW > 0) { //浏览器窗口出现了滚动条,width要多剪裁，firefox滚动条占地方
             if (scrollHeight > viewSize.height) {
                 diffW += 15;
@@ -588,11 +588,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         option = option || {};
         if (option.animateTarget) this.getProxy().hide(); //细微调整，不要使用 getX 了，绝对定位就直接读css
         var winScroll = Ext.getDoc().getScroll();
-        if (this.el.getTop(true) <= (10 + winScroll.top)) {
-            this.el.setTop(10 + winScroll.top);
+        if (this.el.getY() <= (10 + winScroll.top)) {
+            this.el.setY(10 + winScroll.top);
         } //09-09-14 不要超出窗口所边界
-        if (this.el.getLeft(true) <= (10 + winScroll.left)) {
-            this.el.setLeft(10 + winScroll.left);
+        if (this.el.getX() <= (10 + winScroll.left)) {
+            this.el.setX(10 + winScroll.left);
         }
         this.constrainHeight(false);
         this.el.setStyle({
@@ -691,7 +691,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 		**/
     unghost: function () {
         this.el.show();
-        this.el.setLeftTop(this.activeGhost.getLeft(true), this.activeGhost.getTop(true));
+        this.el.setXY(this.activeGhost.getXY());
         this.syncShadow();
         this.activeGhost.hide();
         this.activeGhost.remove();
@@ -720,7 +720,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         //Ext.getBody().maximizeWinlite++;
         //Ext.getBody().addClass("x-window-maximized-ct");
         var scrolls = Ext.getDoc().getScroll();
-        this.el.setLeftTop(scrolls.left, scrolls.top);
+        this.el.setXY([scrolls.left, scrolls.top]);
         this.fitViewport();
         if (this.ddHandler) {
             this.ddHandler.lock();
@@ -731,6 +731,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         this._maximizeA.setDisplayed("none");
         this._restoreA.setDisplayed(true);
         this.syncShadow();
+        this.toFront();
     },
     fitViewport: function () {
         var maxView = Ext.getDoc().getViewSize(); //firefox 滚动条也占据 viewwidth .....
@@ -744,6 +745,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 maxView.height -= 20;
             }
         }
+        
         this.setSize(maxView.width, maxView.height);
     },
     setSize: function (width, height) {
@@ -782,7 +784,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         //多个窗口最大化，互相干扰，没有窗口最大化时才完全去除
         //if(Ext.getBody().maximizeWinlite==0)
         //	Ext.getBody().removeClass("x-window-maximized-ct");
-        this.el.setXY(this.restorePosition);
+        this.el.setLeftTop(this.restorePosition[0],this.restorePosition[1]);
         if (this.ddHandler) {
             this.ddHandler.unlock();
             this.header.setStyle({
