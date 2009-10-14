@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>TabPanelLite/tab_layout_skin.html</string>
+	<string>WindowLite/javascript/windowlite.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -34,6 +34,34 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>14</integer>
+		</dict>
+		<key>ButtonLite/button.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>ButtonLite/javascript/button.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>CollapseLite/collapselite.html</key>
 		<dict>
@@ -107,85 +135,72 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>TabPanelLite/css/aol/tabpanel.css</key>
+		<key>ImageScaler/imagescaler.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>37</integer>
+				<integer>18</integer>
 				<key>line</key>
-				<integer>96</integer>
+				<integer>28</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>10</integer>
+		</dict>
+		<key>ImageScaler/javascript/imagescaler.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>2</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>60</integer>
+			<integer>0</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>30</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>96</integer>
+				<integer>0</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>37</integer>
+				<integer>2</integer>
 				<key>line</key>
-				<integer>96</integer>
+				<integer>2</integer>
 			</dict>
 		</dict>
-		<key>TabPanelLite/javascript/tabpanel.js</key>
+		<key>WindowLite/javascript/windowlite.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>49</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>49</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>21</integer>
-		</dict>
-		<key>TabPanelLite/tab.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>41</integer>
-				<key>line</key>
-				<integer>141</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
 			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>40</integer>
-		</dict>
-		<key>TabPanelLite/tab_layout_skin.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>45</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>26</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>TabPanelLite/css/aol/tabpanel.css</string>
-		<string>TabPanelLite/javascript/tabpanel.js</string>
-		<string>TabPanelLite/tab.html</string>
-		<string>TabPanelLite/tab_layout_skin.html</string>
+		<string>ImageScaler/imagescaler.html</string>
+		<string>ImageScaler/javascript/imagescaler.js</string>
+		<string>ButtonLite/button.html</string>
+		<string>ButtonLite/javascript/button.js</string>
+		<string>WindowLite/javascript/windowlite.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
