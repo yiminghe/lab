@@ -25,7 +25,7 @@ var theJobCategories = [
 			{ key:'500213',label:'计算机辅助设计工程师'},
                         { key:'500214',label:'VC界面设计工程师'}
 			]},
-		{ key:'5003',label:'互联网开发及应用',
+		{ key:'5003',label:'互联网开发',
 			children:[
 			{ key:'500301',label:'互联网软件开发工程师'},
 			{ key:'500302',label:'语音/视频开发工程师'},
@@ -56,7 +56,7 @@ var theJobCategories = [
 			{ key:'500408',label:'IT项目执行/协调人员'},
 			               { key:'500409',label:'ERP管理员'}
 			]},
-		{ key:'5005',label:'IT-品管、技术支持',
+		{ key:'5005',label:'IT-品管技术支持',
 			children:[
 			{ key:'500501',label:'技术支持经理'},
 			{ key:'500502',label:'技术支持工程师'},
@@ -382,7 +382,7 @@ var theJobCategories = [
 		]},
 	{ key:'54',label:'生物/制药/医疗/护理 ',
 		children:[
-		{ key:'5401',label:'生物制药/医疗器械',
+		{ key:'5401',label:'生物制药/器械',
 			children:[
 			{ key:'540101',label:'生物工程/生物制药'},
 			{ key:'540102',label:'化学分析测试员'},
