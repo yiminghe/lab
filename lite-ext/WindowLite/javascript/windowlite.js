@@ -185,7 +185,12 @@ Ext.ux.WindowLite = function (config) {
         },
         this); //改做双击关闭
         this.header.on('dblclick', function (evt) {
-            this[this.closeAction]();
+            if(this._maximizeA.isDisplayed()){
+                this.maximize();
+            }else{
+                this.restore();
+            }
+            //this[this.closeAction]();
             evt.stopEvent();
         },
         this);
@@ -518,7 +523,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             this.restorePosition = [option.x, option.y];
         }
         if (this.restorePosition) {
-            this.el.setLeftTop(this.restorePosition[0], this.restorePosition[1]);
+            this.el.setXY(this.restorePosition);
         } else {
             this.el.center();
         }
@@ -547,20 +552,28 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 			根据当前位置，调整windowlite大小，使得windowlite不超过当前浏览器窗口的可见区域.
 		*/
     constrainToView: function () {
+        
         var viewSize = Ext.getDoc().getViewSize();
         var width = parseInt(this.el.getStyle("width")); //提高效率，尽量用css属性
         var height = this.getHeight();
         var winScroll = Ext.getDoc().getScroll();
         var diffW = Math.max(width + this.el.getX() - viewSize.width - winScroll.left, 0);
         var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+        var scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
+        
         var diffH = Math.max(height + this.el.getY() - viewSize.height - winScroll.top, 0); //出现在边缘，需要width剪裁
         if (diffW > 0) { //浏览器窗口出现了滚动条,width要多剪裁，firefox滚动条占地方
             if (scrollHeight > viewSize.height) {
-                diffW += 15;
+                diffW += 25;
             }
-            width = width - diffW - 5;
+            width = width - diffW-10;
         }
-        if (diffH > 0) height = height - diffH - 5;
+        if (diffH > 0) {
+            if (scrollWidth > viewSize.width) {
+                diffH += 25;
+            }
+            height = height - diffH-10;
+        }
         if (diffW > 0) this.setWidth(width);
         if (diffH > 0) this.setHeight(height);
         if (!this._restoreA.isDisplayed()) {
