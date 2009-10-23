@@ -380,6 +380,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 			ie6 shim included
 		*/
     syncShadow: function () {
+    		//顺便更新下resizer的ie6问题
+    		if (Ext.isIE6 && this.resizer) {
+            this.resizer.syncHandleHeight();
+            this.el.repaint();
+        }
         var sw = this.shadow;
         var sh = this.shim;
         if (this.el.isVisible() && sw && !this._restoreA.isDisplayed()) { //防止其关联的 windowContainer z-index 改变了 
