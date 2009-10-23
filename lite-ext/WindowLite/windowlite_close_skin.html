@@ -3,6 +3,7 @@
 <head>
 <title>窗口测试</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <script type="text/javascript" src="../base/javascript/ext-core-min.js"></script>
 
 <!-- 以下为自定义组件-->
@@ -50,7 +51,7 @@ Ext.onReady(function() {
     			var mwindow = new Ext.ux.WindowLite({			
 			
 				        width:2500,
-				        height:1300,  
+				        //height:1300,  
 				        //每次都删掉    
 				       	closeAction:'close',
 				        drag:true,
@@ -93,7 +94,7 @@ Ext.onReady(function() {
 					   	mwindow.show({
     				    	//x,y应该是窗口当前可见区域，不包括滚动区域
     				    	x:600,
-    				    	y:900,
+    				    	y:400,
     				    	constrainToView:true
     				    });
 					   	//不脱离视窗

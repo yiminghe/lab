@@ -33,7 +33,8 @@
   v2.9.8.2(20090919) 全屏时firefox修正		
   v2.9.8.5(20090927) 增加minHeight,maxHeight配置，可单独调用constrainHeight.
   v3(20091010) 重要更新：增加 taskbar 配置，可以出现 窗口管理栏了，参见 windowlite_taskbar.html
-    (20091014) 修正设置 containerId 时的定位行为            
+    (20091014) 修正设置 containerId 时的定位行为
+  v3.1(20091023) size问题调整              
 */
 Ext.namespace('Ext.ux');
 Ext.ux.WindowLite = function (config) {
@@ -145,17 +146,17 @@ Ext.ux.WindowLite = function (config) {
         } //end body
         ] //end container cn
     },
-    true);
-    this.header = this.el.child('div.window-header-l');
-    this.main = this.el.child('div.window-body');
-    this.title = this.header.child('div.window-header-text span');
-    this._closebarA = this.header.child('a.x-tool-close');
-    this._maximizeA = this.header.child('a.x-tool-maximize');
-    this._restoreA = this.header.child('a.x-tool-restore');
-    this._minimizeA = this.header.child('a.x-tool-minimize');
-    this.body = this.el.child('div.window-body-mc');
+    true); //标题头
+    this.header = this.el.child('div.window-header-l'); //主体：内容+按钮栏
+    this.main = this.el.child('div.window-body'); //标题头内容
+    this.title = this.header.child('div.window-header-text span'); //右上角按钮组
+    this._toolsSection = this.header.child('div.window-header-text'); //右上角关闭
+    this._closebarA = this.header.child('a.x-tool-close'); //右上角最大化
+    this._maximizeA = this.header.child('a.x-tool-maximize'); //右上角恢复大小
+    this._restoreA = this.header.child('a.x-tool-restore'); //右上角最小化
+    this._minimizeA = this.header.child('a.x-tool-minimize'); //内容
+    this.body = this.el.child('div.window-body-mc'); //按钮栏
     this.bottom = this.el.child('div.window-body-bc');
-    this._toolsSection = this.header.child('div.window-header-text');
     this._tools = [];
     if (this.tools) {
         Ext.each(this.tools, function (el) {
@@ -184,16 +185,6 @@ Ext.ux.WindowLite = function (config) {
             eventExt.stopEvent();
         },
         this); //改做双击关闭
-        this.header.on('dblclick', function (evt) {
-            if(this._maximizeA.isDisplayed()){
-                this.maximize();
-            }else{
-                this.restore();
-            }
-            //this[this.closeAction]();
-            evt.stopEvent();
-        },
-        this);
     }
     if (this.maximizable) {
         this._maximizeA.on('click', function (eventExt) {
@@ -206,6 +197,15 @@ Ext.ux.WindowLite = function (config) {
             eventExt.stopEvent();
         },
         this);
+        this.header.on('dblclick', function (evt) {
+            if (this._maximizeA.isDisplayed()) {
+                this.maximize();
+            } else {
+                this.restore();
+            } //this[this.closeAction]();
+            evt.stopEvent();
+        },
+        this);
     }
     if (this.minimizable && this.taskbar) {
         this._minimizeA.setDisplayed(true);
@@ -215,7 +215,7 @@ Ext.ux.WindowLite = function (config) {
         },
         this);
     }
-    var fobiddenFront = ['a', 'input', 'button']; //单击带领窗口到最前端,2秒内点击无效
+    var fobiddenFront = ['a', 'input', 'button']; //单击带领窗口到最前端
     this.el.on('click', function (evt, target) {
         var nodeName = target.nodeName.toLowerCase();
         for (var i = fobiddenFront.length - 1; i--; i >= 0) {
@@ -224,29 +224,34 @@ Ext.ux.WindowLite = function (config) {
         this.toFront(); //evt.stopEvent();
     },
     this);
-    if (!this.width) { //没有上限 09-07-30
-        //this.width=this.offsetWidth=this.body.getTextWidth(null,50);
-        //offset 很费时间，html 很多时，请尽量设置宽度 09-08-12
-        this.width = Math.max(this.body.getTextWidth(null, 0) + 25, this.header.getTextWidth(null, 0) + 30);
-    } //尽量使用setStyle ,setWidth 很费时间 09-08-12
-    this.body.setStyle({
-        width: this.width + "px"
-    });
-    if (this.height) {
-        this.body.setStyle({
-            height: this.height + "px"
-        });
-    }
     /**
         设置可以拖放，拖放点在标题栏
     **/
     if (Ext.dd && Ext.dd.DD && this.drag) {
         this.ddHandler = new Ext.ux.WindowLite.DD(this);
-    } //利用 body 和 windowContainer 之间关系设置 windowContainer 宽度
-    //this.offsetBodyToContainer=this.body.getOffsetsTo(this.el);  
-    //性能考虑，写死掉
-    this.offsetBodyToContainer = [6, 24];
-    this.updateWindowSize(true);
+    }
+    /**
+      	设置阴影
+      **/
+    if (Ext.Shadow && this.shadow !== false) {
+        this.shadowOffset = config.shadowOffset || 4;
+        this.shadow = new Ext.Shadow({
+            offset: this.shadowOffset,
+            mode: config.shadow || 'sides'
+        });
+        this.el.setStyle({
+            'background-image': 'none'
+        });
+    }
+    /*
+    		for ie6 iframe select relationship
+			*/
+    if (Ext.isIE6) {
+        this.shim = this.el.createShim();
+        this.shim.enableDisplayMode('block');
+        this.shim.dom.style.display = 'none';
+        this.shim.dom.style.visibility = 'visible';
+    }
     /**
        设置按钮
     **/
@@ -256,6 +261,19 @@ Ext.ux.WindowLite = function (config) {
         }
     } //body与container的高度差,prototype写死提高效率
     //this._offsetHeightBodyToContainer =this.el.getComputedHeight()-this.body.getComputedHeight();
+    //利用 body 和 windowContainer 之间关系设置 windowContainer 宽度
+    //this.offsetBodyToContainer=this.body.getOffsetsTo(this.el);  
+    //性能考虑，写死掉
+    this.offsetBodyToContainer = [6, 24];
+    if (!this.width) { //没有上限 09-07-30
+        //this.width=this.offsetWidth=this.body.getTextWidth(null,50);
+        //offset 很费时间，html 很多时，请尽量设置宽度 09-08-12
+        this.width = Math.max(this.body.getTextWidth(null, 0) + 25, this.header.getTextWidth(null, 0) + 30);
+    } //尽量使用setStyle ,el.setWidth 很费时间 09-08-12
+    this.setWidth(this.width);
+    if (this.height) {
+        this.setHeight(this.height);
+    }
     /**
 	     设置用户调节大小,动态设置css，width height
 	   **/
@@ -282,28 +300,6 @@ Ext.ux.WindowLite = function (config) {
         this.mask.enableDisplayMode("block");
         this.mask.hide();
         this.mask.on('click', this.focus, this);
-    }
-    /**
-      	设置阴影
-      **/
-    if (Ext.Shadow && this.shadow !== false) {
-        this.shadowOffset = config.shadowOffset || 4;
-        this.shadow = new Ext.Shadow({
-            offset: this.shadowOffset,
-            mode: config.shadow || 'sides'
-        });
-        this.el.setStyle({
-            'background-image': 'none'
-        });
-    }
-    /*
-    		for ie6 iframe select relationship
-			*/
-    if (Ext.isIE6) {
-        this.shim = this.el.createShim();
-        this.shim.enableDisplayMode('block');
-        this.shim.dom.style.display = 'none';
-        this.shim.dom.style.visibility = 'visible';
     } //修正extjs中点击窗体ie系列失去焦点问题，但是多窗体会出问题
     //改做单击窗口搞在最前端
     //this.el.on('click',this.focus,this);
@@ -324,19 +320,29 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     _FrameWidthLR: 2,
     _FrameWidthTB: 2,
     //带工具条body与container的高度差
-    _offsetHeightBodyToContainerWithButton: Ext.isIE6 ? 61 : 58,
+    _offsetHeightBodyToContainerWithButton: 0,
     //不带工具条body与container的高度差
-    _offsetHeightBodyToContainer: 30,
+    _offsetHeightBodyToContainer: 0,
     closable: true,
     _getOffsetHeightBodyToContainer: function () {
-        if (this.bottom.hasClass('nobutton')) return this._offsetHeightBodyToContainer;
+        if (this.bottom.hasClass('nobutton')) {
+            if (!this._offsetHeightBodyToContainer) {
+                this._offsetHeightBodyToContainer = this.el.getComputedHeight() - this.body.getComputedHeight();
+            }
+            return this._offsetHeightBodyToContainer;
+        }
+        if (!this._offsetHeightBodyToContainerWithButton) {
+            this._offsetHeightBodyToContainerWithButton = this.el.getComputedHeight() - this.body.getComputedHeight();
+        }
         return this._offsetHeightBodyToContainerWithButton;
     },
     //带领窗口到所有已有窗口的最前端		
     toFront: function () {
-        if (this.el.getStyle('z-index') < Ext.ux.WindowLite.ZIndex) this.el.setStyle({
-            'z-index': ++Ext.ux.WindowLite.ZIndex
-        });
+        if (this.el.getStyle('z-index') < Ext.ux.WindowLite.ZIndex) {
+            this.el.setStyle({
+                'z-index': ++Ext.ux.WindowLite.ZIndex
+            });
+        }
         this.fireEvent("show");
     },
     setTitle: function (str) {
@@ -383,9 +389,9 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         } //ie6 iframe
         if (sh) {
             if (this.el.isVisible()) {
-                var elStyleSize = this.el.getStyleSize();
-                var w = elStyleSize.width,
-                h = elStyleSize.height;
+                var elSize = this.el.getSize();
+                var w = elSize.width,
+                h = elSize.height;
                 var l = this.el.getLeft(true),
                 t = this.el.getTop(true);
                 sh.setStyle('z-index', parseInt(this.el.getStyle("z-index"), 10) - 2);
@@ -552,30 +558,34 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 			根据当前位置，调整windowlite大小，使得windowlite不超过当前浏览器窗口的可见区域.
 		*/
     constrainToView: function () {
-        
         var viewSize = Ext.getDoc().getViewSize();
         var width = parseInt(this.el.getStyle("width")); //提高效率，尽量用css属性
         var height = this.getHeight();
         var winScroll = Ext.getDoc().getScroll();
-        var diffW = Math.max(width + this.el.getX() - viewSize.width - winScroll.left, 0);
-        var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+        var elX = this.el.getX();
+        var elY = this.el.getY(); //本身已经在屏幕以外，大小无论如何调整都不行了
         var scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
-        
-        var diffH = Math.max(height + this.el.getY() - viewSize.height - winScroll.top, 0); //出现在边缘，需要width剪裁
-        if (diffW > 0) { //浏览器窗口出现了滚动条,width要多剪裁，firefox滚动条占地方
-            if (scrollHeight > viewSize.height) {
-                diffW += 25;
+        var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+        if (elX < viewSize.width) {
+            var diffW = Math.max(width + this.el.getX() - viewSize.width - winScroll.left, 0);
+            if (diffW > 0) { //浏览器窗口出现了滚动条,width要多剪裁，firefox滚动条占地方
+                if (scrollHeight > viewSize.height) {
+                    diffW += 15;
+                }
+                width = width - diffW - 10;
             }
-            width = width - diffW-10;
+            if (diffW > 0) this.setWidth(width);
         }
-        if (diffH > 0) {
-            if (scrollWidth > viewSize.width) {
-                diffH += 25;
+        if (elY < viewSize.height) {
+            var diffH = Math.max(height + this.el.getY() - viewSize.height - winScroll.top, 0); //出现在边缘，需要width剪裁
+            if (diffH > 0) {
+                if (scrollWidth > viewSize.width) {
+                    diffH += 15;
+                }
+                height = height - diffH - 10;
             }
-            height = height - diffH-10;
+            if (diffH > 0) this.setHeight(height);
         }
-        if (diffW > 0) this.setWidth(width);
-        if (diffH > 0) this.setHeight(height);
         if (!this._restoreA.isDisplayed()) {
             this.syncShadow();
         }
@@ -600,7 +610,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     },
     afterShow: function (option) {
         option = option || {};
-        if (option.animateTarget) this.getProxy().hide(); //细微调整，不要使用 getX 了，绝对定位就直接读css
+        if (option.animateTarget) this.getProxy().hide();
         var winScroll = Ext.getDoc().getScroll();
         if (this.el.getY() <= (10 + winScroll.top)) {
             this.el.setY(10 + winScroll.top);
@@ -614,7 +624,8 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         });
         if (option.constrainToView) {
             this.constrainToView();
-        } else { if (!this._restoreA.isDisplayed()) this.syncShadow();
+        } else {
+            if (!this._restoreA.isDisplayed()) this.syncShadow();
         }
         this.focus();
         this.fireEvent("show", this);
@@ -627,8 +638,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             if (this._restoreA.isDisplayed()) {
                 this.restore();
             }
-            var tb = this.el.getBox(false);
-            this.restorePosition = [this.el.getLeft(true), this.el.getTop(true)];
+            this.restorePosition = this.el.getXY();
             this.el.setLeftTop(-99999, -99999);
             this.el.hide();
             this.syncShadow();
@@ -637,6 +647,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 var proxy = this.getProxy();
                 proxy.setOpacity(.5);
                 proxy.show();
+                var tb = this.el.getBox(false);
                 proxy.setBox(tb);
                 var b = animateTarget.getBox();
                 b.callback = this.afterHide;
@@ -730,7 +741,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 		*/
     maximize: function () {
         this.restorePosition = [this.el.getLeft(true), this.el.getTop(true)];
-        this.restoreSize = this.el.getStyleSize(); //Ext.getBody().maximizeWinlite=Ext.getBody().maximizeWinlite||0;
+        this.restoreSize = this.el.getSize(); //Ext.getBody().maximizeWinlite=Ext.getBody().maximizeWinlite||0;
         //Ext.getBody().maximizeWinlite++;
         //Ext.getBody().addClass("x-window-maximized-ct");
         var scrolls = Ext.getDoc().getScroll();
@@ -759,7 +770,6 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 maxView.height -= 20;
             }
         }
-        
         this.setSize(maxView.width, maxView.height);
     },
     setSize: function (width, height) {
@@ -767,7 +777,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         this.setHeight(height);
         this.syncShadow();
     },
-    setWidth: function (width) { //return;
+    setWidth: function (width) {
         this.body.setStyle({
             width: width - this.offsetBodyToContainer[0] * 2 - this._FrameWidthLR + 'px'
         });
@@ -788,7 +798,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     getHeight: function () {
         var height = parseInt(this.body.getStyle("height"));
         if (!height) return this.el.getComputedHeight();
-        return height + this._getOffsetHeightBodyToContainer()
+        return height + this._getOffsetHeightBodyToContainer() + this._FrameWidthTB;
     },
     /*
 			还原窗口
@@ -798,7 +808,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         //多个窗口最大化，互相干扰，没有窗口最大化时才完全去除
         //if(Ext.getBody().maximizeWinlite==0)
         //	Ext.getBody().removeClass("x-window-maximized-ct");
-        this.el.setLeftTop(this.restorePosition[0],this.restorePosition[1]);
+        this.el.setLeftTop(this.restorePosition[0], this.restorePosition[1]);
         if (this.ddHandler) {
             this.ddHandler.unlock();
             this.header.setStyle({
@@ -875,6 +885,7 @@ Ext.ux.WindowLite.TaskBar = function () {
         scrollTaskLeft.dom.title = "total " + currentTaskBtnStack.length + " windows";
         scrollTaskRight.dom.title = "total " + currentTaskBtnStack.length + " windows";
     }
+
     function scrollTaskRightAction() {
         var scrollWidth = scrollTaskEdge.getOffsetsTo(scrollTaskContainer)[0];
         var diff = Math.min(scrollWidth - scrollTaskContainer.getComputedWidth(), 150);
@@ -883,6 +894,7 @@ Ext.ux.WindowLite.TaskBar = function () {
             callback: scrollTaskCheck
         });
     };
+
     function scrollTaskLeftAction() {
         scrollTaskContainer.scroll("r", 150, {
             duration: 0.5,
@@ -908,7 +920,8 @@ Ext.ux.WindowLite.TaskBar = function () {
             }
             taskBarBtn.el.addClass("x-btn-active3");
             currentTaskBtnStack.push(taskBarBtn);
-        } else { if (!close) taskBarBtn.el.removeClass("x-btn-active3");
+        } else {
+            if (!close) taskBarBtn.el.removeClass("x-btn-active3");
             if (currentTaskBtnStack.length != 0) {
                 currentTaskBtnStack[currentTaskBtnStack.length - 1].el.addClass("x-btn-active3");
             }
@@ -930,6 +943,7 @@ Ext.ux.WindowLite.TaskBar = function () {
             callback: scrollTaskCheck
         });
     }
+
     function taskBtnClick(win) {
         var taskBarBtn = taskBarBtns[win.id];
         if (taskBarBtn.el.hasClass("x-btn-active3")) {
