@@ -1,0 +1,374 @@
+table.gridLite {
+	border-collapse:collapse;
+	table-layout:fixed;
+	text-align:left;
+	border:1px solid #D0D0D0;
+	font-size:12px;
+	/*fixed width 成对设置，否则部分浏览器会当做 自动宽度布局模型*/
+	width:100%;
+}
+
+table.gridLite caption {
+	font-size:1.2em;
+	font-weight:bold;
+	margin:1em 0;
+}
+
+table.gridLite thead {
+	background:transparent url(../images/white-top-bottom.gif) repeat-x scroll 0 -1px;
+	border-top: 1px solid #a5a5a5;
+  border-bottom: 1px solid #a5a5a5;
+}
+
+table.gridLite thead .x-grid3-tool {
+	height:20px;
+	position:absolute;
+	right:0px;
+	top:2px;
+	z-index:2;
+}
+
+
+table.gridLite thead .x-grid3-tool-split {
+	background:transparent url(../images/tool_split.gif) repeat-y scroll 3px center;
+	height:16px;
+	overflow:hidden;
+	width:6px;
+	float:left;
+	font-size:1px;
+}
+
+
+table.gridLite thead .x-grid3-tool-sort {
+	background:transparent url(../images/sort-bg.gif) no-repeat scroll left center;
+	height:16px;
+	overflow:hidden;
+	width:21px;
+	float:left;
+	font-size:1px;
+	cursor:pointer;
+}
+table.gridLite thead .x-grid3-tool-asc {
+	background-image:url(../images/asc.gif);
+}
+table.gridLite thead .x-grid3-tool-desc {
+	background-image:url(../images/desc.gif);
+}
+
+table.gridLite tbody a.x-grid3-tool-group {
+	background:transparent url(../../base/images/group-expand-sprite.gif) no-repeat scroll;
+	text-indent:-100px;
+	height:15px;
+	display:block;
+	outline:0;
+}
+
+table.gridLite tbody a.x-grid3-tool-collapse {
+	 background-position:3px 0;	
+}
+
+table.gridLite tbody a.x-grid3-tool-expand  {
+	background-position:3px -50px;
+}
+
+table.gridLite .x-grid3-td-numberer {
+	background:transparent url(../images/grid3-special-col-bg.gif) repeat-y scroll right center;
+}
+
+table.gridLite .x-grid3-td-numberer .x-grid3-cell-inner {
+	color:#444444;
+	font-size:11px;
+}
+
+.x-grid3-resize-marker {
+	background-color:#777777;
+	border:0 none;
+	height:100px;
+	left:100px;
+	overflow:hidden;
+	position:absolute;
+	top:100px;
+	visibility:hidden;
+	width:1px;
+	z-index:7;
+}
+
+table.gridLite .x-grid3-hd-inner,table.gridLite .x-grid3-cell-inner {	
+	padding:3px 3px 3px 5px;
+	overflow:hidden;
+	line-height:1em;	
+	white-space:nowrap;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	-moz-binding: url('ellipsis.xml#ellipsis');	
+}
+
+table.gridLite .x-grid3-hd-inner span {
+	-moz-binding: url('ellipsis.xml#ellipsis');
+}
+
+/* reverse above in strict mode */
+.ext-strict .x-grid3-cell-inner, .ext-strict .x-grid3-hd-inner{
+	width:auto;
+}
+
+/* IE Quirks to clip */
+.ext-ie .x-grid3-cell-inner, .ext-ie .x-grid3-hd-inner{
+	width:100%;
+}
+
+table.gridLite .x-grid3-hd-inner {
+	padding:4px 3px 4px 5px;	
+	line-height:1.2em;
+	font-family:arial,tahoma,helvetica,sans-serif;
+	font-size-adjust:none;	
+	position:relative;
+}
+
+table.gridLite .x-grid3-cell {
+	border-left:1px solid #D0D0D0;
+	border-right:1px solid #D0D0D0;
+	border-top:1px solid #EDEDED;
+	border-bottom:1px solid #EDEDED;
+	vertical-align:middle;
+	line-height:1em;	
+	overflow:hidden;
+}
+
+table.gridLite thead .x-grid3-cell {
+	line-height:1.2em;
+	font-weight:bold;	
+}
+
+table.gridLite thead th.x-grid3-hd-over,table.gridLite thead th:hover {
+	background:#EBF3FD url(../images/grid3-hrow-over.gif) repeat-x scroll left bottom;
+}
+
+table.gridLite td,table.gridLite th {
+  text-align: left;
+}
+
+table.gridLite .even {
+  background-color:#edf5ff;
+}
+
+/*
+	only data row please 090601
+*/
+table.gridLite > tbody.x-grid3-body > tr:hover {
+ border:1px solid #dddddd;
+ background: #efefef url(../images/row-over.gif) repeat-x scroll;    
+}
+
+table.gridLite tbody.x-grid3-body .trhover {
+  border:1px solid #dddddd;
+  background: #efefef url(../images/row-over.gif) repeat-x scroll; 
+}
+
+/*ie6 no border for tr ,so set to td*/
+table.gridLite tbody.x-grid3-body tr {
+	padding-top:6px;
+}
+
+
+table.gridLite tfoot {
+	background:#D0DEF0 url(../images/bg.gif) repeat-x scroll left top;
+}
+
+table.gridLite tfoot td {
+	padding:2px;
+	padding-top:3px;	
+	margin:0;	
+}
+
+table.pagingTable td,table.pagingTable th {	
+	margin:0;
+	padding:0;
+}
+
+.x-item-disabled {
+	color:gray;
+	cursor:default;
+	opacity:.6;
+	-moz-opacity:.6;
+	filter:alpha(opacity=60);
+}
+
+.x-item-disabled * {
+	color:gray;
+	cursor:default;
+}
+
+.x-btn-icon .x-btn-center .x-btn-text {
+	background-position:center center;
+	background-repeat:no-repeat;
+	height:16px;
+	padding:0;
+	white-space:nowrap;
+	width:16px;
+}
+
+.x-btn-left {
+	height:21px;
+	width:3px;
+}
+
+.x-btn-center button {
+	cursor:default;
+}
+
+.x-btn-center {
+	text-align:center;
+	white-space:nowrap;
+}
+
+.x-btn-right {	
+	height:21px;
+	width:3px;
+}
+
+.x-btn-left i, .x-btn-right i {
+	display:block;
+	font-size:1px;
+	line-height:1px;
+	overflow:hidden;
+	width:3px;
+}
+
+.x-btn {	
+	font-family:tahoma,verdana,helvetica;
+	font-size:11px;
+	white-space:nowrap;	
+}
+
+.x-btn button {	
+	background:transparent none repeat scroll 0 0;
+	border:0 none;	
+	font-family:tahoma,verdana,helvetica;
+	font-size:11px;
+	margin:0;
+	outline:0;
+	-moz-focus-inner{border-color:transparent!important;}
+	overflow:visible;
+	padding-left:3px;
+	padding-right:3px;
+	width:auto;
+	cursor:pointer;
+}
+
+table.gridLite .x-btn-icon td {
+	padding:0;	
+	vertical-align:middle;
+}
+
+.x-btn-over .x-btn-left{
+	background: url(../images/tb-btn-sprite.gif) no-repeat 0 0;
+}
+.x-btn-over .x-btn-right{
+	background: url(../images/tb-btn-sprite.gif) no-repeat 0 -21px;
+}
+.x-btn-over .x-btn-center{
+	background: url(../images/tb-btn-sprite.gif) repeat-x 0 -42px;
+}
+
+.x-btn-click .x-btn-left {
+	background: url(../images/tb-btn-sprite.gif) no-repeat 0 -63px;
+}
+.x-btn-click .x-btn-right{
+	background: url(../images/tb-btn-sprite.gif) no-repeat 0 -84px;
+}
+
+.x-btn-click .x-btn-center{
+	background: url(../images/tb-btn-sprite.gif) repeat-x 0 -105px;
+}
+
+table.gridLite tfoot .x-item-disabled .x-btn-left ,table.gridLite tfoot .x-item-disabled .x-btn-right,table.gridLite tfoot .x-item-disabled .x-btn-center {
+	background:transparent none repeat scroll 0 0;
+}
+
+.x-item-disabled button {
+	cursor:default;	
+}
+
+table.gridLite tfoot .x-item-disabled .firstPage{
+	background-image:url(../images/page-first-disabled.gif);	
+}
+
+table.gridLite tfoot .x-item-disabled .prevPage{	
+	background-image:url(../images/page-prev-disabled.gif);	
+}
+
+table.gridLite tfoot .x-item-disabled .nextPage{	
+	background-image:url(../images/page-next-disabled.gif);	
+}
+
+table.gridLite tfoot .x-item-disabled .lastPage{	
+	background-image:url(../images/page-last-disabled.gif);	
+}
+
+
+
+table.gridLite tfoot  .firstPage {
+	background-image:url(../images/page-first.gif);	
+}
+
+table.gridLite tfoot  .prevPage {	
+	background-image:url(../images/page-prev.gif);
+}
+
+table.gridLite tfoot .nextPage {	
+	background-image:url(../images/page-next.gif);
+}
+
+table.gridLite tfoot  .lastPage {	
+	background-image:url(../images/page-last.gif);
+}
+
+table.gridLite tfoot .refresh {	
+	background-image:url(../images/refresh.gif);
+}
+
+
+table.gridLite tfoot .loading{	
+	background-image:url(../images/loading.gif);
+	cursor:default;
+}
+
+table.gridLite .pagingSeperator {
+	background-position:center center;
+	background-repeat:no-repeat;
+	text-indent:-9999px;
+	background-image:url(../images/grid-blue-split.gif);
+	width:6px ;	
+	height:16px;
+}
+
+table.gridLite .pageCurInfo {
+	font-size:11px;
+	height:16px;
+	line-height:16px;
+	padding-bottom:2px;
+	margin:0 5px;
+}
+
+table.gridLite .pageInfo {
+	color:#444444;
+	position:absolute;
+	right:8px;
+	top:5px;
+	font-size:11px;
+	height:16px;
+	line-height:16px;
+}
+
+table.gridLite .pageCurInfo input {	
+	width:25px;
+	font-size:11px;
+	vertical-align:middle;	
+}
+
+.pagingWrap {
+	position:relative;
+	margin:0;
+	padding:0;
+}

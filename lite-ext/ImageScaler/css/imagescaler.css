@@ -1,0 +1,129 @@
+.resizerScaler a {
+	outline:none;
+	text-decoration:none;
+}
+
+.resizerScaler {
+	position:absolute;
+	z-index:10001;
+	left:0;
+	
+}
+
+.resizerHandle{
+	position:absolute;
+	display:block;
+	right:-10px;
+	bottom:-10px;
+	width:28px;
+	cursor:se-resize;
+	height:28px;
+	background-image:url(../image/handles.gif);
+	background-position:0 0;
+}
+
+.scalerViewer{
+	position:absolute;
+	right:0;
+	overflow:hidden;
+	z-index:10001;
+	border:1px solid green;
+}
+
+.scalerViewer img {
+	position:absolute;
+}
+
+.resizerHandle:hover {
+	background-position:0 -29px;
+}
+
+.resizee {
+	position:absolute;
+	margin:0;
+	padding:0;
+	border:0;
+}
+
+.resizeeCover {
+	position:absolute;
+	background-color:black;
+	opacity:0.5;
+	filter:alpha(opacity=50);
+}
+
+.cropSizeDisplay {
+	background-color:black;
+	color:white;
+	font-size:10px;
+	line-height:10px;
+	padding-bottom:4px;
+	padding-left:4px;
+	padding-right:4px;
+	padding-top:4px;
+	position:absolute;
+}
+
+.cropArea {
+	overflow:hidden;
+	position:absolute;
+	background-color:transparent;
+	left:0px;
+	cursor:move;
+	top:0px;
+}
+
+.cropResizeHandle {
+	background-attachment:scroll;
+	background-color:transparent;
+	background-image:url(../image/handles.gif);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	bottom:0;
+	cursor:se-resize;
+	display:block;
+	height:18px;
+	position:absolute;
+	right:0;
+	width:18px;
+}
+
+.cropResizeHandle:hover {
+	background-position:0 -29px;
+}
+
+.saveHandle {
+	background-attachment:scroll;
+	background-color:transparent;
+	background-image:url(../image/handles.gif);
+	background-position:-40px 0;
+	background-repeat:no-repeat;
+	bottom:0;
+	display:block;
+	height:18px;
+	left:0;
+	position:absolute;
+	width:16px;
+}
+
+.saveHandle:hover {
+	background-position:-40px -29px;
+}
+
+.cancelHandle {
+	background-attachment:scroll;
+	background-color:transparent;
+	background-image:url(../image/handles.gif);
+	background-position:-29px -11px;
+	background-repeat:no-repeat;
+	height:16px;
+	display:block;
+	position:absolute;
+	right:0;
+	top:0;
+	width:18px;
+}
+
+.cancelHandle:hover {
+	background-position:-29px -40px;
+}

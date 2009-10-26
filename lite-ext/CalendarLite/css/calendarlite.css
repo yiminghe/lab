@@ -1,0 +1,262 @@
+	.calendarLite,.yearMonthSelector {
+		background:#FFFFFF none repeat scroll 0 0;
+		border:1px solid #718BB7;
+		position:absolute;
+		width:260px;
+		line-height:13px;
+		font-size:11px;
+		z-index:99999;		
+	}
+	div.yearMonthSelector {
+		line-height:14px;
+		z-index:100000;
+	}
+	
+	.calendarData , .yearMonthSelectorTable {
+		border-collapse:collapse;
+		table-layout:fixed;
+		width:100%;
+	}
+	.calendarData thead ,.calendarData .weekCell {
+		background-color:#DFECFB;
+		
+	}
+	
+	table.calendarData > tbody > tr:hover {
+	 border:1px solid #DFECFB;
+	 background: #efefef url(../images/row-over.gif) repeat-x left top;    
+	}
+	
+		
+	table.calendarData tbody .trhover {
+	  border:1px solid #DFECFB;
+	  background: #efefef url(../images/row-over.gif) repeat-x left top; 
+	}
+	
+	table.calendarData tbody tr {
+		border-bottom:1px solid #DFECFB;
+	}
+	
+	.calendarData td,.calendarData th {
+		text-align:center;
+		border-collapse:separate;
+		width:2em;
+		font-family:arial,helvetica,tahoma,sans-serif;
+		font-size-adjust:none;
+		font-stretch:normal;
+		font-style:normal;
+		font-variant:normal;
+		font-weight:normal;
+		line-height:normal;
+		padding:0px;		
+	}
+	
+	.calendarData th ,.calendarData .weekCell{	
+		background:#DFECFB url(../images/glass-bg.gif) repeat-x scroll left top;
+		overflow:hidden;
+		border-bottom:1px solid #A3BAD9;
+		color:#233D6D;
+		cursor:default;
+		padding:2px;
+	}
+	.calendarData td.weekCell {
+		border-bottom:0px solid #A3BAD9;
+	}
+	
+	
+	.calendarData .prevday a, .calendarData .nextday a {
+		color:#AAAAAA;
+		text-decoration:none !important;
+	}
+	
+	.calendarData a ,.yearMonthSelector a {
+		outline:none;
+	} 
+	.calendarData a {
+		overflow:hidden;
+		color:black;
+		display:block;
+		padding:2px 4px 2px 2px;
+		height:100%;
+		text-decoration:none;
+	}
+	.calendarData .weekCell a {
+		padding-left:1px;
+	}
+	
+	.calendarData a:hover {
+		background:#DDECFE none repeat scroll 0 0;
+	}
+	
+	td.date-mp-sel a {
+		background:#DFECFB url(../images/glass-bg.gif) repeat-x scroll left top;
+		border:1px solid #8DB2E3;
+		padding:1px 3px;
+	}
+
+	.calendarData .date-selected a {
+ 		overflow:hidden;
+		background:#DFECFB url(../images/glass-bg.gif) repeat-x scroll left top;
+		border:1px solid #8DB2E3;
+		font-weight:bold;
+	}
+	.calendarData .date-today a {
+		border:1px solid darkred;
+	}
+	
+	
+	.calendarData tfoot td ,.yearMonthSelectorTable tfoot td {
+		background:#DFECFB url(../images/glass-bg.gif) repeat-x scroll left top;
+		border-top:1px solid #A3BAD9;
+		padding:4px;		
+		text-align:center;
+		/*ie 一定要设置宽度，才能正确居中！*/
+		width:260px;
+	}
+	
+	.yearMonthSelectorTable tfoot td {
+		padding:4px 0;
+	}
+	
+	.calendarLite .navibar {
+		-system-font:none;
+		background:transparent url(../images/hd-sprite.gif) repeat-x scroll 0 -83px;
+		color:#FFFFFF;
+		font-family:"sans serif",tahoma,verdana,helvetica;
+		font-size:11px;
+		font-size-adjust:none;
+		font-stretch:normal;
+		font-style:normal;
+		font-variant:normal;
+		font-weight:bold;
+		line-height:normal;
+		overflow:hidden;
+	}
+	
+	
+	.navibar a {
+		background-position:center center;
+		background-repeat:no-repeat;
+		cursor:pointer;
+		display:block;
+		height:13px;
+		opacity:0.6;
+		width:16px;
+		filter: alpha(opacity=60);
+	}
+	
+	.navibar a:hover {
+		opacity:1;
+		filter: alpha(opacity=100);
+	}
+	
+	.navibar .leftBtn {
+		float:left;
+		width:18px;
+		background-image:url(../images/left-btn.gif);
+		margin-left:2px;
+	}
+	
+	.navibar .rightBtn {
+		float:right;
+		width:18px;
+		background-image:url(../images/right-btn.gif);
+		margin-right:2px;
+	}
+	
+	.navibar .monthYear {
+		margin-left:50px;
+		float:left;
+	}
+	
+	.navibar .time {
+		float:left;
+	}
+	.navibar {
+		padding:5px 0;
+	}
+	
+	.calendarData thead tr th span {
+		display:block;
+		padding:2px 7px 2px 2px;
+	}
+	
+	
+	.navibar .btn-arrow,.time-btn {
+		background:transparent url(../images/btn-arrow-light.gif) no-repeat scroll right 0;
+		color:white;
+		height:22px;
+		padding-right:10px;
+		display:block;
+		border:none;
+		cursor:pointer;
+	}
+	
+	.time-btn {
+		display:inline;
+		margin-right:5px;
+	}
+	
+	.date-btn,.time-btn-wrap {
+		background:#083772 none repeat scroll 0 0;
+		border-color:#3366CC #000055 #000055 #3366CC;
+		border-style:solid;
+		border-width:1px;
+		color:white;
+		margin-right:5px;
+		cursor:pointer;
+		height:22px;
+	}
+	.time-btn-wrap {
+		float:left;
+	}
+	
+	td.date-mp-month, td.date-mp-minute,td.date-mp-second,td.date-mp-year, td.date-mp-ybtn {
+		border:0 none;
+		text-align:center;
+		vertical-align:middle;
+		width:25%;
+	}
+		
+	td.date-mp-sep {
+		border-right:1px solid #C5D2DF;
+	}
+	
+	td.date-mp-month a, td.date-mp-year a ,td.date-mp-minute a, td.date-mp-second a {
+		color:#15428B;
+		display:block;
+		padding:9px 0;	
+		text-align:center;
+		text-decoration:none;
+	}
+
+	td.date-mp-month a:hover, td.date-mp-year a:hover ,td.date-mp-minute a:hover, td.date-mp-second a:hover {
+		background:#DDECFE none repeat scroll 0 0;
+	}
+	
+	
+	.date-mp-ybtn a {
+		background:transparent url(../../base/images/tool-sprites.gif) no-repeat scroll 0 0;
+		cursor:pointer;
+		display:block;
+		height:15px;
+		margin:8px auto;
+		overflow:hidden;
+		width:15px;
+	}
+	
+	.date-mp-ybtn a.date-mp-prev {
+		background-position:0 -105px;
+	}
+	
+	.date-mp-ybtn a.date-mp-prev:hover {
+		background-position:-15px -105px;
+	}
+	
+	.date-mp-ybtn a.date-mp-next:hover {
+		background-position:-15px -120px;
+	}
+	
+	.date-mp-ybtn a.date-mp-next {
+		background-position:0 -120px;
+	}

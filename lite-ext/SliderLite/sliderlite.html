@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>slider测试</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="../base/javascript/ext-core-min.js"></script>
+		<!-- 以下为自定义组件-->
+		<script type="text/javascript" src="javascript/sliderlite.js" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
+		<link rel="stylesheet" type="text/css" href="css/sliderlite.css" />
+		
+		<script type="text/javascript">
+		//<![CDATA[
+		
+		Ext.onReady(function() {
+			new Ext.ux.SliderLite({
+				id:'test',
+				interval:3000 // 轮转间隔 3秒，最少 1秒
+			});
+		});
+		//]]>
+		
+		</script>
+	
+	
+	</head>
+	<body>
+	
+		<div class="sliderLite" style="width:360px;" id='test'>
+			
+			<ul class="sliderImages clearfix">
+				<li style="width:360px;"><a href="#" title="im1"><img src="01.gif" alt="test01" title="" /></a></li>
+				<li style="width:360px;"><a href="#" title="im2"><img src="02.jpg" alt="test02" title="" /></a></li>
+				<li style="width:360px;"><a href="#" title="im3"><img src="03.gif" alt="test03" title="" /></a></li>
+				<li style="width:360px;"><a href="#" title="im4"><img src="04.jpg" alt="test04" title="" /></a></li>		
+			</ul>
+			
+			<ul class="sliderNumbers clearfix">
+				<li title="num1">1</li>
+				<li title="num2">2</li>
+				<li title="num3">三</li>
+				<li title="num4">四</li>		
+			</ul>
+			
+		</div>
+	
+	</body>
+</html>

@@ -1,0 +1,102 @@
+.tabpanel ul.tabpanel_nav  , .tabpanel .tabpanel_nav li {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+.tabpanel ul.tabpanel_nav {
+	display:block;
+	background:transparent url(../../../base/images/aol/blue_skin.png) repeat-x scroll 0 -8208px;
+	border-bottom:1px solid #BBC4CE;
+	padding-left:12px;
+}
+
+
+.tabpanel .tabpanel_nav li {
+	float:left;
+	margin-left:2px;	
+}
+
+
+
+.tabpanel_nav a, .tabpanel_nav span, .tabpanel_nav em {
+		display:block;
+}
+
+.tabpanel .tabpanel_nav li a.tab_left {		
+		top:1px;
+		position:relative;
+		cursor:pointer;		
+		display:block;
+  	outline: none;  /* for firefox 1.5 + */
+		text-decoration:none !important;
+		
+}
+
+.tabpanel .tabpanel_nav li em.tab_right {		
+		padding-right:10px;
+}
+
+.tabpanel .tabpanel_nav li span.tab_inner {
+		background:transparent url(../../../base/images/aol/blue_skin.png) repeat-x scroll 0 -8352px;
+		margin-top:9px;
+		padding:7px 8px 6px;
+		border-style:solid solid none;
+		border-width:1px;
+		border-color:#859DB7;
+		color:#FFFFFF;	
+}
+.ext-ie6 .tabpanel .tabpanel_nav li span.tab_inner{
+		padding-bottom:5px;
+}
+
+.tabpanel .tabpanel_nav li span.tab_text {
+		cursor:pointer;
+		font-family:tahoma,arial,helvetica;
+		font-size:12px;
+		font-style:normal;
+		font-variant:normal;
+		font-weight:normal;
+		line-height:normal;
+		white-space:nowrap;
+}
+
+.tabpanel .tabpanel_nav li.tab_active a.tab_left {
+		cursor:default;
+}
+
+.tabpanel .tabpanel_nav li.tab_active span.tab_text {
+		cursor:default;
+}
+
+.tabpanel .tabpanel_nav li.tab_active span.tab_inner {
+		background-position:0 -8496px;
+		border-bottom-color:#F7F7FF;
+		border-bottom-style:solid;
+		color:#284668;		
+}
+
+.tabpanel .tabpanel_nav li.tab_active em.tab_right {
+}
+
+
+
+.tabpanel .panels {
+	padding:10px;
+	border-left-style:solid;
+	border-left-width:1px;
+	border-right-style:solid;
+	border-right-width:1px;
+	border-bottom-style:solid;
+	border-bottom-width:1px;
+	border-bottom-color:#CECECE;
+	border-left-color:#CECECE;
+	border-right-color:#CECECE;
+	background:#E6EAEB url(../../../base/images/aol/cols_stripe.gif) repeat-x scroll 0 0;
+}
+
+.tabpanel .hiddenTab {
+	display:none;
+}

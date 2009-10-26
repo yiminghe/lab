@@ -1,0 +1,85 @@
+.tip-lite {
+	position:absolute;
+	overflow:hidden;	
+}
+
+.tip-lite-hl {
+	background:transparent url(../images/tip-sprite.gif) no-repeat scroll 0 0;
+	overflow:hidden;
+	padding-left:6px;
+}
+
+.tip-lite-hr {
+	background:transparent url(../images/tip-sprite.gif) no-repeat scroll right 0;
+	overflow:hidden;
+	padding-right:6px;
+}
+
+.tip-lite-hc {
+	background:transparent url(../images/tip-sprite.gif) no-repeat scroll 0 -62px;
+	overflow:hidden;
+	padding-top:3px;	
+}
+
+.tip-lite-close {
+	background:transparent url(../../base/images/tool-sprites.gif) no-repeat scroll 0 0;
+	cursor:pointer;
+	float:right;
+	height:15px;
+	margin-left:2px;
+	overflow:hidden;
+	width:15px;
+}
+
+.tip-lite-ht {
+	overflow:hidden;	
+}
+
+.tip-lite-ht-span {	
+	color:#444444;
+	font-family:tahoma,arial,helvetica,sans-serif;
+	font-size:11px;	
+	font-style:normal;
+	font-weight:bold;
+	line-height:normal;
+	margin:0 0 2px;
+	padding:0;
+}
+
+.tip-lite-bl {
+	background:#FFFFFF url(../images/tip-sprite.gif) no-repeat scroll 0 -124px;
+	padding-left:6px;
+}
+
+.tip-lite-br {
+	background:transparent url(../images/tip-sprite.gif) no-repeat scroll right -124px;
+	padding-right:6px;
+}
+
+.tip-lite-bc {
+	color:#444444;
+	font-family:tahoma,arial,helvetica,sans-serif;
+	font-size:11px;
+	font-style:normal;
+	overflow:auto;
+	font-weight:normal;
+	line-height:14px;
+	margin:0 !important;
+	padding:0;
+}
+
+.tip-lite-fl {
+	background:transparent url(../images/tip-sprite.gif) no-repeat scroll 0 -59px;
+	padding-left:6px;
+}
+
+.tip-lite-fr {
+	background:transparent url(../images/tip-sprite.gif) no-repeat scroll right -59px;
+	padding-right:6px;
+}
+
+.tip-lite-fc {
+	background:transparent url(../images/tip-sprite.gif) no-repeat scroll 0 -121px;
+	height:3px;
+	overflow:hidden;
+}
