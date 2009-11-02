@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			textrange
+		</title>
+		<script type="text/javascript" src="range.js">
+		</script>
+		
+	</head>
+	<body>
+		<form action="a.cgi">
+						<textarea id="test" ></textarea>
+						<input type="button" id="add" value="get textarea range">
+					
+		</form>
+		<p>结果：</p>
+		<div style="border:1px solid red;" id="result"></div>
+		<script type="text/javascript">
+		var tx=document.getElementById("test");
+		var re=document.getElementById("result");
+		document.getElementById("add").onclick=function(){
+			tx.focus();
+			var pos=TextRangeUtil.getTextRange("test");
+			re.innerHTML=("range : "+pos.start +" - "+pos.end);
+		}
+		</script>
+	</body>
+</html>
