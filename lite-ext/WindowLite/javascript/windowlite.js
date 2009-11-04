@@ -297,7 +297,8 @@ Ext.ux.WindowLite = function(config) {
         //没有上限 09-07-30
         //this.width=this.offsetWidth=this.body.getTextWidth(null,50);
         //offset 很费时间，html 很多时，请尽量设置宽度 09-08-12
-        this.width = Math.max(this.body.getTextWidth(null, 0) + 25, this.header.getTextWidth(null, 0) + 30);
+        //09-11-04 不使用 getTextWidth 会导致 body的innerHtml 重复设置到其他元素，<input checked="checked" name="xx"/>
+        this.width = this.el.getComputedWidth();
     }
     //尽量使用setStyle ,el.setWidth 很费时间 09-08-12
     this.setWidth(this.width);
