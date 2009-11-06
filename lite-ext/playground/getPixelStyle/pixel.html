@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			获得css属性值的像素单元
+		</title>
+		</script>
+		<style>
+			#wrap {
+				border:1px solid red;
+				margin:0 auto;
+				width:700px;	
+				padding:20px;
+				height:300px;
+				position:relative;
+			}
+			
+			#test {
+				padding:10px;
+				width:200px;
+				left:10px;
+				margin:20px;
+				position:absolute;
+				border:1px solid green;
+			}
+		</style>
+	</head>
+	<body>
+		<form action="">
+				<label> 子容器left设置(em,pt,%都可以)<input id="unit" value="10px"/></label>
+				<br/>
+				
+				<input id="re" value="获取子容器left像素值" type="button" />
+		</form>
+		
+		<div id="wrap">
+			相对定位父容器，宽700px
+			
+			<div id="test">
+				我是绝对定位子容器，用来测试取得left像素值的
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			
+			var PIXEL = /^\d+(px)?$/i;
+			function getPixelValue(element, value) {
+				if (PIXEL.test(value)) return parseInt(value);
+				var style = element.style.left;
+				var runtimeStyle = element.runtimeStyle.left;
+				element.runtimeStyle.left = element.currentStyle.left;
+				element.style.left = value || 0;
+				value = element.style.pixelLeft;
+				element.style.left = style;
+				element.runtimeStyle.left = runtimeStyle;
+				return value;
+			};
+
+		var unit=document.getElementById("unit");
+		var test=document.getElementById("test");
+		unit.value="10px";
+		document.getElementById("re").onclick=function(){
+			test.style.left=unit.value;
+			var pix ;
+			if(document.defaultView) {
+				pix=document.defaultView.getComputedStyle(test,null).getPropertyValue("left");
+			}else{
+				pix=getPixelValue(test,test.currentStyle["left"])+"px";
+			}
+			alert("子容器left像素值 ： " + pix);
+		}
+		</script>
+	</body>
+
+</html>
