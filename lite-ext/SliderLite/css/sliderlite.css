@@ -48,11 +48,16 @@
 .sliderLite.js .sliderNumbers {
 	display:block;
 }
-.sliderLite .sliderImages img {
+.sliderLite .sliderImages li a img {
 	border:none;
+	display:block;
 }
 .sliderLite .sliderImages li {
 	float:left;
+}
+
+.sliderLite ul.sliderImages li a {
+	display:block;
 }
 
 .sliderLite.js .sliderImages li {

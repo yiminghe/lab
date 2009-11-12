@@ -2,6 +2,7 @@
 	v1.0(20090616) 根据淘宝首页slider的样子，加入渐隐效果，鼠标移动缓冲
 	v1.5(20090706) 小标标号计算改变，增强容错处理.
 	v1.5.5(20091023) js不支持时设计考虑
+	v1.6(20091113) puzzle mode support,code reorganize	
 */
 Ext.namespace('Ext.ux');
 Ext.ux.SliderLite = function(config) {
@@ -61,17 +62,31 @@ Ext.ux.SliderLite = function(config) {
     });
 
     //移出容器就开始图片自动变换
-    //离开 li 会触发 li mouseout,container mouseout,container mouseover
-    //进入 li 会触发 container mouseout ,li mouseover,container mouseover
-    container.on("mouseout",
-    function(evt) {
-        this.startSlider();
-    },
-    this, {
-        stopEvent: true
-    });
+    if (Ext.isIE) {
+        container.on("mouseleave",
+        function(evt) {
+            // this.startSlider();
+            },
+        this);
+    } else {
+        //离开 li 会触发 li mouseout,container mouseout,container mouseover
+        //进入 li 会触发 container mouseout ,li mouseover,container mouseover
+        //模拟 ie 的 mouseleave
+        container.on("mouseout",
+        function(evt) {
+            if (container.contains(evt.getRelatedTarget()) || container.dom == evt.getRelatedTarget()) {
+
+                } else {
+                // this.startSlider();
+                }
+
+        },
+        this);
+    }
+    this.anim = this[this.anim] ? this.anim: "goTo";
+    this.anim == "puzzleTo" && (this.animParts = this.animParts || [2, 2]);
     this.interval = this.interval || 5000;
-    this.interval = Math.max(this.interval, 1000);
+    this.interval = Math.max(this.interval, 2000);
     this.startSlider();
 };
 
@@ -86,14 +101,100 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
     },
 
     _mouseover: function(evt, numEl) {
-        var numInt = numEl.sliderNumberIndex;	
-        this.goTo(numInt);
+        var numInt = numEl.sliderNumberIndex;
+        this[this.anim](numInt);
     },
 
     //自动轮换
     _timeRunner: function(numInt) {
-        this.goTo(numInt);
+        this[this.anim](numInt);
         this.startSlider();
+    },
+    _randIt: function(l, u) {
+        return l + Math.floor(Math.random() * (u - l + 1));
+    },
+    //inspired by :http://cnwander.com/blog/?p=13
+    puzzleTo: function(numInt) {
+        if (this._currentNum != numInt) {
+            this.getNumberLiByIndex(this._currentNum).removeClass("current");
+            this.getNumberLiByIndex(numInt).addClass("current");
+            this.getImageByIndex(this._currentNum).setDisplayed(false);
+            //current image to show
+            var curImg = this.getImageByIndex(numInt).child("img");
+            //current image wrap a
+            var curA = this.getImageByIndex(numInt).child("a");
+            this.getImageByIndex(numInt).show();
+            var width = curImg.getComputedWidth();
+            var height = curImg.getComputedHeight();
+            curImg.hide();
+            //part's individual dimension
+            var partWidth = width / this.animParts[0];
+            var partHeight = height / this.animParts[1];
+            var curAXY = curA.getXY();
+            var total = this.animParts[0] + this.animParts[1];
+            //current parts
+            var totalParts = [];
+            for (var i = 0; i < this.animParts[0]; i++) {
+                for (var j = 0; j < this.animParts[1]; j++) {
+                    //the end position this part should be
+                    var destinedLeft = curAXY[0] + i * partWidth;
+                    var destinedTop = curAXY[1] + j * partHeight;
+                    //this part's start position ,random
+                    var cx = this._randIt(destinedLeft - partWidth, destinedLeft + partWidth);
+                    var cy = this._randIt(destinedTop - partHeight, destinedTop + partHeight);
+                    //xhtml tag rule no valid ,sorry
+                    var part = Ext.DomHelper.append(curA, {
+                        tag: 'div',
+                        style: {
+                            "background": "url(" + curImg.dom.src + ") -" + (i * partWidth) + "px -" + (j * partHeight) + "px",
+                            position: 'absolute',
+                            width: partWidth + "px",
+                            height: partHeight + "px",
+                            opacity: 0
+                        }
+                    },
+                    true);
+
+                    //in order to get left top css value
+                    part.setXY([destinedLeft, destinedTop]);
+                    var dleft = part.getLeft(true);
+                    var dtop = part.getTop(true);
+                    part.setXY([cx, cy]);
+                    //now anim it
+                    part.anim({
+                        left: {
+                            to: dleft
+                        },
+                        top: {
+                            to: dtop
+                        },
+                        opacity: {
+                            to: 1
+                        }
+                    },
+                    {
+                        duration: 1,
+                        callback: function(elA) {
+                            total--;
+                            //if all parts anim complete
+                            if (total == 0) {
+                                //show the whole picture
+                                curImg.show();
+                                totalParts.push(elA);
+                                //remove all anim parts
+                                Ext.each(totalParts,
+                                function(el) {
+                                    el.remove();
+                                });
+                                totalParts = null;
+                            }
+                            else totalParts.push(elA);
+                        }
+                    });
+                }
+            }
+            this._currentNum = numInt;
+        }
     },
 
 

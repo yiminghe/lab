@@ -10,7 +10,19 @@
 		
 		<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
 		<link rel="stylesheet" type="text/css" href="css/sliderlite.css" />
-		
+		<style type="text/css">
+			#wrap {
+				width:950px;
+				margin:0 auto;
+			}
+			h2 {
+				font-size:20px;
+				margin:20px auto;
+			}
+			#test,#test2 {
+				margin:0 auto;
+			}
+		</style>
 		<script type="text/javascript">
 		//<![CDATA[
 		
@@ -19,6 +31,14 @@
 				id:'test',
 				interval:3000 // 轮转间隔 3秒，最少 1秒
 			});
+			
+			
+			new Ext.ux.SliderLite({
+				id:'test2',
+				anim:'puzzleTo',//轮转类型
+				interval:3000 // 轮转间隔 3秒，最少 1秒
+			});
+			
 		});
 		//]]>
 		
@@ -27,7 +47,8 @@
 	
 	</head>
 	<body>
-	
+		<div id="wrap">
+	<h2>simple fade slider</h2>
 		<div class="sliderLite" style="width:360px;" id='test'>
 			
 			<ul class="sliderImages clearfix">
@@ -45,6 +66,29 @@
 			</ul>
 			
 		</div>
-	
+		
+		<h2>puzzle slider inspired by <a href="http://cnwander.com/blog/?p=13" target="_blank">http://cnwander.com/blog/?p=13</a></h2>
+			<div class="sliderLite" style="width:360px;" id='test2'>
+
+				<ul class="sliderImages clearfix">
+					<li style="width:360px;">
+						<a href="#" title="im1"><img src="01.gif" alt="test01" title="" /></a></li>
+					<li style="width:360px;">
+						<a href="#" title="im2"><img src="02.jpg" alt="test02" title="" /></a></li>
+					<li style="width:360px;">
+						<a href="#" title="im3"><img src="03.gif" alt="test03" title="" /></a></li>
+					<li style="width:360px;">
+						<a href="#" title="im4"><img src="04.jpg" alt="test04" title="" /></a></li>		
+				</ul>
+
+				<ul class="sliderNumbers clearfix">
+					<li title="num1">1</li>
+					<li title="num2">2</li>
+					<li title="num3">三</li>
+					<li title="num4">四</li>		
+				</ul>
+
+			</div>
+	</div>
 	</body>
 </html>
