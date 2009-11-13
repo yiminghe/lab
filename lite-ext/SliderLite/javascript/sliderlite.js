@@ -53,19 +53,28 @@ Ext.ux.SliderLite = function(config) {
     });
 
     //经过容器就停止图片自动变换
-    container.on("mouseover",
-    function() {
-        this.stopSlider();
-    },
-    this, {
-        stopEvent: true
-    });
+    if(Ext.isIE) {
+	    container.on("mouseenter",
+		    function() {
+		        this.stopSlider();
+		    },
+	    this);
+  	} else {
+  		container.on("mouseover",
+		    function(evt) {
+		    	if (container.contains(evt.getRelatedTarget()) || container.dom == evt.getRelatedTarget()) {
+          } else {
+            this.stopSlider();
+          }
+		    },
+	    this);
+  	}
 
     //移出容器就开始图片自动变换
     if (Ext.isIE) {
         container.on("mouseleave",
         function(evt) {
-            // this.startSlider();
+            this.startSlider();
             },
         this);
     } else {
@@ -77,9 +86,9 @@ Ext.ux.SliderLite = function(config) {
             if (container.contains(evt.getRelatedTarget()) || container.dom == evt.getRelatedTarget()) {
 
                 } else {
-                // this.startSlider();
+               this.startSlider();
                 }
-
+						
         },
         this);
     }
@@ -131,7 +140,7 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             var partWidth = width / this.animParts[0];
             var partHeight = height / this.animParts[1];
             var curAXY = curA.getXY();
-            var total = this.animParts[0] + this.animParts[1];
+            var total = this.animParts[0]*this.animParts[1];
             //current parts
             var totalParts = [];
             for (var i = 0; i < this.animParts[0]; i++) {
@@ -149,14 +158,15 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
                             "background": "url(" + curImg.dom.src + ") -" + (i * partWidth) + "px -" + (j * partHeight) + "px",
                             position: 'absolute',
                             width: partWidth + "px",
-                            height: partHeight + "px",
-                            opacity: 0
+                            height: partHeight + "px"
                         }
                     },
                     true);
 
                     //in order to get left top css value
                     part.setXY([destinedLeft, destinedTop]);
+                    part.setOpacity(0);
+                    
                     var dleft = part.getLeft(true);
                     var dtop = part.getTop(true);
                     part.setXY([cx, cy]);
