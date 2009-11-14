@@ -30,63 +30,81 @@ Ext.ux.SliderLite = function (config) {
     if (this._totalNum <= 1) {
         return;
     }
-    this._imageDimension = [];
+    var total = 0;
+    this.el.mask("loading ...");
     this._images.each(function (el) {
-        that._imageDimension.push({
-            width: el.getComputedWidth(),
-            height: el.getComputedHeight()
+        var img = el.child("img");
+        img.on("load", function () {
+            total++;
+            if (total == that._totalNum) that.init();
         });
+        if (img.dom.complete) {
+            total++;
+            if (total == that._totalNum) that.init();
+        }
     });
-    this.anim = this[this.anim] ? this.anim : "fadeTo";
-    if (this.setUp[this.anim]) {
-        this.setUp[this.anim].call(this);
-    }
-    this._numbers.item(0).addClass('current');
-    this._currentNum = 0; //给小标编号，便于查找对应图片对应
-    this._numbers.each(function (el, this_, index) {
-        el.dom.sliderNumberIndex = index;
-    });
-    var numUl = container.select(".sliderNumbers").item(0); //鼠标经过数字变换当前图片
-    //注意设置buffer防止鼠标移动过快，和渐隐效果冲突
-    numUl.on("mouseover", this._mouseover, this, { //ie can not stop mouseover
-        //stopEvent :true,
-        delegate: "li",
-        buffer: 400 //之前已经触发过 container mouseover ,slider 已停
-        //400 和 _unHightlight duration 参数相等
-    }); //经过容器就停止图片自动变换
-    if (Ext.isIE) {
-        container.on("mouseenter", function () {
-            this.stopSlider();
-        },
-        this);
-    } else {
-        container.on("mouseover", function (evt) {
-            if (container.contains(evt.getRelatedTarget()) || container.dom == evt.getRelatedTarget()) {} else {
-                this.stopSlider();
-            }
-        },
-        this);
-    } //移出容器就开始图片自动变换
-    if (Ext.isIE) {
-        container.on("mouseleave", function (evt) {
-            this.startSlider();
-        },
-        this);
-    } else { //离开 li 会触发 li mouseout,container mouseout,container mouseover
-        //进入 li 会触发 container mouseout ,li mouseover,container mouseover
-        //模拟 ie 的 mouseleave
-        container.on("mouseout", function (evt) {
-            if (container.contains(evt.getRelatedTarget()) || container.dom == evt.getRelatedTarget()) {} else {
-                this.startSlider();
-            }
-        },
-        this);
-    }
-    this.interval = this.interval || 5000;
-    this.interval = Math.max(this.interval, 2000);
-    this.startSlider();
 };
 Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
+    init: function () {
+        var container = this.el;
+        var that = this;
+        this.el.unmask();
+        this._imageDimension = [];
+        this._images.each(function (el) {
+            that._imageDimension.push({
+                width: el.getComputedWidth(),
+                height: el.getComputedHeight()
+            });
+        });
+        this.anim = this[this.anim] ? this.anim : "fadeTo";
+        if (this.setUp[this.anim]) {
+            this.setUp[this.anim].call(this);
+        }
+        this._numbers.item(0).addClass('current');
+        this._currentNum = 0; //给小标编号，便于查找对应图片对应
+        this._numbers.each(function (el, this_, index) {
+            el.dom.sliderNumberIndex = index;
+        });
+        var numUl = this.el.select(".sliderNumbers").item(0); //鼠标经过数字变换当前图片
+        //注意设置buffer防止鼠标移动过快，和渐隐效果冲突
+        numUl.on("mouseover", this._mouseover, this, { //ie can not stop mouseover
+            //stopEvent :true,
+            delegate: "li",
+            buffer: 400 //之前已经触发过 container mouseover ,slider 已停
+            //400 和 _unHightlight duration 参数相等
+        }); //经过容器就停止图片自动变换
+        if (Ext.isIE) {
+            this.el.on("mouseenter", function () {
+                this.stopSlider();
+            },
+            this);
+        } else {
+            this.el.on("mouseover", function (evt) {
+                if (container.contains(evt.getRelatedTarget()) || container.dom == evt.getRelatedTarget()) {} else {
+                    this.stopSlider();
+                }
+            },
+            this);
+        } //移出容器就开始图片自动变换
+        if (Ext.isIE) {
+            this.el.on("mouseleave", function (evt) {
+                this.startSlider();
+            },
+            this);
+        } else { //离开 li 会触发 li mouseout,container mouseout,container mouseover
+            //进入 li 会触发 container mouseout ,li mouseover,container mouseover
+            //模拟 ie 的 mouseleave
+            this.el.on("mouseout", function (evt) {
+                if (container.contains(evt.getRelatedTarget()) || container.dom == evt.getRelatedTarget()) {} else {
+                    this.startSlider();
+                }
+            },
+            this);
+        }
+        this.interval = this.interval || 5000;
+        this.interval = Math.max(this.interval, 2000);
+        this.startSlider();
+    },
     setUp: {
         commonHide: function () {
             this._images.each(function (el) {
