@@ -36,10 +36,20 @@ Ext.ux.SliderLite = function (config) {
         var img = el.child("img");
         img.on("load", function () {
             total++;
+            if(total==1) {
+            	that.el.setStyle({
+            		height:img.getComputedHeight()+"px"
+            	});
+            }
             if (total == that._totalNum) that.init();
         });
         if (img.dom.complete) {
             total++;
+            if(total==1) {
+            	that.el.setStyle({
+            		height:img.getComputedHeight()+"px"
+            	});
+            }
             if (total == that._totalNum) that.init();
         }
     });
@@ -112,11 +122,14 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             });
             this._images.item(0).setDisplayed(true);
         },
+        commonShow: function () {
+            this._images.each(function (el) {
+                el.setDisplayed(true);
+            });
+        },
         fadeTo: function () {
-            this.setUp.commonHide.call(this);
         },
         puzzleTo: function () {
-            this.setUp.commonHide.call(this);
             this.animParts = this.animParts || [2, 2]
         },
         scrollHorizontal: function () {
