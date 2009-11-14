@@ -3,6 +3,7 @@
 	v1.5(20090706) 小标标号计算改变，增强容错处理.
 	v1.5.5(20091023) js不支持时设计考虑
 	v1.6(20091113) puzzle mode support,code reorganize	
+	v1.7(20091114) 添加水平垂直滚动，考虑js不支持的情况
 */
 Ext.namespace('Ext.ux');
 Ext.ux.SliderLite = function (config) {
