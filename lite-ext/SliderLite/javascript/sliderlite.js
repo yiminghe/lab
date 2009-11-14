@@ -34,31 +34,25 @@ Ext.ux.SliderLite = function(config) {
         return;
     }
     var total = 0;
+    function update(img) {
+		total++;
+        if (total == 1) {
+            that.el.setStyle({
+                height: img.getComputedHeight() + "px"
+            });
+        }
+        else if (total == that._totalNum) that.init();
+    }
     this.el.mask("loading ...");
     this._images.each(function(el) {
         var img = el.child("img");
-
         if (img.dom.complete) {
-            total++;
-            if (total == 1) {
-                that.el.setStyle({
-                    height: img.getComputedHeight() + "px"
-                });
-            }
-            if (total == that._totalNum) that.init();
+            update(img);
             //console.log("comlete :" + total);
-        }
-        else
-        {
+        } else {
             img.on("load",
             function() {
-                total++;
-                if (total == 1) {
-                    that.el.setStyle({
-                        height: img.getComputedHeight() + "px"
-                    });
-                }
-                if (total == that._totalNum) that.init();
+                update(img);
                 //console.log("load :" + total);
             });
         }
@@ -66,7 +60,7 @@ Ext.ux.SliderLite = function(config) {
 };
 Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
     init: function() {
-		//console.log("innit:"+this._currentNum);
+        //console.log("innit:"+this._currentNum);
         var container = this.el;
         var that = this;
         this.el.unmask();
@@ -150,10 +144,10 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             });
         },
         fadeTo: function() {
-			this.setUp.commonHide.call(this);
+            this.setUp.commonHide.call(this);
         },
         puzzleTo: function() {
-			this.setUp.commonHide.call(this);
+            this.setUp.commonHide.call(this);
             this.animParts = this.animParts || [2, 2]
         },
         scrollHorizontal: function() {
@@ -275,7 +269,7 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
     //inspired by :http://cnwander.com/blog/?p=13
     puzzleTo: function(numInt) {
         if (this._currentNum != numInt) {
-			//console.log("puzzleTo:"+this._currentNum +" :"+numInt);
+            //console.log("puzzleTo:"+this._currentNum +" :"+numInt);
             this.getNumberLiByIndex(this._currentNum).removeClass("current");
             this.getNumberLiByIndex(numInt).addClass("current");
             this.getImageByIndex(this._currentNum).setDisplayed(false);
