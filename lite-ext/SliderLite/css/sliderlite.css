@@ -17,7 +17,7 @@
 	bottom:8px;
 	overflow:hidden;
 	height:21px;
-	z-index:1;
+	z-index:10;
 }
 .sliderNumbers li {
 	background:#FFFFFF none repeat scroll 0 0;
@@ -51,20 +51,19 @@
 .sliderLite .sliderImages li a img {
 	border:none;
 	display:block;
+	margin:0;
+	padding:0;
 }
 .sliderLite .sliderImages li {
 	float:left;
 }
 
+.sliderLite .sliderImages.scrollTopImg li {
+	float:none;
+}
+
 .sliderLite ul.sliderImages li a {
 	display:block;
-}
-
-.sliderLite.js .sliderImages li {
-	/*js on all hide except current*/
-	display:none;
-}
-
-.sliderLite.js .sliderImages li.current {
-	display:block;
+	margin:0;
+	padding:0;
 }
