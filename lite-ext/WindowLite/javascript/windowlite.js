@@ -418,7 +418,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 		*/
     syncShadow: function() {
         //顺便更新下resizer的ie6问题
-        if (Ext.isIE6 && this.resizer) {
+        if (this.el.isVisible() && Ext.isIE6 && this.resizer) {
             this.resizer.syncHandleHeight();
             this.el.repaint();
         }
@@ -431,7 +431,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             sw.hide();
         }
         //ie6 iframe
-        if (sh) {
+        if (this.el.isVisible() && sh) {
             if (this.el.isVisible()) {
                 var elSize = this.el.getSize();
                 var w = elSize.width,
@@ -611,19 +611,20 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     /*
 			根据当前位置，调整windowlite大小，使得windowlite不超过当前浏览器窗口的可见区域.
 		*/
-    constrainToView: function() {
+    constrainToView: function(option,shadow) {
+        option=option||{};
         var viewSize = Ext.getDoc().getViewSize();
         var width = parseInt(this.el.getStyle("width"));
         //提高效率，尽量用css属性
         var height = this.getHeight();
         var winScroll = Ext.getDoc().getScroll();
-        var elX = this.el.getX();
-        var elY = this.el.getY();
+        var elX = option.x||this.el.getX();
+        var elY = option.y||this.el.getY();
         //本身已经在屏幕以外，大小无论如何调整都不行了
         var scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
         var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
         if (elX < viewSize.width) {
-            var diffW = Math.max(width + this.el.getX() - viewSize.width - winScroll.left, 0);
+            var diffW = Math.max(width + elX - viewSize.width - winScroll.left, 0);
             if (diffW > 0) {
                 //浏览器窗口出现了滚动条,width要多剪裁，firefox滚动条占地方
                 if (scrollHeight > viewSize.height) {
@@ -631,10 +632,10 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 }
                 width = width - diffW - 10;
             }
-            if (diffW > 0) this.setWidth(width);
+            if (diffW > 0) this.setWidth(width,false);
         }
         if (elY < viewSize.height) {
-            var diffH = Math.max(height + this.el.getY() - viewSize.height - winScroll.top, 0);
+            var diffH = Math.max(height + elY - viewSize.height - winScroll.top, 0);
             //出现在边缘，需要width剪裁
             if (diffH > 0) {
                 if (scrollWidth > viewSize.width) {
@@ -642,9 +643,9 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 }
                 height = height - diffH - 10;
             }
-            if (diffH > 0) this.setHeight(height);
+            if (diffH > 0) this.setHeight(height,false);
         }
-        if (!this._restoreA.isDisplayed()) {
+        if ( shadow !== false && !this._restoreA.isDisplayed() ) {
             this.syncShadow();
         }
     },
@@ -669,23 +670,26 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     afterShow: function(option) {
         option = option || {};
         if (option.animateTarget) this.getProxy().hide();
-        var winScroll = Ext.getDoc().getScroll();
-        if (this.el.getY() <= (10 + winScroll.top)) {
-            this.el.setY(10 + winScroll.top);
-        }
-        //09-09-14 不要超出窗口所边界
-        if (this.el.getX() <= (10 + winScroll.left)) {
-            this.el.setX(10 + winScroll.left);
+        //以前没有调节过！节省效率
+        if(option.constrainToView && option.x && option.y) {}
+        else if(option.constrainToView){
+            var winScroll = Ext.getDoc().getScroll();
+            if (this.el.getY() <= (10 + winScroll.top)) {
+                this.el.setY(10 + winScroll.top);
+            }
+            //09-09-14 不要超出窗口所边界
+            if (this.el.getX() <= (10 + winScroll.left)) {
+                this.el.setX(10 + winScroll.left);
+            }
         }
         this.constrainHeight(false);
+        if (option.constrainToView) {
+            this.constrainToView(option,false);
+        } 
         this.el.setStyle({
             'visibility': 'visible'
         });
-        if (option.constrainToView) {
-            this.constrainToView();
-        } else {
-            if (!this._restoreA.isDisplayed()) this.syncShadow();
-        }
+        if (!this._restoreA.isDisplayed()) this.syncShadow();
         this.focus();
         this.fireEvent("show", this);
     },
@@ -762,11 +766,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         }
         Ext.fly(el.appendChild(document.createElement('ul'))).setHeight(this.el.getComputedHeight() - this.header.getComputedHeight());
         el.style.width = this.el.getComputedWidth() + 'px';
-        Ext.getBody().appendChild(el);
+        ( (this.containerId && Ext.get(this.containerId))||Ext.getBody() ).appendChild(el);
         var ghost = Ext.get(el);
         this.el.hide();
         this.syncShadow();
-        var xy = this.el.getXY();
+        var xy = [this.el.getLeft(true),this.el.getTop(true)];
         ghost.setLeftTop(xy[0], xy[1]);
         this.activeGhost = ghost;
         return ghost;
@@ -775,12 +779,13 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 			删掉简易的代理窗口，恢复原来的复杂窗口
 		**/
     unghost: function() {
-        this.el.show();
-        this.el.setXY(this.activeGhost.getXY());
-        this.syncShadow();
         this.activeGhost.hide();
+        var l=[this.activeGhost.getLeft(true),this.activeGhost.getTop(true)];
         this.activeGhost.remove();
         delete this.activeGhost;
+        this.el.setLeftTop(l[0],l[1]);
+        this.el.show();
+        this.syncShadow();
         this.focus();
     },
     /*
@@ -841,23 +846,23 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         this.setHeight(height);
         this.syncShadow();
     },
-    setWidth: function(width) {
+    setWidth: function(width,shadow) {
         this.body.setStyle({
             width: width - this.offsetBodyToContainer[0] * 2 - this._FrameWidthLR + 'px'
         });
         this.el.setStyle({
             width: width + 'px'
         });
-        this.syncShadow();
+        if(shadow!==false)this.syncShadow();
     },
-    setHeight: function(height) {
+    setHeight: function(height,shadow) {
         this.body.setStyle({
             height: height - this._getOffsetHeightBodyToContainer() - this._FrameWidthTB + 'px'
         });
         this.el.setStyle({
             height: 'auto'
         });
-        this.syncShadow();
+        if(shadow!==false)this.syncShadow();
     },
     getHeight: function() {
         var height = parseInt(this.body.getStyle("height"));
@@ -919,6 +924,7 @@ if (Ext.dd && Ext.dd.DD) {
                 this.alignElWithMouse(this.win.shim, e.getPageX(), e.getPageY());
             }
         },
+        b4EndDrag: Ext.emptyFn,
         endDrag: function(e) {
             this.win.unghost();
         }
