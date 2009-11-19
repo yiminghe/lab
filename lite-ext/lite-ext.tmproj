@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>SliderLite/sliderlite.html</string>
+	<string>WindowLite/javascript/windowlite.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -121,54 +121,24 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>SliderLite/css/sliderlite.css</key>
+		<key>WindowLite/javascript/windowlite.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>15</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>52</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>33</integer>
-		</dict>
-		<key>SliderLite/javascript/sliderlite.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>28</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>SliderLite/sliderlite.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>38</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>18</integer>
+			<integer>890</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>SliderLite/javascript/sliderlite.js</string>
-		<string>SliderLite/sliderlite.html</string>
-		<string>SliderLite/css/sliderlite.css</string>
+		<string>WindowLite/javascript/windowlite.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

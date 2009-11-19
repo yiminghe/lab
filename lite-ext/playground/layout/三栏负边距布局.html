@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<title>Example 5: Negative Margins</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> 
+
+<style type="text/css" media="screen">
+/*<![CDATA[*/
+#header {
+	border: 1px solid #cecea5;
+	background: #d7dabd;
+}
+#outer_wrapper {
+	background: #fff url(background_3.gif) repeat-y left;
+}
+#wrapper {
+	background: url(background_2.gif) repeat-y right;
+}
+
+#container {
+	width: 100%;
+	float: left;
+	margin-right: -200px;
+	background: url(background_2.gif) repeat-y right;
+}
+#content {
+	margin-right: 200px;
+	background: url(background_3.gif) repeat-y left;
+}
+#main {
+	margin-left: 150px;
+}
+#left {
+	width: 150px;
+	float: left;
+}
+#sidebar {
+	width: 200px;
+	float: right;
+}
+#footer {
+	border: 1px solid #cecea5;
+	background: #d7dabd;
+}
+h1 {
+	margin-top: 0;
+}
+.last {
+	margin-bottom: 0;
+}
+.clearing {
+	height: 0;
+	clear: both;
+}
+/*]]>*/
+</style>
+</head>
+
+<body>
+
+<div id="header">header</div>
+
+<div id="outer_wrapper">
+
+	<div id="wrapper">
+		<div id="container">
+			<div id="content">
+			
+				<div id="left">
+					<h1>navbar</h1>
+					<ul>
+						<li>link one</li>
+						<li>link two</li>
+
+					</ul>
+				</div>
+				
+				<div id="main">
+					<h1>content</h1>
+					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  Phasellus varius eleifend tellus. Suspendisse potenti. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Nulla facilisi. Sed wisi lectus, placerat nec, mollis quis, posuere eget, arcu.</p>
+					<p class="last">Donec euismod. Praesent mauris mi, adipiscing non, mollis eget, adipiscing ac, erat. Integer nonummy mauris sit amet metus. In adipiscing, ligula ultrices dictum vehicula, eros turpis lacinia libero, sed aliquet urna diam sed tellus. Etiam semper sapien eget metus.</p>
+				</div>
+
+				
+			</div>
+		</div>
+		
+		<div id="sidebar">
+			<h1>sidebar</h1>
+			<p>Here be your sidebar. Add whatever content you may desire.</p>
+		</div>
+		
+		<div class="clearing">&nbsp;</div>
+	</div>
+
+</div>
+
+<div id="footer">footer</div>
+
+</body>
+</html>
