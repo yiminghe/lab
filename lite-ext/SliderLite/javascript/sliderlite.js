@@ -405,7 +405,7 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             //easing: 'easeOut',
             duration: 0.5
             //ie6 canot hide ,if set Zindex	
-            //,callback: function(el){el.hide();}
+            ,callback: function(el){el.setOpacity(0);}
         });
     },
     //自动轮换开始
