@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+		<title>
+
+		content一象素缺口圆角
+
+		通过使用两个div.sup在div.cnt的上下，各画出1px的缺口边框
+</title>
+		<style type="text/css">
+		#xyz.box .sup{display:block; height:1px; overflow:hidden; margin:0 1px; background:#ccc;}
+		#xyz.box .cnt{border-left:1px solid #ccc; border-right:1px solid #ccc;}
+		p {margin:0;padding:0;}
+		</style>
+	</head>
+	<body>
+		<div id="xyz" class="box">
+		<div class="sup"></div>
+		<div class="cnt">
+		<p>content一象素缺口圆角</p>
+		<p>通过使用两个div.sup在div.cnt的上下，各画出1px的缺口边框</p>
+		</div>
+		<div class="sup"></div>
+		</div>
+		
+	</body>
+</html>
