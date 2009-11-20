@@ -41,12 +41,11 @@ float: left;
 margin: 0;
 padding: 1px 0;
 width: 160px;
-line-height: 1em;
 }
+/*
 .mulTreeContainer ul li.level1 {
 	padding:3px 0;
-}
-
+}*/
 .mulTreeContainer ul li .labelText {
 	overflow:hidden;
 	width:120px;
@@ -55,7 +54,10 @@ line-height: 1em;
 
 .mulTreeContainer ul li .labelText input ,ul.bottomNode li input {
 	margin:3px 4px;
-	_margin:0px 4px;
+}
+
+.ext-ie .mulTreeContainer ul li .labelText input ,.ext-ie ul.bottomNode li input {
+	margin:0px 4px;
 }
 
 .mulTreeContainer ul li {
