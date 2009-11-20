@@ -1,0 +1,296 @@
+/* The following styles have no impact on the demo */
+/* just for colours and laying out the form controls etc */
+*
+	{
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 100%;
+	}
+body
+	{
+	background-color: #ffffff;
+	}
+h1
+	{
+	font-size: 1.5em;
+	}
+div.output
+	{
+	margin-top: 1em;
+	padding: 0.25em;
+	background: #ccffdd;
+	}
+#article_location
+	{
+	font-style: italic;
+	margin: 1.5em 0 1.5em 0;
+	}
+#block_1
+	{
+	background-color: #c0c0c0;
+	}
+#block_2
+	{
+	background-color: #b4b4b4;
+	}
+#block_3
+	{
+	background-color: #a8a8a8;
+	}
+#wrapper
+	{
+	margin: 0;
+	padding: 0;
+	background: #ffff00;
+	}
+#header
+	{
+	padding: 0.5em 0;
+	background: #9999dd;
+	}
+#footer
+	{
+	background: #ccccee;
+	}
+div, #wrapper h2, #header h1, #wrapper p, #header p, #footer p, div p
+	{
+	margin: 0;
+	padding: 0;
+	}
+div
+	{
+	margin: 0;
+	padding: 0;
+	}
+form
+	{
+	width: auto;
+	}
+fieldset
+	{
+	margin-top: 1em;
+	padding: 0.5em;
+	}
+* html fieldset
+	{
+	width: 94%;
+	}
+div#column_order
+	{
+	padding-bottom: 0.2em;
+	}
+div#column_order span
+	{
+	float: left;
+	width: auto;
+	margin-right: 0.5em;
+	}
+span strong
+	{
+	display: block;
+	font-size: 0.8em;
+	width: 5em;
+	padding: 0.3em 0 0.3em 0;
+	font-weight: normal;
+	}
+div#column_order table
+	{
+	float: left;
+	border-collapse: collapse;
+	}
+div#column_order td, div#column_order th
+	{
+	font-size: 0.8em;
+	text-align: center;
+	padding: 0 0.5em 0 0;
+	}
+div#column_order th
+	{
+	font-weight: normal;
+	padding-bottom: 0.25em;
+	}
+span input, div#column_order td input
+	{
+	width: 2.5em;
+	text-align: center;
+	background: #cccccc;
+	}
+input.radio
+	{
+	background: transparent !important;
+	}
+span input.column_width, div#column_order td input.column_width
+	{
+	background: #eeeeee;
+	}
+form p
+	{
+	margin: 0;
+	padding: 0;
+	}
+div#commands
+	{
+	clear: both;
+	margin-top: 0.75em;
+	padding: 0.75em 0;
+	margin-bottom: 0.5em;
+	}
+div#commands input
+	{
+	font-size: 0.8em;
+	float: left;
+	width: 9em;
+	padding: 0.2em 0;
+	margin-right: 0.25em;
+	}
+div#commands input#update
+	{
+	float: right;
+	margin-right: 0;
+	}
+div#controls_unit_width
+	{
+	margin-right: 0.75em;
+	float: left;
+	font-size: 0.8em;
+	width: 9em;
+	margin-top: 0.75em;
+	margin-bottom: 0.75em;
+	}
+div#controls_unit_width p
+	{
+	margin-top: 0.25em;
+	float: left;
+	}
+div#controls_unit_width p span
+	{
+	margin-left: 0.75em;
+	}
+div#width_warning
+	{
+	margin-top: 1.25em;
+	font-style: italic;
+	font-size: 0.8em;
+	color: #cc3333;
+	}
+div#width_warning span
+	{
+	white-space: nowrap;
+	}
+div#controls_select
+	{
+	clear: both;
+	padding: 1em 0 1em 0;
+	}
+div#controls_select div
+	{
+	margin-bottom: 0.25em;
+	width: 33%;
+	float: left;
+	font-size: 0.75em;
+	}
+body > div#controls_select div p
+	{
+	position: relative;
+	padding: 0.15em 0 0 1.75em;
+	margin: 0 1em 0.5em 0;
+	}
+body > div#controls_select div p input
+	{
+	position: absolute;
+	left: 0;
+	top: 0;
+	}
+p.disableable
+	{
+	margin-left: 1.5em;
+	}
+form hr
+	{
+	margin-top: 0.25em;
+	padding-top: 0.25em;
+	clear: both;
+	height: 1px;
+	}
+form h3
+	{
+	zclear: both;
+	zborder-top: solid 1px #000000;
+	zpadding-top: 1em;
+	}
+form ul
+	{
+	margin: 0;
+	padding: 0 0 0 1em;
+	}
+form li
+	{
+	margin: 0;
+	padding: 0.25em 0 0 0;
+	}
+#instructions li em
+	{
+	display: block;
+	color: #999999;
+	margin-left: 1em;
+	}
+table#agent_report
+	{
+	width: 100%;
+	border-collapse: collapse;
+	}
+table#agent_report td, table#agent_report th
+	{
+	text-align: left;
+	vertical-align: top;
+	border: solid 1px #000000;
+	padding: 0.5em;
+	width: 20%;
+	}
+td.fail
+	{
+	color: #cc3333;
+	}
+tr.important
+	{
+	background: #cccccc;
+	}
+* html table#agent_report
+	{
+	display: none;
+	}
+table#agent_report div:before
+	{
+	content: '[NOTES]'; 
+	display: block;
+	}
+table#agent_report div
+	{
+	position: absolute;
+	height: 1em;
+	margin-top: -1em;
+	margin-left: 9em;
+	overflow: hidden;
+	width: 4em;
+	font-size: 0.75em;
+	color: #000000;
+	z-index: 10;
+	}
+table#agent_report td:hover div
+	{
+	position: absolute;
+	height: auto;
+	overflow: auto;
+	margin-left: -21%;
+	margin-top: -3em;
+	background: #ffcc00;
+	width: 40%;
+	z-index: 100;
+	}
+table#agent_report td:hover div:before
+	{
+	content: ''; 
+	}
+form, div#legend, div#instructions, div.output
+	{
+	direction: ltr;
+	}

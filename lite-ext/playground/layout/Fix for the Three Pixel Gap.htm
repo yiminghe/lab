@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0057)http://www.positioniseverything.net/sidepages/jogfix.html -->
+<HTML lang=en xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>Fix for the Three Pixel Gap</TITLE>
+<META content="23 October, 2002" name="Big John">
+<META http-equiv=content-Type content="text/html; charset=iso-8859-1">
+<META content=true name=mssmarttagspreventparsing>
+<META 
+content="demo,test,big john,big,john,positioniseverything,css,html,what else do you want from me!?" 
+name=keywords>
+<META 
+content="This demo shows a fix for the 3px gap that Internet Explorer adds to layouts when floats are used." 
+name=description>
+<META content=global name=distribution>
+<META content=document name=resource-type>
+<META content=all name=robots>
+<META http-equiv=imagetoolbar content=no><LINK href="favicon.ico" 
+rel="SHORTCUT ICON">
+<STYLE type=text/css>HTML {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; BORDER-RIGHT-WIDTH: 0px
+}
+BODY {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 80%; BACKGROUND: #cdc; PADDING-BOTTOM: 0px; MARGIN: 20px; PADDING-TOP: 0px; FONT-FAMILY: verdana,sans-serif
+}
+A {
+	COLOR: #000
+}
+.alignright {
+	MARGIN: 0px; TEXT-ALIGN: right
+}
+.small {
+	FONT-SIZE: 0.8em
+}
+.return {
+	FONT-WEIGHT: bold; RIGHT: 30px; POSITION: absolute; TOP: 20px
+}
+IMG {
+	MARGIN: 0px 0px 20px
+}
+#wrapper {
+	BORDER-RIGHT: red 3px solid; BORDER-TOP: red 3px solid; MARGIN: 0px 0px 50px; BORDER-LEFT: red 3px solid; WIDTH: 500px; BORDER-BOTTOM: red 3px solid
+}
+#floatbox {
+	FONT-WEIGHT: bold; FONT-SIZE: 1.4em; BACKGROUND: #6d6; FLOAT: left; WIDTH: 100px; COLOR: #46d; HEIGHT: 50px
+}
+P {
+	BORDER-RIGHT: #000 2px solid; BORDER-TOP: #000 2px solid; BACKGROUND: #dd9; MARGIN: 0px 0px 0px 110px; BORDER-LEFT: #000 2px solid; BORDER-BOTTOM: #000 2px solid
+}
+ HTML #floatbox {
+	MARGIN-RIGHT: 7px
+}
+ HTML P {
+	MARGIN-LEFT: 0px; HEIGHT: 1%
+}
+</STYLE>
+
+<META content="MSHTML 6.00.2900.5512" name=GENERATOR></HEAD>
+<BODY>
+<DIV class=return><A 
+href="http://www.positioniseverything.net/explorer/threepxtest.html">Return to 
+Three PX Test</A> </DIV>
+<DIV>Live demo</DIV>
+<DIV id=wrapper>
+<DIV id=floatbox>Float </DIV>
+<P>The red bordered box is a wrapper to give the demo a consistent width, and 
+has no effect on the various IE problems in question. It can be eliminated 
+without changing the jog fix.<BR>This paragraph (black border) should have a 
+10px gap between it and the float. There will be no 3px text jog within the 
+paragraph where the float ends in IE/win. Take that, M$! Buahaha!!<BR>Below is a 
+graphic showing the demo as it appears in Mozilla. </P></DIV>
+<DIV>Mozilla</DIV><IMG height=152 
+src="Fix for the Three Pixel Gap.files/jogfix-moz.gif" width=507> 
+<DIV>IE 5.5/win</DIV><IMG height=170 
+src="Fix for the Three Pixel Gap.files/jogfix-ie5.5.gif" width=501> 
+</BODY></HTML>
