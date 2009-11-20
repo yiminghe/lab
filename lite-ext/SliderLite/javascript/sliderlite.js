@@ -4,6 +4,7 @@
 	v1.5.5(20091023) js不支持时设计考虑
 	v1.6(20091113) puzzle mode support,code reorganize	
 	v1.7(20091114) 添加水平垂直滚动，考虑js不支持的情况
+	v1.8(20091120) fadeTo 两幅同时变化
 */
 Ext.namespace('Ext.ux');
 Ext.ux.SliderLite = function(config) {
@@ -144,7 +145,15 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             });
         },
         fadeTo: function() {
-            this.setUp.commonHide.call(this);
+            this._images.each(function(el,this_,index) {
+                el.position("absolute");
+                el.setLeftTop(0,0);
+                el.hide();
+                el.setStyle({
+                	zIndex:index
+                });
+            });
+            this._images.item(0).show();
         },
         puzzleTo: function() {
             this.setUp.commonHide.call(this);
@@ -363,29 +372,40 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
         if (this._currentNum != numInt) {
             this.getNumberLiByIndex(this._currentNum).removeClass("current");
             this.getNumberLiByIndex(numInt).addClass("current");
-            this._unHightlight(this._currentNum, this._highlight.createDelegate(this, [numInt]))
+            var oneHide=this.getImageByIndex(this._currentNum);
+            var oneShow=this.getImageByIndex(numInt);
+            var oneHZ=+oneHide.getStyle("zIndex");
+            var oneSZ=+oneShow.getStyle("zIndex");
+            if(oneHZ > oneSZ) {
+            	oneHide.setStyle({zIndex:oneSZ});
+            	oneShow.setStyle({zIndex:oneHZ});
+            }
+            this._unHightlight(this._currentNum);
+            this._highlight(numInt); 
+            //this._unHightlight(this._currentNum, this._highlight.createDelegate(this, [numInt]))
         }
     },
     //图片渐隐出现
     _highlight: function(num) {
         this._currentNum = num;
         this.getImageByIndex(num).fadeIn({
-            endOpacity: 1,
-            //can be any value between 0 and 1 (e.g. .5)
-            easing: 'easeOut',
-            useDisplay: true,
-            duration: .5
+            //endOpacity: 1,
+            //block :true,
+            //concurrent :true,
+            //easing: 'easeOut',
+            duration: 0.5
         });
     },
     //图片渐隐隐藏
-    _unHightlight: function(num, callback) {
+    _unHightlight: function(num) {
         this.getImageByIndex(num).fadeOut({
-            endOpacity: 0,
-            //can be any value between 0 and 1 (e.g. .5)
-            easing: 'easeOut',
-            duration: .4,
-            useDisplay: true,
-            callback: callback
+            endOpacity:0.5,
+            //block :true,
+            //concurrent :true,
+            //easing: 'easeOut',
+            duration: 0.5
+            //ie6 canot hide ,if set Zindex	
+            //,callback: function(el){el.hide();}
         });
     },
     //自动轮换开始
