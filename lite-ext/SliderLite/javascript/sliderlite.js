@@ -38,6 +38,7 @@ Ext.ux.SliderLite = function(config) {
     function update(img) {
 		total++;
         if (total == 1) {
+        		if(!that.el.dom.style.height)
             that.el.setStyle({
                 height: img.getComputedHeight() + "px"
             });
