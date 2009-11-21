@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+		<title>
+百科实现
+</title>
+		<style type="text/css">
+			.box{border:1px solid #ccc; border-top:0;}
+.box .cnt{position:relative; top:-1px;border-top:1px solid #ccc;}
+		p {margin:0;padding:0;padding:10px;}
+		</style>
+	</head>
+	<body>
+		<p>描述：只设置外层的左右边框，使内层元素高度等于外层的，然后向上relative top-1px。<br/>
+优点：<br/>
+　　实现简单；<br/>
+　　文档语义化好；<br/>
+　　不需要额外非结构容器；<br/>
+缺点：<br/>
+　　只支持向上的圆角；<br/>
+　　要支持向下的必须设置固定高度，且IE6不支持；</p>
+	<p>1px带缺口的上圆角(2)内容反向relative 1px方法</p>
+	
+	<div class="box">
+		<div class="cnt">
+			<p>content一象素缺口上圆角</p>
+			<p>如果只有上边需要圆角的话可以这样做</p>
+			<p>对div.cnt使用relative，top设置-1px</p>
+		</div>
+	</div>
+
+		
+	</body>
+</html>

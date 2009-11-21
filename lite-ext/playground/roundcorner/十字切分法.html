@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+		<title>
+十字切分法
+</title>
+		<style type="text/css">
+			.box{zoom:1; background:#EEEEEE url(rr_bl.gif) no-repeat left bottom;}
+.box .box_hd{height:8px; overflow:hidden; background:url(rr_tl.gif) no-repeat;}
+.box .r{margin-left:8px;}
+.box .box_hd .r{height:8px; overflow:hidden; background:url(rr_tr.gif) no-repeat right top;}
+.box .box_bd{background:url(rr_br.gif) no-repeat right bottom;}
+		p {margin:0;padding:0;padding:10px;}
+		</style>
+	</head>
+	<body>
+		<p>描述：用4个容器float排布成“田”字形，右下为内容区，每个容器用背景图相对位置实现；<br/>
+优点：<br/>
+　　结构较少；<br/>
+　　控制方便；<br/>
+缺点：<br/>
+　　只能作为色块类型的圆角使用；<br/>
+　　文档语义性差；<br/>
+　　背景图必须按一定规律才能合并成一个文件；</p>
+	
+	<div class="box">
+		<div class="box_hd"><div class="r"></div></div>
+		<div class="box_bd r">
+		<p>图片圆角色块</p>
+		<p>先用两个容器分割为上下两部分，再在每个部分里增加一个容器，则下方增加容器作为内容容器，最后对各个容器相应位置放上背景图片</p>
+		<p>不能作为线框应用</p>
+		</div>
+	</div>
+
+		
+	</body>
+</html>

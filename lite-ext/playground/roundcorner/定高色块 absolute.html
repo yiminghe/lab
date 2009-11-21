@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+		<title>
+定高色块 absolute两个边脚实现
+</title>
+		<style type="text/css">
+			.box {
+				height:24px;
+				position:relative;
+			}
+			.box sup.r {
+				background-position:0 -208px;
+				right:0;
+			}
+			.box sup, .box sub {
+				background:transparent url(mix_nr.gif) no-repeat scroll 0 0;
+				display:block;
+				height:24px;
+				overflow:hidden;
+				position:absolute;
+				width:8px;
+			}
+			.box sup.l {
+				background-position:-8px -208px;
+				left:0;
+			}
+			.box_bd {
+				background:#E4E4E1 none repeat scroll 0 0;
+				height:24px;
+				padding:0 8px;
+			}
+			p {margin:0;padding:0;padding:0;}
+		</style>
+	</head>
+	<body>
+<div class="box">
+					<sup class="r"></sup><sup class="l"></sup>
+					<div class="box_bd">
+						<p>24px定高圆角色块，两个absolute的sup用background-image布置圆角</p>
+					</div>
+				</div>
+	</body>
+</html>
