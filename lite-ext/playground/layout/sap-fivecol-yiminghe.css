@@ -1,0 +1,75 @@
+#canvas {
+	width:  80%;
+	margin:  20px auto;
+	overflow: auto;
+	
+	padding: 1%;
+	background: #ccc;
+	}
+
+/*generic css for all elements*/
+img {
+	display: block; /*needed to avoid alignment with baseline of text*/
+}
+
+.line {
+	float: left;
+	width: 100%;
+	display: block;
+	position: relative; /*prevents shifting when changing viewport in IE;thanks to Alan Gresley*/
+}
+
+.item {
+	position: relative;
+	float: left;
+	overflow: hidden;
+	margin-left: -100%;
+}
+
+.sap-content {
+	overflow: hidden;
+}
+
+/*item specific css*/
+#line1 {
+	background-color: #C2DFEB;
+}
+
+#line2 {
+	background-color: #FFF2B7;
+}
+
+#item1 {
+	left:100%;
+	width: 15%;
+
+	background: #ACA42E;
+}
+
+#item2 {
+	left:120%;
+	width: 15%;
+
+	background-color: #2A66B2;
+}
+
+#item3 {
+	left:140%;
+	width: 15%;
+	
+	background-color: transparent;
+}
+
+#item4 {
+	left:160%;
+	width: 15%;
+
+	background: #ACA42E;
+}
+
+#item5 {
+	left:180%;
+	width: 15%;
+
+	background: #9F3B57;
+}

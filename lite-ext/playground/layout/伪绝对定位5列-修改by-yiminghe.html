@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl" lang="nl">
+
+<head>
+	   <title>simulated absolute positioning demo</title>
+	   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+       <link href="sap-fivecol-yiminghe.css" media="screen" rel="Stylesheet" type="text/css" />      
+</head>
+
+<body>
+<p style="width:80%;margin:10px auto;">
+	关键为 left + margin-left = 想要的位置即可
+	margin-left 为大于自身宽度的负值，将自己推出父容器之外，不占用父容器可见地方位置，
+	则兄弟初始位置可以和自己刚开始一样定位，最后 margin-left 若兄弟间都一样，
+	则都重合位置定位于父容器外一个位置，再一个个relative定位到自己想要的位置即可。
+</p>
+<div id="canvas">
+
+	<div class="line" id="line1">	  	
+	  <div class="item" id="item1">
+	    <div class="sap-content">item 1</div>
+	  </div>
+	  <div class="item" id="item2">
+	  	<div class="sap-content">item 2</div>
+	  </div>
+	  <div class="item" id="item3">
+	  	<div class="sap-content">伪绝对定位变形  － by yiminghe</div>
+	  </div>
+	  <div class="item" id="item4">
+	  	<div class="sap-content">item 4</div>
+	  </div>
+	  <div class="item" id="item5">
+	  	<div class="sap-content">item 5</div>
+	  </div>
+	</div>
+	
+<div id="closure"></div>
+</body>
+</html>
