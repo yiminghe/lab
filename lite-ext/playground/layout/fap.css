@@ -1,0 +1,115 @@
+#canvas {
+	width:  90%;
+	margin:  20px auto;
+	overflow: hidden;
+	
+	padding: 0px;
+	background: url(./images/background.jpg) no-repeat 0% 0%;
+	border: 1px solid red;
+}
+/* overrule generic html */
+
+a {
+	color: #888;
+	text-decoration: none;
+}
+
+a.visited {
+	color: #666;
+}
+
+/* overrule drupal system.css */
+.item-list ul li {
+	list-style-type: none;
+}
+
+ul.links {
+	margin: .3em 0;
+}
+
+/* generic sap classes */
+.line {
+	float: left;
+	width: 100%;
+	display: block;
+	position: relative; /*prevents shifting when changing viewport in IE;thanks to Alan Gresley*/
+	overflow: hidden; /*only needed for equal height columns*/
+	
+	background-color: transparent;
+	border-bottom: 1px solid red;
+}
+
+.item {
+	position: relative;
+	float: left;
+	overflow: hidden;
+	left: 100%;
+	background-color: #fff;
+}
+
+.column { /* all columns have continous background color */
+	margin-bottom: -5000px;
+	padding-bottom: 5000px;
+}
+
+/* end generic; all sap elements must have margin-left and with defined */
+#logoitem {
+	margin-left: -95%;
+	width: 90%;
+}
+
+#title {
+	margin-left: -80%;
+	width: 65%;
+}
+
+#primary-nav {
+	margin-left: -100%;
+	width: 100%;
+	text-align: center;
+}
+
+#main #sidebar-left {
+	margin-left: -100%;
+	width: 200px;
+	border-right: 1px solid red;
+	z-index: 100; /*prevent main content from obscuring sidebars */
+}
+
+#main #sidebar-left .sap-content {
+	padding-left: .5em;
+	padding-right: .5em;
+}
+
+#main #maincontent {
+	margin-left: -100%;
+	width: 100%;
+	color: #444;
+}
+
+#main #maincontent .sap-content {
+	padding: 20px 165px 5px 215px;
+}
+
+#main #sidebar-right {
+	margin-left:  -150px;
+	width: 150px;
+	border-left: 1px solid red;
+	z-index: 100; /*prevent main content from obscuring sidebars */
+}
+
+#main #sidebar-right .sap-content {
+	padding-left: .5em;
+	padding-right: .5em;
+}
+
+#footerline {
+	border-bottom: none;
+}
+
+#footer {
+	margin-left: -100%;
+	width: 100%;
+	text-align: center;
+	background-color: #fff;
+}
