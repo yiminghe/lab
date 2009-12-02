@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>WindowLite/javascript/windowlite.js</string>
+	<string>AutocompleteLite/javascript/autocompletelite.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -26,14 +26,56 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>81</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>42</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>14</integer>
+			<integer>16</integer>
+		</dict>
+		<key>AutocompleteLite/css/autocompletelite.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>42</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>28</integer>
+		</dict>
+		<key>AutocompleteLite/data.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>20</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>AutocompleteLite/javascript/autocompletelite.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>293</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>276</integer>
 		</dict>
 		<key>ButtonLite/button.html</key>
 		<dict>
@@ -121,24 +163,13 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>WindowLite/javascript/windowlite.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>890</integer>
-		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>WindowLite/javascript/windowlite.js</string>
+		<string>AutocompleteLite/javascript/autocompletelite.js</string>
+		<string>AutocompleteLite/data.html</string>
+		<string>AutocompleteLite/css/autocompletelite.css</string>
+		<string>AutocompleteLite/AutocompleteLite.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

@@ -4,7 +4,7 @@
 	v1.6(20090606) 实现ajax获取数据的 Ext.ux.AutocompleteLite.RemoteStore
 	v2.0(20090811) ie6 界面调整，失去焦点处理调整，ajax次序问题调整,添加triger配置，ext-core css标记浏览器方法避免
 	v2.0.1(20090903) z-index change to 99999
-	v2.1(20091203) 中文输入法兼容修正，改用轮询查询输入变化
+	v2.5(20091203) 中文输入法兼容修正，改用轮询查询输入变化,算法大幅变动,hiddenName配置取消，没有意义
 */
 Ext.namespace('Ext.ux');
 Ext.ux.AutocompleteLite = function(config) {
@@ -14,7 +14,7 @@ Ext.ux.AutocompleteLite = function(config) {
         return;
     }
     if (!config.store || typeof config.store.getSuggestions != 'function') {
-        alert('no proper config store');
+        alert('no proper config storef');
         return;
     }
     Ext.apply(this, {
@@ -51,19 +51,19 @@ Ext.ux.AutocompleteLite = function(config) {
         var triger = Ext.DomHelper.append(this._wrapDiv, {
             tag: 'span',
             cls: 'x-form-trigger',
-            html:'&nbsp;'
+            html: '&nbsp;'
         },
         true);
-
+		//特殊，点下拉箭头全部列出来
         function showAllAndFocus(evt) {
             this._wrapDiv.addClass('x-trigger-wrap-focus');
             this.selectRange(0, this.textField.getValue().length);
-            //console.log(this._autoCompleteDiv.isVisible());
             if (!this._autoCompleteDiv.isVisible()) {
                 this.store.getSuggestions(this, '', config.typeahead, true);
             } else {
                 this._autoCompleteDiv.hide();
             }
+			this.textField.dom.focus();
             evt.stopEvent();
         }
         triger.on('click', showAllAndFocus, this);
@@ -83,26 +83,24 @@ Ext.ux.AutocompleteLite = function(config) {
     this.currentText = "";
     var checkTimer;
     var checkInterval = function() {
-        var originalText = this.textField.getValue();
-        //console.log(originalText);
+        var originalText = this.textField.dom.value;
         //没有变化
-        if (originalText == this.currentText) {
+        if (originalText == this._getCurrent()) {
             } else {
+            //只有用户输入时才查询，选择建议项不会列入历史纪录，不能会退!
+            this.originalText = originalText;
+            var oldCur = this.currentText;
+            this.currentText = originalText;
             this.store.getSuggestions(this, originalText,
             // this.originalText.length < currentText.length 删除不用 typeahead
-            originalText.length < this.currentText.length ? false: this.typeahead);
-            this.currentText = originalText;
+            originalText.length < oldCur.length ? false: this.typeahead);
+
         }
         checkTimer = checkInterval.defer(250, this);
     }
 
-    this.textField.on('keyup',
-    function() {
-        //用于 esc 返回
-        this.originalText = this.textField.getValue();
-    },
-    this);
 
+	//启动轮训定时器
     this.textField.on('focus',
     function() {
         this._wrapDiv.addClass('x-trigger-wrap-focus');
@@ -112,7 +110,7 @@ Ext.ux.AutocompleteLite = function(config) {
         checkInterval.call(this);
     },
     this);
-
+	//关闭轮训定时期
     this.textField.on('blur',
     function() {
         this._wrapDiv.removeClass('x-trigger-wrap-focus');
@@ -125,15 +123,6 @@ Ext.ux.AutocompleteLite = function(config) {
     },
     this);
 
-    if(this.hiddenName) {
-    this.valueHolder = Ext.DomHelper.append(this._wrapDiv, {
-        tag: 'input',
-        style: 'display:none;',
-        type: 'hidden',
-        name: this.hiddenName
-    },
-    true);
-	}
 
     this._autoCompleteUl = Ext.DomHelper.append(document.body, {
         tag: 'ul',
@@ -147,50 +136,9 @@ Ext.ux.AutocompleteLite = function(config) {
     });
 
     //设为和文本框宽度相同
-    this._autoCompleteDiv.setWidth(this.textField.getComputedWidth()+this.triger);
-	this._wrapDiv.setWidth(this.textField.getComputedWidth()+this.triger);
-    /*
-		代价不小，收效甚微
-	Ext.EventManager.onWindowResize(function(){
-      	var textFieldXy=this._wrapDiv.getXY();
-				textFieldXy[1]+=this._wrapDiv.getComputedHeight();
-				this._autoCompleteDiv.setXY(textFieldXy);
-  },this);
-	*/
-
-    //防止输得太快，设置buffer,可直接在添加事件处理中选项设置
-    //只处理可显示字符
-    /*
-    this.textField.on('keyup',
-    function(evt) {
-        if (!this.textField.getValue().trim()) {
-            this.hide();
-            return;
-        }
-        var ikeyCode = evt.getKey();
-        //delete,backspace
-        if (ikeyCode == 8 || ikeyCode == 46) {
-            this.originalText = this.textField.getValue();
-            this.store.getSuggestions(this, this.textField.getValue(), false);
-        }
-        //no meaning character
-        else if (
-        (ikeyCode != 16 && ikeyCode < 32) ||
-        (ikeyCode >= 33 && ikeyCode <= 46) ||
-        (ikeyCode >= 112 && ikeyCode <= 123)
-        ) {
-            }
-        //ok
-        else {
-            this.originalText = this.textField.getValue();
-            this.store.getSuggestions(this, this.textField.getValue(), config.typeahead);
-        }
-    },
-    this, {
-        buffer: 250
-    });*/
-
-
+	var suitWidth=this.textField.getComputedWidth() + this.triger;
+    this._autoCompleteDiv.setWidth(suitWidth);
+    this._wrapDiv.setWidth(suitWidth);
 
     //键盘导航
     this.textField.on('keydown',
@@ -211,7 +159,7 @@ Ext.ux.AutocompleteLite = function(config) {
         case 27:
             //esc
             this.hide();
-            this.textField.dom.value = this.originalText;
+            this._updateCurrent(this.originalText);
             this.textField.focus();
             break;
         case 13:
@@ -225,8 +173,7 @@ Ext.ux.AutocompleteLite = function(config) {
     },
     this);
 
-
-    //高亮当前提示
+    //鼠标掠过高亮当前提示
     this._autoCompleteUl.on('mouseover',
     function(evt) {
         var target = evt.getTarget('li');
@@ -238,60 +185,38 @@ Ext.ux.AutocompleteLite = function(config) {
     ,
     this);
 
-
-    //选择当前提示
-    this._autoCompleteUl.on('mousedown',
-    function(evt) {
-        var target = evt.getTarget('li');
-        if (target) {
-            this.textField.dom.value = target.innerHTML;
-            if (this.valueHolder) this.valueHolder.dom.value = target.getAttribute('value');
-            //不用检测变化
-            this.currentText = this.textField.dom.value;
-            this.hide();
-        }
-        evt.stopEvent();
-    }
-    ,
-    this);
-
     this.hide();
-
 };
 
 Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
-    updateHiddenFromComplete: function() {
-        if (this.valueHolder) {
-            this.valueHolder.dom.value = '';
-            this._autoCompleteUl.select('li').each(function(el, this_, index) {
-                if (el.dom.innerHTML == this.textField.getValue()) {
-                    this.valueHolder.dom.value = el.dom.getAttribute('value');
-                    return false;
-                }
-            },
-            this);
-        }
+    _updateCurrent: function(v) {
+        this.textField.dom.value = v;
+        this.currentText = v;
+    },
+    _getCurrent: function() {
+        return this.currentText;
     },
     //失去焦点隐藏
     docMouseDown: function(evt, t) {
-
-        if (!this._autoCompleteDiv.isVisible() || t.id == this.textField.id) return;
-        //提示框滚动条点击
-        if (evt && (evt.within(this._autoCompleteDiv) || t.id == this._autoCompleteDiv.id)) return;
-
+        //提示框滚动条点击,提示点击只隐藏提示
+        if (!this._autoCompleteDiv.isVisible() || t.id == this.textField.id || t.id == this._autoCompleteDiv.id) return;
         this.hide();
+        if (evt && (evt.within(this._autoCompleteDiv) || t.id == this._autoCompleteDiv.id)) return;
+        //否则状态更新
         this._wrapDiv.removeClass('x-trigger-wrap-focus');
         //store its value according to label
         //提示文字
         if (!this.textField.getValue() && this.labelTip) {
             this.labelTip.show();
         }
-
     },
 
     //提示框出现,监听文档点击
     show: function() {
-		this._autoCompleteDiv.setStyle({height:"auto"});
+        this._autoCompleteDiv.setStyle({
+            height: "auto"
+        });
+		//是否出现滚动条
         if (this._autoCompleteUl.getComputedHeight() > this.maxHeight) {
             this._autoCompleteDiv.setHeight(this.maxHeight);
         }
@@ -301,8 +226,6 @@ Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
         textFieldXy[1] += this.textField.getComputedHeight();
         this._autoCompleteDiv.setXY(textFieldXy);
         this._autoCompleteDiv.show();
-        this.updateHiddenFromComplete();
-
     },
 
     //提示框隐藏,注销监听文档点击
@@ -313,7 +236,7 @@ Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
     },
 
     //设置提示列表，由ajax callback 函数调用
-    autoComplete: function(suggestions, ahead, query,autoComplete) {
+    autoComplete: function(suggestions, ahead, query, autoComplete) {
         //上次结果清空
         this._autoCompleteUl.update('');
         //重要，如果次序乱了，要看回调函数的query是否就是当前的query
@@ -345,9 +268,10 @@ Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
         if (this.textField.getValue().length >= suggestion.label.length) return;
         if (this.textField.dom.createTextRange || this.textField.dom.setSelectionRange) {
             var ilen = this.textField.getValue().length;
-            this.textField.dom.value = (suggestion.label);
-            this.currentText = this.textField.dom.value;
+            //同步更新currentText防止定时检测使得typeahead也发请求
+            this._updateCurrent(suggestion.label);
             this.selectRange(ilen, suggestion.label.length);
+
         }
     },
 
@@ -365,13 +289,17 @@ Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
 
     //高亮当前列表项
     highlight: function(suggestionLi) {
+        var that = this;
         this._autoCompleteUl.select('li').each(function(el, this_, index) {
             if (el.dom == suggestionLi) {
                 el.addClass('x-combo-selected');
-                this.curLi = index;
+                that.curLi = index;
             }
             else el.removeClass('x-combo-selected');
         });
+        //高亮同时更新textfield,cacheCurrent防止重复查询
+        ////同步更新currentText防止定时检测使得typeahead也发请求
+        this._updateCurrent(suggestionLi.innerHTML);
     },
 
     keyboard: function(direction) {
@@ -391,9 +319,10 @@ Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
         }
         //自动赋值高亮
         if (li) {
+            //父窗口自动滚
+            Ext.fly(li).scrollIntoView(this._autoCompleteDiv);
             this.highlight(li);
-            this.textField.dom.value = li.innerHTML;
-            this.currentText = this.textField.dom.value;
+
         }
     }
 
@@ -420,8 +349,7 @@ Ext.extend(Ext.ux.AutocompleteLite.MemeryStore, Ext.util.Observable, {
                 x.push(this.data[i]);
             }
         }
-        //console.log(x);
-        autocompleteLite.autoComplete(x, ahead, query,allowEmpty);
+        autocompleteLite.autoComplete(x, ahead, query, allowEmpty);
     }
 
 });
@@ -440,7 +368,6 @@ Ext.ux.AutocompleteLite.RemoteStore = function(config) {
 Ext.extend(Ext.ux.AutocompleteLite.RemoteStore, Ext.util.Observable, {
 
     getSuggestions: function(autocompleteLite, query, ahead, allowEmpty) {
-
         if ((allowEmpty && query.trim().length == 0) || query.trim().length) {
 
             Ext.Ajax.request({
@@ -453,7 +380,7 @@ Ext.extend(Ext.ux.AutocompleteLite.RemoteStore, Ext.util.Observable, {
 
                         }
                     if (returnData && returnData.data)
-                    autocompleteLite.autoComplete(returnData.data, ahead, query,allowEmpty);
+                    autocompleteLite.autoComplete(returnData.data, ahead, query, allowEmpty);
                     else {
                         alert(response.responseText.trim());
                     }
@@ -472,7 +399,7 @@ Ext.extend(Ext.ux.AutocompleteLite.RemoteStore, Ext.util.Observable, {
 
         } else {
 
-            autocompleteLite.autoComplete([], ahead,query,allowEmpty);
+            autocompleteLite.autoComplete([], ahead, query, allowEmpty);
         }
     }
 
