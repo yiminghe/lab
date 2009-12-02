@@ -291,6 +291,7 @@ Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
 
     //提示框出现,监听文档点击
     show: function() {
+		this._autoCompleteDiv.setStyle({height:"auto"});
         if (this._autoCompleteUl.getComputedHeight() > this.maxHeight) {
             this._autoCompleteDiv.setHeight(this.maxHeight);
         }
