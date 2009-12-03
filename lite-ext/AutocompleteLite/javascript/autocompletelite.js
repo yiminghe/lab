@@ -5,6 +5,7 @@
 	v2.0(20090811) ie6 界面调整，失去焦点处理调整，ajax次序问题调整,添加triger配置，ext-core css标记浏览器方法避免
 	v2.0.1(20090903) z-index change to 99999
 	v2.5(20091203) 中文输入法兼容修正，改用轮询查询输入变化,算法大幅变动,hiddenName配置取消，没有意义
+	v2.5.5(20091204) AOP阴影处理分离主逻辑   
 */
 Ext.namespace('Ext.ux');
 Ext.ux.AutocompleteLite = function(config) {
@@ -22,6 +23,7 @@ Ext.ux.AutocompleteLite = function(config) {
     });
     Ext.apply(this, config);
     this.maxHeight = this.maxHeight || 9999;
+	this.addEvents("show","hide");
     Ext.ux.AutocompleteLite.superclass.constructor.call(this);
     this.textField = Ext.get(config.id);
     this.textField.addClass('x-form-text');
@@ -185,6 +187,23 @@ Ext.ux.AutocompleteLite = function(config) {
     ,
     this);
 
+
+	//阴影，利用事件 AOP 切片处理
+	if (Ext.Shadow && this.shadow !== false) {
+        this.shadowOffset = this.shadowOffset || 4;
+        this.shadow = new Ext.Shadow({
+            offset: this.shadowOffset,
+            mode: this.shadow || 'sides'
+        });
+		this.on("show",function(){
+			this.shadow.show(this._autoCompleteDiv);
+		},this);
+		this.on("hide",function(){
+			this.shadow.hide();
+		},this);
+
+	}
+
     this.hide();
 };
 
@@ -226,13 +245,14 @@ Ext.extend(Ext.ux.AutocompleteLite, Ext.util.Observable, {
         textFieldXy[1] += this.textField.getComputedHeight();
         this._autoCompleteDiv.setXY(textFieldXy);
         this._autoCompleteDiv.show();
+		this.fireEvent("show");
     },
 
     //提示框隐藏,注销监听文档点击
     hide: function() {
         Ext.getDoc().un("mousedown", this.docMouseDown, this);
         this._autoCompleteDiv.hide();
-
+		this.fireEvent("hide");
     },
 
     //设置提示列表，由ajax callback 函数调用

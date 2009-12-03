@@ -89,13 +89,18 @@ Ext.onReady(function() {
 	}
 	//,scope:window
 	});
-  mwindow.on('hide',function(){
-  	//alert('窗体隐藏了');
-  });
-   mwindow.on('beforehide',function(){
-  	 //if(!confirm('是否隐藏'))
-  	 	//	return false;
-  });
+  
+		var events=['hide',
+	    'beforehide', 'beforeclose', 'show',
+	    'close', "resize", "ghost", "unghost"
+	    , "maximize", "restore"];
+	if(false)for(var i=0;i<events.length;i++) {
+		
+		(function(evt){mwindow.on(evt,function(){
+			console.log("invoke "+evt);
+		});})(events[i]);
+	}
+
     Ext.fly('action_a').on('click', function(evt) {
     	 var xy=evt.getXY();
     	 mwindow.show({

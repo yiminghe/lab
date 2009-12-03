@@ -34,7 +34,8 @@
   v2.9.8.5(20090927) 增加minHeight,maxHeight配置，可单独调用constrainHeight.
   v3(20091010) 重要更新：增加 taskbar 配置，可以出现 窗口管理栏了，参见 windowlite_taskbar.html
     (20091014) 修正设置 containerId 时的定位行为
-  v3.1(20091023) size问题调整              
+  v3.1(20091023) size问题调整 
+  v3.2(20091204) AOP利用事件重构，阴影处理分离主逻辑           
 */
 Ext.namespace('Ext.ux');
 Ext.ux.WindowLite = function(config) {
@@ -46,7 +47,10 @@ Ext.ux.WindowLite = function(config) {
     });
     Ext.apply(this, config);
     this.buttonAlign = this.buttonAlign || 'right';
-    this.addEvents('hide', 'beforehide', 'beforeclose', 'show', 'close');
+    this.addEvents('hide',
+    'beforehide', 'beforeclose', 'show',
+    'close', "resize", "ghost", "unghost"
+    , "maximize", "restore");
     Ext.ux.WindowLite.superclass.constructor.call(this);
     this.el = Ext.DomHelper.append(Ext.get(config.containerId) || document.body, {
         tag: 'div',
@@ -256,6 +260,22 @@ Ext.ux.WindowLite = function(config) {
     **/
     if (Ext.dd && Ext.dd.DD && this.drag) {
         this.ddHandler = new Ext.ux.WindowLite.DD(this);
+        this.on("maximize",
+        function() {
+            this.ddHandler.lock();
+            this.header.setStyle({
+                cursor: 'default'
+            });
+        },
+        this);
+        this.on("restore",
+        function() {
+            this.ddHandler.unlock();
+            this.header.setStyle({
+                cursor: 'move'
+            });
+        },
+        this);
     }
     /**
       	设置阴影
@@ -266,6 +286,22 @@ Ext.ux.WindowLite = function(config) {
             offset: this.shadowOffset,
             mode: config.shadow || 'sides'
         });
+        function showShadow() {
+            if (!this._restoreA.isDisplayed() && this.el.isVisible()) {
+                this.shadow.show(this.el);
+            }
+        }
+        function hideShadow() {
+            this.shadow.hide();
+        }
+        this.on("show", showShadow, this);
+        this.on("unghost", showShadow, this);
+        this.on("resize", showShadow, this);
+        this.on("maximize", hideShadow, this);
+        this.on("restore", showShadow, this);
+        this.on("ghost", hideShadow, this);
+        this.on("hide", hideShadow, this);
+        this.on("close", hideShadow, this);
         this.el.setStyle({
             'background-image': 'none'
         });
@@ -275,16 +311,25 @@ Ext.ux.WindowLite = function(config) {
 			*/
     if (Ext.isIE6) {
         this.shim = this.el.createShim();
-        this.shim.enableDisplayMode('block');
-        this.shim.dom.style.display = 'none';
-        this.shim.dom.style.visibility = 'visible';
+        this.shim.hide();
+        function hideIframe() {
+            this.shim.hide();
+        }
+        this.on("show", this.showIframe, this);
+        this.on("unghost", this.showIframe, this);
+        this.on("resize", this.showIframe, this);
+        this.on("maximize", this.showIframe, this);
+        this.on("restore", hideIframe, this);
+        this.on("ghost", hideIframe, this);
+        this.on("hide", hideIframe, this);
+
     }
     /**
        设置按钮
     **/
     if (this.buttons && Object.prototype.toString.apply(this.buttons) == '[object Array]') {
         for (var i = 0; i < this.buttons.length; i++) {
-            this.addButton(this.buttons[i], true);
+            this.addButton(this.buttons[i], false);
         }
     }
     //body与container的高度差,prototype写死提高效率
@@ -301,9 +346,9 @@ Ext.ux.WindowLite = function(config) {
         this.width = this.el.getComputedWidth();
     }
     //尽量使用setStyle ,el.setWidth 很费时间 09-08-12
-    this.setWidth(this.width);
+    this.setWidth(this.width,false);
     if (this.height) {
-        this.setHeight(this.height);
+        this.setHeight(this.height,false);
     }
     /**
 	     设置用户调节大小,动态设置css，width height
@@ -316,10 +361,30 @@ Ext.ux.WindowLite = function(config) {
             pinned: true
         });
         //ie6 height:100% bug
-        if (Ext.isIE6) {
-            this.resizer.syncHandleHeight();
-        }
         this.resizer.on("resize", this.resizeAction, this);
+
+        if (Ext.isIE6) {
+			//ie6 height100% no effect!!
+            function ie6Fix() {
+                this.resizer.syncHandleHeight();
+            }
+            this.on("show", ie6Fix, this);
+            //this.on("unghost", ie6Fix, this);
+            this.on("resize", ie6Fix, this);
+            //this.on("maximize", ie6Fix, this);
+            this.on("restore", ie6Fix, this);
+        }
+        this.on("maximize",
+        function() {
+            this.resizer.enabled = false;
+        },
+        this);
+        this.on("restore",
+        function() {
+            this.resizer.enabled = true;
+
+        },
+        this);
         //this.resizer.on("beforeresize", this.beforeResize,this);
     }
     /**
@@ -372,13 +437,13 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         return this._offsetHeightBodyToContainerWithButton;
     },
     //带领窗口到所有已有窗口的最前端		
-    toFront: function() {
+    toFront: function(noEvents) {
         if (this.el.getStyle('z-index') < Ext.ux.WindowLite.ZIndex) {
             this.el.setStyle({
                 'z-index': ++Ext.ux.WindowLite.ZIndex
             });
         }
-        this.fireEvent("show");
+        if (noEvents !== false) this.fireEvent("show");
     },
     setTitle: function(str) {
         this.title.update(str);
@@ -413,55 +478,41 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         }
     },
     /*
-			阴影与窗体大小同步
+			iframe与窗体大小同步
 			ie6 shim included
 		*/
-    syncShadow: function() {
+    showIframe: function() {
         //顺便更新下resizer的ie6问题
-        if (this.el.isVisible() && Ext.isIE6 && this.resizer) {
-            this.resizer.syncHandleHeight();
-            this.el.repaint();
-        }
-        var sw = this.shadow;
         var sh = this.shim;
-        if (this.el.isVisible() && sw && !this._restoreA.isDisplayed()) {
-            //防止其关联的 windowContainer z-index 改变了
-            sw.show(this.el);
-        } else if (sw) {
-            sw.hide();
-        }
+        var sw = this.shadow;
         //ie6 iframe
-        if (this.el.isVisible() && sh) {
-            if (this.el.isVisible()) {
-                var elSize = this.el.getSize();
-                var w = elSize.width,
-                h = elSize.height;
-                var l = this.el.getLeft(true),
-                t = this.el.getTop(true);
-                sh.setStyle('z-index', parseInt(this.el.getStyle("z-index"), 10) - 2);
-                sh.show();
-                if (sw && sw.isVisible()) {
-                    var a = sw.adjusts;
-                    sh.setStyle({
-                        left: (Math.min(l, l + a.l)) + "px",
-                        top: (Math.min(t, t + a.t)) + "px",
-                        width: (w + a.w) + "px",
-                        height: (h + a.h) + "px"
-                    });
-                } else {
-                    //最大化 iframe 全屏时 iframe 小点
-                    if (this._restoreA.isDisplayed()) {
-                        w -= 5;
-                        h -= 5;
-                    }
-                    sh.setSize(w, h);
-                    sh.setLeftTop(l, t);
-                }
-            } else {
-                sh.hide();
+        var elSize = this.el.getSize();
+        var w = elSize.width,
+        h = elSize.height;
+        var l = this.el.getLeft(true),
+        t = this.el.getTop(true);
+        sh.setStyle('z-index', parseInt(this.el.getStyle("z-index"), 10) - 2);
+        sh.show();
+        if (sw && sw.isVisible()) {
+            var a = sw.adjusts;
+            sh.setStyle({
+                left: (Math.min(l, l + a.l)) + "px",
+                top: (Math.min(t, t + a.t)) + "px",
+                width: (w + a.w) + "px",
+                height: (h + a.h) + "px"
+            });
+        } else {
+            //最大化 iframe 全屏时 iframe 小点
+            if (this._restoreA.isDisplayed()) {
+                w -= 5;
+                h -= 5;
             }
+            sh.setSize(w, h);
+            sh.setLeftTop(l, t);
         }
+
     },
+
     autoHeight: function() {
         this.body.setStyle({
             height: 'auto'
@@ -470,7 +521,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     //body size change then window size change
     //注意：先更新宽度，再更新高度,(高度不用指定死了，由儿子决定)
     //性能考虑，又可以不用更新shadow 09-08-12
-    updateWindowSize: function(noShadow) {
+    updateWindowSize: function(noEvents) {
         this.el.setStyle({
             'width': (parseInt(this.body.getStyle("width")) + this._FrameWidthLR + this.offsetBodyToContainer[0] * 2) + "px"
         });
@@ -478,9 +529,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         this.el.setStyle({
             height: 'auto'
         });
-        if (!noShadow) this.syncShadow();
+        if (!noEvents) {
+            this.fireEvent("resize");
+        }
     },
-    addButton: function(config, noShadow) {
+    addButton: function(config, noEvents) {
         //第一次高度变化，其他就不需要了
         var first = false;
         if (this.bottom.hasClass('nobutton')) {
@@ -495,8 +548,8 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         },
         true);
         b.on('click', config.handler, config.scope || this);
-        if (first) {
-            if (!noShadow) this.syncShadow();
+        if (first && noEvents !== false) {
+            this.fireEvent("resize");
         }
     },
     removeButton: function(text) {
@@ -506,12 +559,12 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             b.remove();
         }
     },
-    removeAllButtons: function() {
+    removeAllButtons: function(noEvents) {
         var bs = this.bottom.select("[type='button']");
         bs.removeAllListeners();
         bs.remove();
         this.bottom.addClass('nobutton');
-        this.syncShadow();
+        if (noEvents !== false) this.fireEvent("resize");
         //底边拖放条没了
         if (Ext.isIE6) {
             this.el.repaint();
@@ -565,7 +618,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                     if (option.x < (10 + winScroll.left)) {
                         option.x = 10 + winScroll.left;
                         width = originalX - option.x;
-                        this.setWidth(width);
+                        this.setWidth(width, false);
                     }
                 }
                 //如果 y在纵坐标中线下边，移动到中线上边，可获得更大的显示位置
@@ -576,7 +629,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                     if (option.y < (10 + winScroll.top)) {
                         option.y = 10 + winScroll.top;
                         height = originalY - option.y;
-                        this.setHeight(height);
+                        this.setHeight(height, false);
                     }
                 }
             }
@@ -611,15 +664,15 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     /*
 			根据当前位置，调整windowlite大小，使得windowlite不超过当前浏览器窗口的可见区域.
 		*/
-    constrainToView: function(option,shadow) {
-        option=option||{};
+    constrainToView: function(option, noEvents) {
+        option = option || {};
         var viewSize = Ext.getDoc().getViewSize();
         var width = parseInt(this.el.getStyle("width"));
         //提高效率，尽量用css属性
         var height = this.getHeight();
         var winScroll = Ext.getDoc().getScroll();
-        var elX = option.x||this.el.getX();
-        var elY = option.y||this.el.getY();
+        var elX = option.x || this.el.getX();
+        var elY = option.y || this.el.getY();
         //本身已经在屏幕以外，大小无论如何调整都不行了
         var scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
         var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
@@ -632,7 +685,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 }
                 width = width - diffW - 10;
             }
-            if (diffW > 0) this.setWidth(width,false);
+            if (diffW > 0) this.setWidth(width, false);
         }
         if (elY < viewSize.height) {
             var diffH = Math.max(height + elY - viewSize.height - winScroll.top, 0);
@@ -643,13 +696,13 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 }
                 height = height - diffH - 10;
             }
-            if (diffH > 0) this.setHeight(height,false);
+            if (diffH > 0) this.setHeight(height, false);
         }
-        if ( shadow !== false && !this._restoreA.isDisplayed() ) {
-            this.syncShadow();
+        if (noEvents !== false) {
+            this.fireEvent("resize");
         }
     },
-    constrainHeight: function(shadow) {
+    constrainHeight: function(noEvents) {
         if ((this.minHeight || this.maxHeight) && !this.height) {
             this.body.setStyle({
                 height: 'auto'
@@ -664,15 +717,17 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 this.body.setHeight(this.maxHeight);
                 change = true;
             }
-            if (change && shadow !== false) this.syncShadow();
+            if (change && noEvents !== false) {
+                this.fireEvent("resize");
+            }
         }
     },
     afterShow: function(option) {
         option = option || {};
         if (option.animateTarget) this.getProxy().hide();
         //以前没有调节过！节省效率
-        if(option.constrainToView && option.x && option.y) {}
-        else if(option.constrainToView){
+        if (option.constrainToView && option.x && option.y) {}
+        else if (option.constrainToView) {
             var winScroll = Ext.getDoc().getScroll();
             if (this.el.getY() <= (10 + winScroll.top)) {
                 this.el.setY(10 + winScroll.top);
@@ -684,12 +739,12 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         }
         this.constrainHeight(false);
         if (option.constrainToView) {
-            this.constrainToView(option,false);
-        } 
+            this.constrainToView(option, false);
+        }
         this.el.setStyle({
             'visibility': 'visible'
         });
-        if (!this._restoreA.isDisplayed()) this.syncShadow();
+
         this.focus();
         this.fireEvent("show", this);
     },
@@ -704,7 +759,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             this.restorePosition = this.el.getXY();
             this.el.setLeftTop( - 99999, -99999);
             this.el.hide();
-            this.syncShadow();
+
             if (this.animateTarget) {
                 var animateTarget = Ext.get(this.animateTarget);
                 var proxy = this.getProxy();
@@ -739,9 +794,8 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 		*/
     destroy: function() {
         Ext.EventManager.removeResizeListener(this.onResize, this);
-        this.removeAllButtons();
+        this.removeAllButtons(false);
         Ext.destroy(this.title, this._closebarA, this._maximizeA, this._minimizeA, this._restoreA, this._tools, this._toolsSection, this.header, this.body, this.bottom, this.main, this.resizer, this.mask, this.proxy, this.ddHandler, this.shim, this.animateTarget, this.el);
-        if (this.shadow) this.shadow.hide();
         this.purgeListeners();
     },
     afterHide: function() {
@@ -766,11 +820,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         }
         Ext.fly(el.appendChild(document.createElement('ul'))).setHeight(this.el.getComputedHeight() - this.header.getComputedHeight());
         el.style.width = this.el.getComputedWidth() + 'px';
-        ( (this.containerId && Ext.get(this.containerId))||Ext.getBody() ).appendChild(el);
+        ((this.containerId && Ext.get(this.containerId)) || Ext.getBody()).appendChild(el);
         var ghost = Ext.get(el);
         this.el.hide();
-        this.syncShadow();
-        var xy = [this.el.getLeft(true),this.el.getTop(true)];
+        this.fireEvent("ghost");
+        var xy = [this.el.getLeft(true), this.el.getTop(true)];
         ghost.setLeftTop(xy[0], xy[1]);
         this.activeGhost = ghost;
         return ghost;
@@ -780,12 +834,12 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 		**/
     unghost: function() {
         this.activeGhost.hide();
-        var l=[this.activeGhost.getLeft(true),this.activeGhost.getTop(true)];
+        var l = [this.activeGhost.getLeft(true), this.activeGhost.getTop(true)];
         this.activeGhost.remove();
         delete this.activeGhost;
-        this.el.setLeftTop(l[0],l[1]);
+        this.el.setLeftTop(l[0], l[1]);
         this.el.show();
-        this.syncShadow();
+        this.fireEvent("unghost");
         this.focus();
     },
     /*
@@ -796,11 +850,6 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         this.el.setStyle({
             height: 'auto'
         });
-        //ie6 height100% no effect!!
-        if (Ext.isIE6) {
-            this.resizer.syncHandleHeight();
-            this.el.repaint();
-        }
     },
     /*
 			最大化处理
@@ -813,19 +862,13 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         //Ext.getBody().addClass("x-window-maximized-ct");
         var scrolls = Ext.getDoc().getScroll();
         this.el.setXY([scrolls.left, scrolls.top]);
-        this.fitViewport();
-        if (this.ddHandler) {
-            this.ddHandler.lock();
-            this.header.setStyle({
-                cursor: 'default'
-            });
-        }
+        this.fitViewport(false);
         this._maximizeA.setDisplayed("none");
         this._restoreA.setDisplayed(true);
-        this.syncShadow();
-        this.toFront();
+        this.fireEvent("maximize");
+        this.toFront(false);
     },
-    fitViewport: function() {
+    fitViewport: function(noEvents) {
         var maxView = Ext.getDoc().getViewSize();
         //firefox 滚动条也占据 viewwidth .....
         if (Ext.isGecko3 && !this.modal) {
@@ -839,30 +882,36 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 maxView.height -= 20;
             }
         }
-        this.setSize(maxView.width, maxView.height);
+        this.setSize(maxView.width, maxView.height, noEvents);
     },
-    setSize: function(width, height) {
-        this.setWidth(width);
-        this.setHeight(height);
-        this.syncShadow();
+    setSize: function(width, height, noEvents) {
+        this.setWidth(width, false);
+        this.setHeight(height, false);
+        if (noEvents !== false) {
+            this.fireEvent("resize");
+        }
     },
-    setWidth: function(width,shadow) {
+    setWidth: function(width, noEvents) {
         this.body.setStyle({
             width: width - this.offsetBodyToContainer[0] * 2 - this._FrameWidthLR + 'px'
         });
         this.el.setStyle({
             width: width + 'px'
         });
-        if(shadow!==false)this.syncShadow();
+        if (noEvents !== false) {
+            this.fireEvent("resize");
+        }
     },
-    setHeight: function(height,shadow) {
+    setHeight: function(height, noEvents) {
         this.body.setStyle({
             height: height - this._getOffsetHeightBodyToContainer() - this._FrameWidthTB + 'px'
         });
         this.el.setStyle({
             height: 'auto'
         });
-        if(shadow!==false)this.syncShadow();
+        if (noEvents !== false) {
+            this.fireEvent("resize");
+        }
     },
     getHeight: function() {
         var height = parseInt(this.body.getStyle("height"));
@@ -879,15 +928,10 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         //if(Ext.getBody().maximizeWinlite==0)
         //	Ext.getBody().removeClass("x-window-maximized-ct");
         this.el.setLeftTop(this.restorePosition[0], this.restorePosition[1]);
-        if (this.ddHandler) {
-            this.ddHandler.unlock();
-            this.header.setStyle({
-                cursor: 'move'
-            });
-        }
         this._maximizeA.setDisplayed(true);
         this._restoreA.setDisplayed("none");
-        this.setSize(this.restoreSize.width, this.restoreSize.height);
+        this.setSize(this.restoreSize.width, this.restoreSize.height, false);
+        this.fireEvent("restore");
     }
 });
 if (Ext.dd && Ext.dd.DD) {

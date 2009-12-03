@@ -105,9 +105,16 @@ Ext.onReady(function() {
 					  }).defer(50);
 				    
 				    
-				    mwindow.on("beforeclose",function(win){
-				    	alert("about to close");
-				    });
+				   	var events=['hide',
+				    'beforehide', 'beforeclose', 'show',
+				    'close', "resize", "ghost", "unghost"
+				    , "maximize", "restore"];
+				if(false)for(var i=0;i<events.length;i++) {
+					
+					(function(evt){mwindow.on(evt,function(){
+						console.log("invoke "+evt);
+					});})(events[i]);
+				}
     }
 
 	

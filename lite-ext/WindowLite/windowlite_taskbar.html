@@ -93,7 +93,7 @@ Ext.onReady(function() {
 				    (function() {
 					   	Ext.DomHelper.overwrite(mwindow.body,table);
 					   	//手动阴影同步
-					   	mwindow.syncShadow();
+					   	mwindow.fireEvent("resize");
 					   	table=null;
 					  }).defer(50);
     }
