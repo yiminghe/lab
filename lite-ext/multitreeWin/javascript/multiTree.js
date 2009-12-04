@@ -308,7 +308,7 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
         var subNodes=this.body.select(".labelText");
         var that=this;
         subNodes.each(function(el){
-        	that.trimSubTextLimited(el,"span",90);
+        	that.trimSubTextLimited(el,["span","label"],90);
         });
         this.selectedNodesUl = this.multiTreeWin.body.select('ul.selectedNodes').item(0);
         this.dataNodesUls = this.multiTreeWin.body.select('div.dataUlSection').item(0);
@@ -523,8 +523,15 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
     },
     
     trimSubTextLimited:function(li,tag,limit){
-    	
-    	var span=Ext.get(li).child(tag);
+    	var span;
+    	if(tag instanceof Array) {
+    		for(var i=0;i<tag.length;i++){
+    		  	span=Ext.get(li).child(tag[i]);
+    				if(span) break;
+    			}
+    	}else{
+    		span=Ext.get(li).child(tag);
+    	}
     	if(!span) return;
     	//console.log(li.dom.innerHTML);
     	var re=span.dom.innerHTML;
