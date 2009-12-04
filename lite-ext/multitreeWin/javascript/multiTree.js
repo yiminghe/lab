@@ -19,6 +19,7 @@ v6.6(20090518) 利用ext的css selector功能修复（6.5之前功能） 选择�
 v6.7(20090525) 修复ie7，8显示细节问题,已选择移到下面和按钮临近
 v7.0(20090919) 整合windowlite 2.9.8
 v7.1(20091009) 界面优化大幅变动，增加操作方便（二级框选择，取消叉与阴影）
+v7.2(20091204) 增加 trimSubTextLimited 内部实现，利用Ext.Element.getTextWidth得到文字实际宽度，添加title,"..."到容器，防止文字换行！
 
 Any problem contact hym_sunrise@126.com
 **/
@@ -234,7 +235,15 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
         if (info.children) for (var i = 0; i < info.children.length; i++) {
             dataNodesSubUlData.cn.push(this.createDataSubLi(info.children[i], selectedMap));
         }
-        return Ext.DomHelper.append(this.bottomNodesContainer, dataNodesSubUlData, true);
+        var popup= Ext.DomHelper.append(this.bottomNodesContainer, dataNodesSubUlData, true);
+        
+        var lis=popup.select("li");
+        var that=this;
+        lis.each(function(el){
+        	that.trimSubTextLimited(el,"label",130);
+        });
+        
+        return popup;
     },
     /*
          *建立第三层弹出菜单的一个列表li ,(将第二层节点在第三层特殊显示)
@@ -295,6 +304,12 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
         });
         bodyData.cn.push(selectedNodesUlData);
         this.body = Ext.DomHelper.append(this.multiTreeWin.body, bodyData, true);
+        
+        var subNodes=this.body.select(".labelText");
+        var that=this;
+        subNodes.each(function(el){
+        	that.trimSubTextLimited(el,"span",90);
+        });
         this.selectedNodesUl = this.multiTreeWin.body.select('ul.selectedNodes').item(0);
         this.dataNodesUls = this.multiTreeWin.body.select('div.dataUlSection').item(0);
         this.bottomNodesContainer = Ext.DomHelper.append(document.body, {
@@ -505,5 +520,25 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
             }
             if (datas[i].children) this.gatherInfoByKey(keys, infos, datas[i].children);
         }
+    },
+    
+    trimSubTextLimited:function(li,tag,limit){
+    	
+    	var span=Ext.get(li).child(tag);
+    	if(!span) return;
+    	//console.log(li.dom.innerHTML);
+    	var re=span.dom.innerHTML;
+    	var str=re;
+    	if(Ext.get(li).getTextWidth(str) > limit) {
+    		var l=str.length-1;
+    		while(Ext.get(li).getTextWidth(re+" ...") > limit) {
+    			l--;
+    			re=str.slice(0,l);
+    		}
+    		re=re+" ...";
+    	}
+    	span.update(re);
+    	Ext.get(li).dom.title=str;
+    	return re;
     }
 });
