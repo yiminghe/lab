@@ -320,7 +320,6 @@ Ext.ux.WindowLite = function(config) {
         this.on("resize", this.showIframe, this);
         this.on("maximize", this.showIframe, this);
         this.on("restore", hideIframe, this);
-        this.on("ghost", hideIframe, this);
         this.on("hide", hideIframe, this);
 
     }
@@ -397,6 +396,21 @@ Ext.ux.WindowLite = function(config) {
         this.el.dom);
         this.mask.enableDisplayMode("block");
         this.mask.hide();
+        
+        function hideMask(){
+	        this.mask.hide();
+	        Ext.getBody().removeClass("x-masked");
+        }
+        
+        function showMask(){
+          Ext.getBody().addClass("x-masked");
+          this.mask.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+          this.mask.setStyle('z-index', Ext.ux.WindowLite.ZIndex);
+          this.mask.show();
+        }
+        
+        this.on("show",showMask,this);
+        this.on("hide",hideMask,this);
         this.mask.on('click', this.focus, this);
     }
     //修正extjs中点击窗体ie系列失去焦点问题，但是多窗体会出问题
@@ -482,35 +496,25 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 			ie6 shim included
 		*/
     showIframe: function() {
-        //顺便更新下resizer的ie6问题
         var sh = this.shim;
         var sw = this.shadow;
-        //ie6 iframe
-        var elSize = this.el.getSize();
-        var w = elSize.width,
-        h = elSize.height;
-        var l = this.el.getLeft(true),
-        t = this.el.getTop(true);
+        var elBox=this.el.getBox();
         sh.setStyle('z-index', parseInt(this.el.getStyle("z-index"), 10) - 2);
         sh.show();
         if (sw && sw.isVisible()) {
             var a = sw.adjusts;
-            sh.setStyle({
-                left: (Math.min(l, l + a.l)) + "px",
-                top: (Math.min(t, t + a.t)) + "px",
-                width: (w + a.w) + "px",
-                height: (h + a.h) + "px"
-            });
+            elBox.x+=a.l;
+            elBox.y+=a.t;
+            elBox.width+=a.w;
+            elBox.height+=a.h;
         } else {
             //最大化 iframe 全屏时 iframe 小点
             if (this._restoreA.isDisplayed()) {
-                w -= 5;
-                h -= 5;
+                elBox.width -= 5;
+                elBox.height -= 5;
             }
-            sh.setSize(w, h);
-            sh.setLeftTop(l, t);
         }
-
+				sh.setBox(elBox);
     },
 
     autoHeight: function() {
@@ -590,12 +594,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             this.toFront();
             return;
         }
-        if (this.modal) {
-            Ext.getBody().addClass("x-masked");
-            this.mask.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
-            this.mask.setStyle('z-index', ++Ext.ux.WindowLite.ZIndex);
-            this.mask.show();
-        }
+        
         //设定taskbar了！
         if (!animateTarget && this.animateTarget) {
             option.animateTarget = animateTarget = this.animateTarget;
@@ -754,12 +753,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     hide: function() {
         if (this.fireEvent("beforehide", this) !== false) {
             if (this._restoreA.isDisplayed()) {
-                this.restore();
+                this.restore(false);
             }
             this.restorePosition = this.el.getXY();
-            this.el.setLeftTop( - 99999, -99999);
-            this.el.hide();
-
+						this.fireEvent("hide", this);
+						this.el.hide(); 
             if (this.animateTarget) {
                 var animateTarget = Ext.get(this.animateTarget);
                 var proxy = this.getProxy();
@@ -775,9 +773,9 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
                 b.block = true;
                 b.opacity = 0;
                 proxy.shift(b);
-            } else {
-                this.afterHide();
             }
+            //放后，proxy 需要得到当前位置
+            this.el.setLeftTop(-99999, -99999);
         }
     },
     close: function() {
@@ -789,6 +787,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             this.destroy();
         }
     },
+    
+    afterHide: function() {
+        this.getProxy().hide();
+    },
+    
     /*
 			销毁窗体,destroy
 		*/
@@ -798,15 +801,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         Ext.destroy(this.title, this._closebarA, this._maximizeA, this._minimizeA, this._restoreA, this._tools, this._toolsSection, this.header, this.body, this.bottom, this.main, this.resizer, this.mask, this.proxy, this.ddHandler, this.shim, this.animateTarget, this.el);
         this.purgeListeners();
     },
-    afterHide: function() {
-        this.getProxy().hide();
-        //隐藏遮罩层
-        if (this.modal) {
-            this.mask.hide();
-            Ext.getBody().removeClass("x-masked");
-        }
-        this.fireEvent("hide", this);
-    },
+    
     /**
 			设置一个简易的代理窗口，隐藏掉原来的复杂窗口
 		**/
@@ -921,17 +916,12 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     /*
 			还原窗口
 		*/
-    restore: function() {
-        //Ext.getBody().maximizeWinlite=Ext.getBody().maximizeWinlite||0;
-        //Ext.getBody().maximizeWinlite--;
-        //多个窗口最大化，互相干扰，没有窗口最大化时才完全去除
-        //if(Ext.getBody().maximizeWinlite==0)
-        //	Ext.getBody().removeClass("x-window-maximized-ct");
+    restore: function(noEvents) {
         this.el.setLeftTop(this.restorePosition[0], this.restorePosition[1]);
         this._maximizeA.setDisplayed(true);
-        this._restoreA.setDisplayed("none");
+        this._restoreA.setDisplayed(false);
         this.setSize(this.restoreSize.width, this.restoreSize.height, false);
-        this.fireEvent("restore");
+        if(noEvents!==false)this.fireEvent("restore");
     }
 });
 if (Ext.dd && Ext.dd.DD) {
@@ -951,20 +941,14 @@ if (Ext.dd && Ext.dd.DD) {
             var win = this.win;
             this.proxy = win.ghost();
             //iframe 拖动时也要跟着
-            if (win.shim) {
-                var w = this.proxy.getWidth(),
-                h = this.proxy.getHeight();
-                var l = this.proxy.getLeft(true),
-                t = this.proxy.getTop(true);
-                win.shim.show();
-                win.shim.setSize(w, h);
-                win.shim.setLeftTop(l, t);
-            }
+            if(this.win.shim) {
+            	this.win.shim.setBox(this.proxy.getBox(false));
+            }	
         },
         b4Drag: Ext.emptyFn,
         onDrag: function(e) {
             if (e.getPageY() > 10) this.alignElWithMouse(this.proxy, e.getPageX(), e.getPageY());
-            if (this.win.shim & e.getPageY() > 10) {
+            if (this.win.shim && e.getPageY() > 10) {
                 this.alignElWithMouse(this.win.shim, e.getPageX(), e.getPageY());
             }
         },

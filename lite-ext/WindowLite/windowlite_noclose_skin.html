@@ -104,9 +104,9 @@ Ext.onReady(function() {
     Ext.fly('action_a').on('click', function(evt) {
     	 var xy=evt.getXY();
     	 mwindow.show({
-    		//animateTarget:'action_a',
+    		animateTarget:'action_a',
     		x:xy[0],
-    		y:xy[1],
+    		y:xy[1]+300,
     		constrainToView:true
     	});
     	
