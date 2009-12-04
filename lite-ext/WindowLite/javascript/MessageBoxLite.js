@@ -1,9 +1,9 @@
 /*
-	alert ¾ÙÀı
-	v1.1(20090610) ÀûÓÃ±Õ°üÊµÏÖalertµ¥ÀıÄ£Ê½
-	v1.2(20090611) ÉèÖÃbuttonAlign¾ÓÖĞ¶ÔÆë°´Å¥
-	v1.2.5(20090613) alertlite Ôö¼ÓiconÒÔ¼°callbackÉèÖÃ
-	v1.3(20090806) Ext.ux.MessageBoxLite.res ¹ú¼Ê»¯Ö§³Ö
+	alert ä¸¾ä¾‹
+	v1.1(20090610) åˆ©ç”¨é—­åŒ…å®ç°alertå•ä¾‹æ¨¡å¼
+	v1.2(20090611) è®¾ç½®buttonAlignå±…ä¸­å¯¹é½æŒ‰é’®
+	v1.2.5(20090613) alertlite å¢åŠ iconä»¥åŠcallbackè®¾ç½®
+	v1.3(20090806) Ext.ux.MessageBoxLite.res å›½é™…åŒ–æ”¯æŒ
 */
 Ext.namespace('Ext.ux');
 Ext.ux.MessageBoxLite = function (config) {	
@@ -22,7 +22,7 @@ Ext.ux.MessageBoxLite = function (config) {
 
 Ext.extend(Ext.ux.MessageBoxLite,Ext.ux.WindowLite,  {
 	/**
-	alert È«¾Öµ¥Àı£¬Ã¿´Î¸üĞÂtitle£¬info¼´¿É
+	alert å…¨å±€å•ä¾‹ï¼Œæ¯æ¬¡æ›´æ–°titleï¼Œinfoå³å¯
 	**/
 	updateInfo:function(config){		
 		this.title.update(config.title);
@@ -33,19 +33,19 @@ Ext.extend(Ext.ux.MessageBoxLite,Ext.ux.WindowLite,  {
 		}else {
 			this.iconEl.hide();
 		}
-		//Ò»°ãÉèÖÃ¿í¶Èµ¥ĞĞÏÔÊ¾
+		//ä¸€èˆ¬è®¾ç½®å®½åº¦å•è¡Œæ˜¾ç¤º
   	var size=this.body.getTextWidth(config.info,0,600)+30+(config.icon?49:0);
 		var titleSize=this.header.getTextWidth(config.title,0,600)+30;
 		this.body.setWidth(Math.max(size,titleSize));	  
-		//¸ß¶È²»ÏŞ		
+		//é«˜åº¦ä¸é™		
 		this.updateWindowSize();		
 	}
 });
 /*
-	¹ú¼Ê»¯Ö§³Ö£¬Çë¸²¸Ç
+	å›½é™…åŒ–æ”¯æŒï¼Œè¯·è¦†ç›–
 */
 Ext.ux.MessageBoxLite.res={
-	buttonOk : 'È·¶¨'
+	buttonOk : 'ç¡®å®š'
 };
 Ext.ux.MessageBoxLite.alert=function(){	
 		
