@@ -5,7 +5,8 @@
 	v2.0(20090811) ie6 界面调整，失去焦点处理调整，ajax次序问题调整,添加triger配置，ext-core css标记浏览器方法避免
 	v2.0.1(20090903) z-index change to 99999
 	v2.5(20091203) 中文输入法兼容修正，改用轮询查询输入变化,算法大幅变动,hiddenName配置取消，没有意义
-	v2.5.5(20091204) AOP阴影处理分离主逻辑   
+	v2.5.5(20091204) AOP阴影处理分离主逻辑，使用inline-block完美替换,
+	http://foohack.com/2007/11/cross-browser-support-for-inline-block-styling/   
 */
 Ext.namespace('Ext.ux');
 Ext.ux.AutocompleteLite = function(config) {
@@ -38,7 +39,10 @@ Ext.ux.AutocompleteLite = function(config) {
             tag: 'label',
             cls: 'labelTip',
             html: this.emptyText,
-            'htmlFor': this.textField.id
+            'htmlFor': this.textField.id,
+			style:{
+				width:this.textField.getComputedWidth()+"px"
+			}
         },
         true);
         var xy = this.textField.getXY();

@@ -38,10 +38,12 @@ ul.x-combo-list-inner li {
 	border-width:0px 0 1px 0;
 	cursor:pointer;
 	height:22px;
-	position:absolute;
-	right:0;
-	top:0px;
 	width:17px;
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	vertical-align:middle;
 }
 
 .ext-ie .x-form-trigger{
@@ -53,10 +55,16 @@ ul.x-combo-list-inner li {
 .x-trigger-wrap-focus .x-form-trigger {
 	background-position:-51px 0;
 }
-
+/*
+	inline block 技巧
+	http://foohack.com/2007/11/cross-browser-support-for-inline-block-styling/
+*/
 .x-trigger-wrap {
-	vertical-align:middle;
-	position:relative;
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	
 }
 .x-trigger-wrap .x-form-trigger-over {
 	background-position:-68px 0;

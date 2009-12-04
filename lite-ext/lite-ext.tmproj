@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>AutocompleteLite/javascript/autocompletelite.js</string>
+	<string>WindowLite/javascript/MessageBoxLite.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,20 +21,6 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>AutocompleteLite/javascript/autocompletelite.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>21</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>ButtonLite/button.html</key>
 		<dict>
 			<key>caret</key>
@@ -121,93 +107,121 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>WindowLite/javascript/windowlite.js</key>
+		<key>WindowLite/css/aol/windowlite.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>39</integer>
+				<integer>54</integer>
 				<key>line</key>
-				<integer>37</integer>
+				<integer>299</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>14</integer>
+			<integer>136</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>37</integer>
+				<integer>299</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>39</integer>
+				<integer>54</integer>
 				<key>line</key>
-				<integer>37</integer>
+				<integer>299</integer>
 			</dict>
 		</dict>
-		<key>WindowLite/windowlite_close_skin.html</key>
+		<key>WindowLite/css/windowlite.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>9</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>111</integer>
+				<integer>328</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>89</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>111</integer>
-			</dict>
-			<key>selectTo</key>
+			<integer>343</integer>
+		</dict>
+		<key>WindowLite/javascript/MessageBoxLite.js</key>
+		<dict>
+			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>12</integer>
 				<key>line</key>
-				<integer>111</integer>
-			</dict>
-		</dict>
-		<key>WindowLite/windowlite_noclose_skin.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>97</integer>
+				<integer>17</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>78</integer>
+			<integer>0</integer>
 		</dict>
-		<key>WindowLite/windowlite_taskbar.html</key>
+		<key>multitreeWin/css/multiTree.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>34</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>95</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>67</integer>
+			<integer>0</integer>
+		</dict>
+		<key>multitreeWin/javascript/multiTree.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>480</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>462</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>480</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>480</integer>
+			</dict>
+		</dict>
+		<key>multitreeWin/multiTree.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>30</integer>
+				<key>line</key>
+				<integer>123</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>94</integer>
 		</dict>
 		<key>playground/simple-table-sort/simple-table-sort.html</key>
 		<dict>
@@ -242,11 +256,12 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>WindowLite/javascript/windowlite.js</string>
-		<string>WindowLite/windowlite_close_skin.html</string>
-		<string>WindowLite/windowlite_taskbar.html</string>
-		<string>WindowLite/windowlite_noclose_skin.html</string>
-		<string>AutocompleteLite/javascript/autocompletelite.js</string>
+		<string>multitreeWin/multiTree.html</string>
+		<string>multitreeWin/css/multiTree.css</string>
+		<string>multitreeWin/javascript/multiTree.js</string>
+		<string>WindowLite/css/windowlite.css</string>
+		<string>WindowLite/css/aol/windowlite.css</string>
+		<string>WindowLite/javascript/MessageBoxLite.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
