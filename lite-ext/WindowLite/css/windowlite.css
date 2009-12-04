@@ -9,11 +9,7 @@ Any problem contact hym_sunrise@126.com
 div.windowContainer {
     text-align:left;
     position: absolute;
-    margin:0;
-    padding:0;
     z-index: 20001;
-    /*ie6 手型保持*/
-    background:transparent url(../images/default/shadow-c.png) repeat scroll 0 0;
     overflow:hidden;  
 }
 
@@ -143,8 +139,6 @@ div.x-window-plain .window-body-mc {
 	/*-x-system-font:none;*/
 	background:#DFE8F6 none repeat scroll 0 0;
 	border:1px solid #99BBE8;
-	margin:0;
-	padding:0;	
 }
 
 
@@ -186,8 +180,6 @@ div.x-window-plain .window-body-mc {
 }
 
 .x-panel-ghost ul {
-    margin:0;
-    padding:0;
     overflow:hidden;
     font-size:0;
     line-height:0;
@@ -388,7 +380,6 @@ div.x-window-plain .window-body-mc {
 	 top:0;
 	 background:white;
 	 z-index:200000;
-	 -moz-opacity: 0;
     opacity:0;
     filter: alpha(opacity=0);
 }
