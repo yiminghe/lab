@@ -332,35 +332,35 @@ div.x-window-plain .window-body-mc {
 	opacity:1;
 }
 .x-resizable-over .x-resizable-handle-east, .x-resizable-pinned .x-resizable-handle-east{
-    background:url(../images/default/sizer/e-handle.gif);
+    background:url(../../base/images/default/sizer/e-handle.gif);
 	background-position: left;
 }
 .x-resizable-over .x-resizable-handle-west, .x-resizable-pinned .x-resizable-handle-west{
-    background:url(../images/default/sizer/e-handle.gif);
+    background:url(../../base/images/default/sizer/e-handle.gif);
 	background-position: left;
 }
 .x-resizable-over .x-resizable-handle-south, .x-resizable-pinned .x-resizable-handle-south{
-    background:url(../images/default/sizer/s-handle.gif);
+    background:url(../../base/images/default/sizer/s-handle.gif);
     background-position: top;
 }
 .x-resizable-over .x-resizable-handle-north, .x-resizable-pinned .x-resizable-handle-north{
-    background:url(../images/default/sizer/s-handle.gif);
+    background:url(../../base/images/default/sizer/s-handle.gif);
     background-position: top;
 }
 .x-resizable-over .x-resizable-handle-southeast, .x-resizable-pinned .x-resizable-handle-southeast{
-    background:url(../images/default/sizer/se-handle.gif);
+    background:url(../../base/images/default/sizer/se-handle.gif);
     background-position: top left;
 }
 .x-resizable-over .x-resizable-handle-northwest, .x-resizable-pinned .x-resizable-handle-northwest{
-    background:url(../images/default/sizer/nw-handle.gif);
+    background:url(../../base/images/default/sizer/nw-handle.gif);
     background-position:bottom right;
 }
 .x-resizable-over .x-resizable-handle-northeast, .x-resizable-pinned .x-resizable-handle-northeast{
-    background:url(../images/default/sizer/ne-handle.gif);
+    background:url(../../base/images/default/sizer/ne-handle.gif);
     background-position: bottom left;
 }
 .x-resizable-over .x-resizable-handle-southwest, .x-resizable-pinned .x-resizable-handle-southwest{
-    background:url(../images/default/sizer/sw-handle.gif);
+    background:url(../../base/images/default/sizer/sw-handle.gif);
     background-position: top right;
 }
 .x-resizable-proxy{
