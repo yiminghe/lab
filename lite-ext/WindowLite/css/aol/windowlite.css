@@ -4,8 +4,6 @@
     margin:0;
     padding:0;
     z-index: 20001;
-    /*ie6 手型保持*/
-    background:transparent url(../../images/default/shadow-c.png) repeat scroll 0 0;
     overflow:hidden;  
 }
 
@@ -140,8 +138,6 @@ a.x-tool-restore:hover {
 }
 
 .x-panel-ghost ul {
-    margin:0;
-    padding:0;
     overflow:hidden;
     font-size:0;
     line-height:0;
