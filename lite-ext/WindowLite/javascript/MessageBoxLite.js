@@ -45,7 +45,7 @@ Ext.extend(Ext.ux.MessageBoxLite,Ext.ux.WindowLite,  {
 	国际化支持，请覆盖
 */
 Ext.ux.MessageBoxLite.res={
-	buttonOk : '确定'
+	buttonOk : '&nbsp;&nbsp;OK&nbsp;&nbsp;'
 };
 Ext.ux.MessageBoxLite.alert=function(){	
 		
