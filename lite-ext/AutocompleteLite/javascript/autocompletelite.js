@@ -144,7 +144,8 @@ Ext.ux.AutocompleteLite = function(config) {
     //设为和文本框宽度相同
 	var suitWidth=this.textField.getComputedWidth() + this.triger;
     this._autoCompleteDiv.setWidth(suitWidth);
-    this._wrapDiv.setWidth(suitWidth);
+    //inline-block 不需要设置宽度
+    //this._wrapDiv.setWidth(suitWidth);
 
     //键盘导航
     this.textField.on('keydown',
