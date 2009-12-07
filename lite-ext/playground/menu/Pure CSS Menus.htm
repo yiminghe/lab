@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script type="text/javascript" src="../../base/javascript/ext-core-min.js">
+</script>
+		<link rel="stylesheet" type="text/css" href="../../base/css/core.css">
+		<title>
+			Pure CSS Menus
+		</title>
+		<style type="text/css">
+
+		body {
+			border:0;
+			margin: 0; 
+			padding: 0;
+		}
+			h1 {margin: 0; padding: 1em 0.25em 0; font: bold 2.5em Arial, sans-serif; line-height: 0.8em; border-bottom: 1px solid silver; text-align: right; color: #557; letter-spacing: 2px;}
+			div#main p {margin: 1em 3em 1em 0.5em;}
+		ul.cssmenu,ul.cssmenu li,ul.cssmenu a {
+			padding: 0; 
+			margin: 0; 
+			display:block;
+			/*ie6 奇怪的ie6*/
+			zoom:1;
+		}
+		ul.cssmenu a:hover {background: yellow;}
+		ul.cssmenu,ul.cssmenu ul { 
+			border-bottom: 1px solid silver;
+			background: white;
+		}
+		ul.cssmenu li {
+			vertical-align: bottom;
+			list-style-type: none;
+			border: 1px solid silver; border-width: 1px 1px 0 3px;
+			/*重要，以第一层菜单定位*/
+			position: relative; 
+		}
+		/*二层以下子菜单初始不显示*/
+		ul.cssmenu ul { display:none;position: absolute;}
+		/*hover时直系显示*/
+		ul.cssmenu li:hover > ul {display: block;  top: -1px; left: 100%;}
+		ul.cssmenu li.jshover  ul.jschild {top: -1px; left: 99%;display: block; }
+		ul.cssmenu li a {
+			display: block; 
+			padding: 5px 7px; 
+			text-decoration: none;
+		}
+		ul.cssmenu li.sub > a {font-weight: bold; }
+		ul.cssmenu li.sub  a.subchild {font-weight: bold;}
+		ul.topmenu {width: 6em;}
+		ul.topmenu > li:hover > ul {width: 10em; top: 1.5em; left: -3px;}
+		ul.topmenu li.jshover.level1  ul.jschild.level1child {width: 10em; top: 1.5em; left: -3px;}
+		.cssmenu ul {width: 10em;}
+		#rtnv { width: 10em; margin: 0; padding: 0; font-family: Arial, sans-serif;float:left;}
+		ul.rightmenu,.rightmenu ul {border: 1px solid silver; border-width: 0 0 0 1px;}
+		ul.rightmenu li {border-width:1px 0; border-color: white; line-height: 1.25em;}
+		/*top-border:0 , ul 不占用上面*/
+		ul.rightmenu ul,.rightmenu ul ul {border-width: 0 1px 1px 1px; border-color: gray silver gray gray;}
+		ul.rightmenu li.sub:hover {
+			margin-left: -100%; 
+			border: 1px solid gray; 
+			background: yellow;
+		}
+		ul.rightmenu li.sub:hover > a {color: #330;}
+		ul.rightmenu li.sub:hover > ul {top: 2.05em; left: -1px; background: #FEFEFC;}
+		ul.rightmenu li.sub.jshover {
+				margin-left: -100%; 
+				border: 1px solid gray;
+				background: yellow;
+		}
+		ul.rightmenu li.sub.jshover  a.subchildhover {color: #330;}
+		ul.rightmenu li.sub.jshover  ul.jschild {
+			top: 2.05em; 
+			left: -1px; 
+			/*没有背景ie不可点！*/
+			background:  #FEFEFC;
+		}
+		h4 {margin: 0 0.5em 0 0; padding: 0 0.25em; font-size: 90%; border-bottom: 1px solid silver;}
+
+		</style>
+		<script>
+		Ext.onReady(function(){
+			if( Ext.isIE6) {
+		
+				Ext.select("li.sub > a").addClass("subchild");
+				Ext.select(".rightmenu li.sub").hover(
+				//over
+				function(){
+					Ext.get(this).addClass("jshover");
+					/*标记：直属子节点*/
+					Ext.get(this).select(">ul").addClass("jschild");
+					var a;
+					if(a=Ext.get(this).child("a"))a.addClass("subchildhover");
+				},
+				//out
+				function(){
+					Ext.get(this).removeClass("jshover");
+					/*马上移去*/
+					Ext.get(this).select(">ul").removeClass("jschild");
+					var a;
+					if(a=Ext.get(this).child("a"))a.removeClass("subchildhover");
+				});
+		
+				Ext.select(".topmenu > li").addClass("level1");
+				Ext.select(".topmenu > li > ul").addClass("level1child");
+				Ext.select(".topmenu li.sub").hover(
+				//over
+				function(){
+					Ext.get(this).addClass("jshover");
+					Ext.get(this).select(">ul").addClass("jschild");
+				},
+				//out
+				function(){
+					Ext.get(this).removeClass("jshover");
+					Ext.get(this).select(">ul").removeClass("jschild");
+				});
+			}
+			
+
+		});
+			
+		</script>
+	</head>
+	<body>
+		<h1>
+			pure CSS menus
+		</h1>
+		<div id="main" class="clearfix">
+			<div style="margin-right:-10em;width:100%;float:left;">
+				<div style="padding:0 10em 0 1em;">
+					<ul class="cssmenu topmenu">
+						<li class="sub">
+							<a href="http://www.meyerweb.com/eric/css/edge/">css/edge</a>
+							<ul>
+								<li class="sub">
+									<a href="http://www.meyerweb.com/eric/css/edge/complexspiral/demo.html" title="fixed background images make for nifty effects [01 Oct 2001]">complexspiral</a>
+									<ul>
+										<li>
+											<a href="http://www.meyerweb.com/eric/css/edge/complexspiral/demo2.html" title="a spiral of extended reach [23 Feb 2002]">...devolved</a>
+										</li>
+										<li>
+											<a href="http://www.meyerweb.com/eric/css/edge/complexspiral/glassy.html" title="through a glass, lightly [23 Feb 2002]">...distorted</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<a href="http://www.meyerweb.com/eric/css/edge/popups/demo.html" title="text appears and disappears without Javascript to drive it [01 Oct 2001]">Pure CSS popups</a>
+								</li>
+								<li>
+									<a href="http://www.meyerweb.com/eric/css/edge/curvelicious/demo.html" title="text flowing along a... curve? [9 Nov 2001]">curvelicious</a>
+								</li>
+								<li class="sub">
+									<a href="http://www.meyerweb.com/eric/css/edge/slantastic/demo.html" title="elements don't have to look boxy any more [9 Nov 2001]">slantastic</a>
+									<ul>
+										<li>
+											<a href="http://www.meyerweb.com/eric/css/edge/slantastic/holiday.html" title="Happy Slanty Holidays! contributed by Mike Solomon [31 Dec 2001]">slanty claus?</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<a href="http://www.meyerweb.com/eric/css/edge/raggedfloat/demo.html" title="irregular text flows, sort of [19 Feb 2002]">ragged float</a>
+								</li>
+								<li>
+									<a href="http://www.meyerweb.com/eric/css/edge/boxpunch/demo.html" title="knocking out pieces of an element gets you irregular shapes [3 Jan 2002]">boxpunch</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<p>
+						修改自 <a target="_blank" href="http://meyerweb.com/eric/css/edge/menus/demo.html">http://meyerweb.com/eric/css/edge/menus/demo.html</a> 原文不支持 ie6 ，ie7右侧菜单显示不正常
+					</p>
+					<p>
+						1.改为负margin布局，两栏流体
+					</p>
+					<p>
+						2.右侧菜单设置宽度，弹出菜单背景得以以透过正文
+					</p>
+					<p>
+						3.为ie6 javascript修正 ,注意 ul,li,a 利用 zoom:1; 取得 hasLayout
+					</p>
+				</div>
+			</div>
+			<div id="rtnv" style="font-size:85%;">
+				<h4>
+					meyerweb
+				</h4>
+				<ul class="cssmenu rightmenu">
+					<li>
+						<a href="http://www.meyerweb.com/eric/talks/">Speaking</a>
+					</li>
+					<li>
+						<a href="http://www.meyerweb.com/eric/writing.html">Writing</a>
+					</li>
+					<li class="sub">
+						<a href="http://www.meyerweb.com/eric/books/">Books</a>
+						<ul>
+							<li>
+								<a href="http://www.meyerweb.com/eric/books/css-tdg">CSS:TDG</a>
+							</li>
+							<li>
+								<a href="http://www.meyerweb.com/eric/books/css-progref">CSS2 ProgRef</a>
+							</li>
+							<li class="sub">
+								<a href="http://www.ericmeyeroncss.com/">Eric Meyer on CSS</a>
+								<ul>
+									<li>
+										<a href="http://www.ericmeyeroncss.com/about-book.html">About the book</a>
+									</li>
+									<li>
+										<a href="http://www.ericmeyeroncss.com/iloveme.html">Advance praise</a>
+									</li>
+									<li>
+										<a href="http://www.ericmeyeroncss.com/order.html">Order a copy!</a>
+									</li>
+									<li>
+										<a href="http://www.ericmeyeroncss.com/projects/">Projects</a>
+									</li>
+									<li>
+										<a href="http://www.ericmeyeroncss.com/about-auth.html">About the author</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="http://www.meyerweb.com/eric/books/css-pocket">CSS Pocket</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="http://www.meyerweb.com/eric/css/">CSS info</a>
+					</li>
+					<li class="sub">
+						<a href="http://www.meyerweb.com/eric/css/edge/">css/edge</a>
+						<ul>
+							<li class="sub">
+								<a href="http://www.meyerweb.com/eric/css/edge/complexspiral/demo.html" title="fixed background images make for nifty effects [01 Oct 2001]">complexspiral</a>
+								<ul>
+									<li>
+										<a href="http://www.meyerweb.com/eric/css/edge/complexspiral/demo2.html" title="a spiral of extended reach [23 Feb 2002]">...devolved</a>
+									</li>
+									<li>
+										<a href="http://www.meyerweb.com/eric/css/edge/complexspiral/glassy.html" title="through a glass, lightly [23 Feb 2002]">...distorted</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="http://www.meyerweb.com/eric/css/edge/popups/demo.html" title="text appears and disappears without Javascript to drive it [01 Oct 2001]">pure CSS popups</a>
+							</li>
+							<li>
+								<a href="http://www.meyerweb.com/eric/css/edge/menus/demo.html" title="arbitrary hover means arbitrarily nested popup menus [14 June 2002]">pure CSS menus</a>
+							</li>
+							<li>
+								<a href="http://www.meyerweb.com/eric/css/edge/curvelicious/demo.html" title="text flowing along a... curve? [9 Nov 2001]">curvelicious</a>
+							</li>
+							<li class="sub">
+								<a href="http://www.meyerweb.com/eric/css/edge/slantastic/demo.html" title="elements don't have to look boxy any more [9 Nov 2001]">slantastic</a>
+								<ul>
+									<li>
+										<a href="http://www.meyerweb.com/eric/css/edge/slantastic/holiday.html" title="Happy Slanty Holidays! contributed by Mike Solomon [31 Dec 2001]">slanty claus?</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="http://www.meyerweb.com/eric/css/edge/raggedfloat/demo.html" title="irregular text flows, sort of [19 Feb 2002]">ragged float</a>
+							</li>
+							<li>
+								<a href="http://www.meyerweb.com/eric/css/edge/boxpunch/demo.html" title="knocking out pieces of an element gets you irregular shapes [3 Jan 2002]">boxpunch</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
