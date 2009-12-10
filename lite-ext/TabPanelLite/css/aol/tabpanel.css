@@ -16,7 +16,7 @@
 
 .tabpanel .tabpanel_nav li {
 	float:left;
-	margin-left:2px;	
+	padding-left:2px;	
 }
 
 
@@ -42,7 +42,7 @@
 .tabpanel .tabpanel_nav li span.tab_inner {
 		background:transparent url(../../../base/images/aol/blue_skin.png) repeat-x scroll 0 -8352px;
 		margin-top:9px;
-		padding:7px 8px 6px;
+		padding:6px 8px 6px;
 		border-style:solid solid none;
 		border-width:1px;
 		border-color:#859DB7;

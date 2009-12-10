@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>playground/menu/Pure CSS Menus.htm</string>
+	<string>playground/textrange/range.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -151,100 +151,70 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>playground/menu/Pure CSS Menus.htm</key>
+		<key>playground/getPixelStyle/pixel.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>14</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>80</integer>
+				<integer>6</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>68</integer>
+			<integer>27</integer>
 		</dict>
-		<key>playground/simple-table-sort/simple-table-sort.html</key>
+		<key>playground/layout/伪绝对定位.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>11</integer>
+				<integer>253</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>45</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
+			<integer>18</integer>
+		</dict>
+		<key>playground/layout/伪绝对定位5列-修改by-yiminghe.html</key>
+		<dict>
+			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>2</integer>
 				<key>line</key>
-				<integer>7</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-		</dict>
-		<key>playground/vertical-center/inline-block-center.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>28</integer>
-				<key>line</key>
-				<integer>38</integer>
+				<integer>36</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>16</integer>
+			<integer>4</integer>
 		</dict>
-		<key>playground/vertical-center/position-center-ie.html</key>
+		<key>playground/layout/伪绝对定位5列.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>3</integer>
+				<integer>43</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>2</integer>
+			<integer>26</integer>
 		</dict>
-		<key>playground/vertical-center/relative-diff-2.html</key>
+		<key>playground/textrange/range.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>7</integer>
+				<integer>33</integer>
 				<key>line</key>
-				<integer>11</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>playground/vertical-center/relative-diff.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>126</integer>
-				<key>line</key>
-				<integer>12</integer>
+				<integer>13</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -254,10 +224,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>playground/vertical-center/position-center-ie.html</string>
-		<string>playground/menu/Pure CSS Menus.htm</string>
-		<string>playground/vertical-center/relative-diff.html</string>
-		<string>playground/vertical-center/relative-diff-2.html</string>
+		<string>playground/layout/伪绝对定位.html</string>
+		<string>playground/layout/伪绝对定位5列.html</string>
+		<string>playground/layout/伪绝对定位5列-修改by-yiminghe.html</string>
+		<string>playground/getPixelStyle/pixel.html</string>
+		<string>playground/textrange/range.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
