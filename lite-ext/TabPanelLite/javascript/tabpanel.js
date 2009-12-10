@@ -110,8 +110,8 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
 	var me=this;
 	/*建立tab包装层，用来定位改变大小并移动，关键overflow:hidden，tab在其中绝对定位*/
 	var wrap= lis.item(index).wrap({
-		position:"relative",
-		style:{float:"left",overflow:"hidden"}
+		
+		style:{position:"relative",float:"left",overflow:"hidden"}
 	});
 	/*开始动画*/
 	lis.item(index).slideOut('bl', { duration: .35 ,
