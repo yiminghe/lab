@@ -105,3 +105,30 @@
 	color:#474747;
 	padding:10px;
 }
+
+.tabpanel li.x-tab-strip-closable a.x-tab-strip-close {
+	background-image:url(../images/tab-close.gif);
+	background-repeat:no-repeat;
+	display:block;
+	height:11px;
+	opacity:0.6;
+	text-indent:-10000px;
+	filter: alpha(opacity=60);
+	position:absolute;
+	right:3px;
+	top:3px;
+	outline:0;
+	width:11px;
+	z-index:2;
+}
+.tabpanel ul.tabpanel_nav li.x-tab-strip-closable {
+	position:relative;
+}
+
+.tabpanel .tabpanel_nav li.x-tab-strip-closable em.tab_right {
+	padding-right:20px;
+}
+.tabpanel li.x-tab-strip-closable a.x-tab-strip-close:hover {
+	opacity:1;
+	filter: alpha(opacity=100);
+}
