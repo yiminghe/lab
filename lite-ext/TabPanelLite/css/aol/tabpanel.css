@@ -110,8 +110,8 @@
 	text-indent:-10000px;
 	filter: alpha(opacity=60);
 	position:absolute;
-	right:3px;
-	top:3px;
+	right:13px;
+	top:13px;
 	outline:0;
 	width:11px;
 	z-index:2;
@@ -120,7 +120,7 @@
 	position:relative;
 }
 
-.tabpanel .tabpanel_nav li.x-tab-strip-closable em.tab_right {
+.tabpanel .tabpanel_nav li.x-tab-strip-closable  span.tab_inner {
 	padding-right:20px;
 }
 .tabpanel li.x-tab-strip-closable a.x-tab-strip-close:hover {
