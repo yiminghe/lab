@@ -5,6 +5,7 @@ Form 2.0(200905121707) 封装模块 Ext.ux.FormLite ,增加配置项
 Form 2.2(200905191625) 加入验证失败覆盖层遮盖提交按钮，修改tip提醒设置方法
 Form 2.3(200906021755) 错误提示修正，表单状态查询，validField增加
 Form 2.4(20090803) 增加msgType 配置，结合TipLite 实现错误信息 tip显示
+Form 2.4.1(20091215) 防止提示重复出现
 */
 
 Ext.ns('Ext.ux');
@@ -23,27 +24,21 @@ Ext.ux.FormLite = function(config) {
     Ext.apply(this, config);
     this.addEvents('invalid');
     Ext.ux.FormLite.superclass.constructor.call(this);
-
     this.formExt = Ext.get(this.formId);
-
     if (!this.formExt.select('.submit-area').item(0)) {
         //alert('FormLite error:no class submit-area for submit button');
         //return;
-        }
+    }
     this.formExt.addClass('formlite');
     this._applyTips();
     this._applyFeedBack();
-
-
 }
 
 
 Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
-
     /*
-		出错处理两种方式
-	*/
-
+			出错处理两种方式
+		*/
     tip: function(el, errorStr) {
         if (errorStr) {
             Ext.ux.TipLiteManager.addTip({
@@ -56,18 +51,20 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
     },
 
     side: function(el, errorStr) {
-        if (errorStr)
-        el.next('span.feedback').update(errorStr);
-        el.next('span.feedback').setStyle({
-            'visibility': 'visible'
-        });
+        if (errorStr) {
+	        el.next('span.feedback').update(errorStr);
+	        el.next('span.feedback').setStyle({
+	            'visibility': 'visible'
+	        });
+      	}
     },
 
     untip: function(el) {
         Ext.ux.TipLiteManager.removeTip(el);
     },
+    
     unside: function(el) {
-        el.next('span.feedback').setStyle({
+        if(el.next('span.feedback')) el.next('span.feedback').setStyle({
             'visibility': 'hidden'
         });
     },
@@ -100,6 +97,9 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
 
         var cel = Ext.get(el.dom);
         if (!tip) return;
+        if("OK" == cel.dom.getAttribute("_formLiteTipAlready")) return;
+        //alert(cel.dom.getAttribute("_formLiteTipAlready"));
+        cel.dom.setAttribute("_formLiteTipAlready","OK");
 
         var label = Ext.DomHelper.insertBefore(cel, {
             tag: 'label',
@@ -124,7 +124,7 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
         function() {
             if (!cel.getValue().trim()) label.show();
         });
-
+				if (cel.getValue().trim()) label.hide();
 
     },
 
@@ -267,9 +267,6 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
                 if (!submitArea || Ext.isIE6) {
                     alert("对不起，您填写的部分信息不合规范");
                 } else {
-
-
-
                     var errorSlider = submitArea.child('.error-slider');
 
                     if (!errorSlider) {
