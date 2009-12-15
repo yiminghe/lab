@@ -369,6 +369,7 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
         var arrow = targetLi.child(".x-tool");
         if (!arrow) return;
         this.currentSubMenu = Ext.get(this.id + 'level3_' + targetLi.dom.getAttribute('key')) || this.createThirdUl(targetLi.dom);
+        this.currentSubMenu.enableDisplayMode();
         this.currentSubMenu.show();
         var xy = arrow.getXY();
         xy[0] += arrow.getComputedWidth() + 2;
