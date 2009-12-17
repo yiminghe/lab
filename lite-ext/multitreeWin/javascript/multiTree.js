@@ -236,7 +236,7 @@ Ext.extend(Ext.ux.MultiTree, Ext.util.Observable, {
             dataNodesSubUlData.cn.push(this.createDataSubLi(info.children[i], selectedMap));
         }
         var popup= Ext.DomHelper.append(this.bottomNodesContainer, dataNodesSubUlData, true);
-        
+        popup.enableDisplayMode();
         var lis=popup.select("li");
         var that=this;
         lis.each(function(el){
