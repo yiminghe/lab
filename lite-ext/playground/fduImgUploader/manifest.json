@@ -1,0 +1,25 @@
+{
+  "name": "fdu img uploader",
+  "icons": { "48": "icon48.png",
+  "32": "icon32.png",
+          "128": "icon128.png" },
+  "version": "1.0",
+  "description": "img upload enhancement by yiminghe for learning chrome extension",
+  "permissions": ["http://bbs.fudan.edu.cn/"],
+  "content_scripts": [
+    {
+      "matches": ["http://bbs.fudan.edu.cn/*"],
+      "css": [
+      "imgUploader.css",
+      "lite-ext/TabPanelLite/css/tabpanel.css",
+      "lite-ext/WindowLite/css/aol/windowlite.css",
+      "lite-ext/base/css/core.css"],
+      "js": ["lite-ext/base/javascript/ext-core-min.js", 
+      "lite-ext/WindowLite/javascript/windowlite.js",
+      "lite-ext/TabPanelLite/javascript/tabpanel.js",
+      
+      "imgUploader.js"],
+      "run_at":"document_start"
+    }
+  ]
+}

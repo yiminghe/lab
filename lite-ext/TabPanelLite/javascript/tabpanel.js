@@ -365,6 +365,11 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
             wrap: wrap,
             callback: function() {
                 wrap.dom.parentNode.insertBefore(addLi.dom, wrap.dom);
+				//默认visibility : visible ,父容器隐藏，这个还在
+				//手动清除
+				addLi.setStyle({
+					visibility:""
+				});
                 wrap.remove();
                 me.activate(lis.getCount());
                 me.fireEvent("add", addLi);

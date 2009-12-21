@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>TabPanelLite/css/aol/tabpanel.css</string>
+	<string>WindowLite/windowlite_close_skin.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -151,61 +151,135 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>TabPanelLite/css/aol/tabpanel.css</key>
+		<key>TabPanelLite/css/tabpanel.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>6</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>113</integer>
+				<integer>5</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>93</integer>
+			<integer>0</integer>
 		</dict>
 		<key>TabPanelLite/javascript/tabpanel.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>6</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>134</integer>
+				<integer>368</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>44</integer>
+			<integer>348</integer>
 		</dict>
 		<key>TabPanelLite/tab.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>7</integer>
+				<integer>4</integer>
 				<key>line</key>
-				<integer>178</integer>
+				<integer>263</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>152</integer>
+			<integer>252</integer>
 		</dict>
-		<key>playground/getPixelStyle/pixel.html</key>
+		<key>WindowLite/javascript/windowlite.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>10</integer>
 				<key>line</key>
-				<integer>6</integer>
+				<integer>52</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>29</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>52</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>52</integer>
+			</dict>
+		</dict>
+		<key>WindowLite/windowlite_close_skin.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>25</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>25</integer>
+			</dict>
+		</dict>
+		<key>playground/fdup/ZeroClipboard.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>115</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>27</integer>
+			<integer>0</integer>
+		</dict>
+		<key>playground/fdup/inject.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>208</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>196</integer>
 		</dict>
 		<key>playground/layout/伪绝对定位.html</key>
 		<dict>
@@ -252,9 +326,12 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>TabPanelLite/tab.html</string>
+		<string>playground/fdup/inject.html</string>
+		<string>playground/fdup/ZeroClipboard.js</string>
 		<string>TabPanelLite/javascript/tabpanel.js</string>
-		<string>TabPanelLite/css/aol/tabpanel.css</string>
+		<string>WindowLite/javascript/windowlite.js</string>
+		<string>WindowLite/windowlite_close_skin.html</string>
+		<string>TabPanelLite/tab.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
