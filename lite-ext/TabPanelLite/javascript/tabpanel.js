@@ -1,21 +1,18 @@
 ﻿/**
-	v1.0(20090423) 从markup 直接生成 ext style tabpanel 
-	v1.1(20090428) # bug修正
-	v1.2(20090430) 增加activate 函数,激活某个标签页
-	v1.3(20090504) ie显示修正，通过css2.1 validation
-	v1.4(20090730) 添加皮肤支持，修正bug:tabpanel互相嵌套
-	v1.4.5(20090806) 修复bug:点击当前tab也会触发change
-	v1.4.7(20090901) 加入皮肤 AOL,see tab_layout_skin.html
-	v1.5(20091210) mac chrome tab 添加删除效果实现
-	v2.0(20091214) 加入 tab 过多时滚动处理
-**/
-
+ v1.0(20090423) 从markup 直接生成 ext style tabpanel 
+ v1.1(20090428) # bug修正
+ v1.2(20090430) 增加activate 函数,激活某个标签页
+ v1.3(20090504) ie显示修正，通过css2.1 validation
+ v1.4(20090730) 添加皮肤支持，修正bug:tabpanel互相嵌套
+ v1.4.5(20090806) 修复bug:点击当前tab也会触发change
+ v1.4.7(20090901) 加入皮肤 AOL,see tab_layout_skin.html
+ v1.5(20091210) mac chrome tab 添加删除效果实现
+ v2.0(20091214) 加入 tab 过多时滚动处理
+ **/
 Ext.namespace('Ext.ux');
-Ext.ux.TabPanelLite = function(config) {
+Ext.ux.TabPanelLite = function (config) {
     config = config || {};
-    if (!config.id)
-    config.id = 'ID' + Ext.id() + '_';
-
+    if (!config.id) config.id = 'ID' + Ext.id() + '_';
     Ext.apply(this, {
         initialConfig: config
     });
@@ -23,7 +20,6 @@ Ext.ux.TabPanelLite = function(config) {
     this.addEvents('change', "add", "remove");
     Ext.ux.TabPanelLite.superclass.constructor.call(this);
     if (!config.containerId) return;
-
     var tabPanel = Ext.get(config.containerId);
     var me = this;
     this.tabHeader = tabPanel.child("> .tabheader");
@@ -35,7 +31,7 @@ Ext.ux.TabPanelLite = function(config) {
         }
     });
     this.headerContainer.addClass("x-tab-list");
-	/*
+    /*
 		for detect all tabs's width until now
 	*/
     this.tabEdge = Ext.DomHelper.append(this.headerContainer, {
@@ -43,8 +39,7 @@ Ext.ux.TabPanelLite = function(config) {
         tag: "li"
     },
     true);
-
-	this.scrollLeftHandler = Ext.DomHelper.insertBefore(this.headerWrap, {
+    this.scrollLeftHandler = Ext.DomHelper.insertBefore(this.headerWrap, {
         cls: "x-tab-scroller-left",
         tag: "a",
         style: {
@@ -63,9 +58,8 @@ Ext.ux.TabPanelLite = function(config) {
     this.panelContainer = tabPanel.child("> .panels");
     var lis = this.headerContainer.select(" > li[class!='x-tab-edge']");
     var activeIndex = 0;
-
-	//对已有 markup 进行增强
-    lis.each(function(el, this_, index_) {
+    //对已有 markup 进行增强
+    lis.each(function (el, this_, index_) {
         //add close icon button
         if (el.hasClass("x-tab-strip-closable")) {
             me._addClose(Ext.get(el.dom));
@@ -74,12 +68,9 @@ Ext.ux.TabPanelLite = function(config) {
             activeIndex = index_;
         }
     });
-
     this.activate(activeIndex);
-
-	//change event when on click
-    this.headerContainer.on('click',
-    function(evt, t) {
+    //change event when on click
+    this.headerContainer.on('click', function (evt, t) {
         var cur = Ext.get(t);
         var lis = this.headerContainer.select(" > li[class!='x-tab-edge']");
         var panels = this.panelContainer.select("> div.panel");
@@ -96,80 +87,63 @@ Ext.ux.TabPanelLite = function(config) {
     this, {
         delegate: "li"
     });
-
-	//when change ,scroll to current tab
-    this.on("change",
-    function(tab) {
+    //when change ,scroll to current tab
+    this.on("change", function (tab) {
         tab = Ext.get(tab);
         this.scrollToTab(tab, this.adjustScroll);
     });
-
-	//when remove ,update scroll button status
-    this.on("remove",
-    function(tab) {
+    //when remove ,update scroll button status
+    this.on("remove", function (tab) {
         var tabWidth = tab.getComputedWidth();
         var lastPos = this.tabEdge.getOffsetsTo(this.headerContainer)[0];
         var wrapWidth = this.headerWrap.getWidth();
         var me = this;
-        if (lastPos - tabWidth > wrapWidth + this.headerWrap.dom.scrollLeft) {
-
-            } else {
+        if (lastPos - tabWidth > wrapWidth + this.headerWrap.dom.scrollLeft) {} else {
             //不要使当前 tabs 不满
             this.headerWrap.scroll("left", -tabWidth, {
                 duration: 0.5,
-                callback: function() {
+                callback: function () {
                     me.adjustScroll();
                 }
             });
         }
-
     });
-
-	//when add,scroll to this tab and update scroll status
-    this.on("add",
-    function(tab) {
+    //when add,scroll to this tab and update scroll status
+    this.on("add", function (tab) {
         this.adjustScroll();
         this.scrollToTab(tab, this.adjustScroll);
     });
-
-	//manually scroll to left
-    this.scrollLeftHandler.on("click",
-    function() {
-		if(!this._scrollLeft) return;
+    //manually scroll to left
+    this.scrollLeftHandler.on("click", function () {
+        if (!this._scrollLeft) return;
         var tab = this._getNextTabScrollLeft();
         if (tab) {
             this.scrollToTab(tab, this.adjustScroll);
         }
     },
     this);
-
-	//manually scroll to right
-	this.scrollRightHandler.on("click",
-    function() {
-		if(!this._scrollRight) return;
+    //manually scroll to right
+    this.scrollRightHandler.on("click", function () {
+        if (!this._scrollRight) return;
         var tab = this._getNextTabScrollRight();
         if (tab) {
             this.scrollToTab(tab, this.adjustScroll);
         }
     },
     this);
-
-	this.adjustScroll();
+    this.adjustScroll();
 };
-
-
-
 Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
     _scrollLeft: true,
     _scrollRight: true,
-	/*
+    /*
 		得到左边不在屏幕的下一个 tab
 	*/
-    _getNextTabScrollLeft: function() {
+    _getNextTabScrollLeft: function () {
         var tab = null
         var lis = this.headerContainer.select(" > li[class!='x-tab-edge']");
         var me = this;
-        lis.each(function(el) {
+        lis.each(function (el) {
             var next = el.next("li");
             if (next) {
                 var curPos = el.getOffsetsTo(me.headerContainer)[0];
@@ -182,42 +156,38 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
         });
         return tab;
     },
-	/*
+    /*
 		得到右边不在屏幕的下一个 tab
 	*/
-    _getNextTabScrollRight: function() {
+    _getNextTabScrollRight: function () {
         var tab = null
         var lis = this.headerContainer.select(" > li[class!='x-tab-edge']");
         var me = this;
         var wrapWidth = this.headerWrap.getWidth();
-		//console.log(me.headerWrap.dom.scrollLeft + wrapWidth);
-        lis.each(function(el) {
+        //console.log(me.headerWrap.dom.scrollLeft + wrapWidth);
+        lis.each(function (el) {
             var next = el.next("li");
             if (next) {
                 var curPos = el.getOffsetsTo(me.headerContainer)[0];
                 var nextPos = next.getOffsetsTo(me.headerContainer)[0];
-				//console.log(curPos+ el.getComputedWidth() +" - "+(nextPos+next.getComputedWidth()));
-                if (curPos + el.getComputedWidth()
-                <=
-                me.headerWrap.dom.scrollLeft + wrapWidth+1
-                &&
-                nextPos + next.getComputedWidth() > me.headerWrap.dom.scrollLeft + wrapWidth+1) {
+                //console.log(curPos+ el.getComputedWidth() +" - "+(nextPos+next.getComputedWidth()));
+                if (curPos + el.getComputedWidth() <= me.headerWrap.dom.scrollLeft + wrapWidth + 1 && nextPos + next.getComputedWidth() > me.headerWrap.dom.scrollLeft + wrapWidth + 1) {
                     tab = next.dom;
                     return false;
                 }
             }
         });
-//console.log(tab.innerHTML);
+        //console.log(tab.innerHTML);
         return tab;
     },
-	/*
+    /*
 		根据位置调整滚动显示
 	*/
-    adjustScroll: function() {
+    adjustScroll: function () {
         var headerWidth = this.tabHeader.getWidth(true);
         var wrapWidth = this.headerWrap.getWidth();
         var lastPos = this.tabEdge.getOffsetsTo(this.headerContainer)[0];
-        if (lastPos  > wrapWidth + this.headerWrap.dom.scrollLeft+1) {
+        if (lastPos > wrapWidth + this.headerWrap.dom.scrollLeft + 1) {
             this._scrollRight = true;
         } else {
             this._scrollRight = false;
@@ -239,77 +209,67 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
             this.tabHeader.removeClass("x-tab-scrolling");
         }
     },
-
-    _disableScroll: function(d) {
+    _disableScroll: function (d) {
         this["_scroll" + d] = false;
         this["scroll" + d + "Handler"].setOpacity(0.3);
         this["scroll" + d + "Handler"].setStyle({
             cursor: "default"
         });
     },
-    _enableScroll: function(d) {
+    _enableScroll: function (d) {
         this["_scroll" + d] = true;
         this["scroll" + d + "Handler"].setOpacity(1);
         this["scroll" + d + "Handler"].setStyle({
             cursor: "pointer"
         });
     },
-
-	/*
+    /*
 		关键：滚动到当前 tab
 	*/
-    scrollToTab: function(tab, callback) {
+    scrollToTab: function (tab, callback) {
         if (!this.tabHeader.hasClass("x-tab-scrolling")) return;
         tab = Ext.get(tab);
         var tabWidth = Ext.get(tab).getComputedWidth();
         var wrapWidth = this.headerWrap.getWidth();
         var currentPos = tab.getOffsetsTo(this.headerContainer)[0];
-        if (currentPos > wrapWidth + this.headerWrap.dom.scrollLeft+1) {
-            this.headerWrap.scroll("left", currentPos - this.headerWrap.dom.scrollLeft - wrapWidth + tabWidth, {
-                duration: 0.5
-                ,
-                callback: callback
-                ,
-                scope: this
-            });
-        } else if (currentPos <= wrapWidth + this.headerWrap.dom.scrollLeft+1 && currentPos + tabWidth > wrapWidth + this.headerWrap.dom.scrollLeft+1) {
+        if (currentPos > wrapWidth + this.headerWrap.dom.scrollLeft + 1) {
             this.headerWrap.scroll("left", currentPos - this.headerWrap.dom.scrollLeft - wrapWidth + tabWidth, {
                 duration: 0.5,
-                callback: callback
-                ,
+                callback: callback,
+                scope: this
+            });
+        } else if (currentPos <= wrapWidth + this.headerWrap.dom.scrollLeft + 1 && currentPos + tabWidth > wrapWidth + this.headerWrap.dom.scrollLeft + 1) {
+            this.headerWrap.scroll("left", currentPos - this.headerWrap.dom.scrollLeft - wrapWidth + tabWidth, {
+                duration: 0.5,
+                callback: callback,
                 scope: this
             });
         } else if (currentPos + tabWidth < this.headerWrap.dom.scrollLeft) {
             this.headerWrap.scroll("left", currentPos + tabWidth - this.headerWrap.dom.scrollLeft, {
                 duration: 0.5,
-                callback: callback
-                ,
+                callback: callback,
                 scope: this
             });
         } else if (currentPos + tabWidth >= this.headerWrap.dom.scrollLeft && currentPos < this.headerWrap.dom.scrollLeft) {
             this.headerWrap.scroll("left", currentPos - this.headerWrap.dom.scrollLeft, {
                 duration: 0.5,
-                callback: callback
-                ,
+                callback: callback,
                 scope: this
             });
         }
-    }
-
-    ,
-    _getTabIndex: function(li) {
+    },
+    _getTabIndex: function (li) {
         var index = -1;
         var lis = this.headerContainer.select(" > li[class!='x-tab-edge']");
-        lis.each(function(el, this_, index_) {
+        lis.each(function (el, this_, index_) {
             if (el.dom == li) {
                 index = index_;
                 return false;
             }
         });
         return index;
-    }
-    ,
-    activate: function(index) {
+    },
+    activate: function (index) {
         var tabPanel = Ext.get(this.containerId);
         var lis = this.headerContainer.select(" > li[class!='x-tab-edge']");
         if (lis.getCount() < index) return;
@@ -319,10 +279,8 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
         lis.item(index).addClass('tab_active');
         panels.addClass('hiddenTab');
         panels.item(index).removeClass('hiddenTab');
-    }
-
-    ,
-    _addClose: function(addLi) {
+    },
+    _addClose: function (addLi) {
         var close = Ext.DomHelper.append(addLi, {
             tag: "a",
             cls: "x-tab-strip-close",
@@ -332,16 +290,14 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
             html: "close"
         },
         true);
-        close.on("click",
-        function(evt) {
+        close.on("click", function (evt) {
             Ext.destroy(close);
             this._removeTab(addLi);
             evt.stopEvent();
         },
         this)
-    }
-    ,
-    addTab: function(config) {
+    },
+    addTab: function (config) {
         var lis = this.headerContainer.select(" > li[class!='x-tab-edge']");
         var addLi = lis.item(0).dom.cloneNode(true);
         addLi.id = config.tabId || Ext.id();
@@ -352,10 +308,10 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
             this._addClose(addLi);
         }
         this.headerContainer.dom.insertBefore(addLi.dom, this.tabEdge.dom);
-        Ext.DomHelper.append(this.panelContainer, {
+        var addPanel=Ext.DomHelper.append(this.panelContainer, {
             cls: 'panel',
             cn: [config.dom]
-        });
+        },true);
         this.activate(lis.getCount());
         var me = this;
         /*从下到上动画出现*/
@@ -363,28 +319,25 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
         addLi.slideIn('b', {
             duration: .35,
             wrap: wrap,
-            callback: function() {
+            callback: function () {
                 wrap.dom.parentNode.insertBefore(addLi.dom, wrap.dom);
-				//默认visibility : visible ,父容器隐藏，这个还在
-				//手动清除
-				addLi.setStyle({
-					visibility:""
-				});
+                //默认visibility : visible ,父容器隐藏，这个还在
+                //手动清除
+                addLi.setStyle({
+                    visibility: ""
+                });
                 wrap.remove();
                 me.activate(lis.getCount());
-                me.fireEvent("add", addLi);
+                me.fireEvent("add", addLi,addPanel);
             }
         });
-
-    }
-
-    ,
-    _removeTab: function(li) {
+        
+    },
+    _removeTab: function (li) {
         var index = this._getTabIndex(li.dom || li);
         this.removeTab(index);
-    }
-    ,
-    _getEffectWrap: function(li) {
+    },
+    _getEffectWrap: function (li) {
         var wrap = li.wrap({
             style: {
                 position: "relative",
@@ -393,9 +346,8 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
             }
         });
         return wrap;
-    }
-    ,
-    removeTab: function(index) {
+    },
+    removeTab: function (index) {
         if (index.dom || index.nodeName) {
             return this._removeTab(index);
         }
@@ -421,16 +373,13 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
         lis.item(index).slideOut('bl', {
             duration: .35,
             wrap: wrap,
-            callback: function(el) {
+            callback: function (el) {
+            		var panels = me.panelContainer.select("> div.panel");
+                Ext.destroy(panels.item(index));
                 me.fireEvent("remove", Ext.get(lis.item(index)));
                 Ext.destroy(el);
                 Ext.destroy(wrap);
-                var panels = me.panelContainer.select("> div.panel");
-                Ext.destroy(panels.item(index));
             }
         });
-
     }
-
-
 });

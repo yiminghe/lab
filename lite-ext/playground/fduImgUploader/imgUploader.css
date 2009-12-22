@@ -6,14 +6,13 @@
 	right:10px;
 	background-color:yellow;
 	width:100px;
-	
 }
 .windowContainer {
 	position:absolute;
 }
 
 .window-header-l{
-	background:#626B73 url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/blue_skin.png) repeat-x scroll 0 -3456px;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/blue_skin.png);
 
 }
 
@@ -23,24 +22,27 @@
 }
 
 .window-body-mc {
-	background:#E6EAEB url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/cols_stripe.gif) repeat-x scroll 0 0;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/cols_stripe.gif);
 	
 }
-
+.tabpanel ul,.tabpanel li{
+	margin:0;
+	padding:0;
+}
 .tabpanel ul.tabpanel_nav {
-	background:#CEDFF5 url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-strip-bg.gif) repeat-x scroll center bottom;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-strip-bg.gif);
 }
 
 .tabpanel .tabpanel_nav li a.tab_left {
-		background:transparent url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif) no-repeat scroll 0 -51px;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
 .tabpanel .tabpanel_nav li em.tab_right {
-		background:transparent url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif) no-repeat scroll right -351px;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
 .tabpanel .tabpanel_nav li span.tab_inner {
-		background:transparent url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif) repeat-x scroll 0 -201px;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
 .tabpanel li.x-tab-strip-closable a.x-tab-strip-close {
@@ -48,16 +50,19 @@
 }
 
 .tabpanel .x-tab-scrolling a.x-tab-scroller-left {
-	background:transparent url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-left.gif) no-repeat scroll -18px 0;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-left.gif);
 }
 
 .tabpanel .x-tab-scrolling a.x-tab-scroller-right {
-	background:transparent url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-right.gif) no-repeat scroll 0 0;
+	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-right.gif);
+}
+.tabpanel .panels .panel {
+	padding:0;
 }
 a.tool-help {
-      background-position:0 -300px;
-  }
+  background-position:0 -300px;
+}
   
-  a.tool-help:hover {
-      background-position:-15px -300px;
-  }
+a.tool-help:hover {
+  background-position:-15px -300px;
+}
