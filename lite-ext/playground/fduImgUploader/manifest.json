@@ -4,7 +4,7 @@
   "32": "icon32.png",
           "128": "icon128.png" },
   "version": "1.1",
-  "description": "img upload enhancement by yiminghe for learning chrome extension",
+  "description": "Fudan BBS Img Upload Enhancement",
   "permissions": ["http://bbs.fudan.edu.cn/"],
   "content_scripts": [
     {
