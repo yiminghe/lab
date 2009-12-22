@@ -51,7 +51,7 @@ Ext.onReady(function () {
             buttons: [{
                 text: 'close',
                 handler: function (evt) {
-                    mwindow.close();
+                    mwindow.hide();
                     evt.stopEvent();
                 }
             }],
