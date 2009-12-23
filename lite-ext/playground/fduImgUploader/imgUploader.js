@@ -1,7 +1,7 @@
-/*
-	v1.0 20091221 Ê¹ÓÃlite-ext,content script½¨Á¢ÏîÄ¿
-	v1.1 20091222 ¼àÌı´°¿Úµ÷ÕûÍ¼Æ¬´óĞ¡£¬Í¼Æ¬¼àÌıon("load"),»º´æÅĞ¶Ïimg.complete
-	v1.2 20091223 Ê¹ÓÃ [Page action(¿ØÖÆµØÖ·À¸Í¼±ê)] [Background page(¿ØÖÆpage actionÏÔÊ¾£¬¼àÌıpage actionµã»÷,¿ØÖÆ content script)] [Message passing(¹µÍ¨backgound page)],µÇÂ½Ê±²ÅÏÔÊ¾
+ï»¿/*
+	v1.0 20091221 ä½¿ç”¨lite-ext,content scriptå»ºç«‹é¡¹ç›®
+	v1.1 20091222 ç›‘å¬çª—å£è°ƒæ•´å›¾ç‰‡å¤§å°ï¼Œå›¾ç‰‡ç›‘å¬on("load"),ç¼“å­˜åˆ¤æ–­img.complete
+	v1.2 20091223 ä½¿ç”¨ [Page action(æ§åˆ¶åœ°å€æ å›¾æ ‡)] [Background page(æ§åˆ¶page actionæ˜¾ç¤ºï¼Œç›‘å¬page actionç‚¹å‡»,æ§åˆ¶ content script)] [Message passing(æ²Ÿé€šbackgound page)],ç™»é™†æ—¶æ‰æ˜¾ç¤º
 */
 Ext.onReady(function () {
 		var VERSION="1.20";
@@ -68,12 +68,12 @@ Ext.onReady(function () {
                 }
             }],
             shadow: 'frame',
-            //Ä¬ÈÏsides
+            //é»˜è®¤sides
             shadowOffset: 6,
-            //Ä¬ÈÏ4
-            //ÉèÖÃÄ¬ÈÏ½¹µã°´Å¥
+            //é»˜è®¤4
+            //è®¾ç½®é»˜è®¤ç„¦ç‚¹æŒ‰é’®
             defaultButton: 'close',
-            //¾²Ì¬ÉèÖÃ°´Å¥       
+            //é™æ€è®¾ç½®æŒ‰é’®       
             buttons: [{
                 text: 'close',
                 handler: function (evt) {
@@ -81,7 +81,7 @@ Ext.onReady(function () {
                     evt.stopEvent();
                 }
             }],
-            //ÊÇ·ñÖ§³ÖÓÃ»§µ÷½Ú´óĞ¡      	
+            //æ˜¯å¦æ”¯æŒç”¨æˆ·è°ƒèŠ‚å¤§å°      	
             resizable: true
         });
         var wrap = Ext.DomHelper.insertFirst(mwindow.body.dom, {
@@ -222,7 +222,7 @@ Ext.onReady(function () {
             }
         };
         /*
-        	Í¼Æ¬¼ÓÔØºóµÚÒ»´Î×Ô¶¯Ëõ·Å
+        	å›¾ç‰‡åŠ è½½åç¬¬ä¸€æ¬¡è‡ªåŠ¨ç¼©æ”¾
         */
         tabPanel.on("add", function (tab, panel) {
             var img = Ext.get(panel).child("img", true);
@@ -240,7 +240,7 @@ Ext.onReady(function () {
             tabPanel.adjustScroll();
             var images = tabPanel.panelContainer.select("img");
             /*
-            	´°Ìå±ä»¯¾Í±ä»¯Í¼Æ¬´óĞ¡
+            	çª—ä½“å˜åŒ–å°±å˜åŒ–å›¾ç‰‡å¤§å°
             */
             images.each(function (el, this_, index_) {
                 resizeImg(el.dom, true);
