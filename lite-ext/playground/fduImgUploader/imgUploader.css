@@ -6,6 +6,7 @@
 	right:10px;
 	background-color:yellow;
 	width:100px;
+	visibility:hidden;
 }
 .windowContainer {
 	position:absolute;

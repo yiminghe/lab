@@ -1,0 +1,27 @@
+<html>
+<head>
+<script>
+  
+
+  chrome.extension.onRequest.addListener(
+    function(request, sender,sendResponse) {
+        // We have got to fudan bbs and logined
+        // Enable the page action icon.
+        chrome.pageAction.setTitle({ tabId: sender.tab.id,
+          title: "welcome "+request.msg+",click to upload images"
+        });
+        chrome.pageAction.show(sender.tab.id);
+        sendResponse({});
+        //alert("from tab,welcome "+request.msg);
+    });
+
+  
+  chrome.pageAction.onClicked.addListener(function(tab) {
+  	//alert(tab.id);
+    chrome.tabs.sendRequest(tab.id, {msg: "open"}, function(response) {
+    	//alert("from tab :back");
+	  });
+  });
+</script>
+</head>
+</html>

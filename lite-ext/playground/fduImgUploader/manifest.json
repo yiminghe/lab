@@ -3,9 +3,10 @@
   "icons": { "48": "icon48.png",
   "32": "icon32.png",
           "128": "icon128.png" },
-  "version": "1.12",
+  "version": "1.2",
   "description": "Fudan BBS Img Upload Enhancement",
   "permissions": ["http://bbs.fudan.edu.cn/"],
+  "background_page": "background.html",
   "content_scripts": [
     {
       "matches": ["http://bbs.fudan.edu.cn/*"],
@@ -17,9 +18,12 @@
       "js": ["lite-ext/base/javascript/ext-core-min.js", 
       "lite-ext/WindowLite/javascript/windowlite.js",
       "lite-ext/TabPanelLite/javascript/tabpanel.js",
-      
       "imgUploader.js"],
       "run_at":"document_start"
     }
-  ]
+  ],
+  "page_action": {
+    "default_title": "upload images",
+    "default_icon": "icon16.png"
+  }
 }
