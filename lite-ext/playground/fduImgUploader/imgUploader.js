@@ -1,6 +1,6 @@
 ﻿/*
 	v1.0 20091221 使用lite-ext,content script建立项目
-	v1.1 20091222 监听窗口调整图片大小，图片监听on("load"),缓存判断img.complete
+	v1.1 20091222 监听窗口等比例调整图片大小，图片监听on("load"),缓存判断img.complete
 	v1.2 20091223 使用 [Page action(控制地址栏图标)] [Background page(控制page action显示，监听page action点击,控制 content script)] [Message passing(沟通backgound page)],登陆时才显示
 */
 Ext.onReady(function () {
