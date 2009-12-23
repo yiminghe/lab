@@ -3,67 +3,86 @@
 	v1.1 20091222 监听窗口等比例调整图片大小，图片监听on("load"),缓存判断img.complete
 	v1.2 20091223 使用 [Page action(控制地址栏图标)] [Background page(控制page action显示，监听page action点击,控制 content script)] [Message passing(沟通backgound page)],登陆时才显示
 */
-Ext.onReady(function () {
-		var VERSION="1.20";
-		var DATE="20091223";
-		var user=null;
-		if(typeof chrome !="undefined") {
-			if(document.cookie.indexOf("utmpuserid=")!=-1)
-			user=document.cookie.substring(document.cookie.indexOf("utmpuserid=")+"utmpuserid=".length);
-			
-			if(user)chrome.extension.sendRequest({msg: user});
-			
-	    chrome.extension.onRequest.addListener(
-	    function(request, sender,sendResponse) {
-	    		
-	        openImagesWindow();
-	        sendResponse({});
-	    });
-  	}
-    
-    
+Ext.onReady(function() {
+    var VERSION = "1.20";
+    var DATE_VER = "20091223";
+    var user = null;
+    if (typeof chrome != "undefined") {
+        if (document.cookie.indexOf("utmpuserid=") != -1)
+        user = document.cookie.substring(document.cookie.indexOf("utmpuserid=") + "utmpuserid=".length);
+
+        if (user) chrome.extension.sendRequest({
+            msg: user
+        });
+
+        chrome.extension.onRequest.addListener(
+        function(request, sender, sendResponse) {
+
+            openImagesWindow();
+            sendResponse({});
+        });
+    } else {
+        /*
+	    no need,use pageAction*/
+        var upload = Ext.DomHelper.append(Ext.getBody(), {
+            tag: "div",
+            cls: "uploadImgEnhancement",
+            cn: [{
+                tag: "button",
+                html: "Upload Img"
+            }]
+        },
+        true).child("button");
+        upload.on("click", openImagesWindow);
+    }
+
+
     var mwindow;
     function openImagesWindow() {
         if (!mwindow) {
             initial();
         }
-        if(mwindow.el.isVisible()){
-        	mwindow.hide();
+        if (mwindow.el.isVisible()) {
+            mwindow.hide();
         }
         else mwindow.show({
             animateTarget: upload,
             constrainToView: true
         });
     };
-    /*
-    no need,use pageAction*/
-    var upload = Ext.DomHelper.append(Ext.getBody(), {
-        tag: "div",
-        cls: "uploadImgEnhancement",
-        cn: [{
-            tag: "button",
-            html: "Upload Img"
-        }]
-    },
-    true).child("button");
-    upload.on("click", openImagesWindow);
-		
-		
+
+
+
     function initial() {
         mwindow = new Ext.ux.WindowLite({
             width: 600,
             height: 500,
             modal: true,
-            html: "<div id='tabpanel_test' class='tabpanel'>" + "	<div class='tabheader'>" + "<ul class='tabpanel_nav clearfix'>" + "<li class='tab_active'>" + "	<a class='tab_left' href='#' hideFocus='on'>" + "	<em class='tab_right'>" + "	<span class='tab_inner'>" + "	<span class='tab_text'>" + "tip" + "	</span>" + "</span>" + "	</em>" + "	</a>" + "</li>" + "</ul>" + "</div>" + "<div class='panels'>" + "<div class='panel'>" + "<div style='height:100px;'>" + "added images will be shown at Tabs <br/> images can be uploaded simultaneously within browser limit<br/> "
-            +"image is proportional to it's original size <br/> image will resize accordinly to window's size" + 
+            html: "<div id='tabpanel_test' class='tabpanel'>" +
+            "	<div class='tabheader'>" +
+            "<ul class='tabpanel_nav clearfix'>" +
+            "<li class='tab_active'>" +
+            "	<a class='tab_left' href='#' hideFocus='on'>" +
+            "	<em class='tab_right'>" +
+            "	<span class='tab_inner'>" +
+            "	<span class='tab_text'>" +
+            "tip" +
+            "	</span>" + "</span>" +
+            "	</em>" + "	</a>" + "</li>" +
+            "</ul>" + "</div>" + "<div class='panels'>" +
+            "<div class='panel'>" + "<div style='height:100px;padding:10px;'>" +
+            "<ol class='upTip'><li>added images will be shown at Tabs </li>"+
+" <li>images can be uploaded simultaneously within browser limit</li> "
+            + "<li>image is proportional to it's original size </li>"
+ 			+"<li>image will resize accordinly to window's size</li></ol>" +
             "	</div>" + "</div></div>",
             drag: true,
             title: 'Please select images',
             maximizable: true,
             tools: [{
                 cls: 'x-tool tool-help',
-                'click': function (evt) {
-                    alert(" Version : "+VERSION+";\n Author:yiminghe.javaeye.com;\n Date:"+Date+"");
+                'click': function(evt) {
+                    alert(" Version : " + VERSION + "\n Author:http://yiminghe.javaeye.com\n Date:" + DATE_VER + "");
                     evt.stopEvent();
                 }
             }],
@@ -73,10 +92,10 @@ Ext.onReady(function () {
             //默认4
             //设置默认焦点按钮
             defaultButton: 'close',
-            //静态设置按钮       
+            //静态设置按钮
             buttons: [{
                 text: 'close',
-                handler: function (evt) {
+                handler: function(evt) {
                     mwindow.hide();
                     evt.stopEvent();
                 }
@@ -108,7 +127,7 @@ Ext.onReady(function () {
         function updateLinksToTextarea(tab) {
             var images = tabPanel.panelContainer.select("img");
             var text = [];
-            images.each(function (el, this_, index_) {
+            images.each(function(el, this_, index_) {
                 text.push(el.dom.src);
             });
             textLinks.dom.value = text.join("\n");
@@ -133,12 +152,13 @@ Ext.onReady(function () {
                 Ext.destroy(input);
                 Ext.destroy(form);
             }
-            input.on("change", function () {
+            input.on("change",
+            function() {
                 form.mask("uploading...");
                 addForm();
                 Ext.Ajax.request({
                     form: form,
-                    success: function (response) {
+                    success: function(response) {
                         //response.responseText = "we <strong id=\"url\">http://bbs.fudan.edu.cn/upload/PIC/1261411452-6838.jpg</strong> zzz";
                         if (response.responseText) {
                             var result = response.responseText;
@@ -165,11 +185,13 @@ Ext.onReady(function () {
                                     }
                                 });
                             } else alert(stripTags(response.responseText));
-                        }
+                        }else{
+							alert("error upload!");
+						}
                         form.unmask();
                         clear();
                     },
-                    failure: function () {
+                    failure: function() {
                         var fileName = input.dom.value;
                         var nameReg = /[^\/\\]+$/;
                         var nameM = nameReg.exec(fileName);
@@ -190,7 +212,7 @@ Ext.onReady(function () {
          */
 
         function stripTags(v) {
-            return !v ? v : String(v).replace(stripTagsRE, "");
+            return ! v ? v: String(v).replace(stripTagsRE, "");
         }
         var tabPanel = new Ext.ux.TabPanelLite({
             containerId: 'tabpanel_test'
@@ -224,12 +246,14 @@ Ext.onReady(function () {
         /*
         	图片加载后第一次自动缩放
         */
-        tabPanel.on("add", function (tab, panel) {
+        tabPanel.on("add",
+        function(tab, panel) {
             var img = Ext.get(panel).child("img", true);
             if (img.complete) {
                 resizeImg(img);
             } else {
-                Ext.fly(img).on("load", function () {
+                Ext.fly(img).on("load",
+                function() {
                     resizeImg(img);
                     Ext.fly(img).removeAllListeners();
                 });
@@ -242,7 +266,7 @@ Ext.onReady(function () {
             /*
             	窗体变化就变化图片大小
             */
-            images.each(function (el, this_, index_) {
+            images.each(function(el, this_, index_) {
                 resizeImg(el.dom, true);
             });
         }

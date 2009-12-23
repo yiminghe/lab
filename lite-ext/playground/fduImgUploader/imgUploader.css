@@ -6,7 +6,6 @@
 	right:10px;
 	background-color:yellow;
 	width:100px;
-	visibility:hidden;
 }
 .windowContainer {
 	position:absolute;
@@ -59,6 +58,10 @@
 }
 .tabpanel .panels .panel {
 	padding:0;
+}
+.tabpanel ol.upTip {
+	list-style-position:inside;
+	list-style-type:decimal;
 }
 a.tool-help {
   background-position:0 -300px;
