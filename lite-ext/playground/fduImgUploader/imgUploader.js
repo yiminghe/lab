@@ -4,6 +4,8 @@
 	v1.2 20091223 使用 [Page action(控制地址栏图标)] [Background page(控制page action显示，监听page action点击,控制 content script)] [Message passing(沟通backgound page)],登陆时才显示
 */
 Ext.onReady(function () {
+		var VERSION="1.20";
+		var DATE="20091223";
 		var user=null;
 		if(typeof chrome !="undefined") {
 			if(document.cookie.indexOf("utmpuserid=")!=-1)
@@ -61,7 +63,7 @@ Ext.onReady(function () {
             tools: [{
                 cls: 'x-tool tool-help',
                 'click': function (evt) {
-                    alert(" Version : 1.0;\n Author:yiminghe.javaeye.com;\n Date:20091222");
+                    alert(" Version : "+VERSION+";\n Author:yiminghe.javaeye.com;\n Date:"+Date+"");
                     evt.stopEvent();
                 }
             }],
