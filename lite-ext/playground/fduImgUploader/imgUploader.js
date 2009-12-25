@@ -2,11 +2,28 @@
 	v1.0 20091221 使用lite-ext,content script建立项目
 	v1.1 20091222 监听窗口等比例调整图片大小，图片监听on("load"),缓存判断img.complete
 	v1.2 20091223 使用 [Page action(控制地址栏图标)] [Background page(控制page action显示，监听page action点击,控制 content script)] [Message passing(沟通backgound page)],登陆时才显示
+	v1.25 20091225 窗口最大化图片大小调整，非html标准属性用setAttribute
+	chrome-extension 中 Ext.getDoc().dom == document 为false ..! 
+	修正 Publish.java 发布打包工具编写
 */
 Ext.onReady(function() {
-    var VERSION = "1.20";
-    var DATE_VER = "20091223";
+    var VERSION = "1.25";
+    var DATE_VER = "20091225";
     var user = null;
+    
+    /*
+  	no need,use pageAction*/
+    var upload = Ext.DomHelper.append(Ext.getBody(), {
+        tag: "div",
+        cls: "uploadImgEnhancement",
+        cn: [{
+            tag: "button",
+            html: "Upload Img"
+        }]
+    },
+    true).child("button");
+    upload.on("click", openImagesWindow);
+   
     if (typeof chrome != "undefined") {
         if (document.cookie.indexOf("utmpuserid=") != -1)
         user = document.cookie.substring(document.cookie.indexOf("utmpuserid=") + "utmpuserid=".length);
@@ -21,20 +38,10 @@ Ext.onReady(function() {
             openImagesWindow();
             sendResponse({});
         });
-    } else {
-        /*
-	    no need,use pageAction*/
-        var upload = Ext.DomHelper.append(Ext.getBody(), {
-            tag: "div",
-            cls: "uploadImgEnhancement",
-            cn: [{
-                tag: "button",
-                html: "Upload Img"
-            }]
-        },
-        true).child("button");
-        upload.on("click", openImagesWindow);
-    }
+        upload.parent("div").hide();
+    } 
+    
+   
 
 
     var mwindow;
@@ -219,21 +226,26 @@ Ext.onReady(function() {
         });
         tabPanel.on("add", updateLinksToTextarea);
         tabPanel.on("remove", updateLinksToTextarea);
-        function resizeImg(img, resize) {
-            var w = img.width;
-            var h = img.height;
-            if (resize) {
-                w = img.oriwidth;
-                h = img.oriheight;
+        function resizeImg(img) {
+            var w = 0;
+            var h = 0;
+            if (img.getAttribute("oriwidth")) {
+                w = parseInt(img.getAttribute("oriwidth"));
+                h = parseInt(img.getAttribute("oriheight"));
             } else {
-                img.oriwidth = w;
-                img.oriheight = h;
+            		w = img.width;
+            		h = img.height;
+            		img.setAttribute("oriwidth",w+"");
+            		img.setAttribute("oriheight",h+"");
             }
             var avHeight = mwindow.body.getComputedHeight() - wrap.getComputedHeight();
             var avWidth = mwindow.body.getComputedWidth();
-            if (avWidth >= w && avHeight >= h) {
-                return;
-            } else if (w > avWidth) {
+            console.debug(img);
+            console.debug("avHeight: "+avHeight);
+            console.debug("avWidth: "+avWidth);
+            console.debug("w: "+w);
+            console.debug("h: "+h);
+            if (w > avWidth) {
                 if (avHeight < h) {
                     avWidth -= 20;
                 }
@@ -241,6 +253,9 @@ Ext.onReady(function() {
                 var ah = h * r;
                 Ext.fly(img).setWidth(avWidth);
                 Ext.fly(img).setHeight(ah);
+            } else {
+            		Ext.fly(img).setWidth(w);
+            		Ext.fly(img).setHeight(h);
             }
         };
         /*
@@ -267,11 +282,15 @@ Ext.onReady(function() {
             	窗体变化就变化图片大小
             */
             images.each(function(el, this_, index_) {
-                resizeImg(el.dom, true);
+                resizeImg(el.dom);
             });
         }
         mwindow.on("maximize", adJustTab);
-        mwindow.on("restore", adJustTab);
+        mwindow.on("restore", function(){
+        	
+        	adJustTab();
+        	console.debug("restore");
+        });
         mwindow.on("resize", adJustTab);
     }
 });

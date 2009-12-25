@@ -605,10 +605,10 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             //指定位置弹出不能超过视窗(即使浏览器有滚动条)，参考windows右键弹出窗口
             //保证四个角有一个角在x，y，获取最大可能的windowlite显示区域
             if (option.constrainToView) {
-                var viewSize = Ext.getDoc().getViewSize();
+                var viewSize = Ext.getBody().getViewSize();
                 var middleHeightLine = viewSize.height / 2;
                 var middleWidthLine = viewSize.width / 2;
-                var winScroll = Ext.getDoc().getScroll();
+                var winScroll = Ext.getBody().getScroll();
                 //如果 x在横坐标中线右边，移动到中线左边，可获得更大的显示位置
                 if (option.x - winScroll.left > middleWidthLine) {
                     var originalX = option.x;
@@ -665,11 +665,11 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
 		*/
     constrainToView: function(option, noEvents) {
         option = option || {};
-        var viewSize = Ext.getDoc().getViewSize();
+        var viewSize = Ext.getBody().getViewSize();
         var width = parseInt(this.el.getStyle("width"));
         //提高效率，尽量用css属性
         var height = this.getHeight();
-        var winScroll = Ext.getDoc().getScroll();
+        var winScroll = Ext.getBody().getScroll();
         var elX = option.x || this.el.getX();
         var elY = option.y || this.el.getY();
         //本身已经在屏幕以外，大小无论如何调整都不行了
@@ -727,7 +727,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         //以前没有调节过！节省效率
         if (option.constrainToView && option.x && option.y) {}
         else if (option.constrainToView) {
-            var winScroll = Ext.getDoc().getScroll();
+            var winScroll = Ext.getBody().getScroll();
             if (this.el.getY() <= (10 + winScroll.top)) {
                 this.el.setY(10 + winScroll.top);
             }
@@ -753,7 +753,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     hide: function() {
         if (this.fireEvent("beforehide", this) !== false) {
             if (this._restoreA.isDisplayed()) {
-                this.restore(false);
+                this.restore();
             }
             this.restorePosition = this.el.getXY();
 						this.fireEvent("hide", this);
@@ -855,7 +855,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         //Ext.getBody().maximizeWinlite=Ext.getBody().maximizeWinlite||0;
         //Ext.getBody().maximizeWinlite++;
         //Ext.getBody().addClass("x-window-maximized-ct");
-        var scrolls = Ext.getDoc().getScroll();
+        var scrolls = Ext.getBody().getScroll();
         this.el.setXY([scrolls.left, scrolls.top]);
         this.fitViewport(false);
         this._maximizeA.setDisplayed("none");
@@ -864,7 +864,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         this.toFront(false);
     },
     fitViewport: function(noEvents) {
-        var maxView = Ext.getDoc().getViewSize();
+        var maxView = Ext.getBody().getViewSize();
         //firefox 滚动条也占据 viewwidth .....
         if (Ext.isGecko3 && !this.modal) {
             var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
@@ -969,7 +969,7 @@ Ext.ux.WindowLite.TaskBar = function() {
         左右滚动标志控制
     */
     function scrollTaskCheck() {
-        var viewSize = Ext.getDoc().getViewSize();
+        var viewSize = Ext.getBody().getViewSize();
         if (Ext.isIE6) scrollTaskContainer.setWidth(viewSize.width - 36);
         //直接页面展示位置比较，不需要考虑滚动多少
         var scrollWidth = scrollTaskEdge.getOffsetsTo(scrollTaskContainer)[0];
@@ -1091,7 +1091,7 @@ Ext.ux.WindowLite.TaskBar = function() {
     //栈，所有正在显示的window task menu
     var currentTaskBtnStack = [];
     //窗口变化，也要检查task bar了
-    var viewSize = Ext.getDoc().getViewSize();
+    var viewSize = Ext.getBody().getViewSize();
     var taskbar = Ext.fly(Ext.DomHelper.append(Ext.getBody(), {
         tag: "div",
         cls: "taskWrap",

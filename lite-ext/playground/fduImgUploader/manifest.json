@@ -1,24 +1,28 @@
 {
   "name": "fdu img uploader",
-  "icons": { "48": "icon48.png",
-  "32": "icon32.png",
-          "128": "icon128.png" },
-  "version": "1.20",
+  "icons": { 
+		"48": "icon48.png",
+		"32": "icon32.png",
+		"128": "icon128.png" 
+  },
+  "version": "1.25",
   "description": "Fudan BBS Img Upload Enhancement",
-  "permissions": ["http://bbs.fudan.edu.cn/"],
+  "permissions": ["http://bbs.fudan.edu.cn/","tabs"],
   "background_page": "background.html",
+  "options_page": "option_page.html",
   "content_scripts": [
     {
       "matches": ["http://bbs.fudan.edu.cn/*"],
       "css": [
-      "imgUploader.css",
-      "lite-ext/TabPanelLite/css/tabpanel.css",
-      "lite-ext/WindowLite/css/aol/windowlite.css",
-      "lite-ext/base/css/core.css"],
-      "js": ["lite-ext/base/javascript/ext-core-min.js", 
-      "lite-ext/WindowLite/javascript/windowlite.js",
-      "lite-ext/TabPanelLite/javascript/tabpanel.js",
-      "imgUploader.js"],
+	      "imgUploader.css",
+	      "lite-ext/TabPanelLite/css/tabpanel.css",
+	      "lite-ext/WindowLite/css/aol/windowlite.css",
+	      "lite-ext/base/css/core.css"],
+	      "js": ["lite-ext/base/javascript/ext-core-min.js", 
+	      "lite-ext/WindowLite/javascript/windowlite.js",
+	      "lite-ext/TabPanelLite/javascript/tabpanel.js",
+	      "imgUploader.js"
+      ],
       "run_at":"document_start"
     }
   ],
