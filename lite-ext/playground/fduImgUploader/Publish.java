@@ -31,18 +31,18 @@ public class Publish {
 	}
 
 	/**
-	 * ÏÈÅĞ¶Ï°×Ãûµ¥£¬ºóÅĞ¶ÏºÚÃûµ¥£¬Ä¿Â¼Ãû²»°üÀ¨ svn £¬ÎÄ¼şÃû²»·ûºÏºÚÃûµ¥£¬·ûºÏ°×Ãûµ¥¾ÍÍ¨¹ı
+	 * å…ˆåˆ¤æ–­ç™½åå•ï¼Œååˆ¤æ–­é»‘åå•ï¼Œç›®å½•åä¸åŒ…æ‹¬ svn ï¼Œæ–‡ä»¶åä¸ç¬¦åˆé»‘åå•ï¼Œç¬¦åˆç™½åå•å°±é€šè¿‡
 	 * 
 	 * @param zipOutput
-	 *            zipÁ÷
+	 *            zipæµ
 	 * @param srcDir
-	 *            ÒªÑ¹ËõÎÄ¼şËùÔÚÄ¿Â¼
+	 *            è¦å‹ç¼©æ–‡ä»¶æ‰€åœ¨ç›®å½•
 	 * @param basePath
-	 *            Ñ¹Ëõ°üÄÚµÄ¿ªÊ¼Â·¾¶
+	 *            å‹ç¼©åŒ…å†…çš„å¼€å§‹è·¯å¾„
 	 * @param whiteFileList
-	 *            °×Ãûµ¥
+	 *            ç™½åå•
 	 * @param blackFileList
-	 *            ºÚÃûµ¥
+	 *            é»‘åå•
 	 * @throws IOException
 	 */
 	private static void zipFile(ZipOutputStream zipOutput, File srcDir,
@@ -51,9 +51,9 @@ public class Publish {
 		File[] fs = srcDir.listFiles(new FileFilter() {
 			public boolean accept(File curFile) {
 
-				// ÅĞ¶ÏÄ¿Â¼
+				// åˆ¤æ–­ç›®å½•
 				if (curFile.isDirectory()) {
-					// ²»°üº¬ svn ÅäÖÃÄ¿Â¼
+					// ä¸åŒ…å« svn é…ç½®ç›®å½•
 					if (curFile.getName().indexOf("svn") != -1
 							&& curFile.isHidden()) {
 						return false;
@@ -62,29 +62,29 @@ public class Publish {
 					}
 				}
 
-				// ÅĞ¶ÏÎÄ¼ş
+				// åˆ¤æ–­æ–‡ä»¶
 
 				if (blackFileList != null) {
-					// ÏÈÅĞ¶ÏºÚÃûµ¥
+					// å…ˆåˆ¤æ–­é»‘åå•
 					for (String filter : blackFileList) {
 						if (curFile.isFile()
 								&& curFile.getName().endsWith(filter))
 							return false;
 					}
-					// ½ÓÏÂÀ´ÅĞ¶Ï°×Ãûµ¥
+					// æ¥ä¸‹æ¥åˆ¤æ–­ç™½åå•
 				}
 
-				// ´æÔÚ°×Ãûµ¥
+				// å­˜åœ¨ç™½åå•
 				if (whiteFileList != null) {
 					for (String filter : whiteFileList) {
 						if (curFile.isFile()
 								&& curFile.getName().endsWith(filter))
 							return true;
 					}
-					// ²»·ûºÏ°×Ãûµ¥£¬Îªfalse
+					// ä¸ç¬¦åˆç™½åå•ï¼Œä¸ºfalse
 					return false;
 				}
-				// °×Ãûµ¥ null ,Ã»ÓĞÉèÖÃ£¬ÔòÈ«²¿Í¨¹ı
+				// ç™½åå• null ,æ²¡æœ‰è®¾ç½®ï¼Œåˆ™å…¨éƒ¨é€šè¿‡
 				else {
 					return true;
 				}
@@ -112,7 +112,7 @@ public class Publish {
 	}
 
 	/**
-	 * µÃµ½ÏµÍ³µÄ°æ±¾ºÅ
+	 * å¾—åˆ°ç³»ç»Ÿçš„ç‰ˆæœ¬å·
 	 * 
 	 * @return verion in manifest.json
 	 */
@@ -158,12 +158,12 @@ public class Publish {
 				new BufferedOutputStream(csum));
 		zipOutput.setComment("fdu img uploader " + ver);
 		File srcDir = curFile;
-		//²»Ñ¹Ëõ×Ó¼¯£¬ºÚÃûµ¥zip,ÆäËûÈ«²¿Ñ¹Ëõ
+		//ä¸å‹ç¼©å­é›†ï¼Œé»‘åå•zip,å…¶ä»–å…¨éƒ¨å‹ç¼©
 		zipFile(zipOutput, srcDir, curFile.getName(), null, new String[] { ".zip",".bak"  ,".class" });
 		for (String curCompress : Need_Compressed) {
 			srcDir = new File("../../" + curCompress);
 			if (srcDir != null)
-				//°×Ãûµ¥£¬Ö»Ñ¹Ëõ css ,js £¬ºÚÃûµ¥bak£¬±à¼­Æ÷±¸·İÎÄ¼ş
+				//ç™½åå•ï¼Œåªå‹ç¼© css ,js ï¼Œé»‘åå•bakï¼Œç¼–è¾‘å™¨å¤‡ä»½æ–‡ä»¶
 				zipFile(zipOutput, srcDir, curFile.getName() + "/lite-ext/" + curCompress,
 						new String[] { ".css", ".js" }, new String[]{".bak"});
 		}

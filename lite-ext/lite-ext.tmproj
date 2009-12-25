@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>WindowLite/windowlite_close_skin.html</string>
+	<string>playground/fduImgUploader/manifest.json</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -165,121 +165,75 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>TabPanelLite/javascript/tabpanel.js</key>
+		<key>playground/fduImgUploader/background.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
+				<integer>34</integer>
 				<key>line</key>
-				<integer>368</integer>
+				<integer>14</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>348</integer>
-		</dict>
-		<key>TabPanelLite/tab.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>263</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
 			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>252</integer>
 		</dict>
-		<key>WindowLite/javascript/windowlite.js</key>
+		<key>playground/fduImgUploader/imgUploader.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>52</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>29</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>52</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>52</integer>
-			</dict>
-		</dict>
-		<key>WindowLite/windowlite_close_skin.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
 				<integer>25</integer>
+				<key>line</key>
+				<integer>63</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>19</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
+			<integer>35</integer>
 		</dict>
-		<key>playground/fdup/ZeroClipboard.js</key>
+		<key>playground/fduImgUploader/imgUploader.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>36</integer>
+				<integer>47</integer>
 				<key>line</key>
-				<integer>115</integer>
+				<integer>17</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>4</integer>
+		</dict>
+		<key>playground/fduImgUploader/manifest.json</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>playground/fdup/inject.html</key>
+		<key>playground/fduImgUploader/test.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>6</integer>
 				<key>line</key>
-				<integer>208</integer>
+				<integer>10</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>196</integer>
+			<integer>0</integer>
 		</dict>
 		<key>playground/layout/伪绝对定位.html</key>
 		<dict>
@@ -326,12 +280,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>playground/fdup/inject.html</string>
-		<string>playground/fdup/ZeroClipboard.js</string>
-		<string>TabPanelLite/javascript/tabpanel.js</string>
-		<string>WindowLite/javascript/windowlite.js</string>
-		<string>WindowLite/windowlite_close_skin.html</string>
-		<string>TabPanelLite/tab.html</string>
+		<string>playground/fduImgUploader/imgUploader.js</string>
+		<string>playground/fduImgUploader/manifest.json</string>
+		<string>playground/fduImgUploader/background.html</string>
+		<string>playground/fduImgUploader/imgUploader.css</string>
+		<string>playground/fduImgUploader/test.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
