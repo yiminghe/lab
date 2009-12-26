@@ -7,6 +7,22 @@
 	background-color:yellow;
 	width:100px;
 }
+
+#tabpanel_test .panel img.loadingImg {
+	position:absolute;
+	visibility:hidden;
+	cursor: pointer;
+}
+#tabpanel_test .panel img.realImg{
+	cursor: pointer;
+}
+#tabpanel_test .panel img.replaceImg {
+	width:100px;
+	height:100px;
+	display:block;
+	cursor: pointer;
+	margin:0 auto;
+}
 .windowContainer {
 	position:absolute;
 }
@@ -25,41 +41,43 @@
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/cols_stripe.gif);
 	
 }
-.tabpanel ul,.tabpanel li{
+#tabpanel_test ul,#tabpanel_test li{
 	margin:0;
 	padding:0;
 }
-.tabpanel ul.tabpanel_nav {
+#tabpanel_test ul.tabpanel_nav {
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-strip-bg.gif);
 }
 
-.tabpanel .tabpanel_nav li a.tab_left {
+#tabpanel_test .tabpanel_nav li a.tab_left {
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
-.tabpanel .tabpanel_nav li em.tab_right {
+#tabpanel_test .tabpanel_nav li em.tab_right {
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
-.tabpanel .tabpanel_nav li span.tab_inner {
+#tabpanel_test .tabpanel_nav li span.tab_inner {
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
-.tabpanel li.x-tab-strip-closable a.x-tab-strip-close {
+#tabpanel_test li.x-tab-strip-closable a.x-tab-strip-close {
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-close.gif);
 }
 
-.tabpanel .x-tab-scrolling a.x-tab-scroller-left {
+#tabpanel_test .x-tab-scrolling a.x-tab-scroller-left {
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-left.gif);
 }
 
-.tabpanel .x-tab-scrolling a.x-tab-scroller-right {
+#tabpanel_test .x-tab-scrolling a.x-tab-scroller-right {
 	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-right.gif);
 }
-.tabpanel .panels .panel {
+#tabpanel_test .panels .panel {
 	padding:0;
+	background:none;
 }
-.tabpanel ol.upTip {
+
+#tabpanel_test ol.upTip {
 	list-style-position:inside;
 	list-style-type:decimal;
 }

@@ -5,7 +5,7 @@
 		"32": "icon32.png",
 		"128": "icon128.png" 
   },
-  "version": "1.25",
+  "version": "1.30",
   "description": "Fudan BBS Img Upload Enhancement",
   "permissions": ["http://bbs.fudan.edu.cn/","tabs"],
   "background_page": "background.html",

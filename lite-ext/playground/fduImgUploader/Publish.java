@@ -1,6 +1,5 @@
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -16,9 +15,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
-@author: http://yiminghe.javaeye.com
-@date: 20091225
-*/
+ * @author: http://yiminghe.javaeye.com
+ * @date: 20091225
+ */
 public class Publish {
 
 	public static String[] Need_Compressed = { "base", "TabPanelLite",
@@ -48,6 +47,29 @@ public class Publish {
 	private static void zipFile(ZipOutputStream zipOutput, File srcDir,
 			String basePath, final String[] whiteFileList,
 			final String[] blackFileList) throws IOException {
+		File[] fs = getFiles(srcDir, whiteFileList, blackFileList);
+		if (fs != null) {
+			byte[] b = new byte[BUFFER];
+			int len = 0;
+			for (File file : fs) {
+				if (file.isDirectory()) {
+					zipFile(zipOutput, file, basePath + "/" + file.getName(),
+							whiteFileList, blackFileList);
+					continue;
+				}
+				FileInputStream in = new FileInputStream(file);
+				zipOutput.putNextEntry(new ZipEntry(basePath + "/"
+						+ file.getName()));
+				while ((len = in.read(b)) != -1) {
+					zipOutput.write(b, 0, len);
+				}
+				in.close();
+			}
+		}
+	}
+
+	static File[] getFiles(File srcDir, final String[] whiteFileList,
+			final String[] blackFileList) {
 		File[] fs = srcDir.listFiles(new FileFilter() {
 			public boolean accept(File curFile) {
 
@@ -91,22 +113,36 @@ public class Publish {
 
 			}
 		});
+		return fs;
+	}
+
+	private static void copyToHere(File srcDir, String basePath,
+			final String[] whiteFileList, final String[] blackFileList)
+			throws IOException {
+		File[] fs = getFiles(srcDir, whiteFileList, blackFileList);
 		if (fs != null) {
 			byte[] b = new byte[BUFFER];
 			int len = 0;
 			for (File file : fs) {
 				if (file.isDirectory()) {
-					zipFile(zipOutput, file, basePath + "/" + file.getName(),
+					copyToHere(file, basePath + "/" + file.getName(),
 							whiteFileList, blackFileList);
 					continue;
 				}
 				FileInputStream in = new FileInputStream(file);
-				zipOutput.putNextEntry(new ZipEntry(basePath + "/"
-						+ file.getName()));
+
+				if (!new File(basePath).exists()) {
+					//System.out.println("mkdir :"+basePath);
+					new File(basePath).mkdirs();
+				}
+				FileOutputStream out = new FileOutputStream(basePath + "/"
+						+ file.getName());
+
 				while ((len = in.read(b)) != -1) {
-					zipOutput.write(b, 0, len);
+					out.write(b, 0, len);
 				}
 				in.close();
+				out.close();
 			}
 		}
 	}
@@ -149,24 +185,35 @@ public class Publish {
 	public static void main(String[] args) throws Exception {
 		String curFolder = getCurrentFolder();
 		File curFile = new File(curFolder);
+		File srcDir;
+
+		// 组件先拷贝到当前目录
+		for (String curCompress : Need_Compressed) {
+			srcDir = new File("../../" + curCompress);
+			if (srcDir != null) {
+				// 白名单，只压缩 css ,js ，黑名单bak，编辑器备份文件
+				copyToHere(srcDir, "lite-ext/" + curCompress, new String[] {
+						".css", ".js" }, new String[] { ".bak" });
+			}
+		}
+
 		String ver = getVersion();
 		String zipName = curFile.getName() + "_" + ver + ".zip";
 		// Adler32 is faster than CRC32
 		FileOutputStream zipFile = new FileOutputStream(zipName);
-		CheckedOutputStream csum = new CheckedOutputStream(zipFile, new Adler32());
+		CheckedOutputStream csum = new CheckedOutputStream(zipFile,
+				new Adler32());
 		ZipOutputStream zipOutput = new ZipOutputStream(
 				new BufferedOutputStream(csum));
 		zipOutput.setComment("fdu img uploader " + ver);
-		File srcDir = curFile;
-		//不压缩子集，黑名单zip,其他全部压缩
-		zipFile(zipOutput, srcDir, curFile.getName(), null, new String[] { ".zip",".bak"  ,".class" });
-		for (String curCompress : Need_Compressed) {
-			srcDir = new File("../../" + curCompress);
-			if (srcDir != null)
-				//白名单，只压缩 css ,js ，黑名单bak，编辑器备份文件
-				zipFile(zipOutput, srcDir, curFile.getName() + "/lite-ext/" + curCompress,
-						new String[] { ".css", ".js" }, new String[]{".bak"});
-		}
+
+		srcDir = curFile;
+
+		// 当前目录全部压缩
+		// 不压缩子集，黑名单zip,其他全部压缩
+		zipFile(zipOutput, srcDir, curFile.getName(), null, new String[] {
+				".zip", ".bak", ".class" });
+
 		zipOutput.close();
 
 		System.out.println();
@@ -174,9 +221,10 @@ public class Publish {
 		System.out.println();
 		System.out.println("*****************************");
 		System.out.println();
-		System.out.println(zipName +"  generated ! \n\n\n press enter to quit !");
-		
+		System.out.println(zipName
+				+ "  generated ! \n\n\n press enter to quit !");
+
 		System.in.read();
-		
+
 	}
 }

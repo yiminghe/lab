@@ -17,10 +17,11 @@ Ext.ux.TabPanelLite = function (config) {
         initialConfig: config
     });
     Ext.apply(this, config);
-    this.addEvents('change', "add", "remove");
+    this.addEvents('change', "add", "remove","show","hide");
     Ext.ux.TabPanelLite.superclass.constructor.call(this);
     if (!config.containerId) return;
     var tabPanel = Ext.get(config.containerId);
+    this.el=tabPanel;
     var me = this;
     this.tabHeader = tabPanel.child("> .tabheader");
     this.headerContainer = this.tabHeader.child("> .tabpanel_nav");
@@ -136,6 +137,21 @@ Ext.ux.TabPanelLite = function (config) {
 Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
     _scrollLeft: true,
     _scrollRight: true,
+    
+    show:function(){
+    	this.el.setDisplayed(true);
+    	this.fireEvent("show");
+    },
+    hide:function(){
+    	this.el.setDisplayed(false);
+    	this.fireEvent("hide");
+    },
+    isDisplayed:function(){
+    	return this.el.isDisplayed();
+    },
+    toogle:function(){
+    	this.isDisplayed()?this.hide():this.show();
+    },
     /*
 		得到左边不在屏幕的下一个 tab
 	*/
@@ -184,6 +200,7 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
 		根据位置调整滚动显示
 	*/
     adjustScroll: function () {
+    		if(!this.isDisplayed()) return;
         var headerWidth = this.tabHeader.getWidth(true);
         var wrapWidth = this.headerWrap.getWidth();
         var lastPos = this.tabEdge.getOffsetsTo(this.headerContainer)[0];
@@ -310,7 +327,7 @@ Ext.extend(Ext.ux.TabPanelLite, Ext.util.Observable, {
         this.headerContainer.dom.insertBefore(addLi.dom, this.tabEdge.dom);
         var addPanel=Ext.DomHelper.append(this.panelContainer, {
             cls: 'panel',
-            cn: [config.dom]
+            cn: Ext.isArray(config.dom)?config.dom:[config.dom]
         },true);
         this.activate(lis.getCount());
         var me = this;

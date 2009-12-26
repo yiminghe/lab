@@ -5,10 +5,11 @@
 	v1.25 20091225 窗口最大化图片大小调整，非html标准属性用setAttribute
 	chrome-extension 中 Ext.getDoc().dom == document 为false ..! 
 	修正 Publish.java 发布打包工具编写
+	v1.30 20091226 loading 动画图标加入，提供关闭预览设置，防止大图片拖慢浏览器
 */
 Ext.onReady(function() {
-    var VERSION = "1.25";
-    var DATE_VER = "20091225";
+    var VERSION = "1.30";
+    var DATE_VER = "20091226";
     var user = null;
     
     /*
@@ -39,10 +40,7 @@ Ext.onReady(function() {
             sendResponse({});
         });
         upload.parent("div").hide();
-    } 
-    
-   
-
+    }
 
     var mwindow;
     function openImagesWindow() {
@@ -132,15 +130,32 @@ Ext.onReady(function() {
         true).child("textarea");
 
         function updateLinksToTextarea(tab) {
-            var images = tabPanel.panelContainer.select("img");
+        		//包括还没load完的，先把地址显示出来 : *= !
+            var images = tabPanel.panelContainer.select("img[class*=realImg]");
             var text = [];
             images.each(function(el, this_, index_) {
                 text.push(el.dom.src);
             });
             textLinks.dom.value = text.join("\n");
         }
+        
+        /*预览控制*/
+        var preview=Ext.DomHelper.append(wrap, {
+        	tag:"p",
+        	cn:[{
+        		tag:"button",
+        		title:"对大图片上传建议关闭预览",
+        		html:"关闭预览"
+        	}]
+        },true).child("button");
+        preview.on("click",function(){
+        	preview.update(tabPanel.isDisplayed()?"开启预览":"关闭预览");
+        	tabPanel.toogle();
+        });
+        
+        
         function addForm() {
-            var form = Ext.DomHelper.append(wrap, {
+            var form = Ext.DomHelper.insertBefore(preview, {
                 tag: "form",
                 method: "post",
                 enctype: "multipart/form-data",
@@ -178,18 +193,21 @@ Ext.onReady(function() {
                                 tabPanel.addTab({
                                     tabText: nameM[0],
                                     closable: true,
-                                    dom: {
+                                    dom: [{
                                         tag: "img",
                                         title: "click to see detail",
+                                        cls:"replaceImg",
                                         onclick: "window.open('" + m[1] + "')",
-                                        //onload:"Ext.ux.resizeImg(this);",
-                                        style: {
-                                            //width: "90%",
-                                            //height: "60%",
-                                            cursor: "pointer"
-                                        },
-                                        src: m[1]
-                                    }
+                                        //first a loading image
+                                        src: typeof chrome == "undefined" ?"img-loading.gif":chrome.extension.getURL("img-loading.gif")
+                                    },
+                                    {
+                                    	tag:"img",
+                                    	onclick: "window.open('" + m[1] + "')",
+                                    	title: "click to see detail",
+                                    	cls:"loadingImg realImg",
+                                      src:m[1]
+                                    }]
                                 });
                             } else alert(stripTags(response.responseText));
                         }else{
@@ -211,6 +229,7 @@ Ext.onReady(function() {
             });
         }
         addForm();
+        
         var stripTagsRE = /<\/?[^>]+>/gi;
         /**
          * Strips all HTML tags
@@ -221,6 +240,9 @@ Ext.onReady(function() {
         function stripTags(v) {
             return ! v ? v: String(v).replace(stripTagsRE, "");
         }
+        
+        
+        /*预览tab区域*/
         var tabPanel = new Ext.ux.TabPanelLite({
             containerId: 'tabpanel_test'
         });
@@ -238,17 +260,13 @@ Ext.onReady(function() {
             		img.setAttribute("oriwidth",w+"");
             		img.setAttribute("oriheight",h+"");
             }
-            var avHeight = mwindow.body.getComputedHeight() - wrap.getComputedHeight();
-            var avWidth = mwindow.body.getComputedWidth();
-            console.debug(img);
-            console.debug("avHeight: "+avHeight);
-            console.debug("avWidth: "+avWidth);
-            console.debug("w: "+w);
-            console.debug("h: "+h);
+            var avWidth = mwindow.body.getComputedWidth()-20;
+            //console.debug(img);
+            //console.debug("avHeight: "+avHeight);
+            //console.debug("avWidth: "+avWidth);
+            //console.debug("w: "+w);
+            //console.debug("h: "+h);
             if (w > avWidth) {
-                if (avHeight < h) {
-                    avWidth -= 20;
-                }
                 var r = avWidth / w;
                 var ah = h * r;
                 Ext.fly(img).setWidth(avWidth);
@@ -259,38 +277,43 @@ Ext.onReady(function() {
             }
         };
         /*
-        	图片加载后第一次自动缩放
+        	图片加载后第一次
         */
         tabPanel.on("add",
         function(tab, panel) {
-            var img = Ext.get(panel).child("img", true);
-            if (img.complete) {
-                resizeImg(img);
+            var img = Ext.get(panel).child("img.replaceImg");
+            //hidden real img load
+            var realImg=Ext.get(panel).child("img.realImg",true);
+            
+            //cached ok,立即赋给loading img,resize 
+            function completeImg(){
+            	Ext.destroy(img);
+            	Ext.fly(realImg).removeClass("loadingImg");
+              resizeImg(realImg);
+            }
+            
+            if (realImg.complete) {
+            		completeImg();
             } else {
-                Ext.fly(img).on("load",
-                function() {
-                    resizeImg(img);
-                    Ext.fly(img).removeAllListeners();
-                });
+               Ext.fly(realImg).on("load",completeImg);
             }
         });
 
+				/*任何界面调整，预览区域以及图片大小调整*/
         function adJustTab() {
             tabPanel.adjustScroll();
-            var images = tabPanel.panelContainer.select("img");
+            //不包括loadingImg，只调整已经显示出来了 , =!
+            var images = tabPanel.panelContainer.select("img[class=' realImg']");
             /*
             	窗体变化就变化图片大小
             */
             images.each(function(el, this_, index_) {
-                resizeImg(el.dom);
+            	resizeImg(el.dom);
             });
         }
+        tabPanel.on("show",adJustTab);
         mwindow.on("maximize", adJustTab);
-        mwindow.on("restore", function(){
-        	
-        	adJustTab();
-        	console.debug("restore");
-        });
+        mwindow.on("restore", adJustTab);
         mwindow.on("resize", adJustTab);
     }
 });
