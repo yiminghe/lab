@@ -1,50 +1,70 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>
 			baidu layout
 		</title>
+		<style type="text/css">
+/*<![CDATA[*/
+		/*all hack for ie,shit*/
+		* html body {
+		overflow: hidden;
+		}
+
+		* html #container {
+		width: 100%;
+		}
+
+		* html #footer-wrapper {
+		position: relative;
+		padding-bottom: 10010px;
+		margin-bottom: -10000px;
+		background: #FFF;        /*** Same as body background ***/
+		}
+
+		/*]]>*/
+		</style>
 	</head>
 	<body>
-		<h1 style="text-align:center;">center:200px;<br/> left:40%-102px;<br/>
+		<h1 style="text-align:center;">
+			center:200px;<br />
+			left:40%-102px;<br />
 			right:60%-102px;
-			</h1>
-		<div style="overflow:hidden;">
-			<div style="width:40%;float:left;margin-left:-100%;position:relative;left:100%;">
-				<div style="background: black;margin-right:102px;color:white;margin-bottom:-1000em;padding-bottom:1001em;">
-					left<br/>
-					left<br/>
-					left<br/>
-					left<br/>
-					left<br/>
+		</h1>
+		<div id="container" style="overflow:hidden;">
+			<div style="width:40%; float: left; margin-left: -100%; position: relative; left: 100%;">
+				<div style="background: black; margin-right: 102px; color: white; margin-bottom: -1000em; padding-bottom: 1001em;">
+					left<br />
+					left<br />
+					left<br />
+					left<br />
+					left<br />
 				</div>
 			</div>
-			<div style="width:60%;float:left;margin-left:-100%;position:relative;left:140%;">
-				<div style="background: green;margin-left:102px;margin-bottom:-1000em;padding-bottom:1001em;">
-					right<br/>
-					right<br/>
-					right<br/>
-					right<br/>
-					right<br/>
-					right<br/>
-					
+			<div style="width:60%; float: left; margin-left: -100%; position: relative; left: 140%;">
+				<div style="background: green; margin-left: 102px; margin-bottom: -1000em; padding-bottom: 1001em;">
+					right<br />
+					right<br />
+					right<br />
+					right<br />
+					right<br />
+					right<br />
 				</div>
 			</div>
-			<div style="width:200px;float:left;background: red;position:relative;left:40%;margin-left:-100px;margin-bottom:-1000em;padding-bottom:1001em;">
-				center<br/>
-				center<br/>
-				center<br/>
-				center<br/>
-				center<br/>
-				center<br/>
+			<div style="width:200px; float: left; background: red; position: relative; left: 40%; margin-left: -100px; margin-bottom: -1000em; padding-bottom: 1001em;">
+				center<br />
+				center<br />
+				center<br />
+				center<br />
+				center<br />
+				center<br />
 			</div>
 		</div>
-		<div style="border:1px solid purple;clear:both;">
-			
-			footer
-		
+		<div id="footer-wrapper">
+			<div id="footer" style="border:1px solid purple; clear: both;">
+				This is the footer.
 			</div>
+		</div>
 	</body>
 </html>
