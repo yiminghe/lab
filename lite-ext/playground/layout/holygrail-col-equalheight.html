@@ -1,10 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>The Holy Grail of Layouts - 修改 by yiminghe</title>
-	<link rel="stylesheet" type="text/css" href="../../base/css/core.css">
-	<style type="text/css">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			The Holy Grail of Layouts - 修改 by yiminghe
+		</title>
+		<link rel="stylesheet" type="text/css" href="../../base/css/core.css" />
+		<style type="text/css">
+/*<![CDATA[*/
 
 		/*** The Essential Code 
 		http://www.alistapart.com/articles/holygrail
@@ -18,37 +22,37 @@
 
 		#container {
 			/* padding-left: 200px;      LC fullwidth */
-		 /* 	padding-right: 190px;    RC fullwidth + CC padding */
+		 /*     padding-right: 190px;    RC fullwidth + CC padding */
 		}
-		
+
 		#container .column {
 			position: relative;
 			float: left;
 		}
-		
+
 		#center_wrap {
 			width: 100%;
 		}
 		#center {
-       /* CC padding */
-       padding: 10px 190px 0 200px;
+		/* CC padding */
+		padding: 10px 190px 0 200px;
 			
 		}
-		
+
 		#left {
 			width: 180px;             /* LC width */
 			padding: 0 10px;          /* LC padding */
 			/*right: 240px;              LC fullwidth + CC padding */
 			margin-left: -100%;
 		}
-		
+
 		#right {
 			width: 130px;             /* RC width */
 			padding: 0 10px;          /* RC padding */
 			/*margin-right: -100%;*/
 			margin-left:-150px;
 		}
-		
+
 		#footer {
 			clear: both;
 		}
@@ -58,7 +62,7 @@
 		#container {
 			width:100%;/*ie6 footer会消失*/
 			overflow: hidden;
-position:relative; /* ie7列背景会突破*/
+		position:relative; /* ie7列背景会突破*/
 		}
 
 		#container .column {
@@ -66,7 +70,7 @@ position:relative; /* ie7列背景会突破*/
 			margin-bottom: -1000em;     /* X */
 		}
 
-	#container .eqcol {
+		#container .eqcol {
 			padding-bottom: 1001em;     /* X + padding-bottom */
 			margin-bottom: -1000em;     /* X */
 		}
@@ -102,36 +106,46 @@ position:relative; /* ie7列背景会突破*/
 			text-align: justify;
 		}
 
-	</style>
-</head>
-
-<body>
-
-	<div id="header">This is the header.</div>
-
-	<div id="container" class="clearfix">
-
-		<div id="center_wrap" class="column">
-			<div id="center" class="eqcol">
-			<h1>This is the main content.</h1>
-			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.</p>
-			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.</p>
+		/*]]>*/
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			This is the header.
 		</div>
+		<div id="container" class="clearfix">
+			<div id="center_wrap" class="column">
+				<div id="center" class="eqcol">
+					<h1>
+						This is the main content.
+					</h1>
+					<p>
+						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.
+					</p>
+					<p>
+						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.
+					</p>
+				</div>
+			</div>
+			<div id="left" class="column">
+				<h2>
+					This is the left sidebar.
+				</h2>
+				<p>
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.
+				</p>
+			</div>
+			<div id="right" class="column">
+				<h2>
+					This is the right sidebar.
+				</h2>
+				<p>
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.
+				</p>
+			</div>
 		</div>
-
-		<div id="left" class="column">
-			<h2>This is the left sidebar.</h2>
-			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.</p>
+		<div id="footer">
+			This is the footer.
 		</div>
-
-		<div id="right" class="column">
-			<h2>This is the right sidebar.</h2>
-			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.</p>
-		</div>
-
-	</div>
-		<div id="footer">This is the footer.</div>
-
-</body>
-
+	</body>
 </html>
