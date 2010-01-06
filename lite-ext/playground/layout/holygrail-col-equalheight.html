@@ -2,11 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>The Holy Grail of Layouts: Example #3: A List Apart</title>
+	<title>The Holy Grail of Layouts - 修改 by yiminghe</title>
+	<link rel="stylesheet" type="text/css" href="../../base/css/core.css">
 	<style type="text/css">
 
 		/*** The Essential Code 
 		http://www.alistapart.com/articles/holygrail
+		修改，原来的hack太多
 		http://www.positioniseverything.net/articles/onetruelayout/equalheight
 		***/
 
@@ -15,8 +17,8 @@
 		}
 
 		#container {
-			padding-left: 200px;      /* LC fullwidth */
-			padding-right: 190px;     /* RC fullwidth + CC padding */
+			/* padding-left: 200px;      LC fullwidth */
+		 /* 	padding-right: 190px;    RC fullwidth + CC padding */
 		}
 		
 		#container .column {
@@ -24,37 +26,39 @@
 			float: left;
 		}
 		
-		#center {
-			padding: 10px 20px;       /* CC padding */
+		#center_wrap {
 			width: 100%;
+		}
+		#center {
+       /* CC padding */
+       padding: 10px 190px 0 200px;
+			
 		}
 		
 		#left {
 			width: 180px;             /* LC width */
 			padding: 0 10px;          /* LC padding */
-			right: 240px;             /* LC fullwidth + CC padding */
+			/*right: 240px;              LC fullwidth + CC padding */
 			margin-left: -100%;
 		}
 		
 		#right {
 			width: 130px;             /* RC width */
 			padding: 0 10px;          /* RC padding */
-			margin-right: -100%;
+			/*margin-right: -100%;*/
+			margin-left:-150px;
 		}
 		
 		#footer {
 			clear: both;
 		}
-		
-		/*** IE Fix ***/
-		* html #left {
-			left: 150px;              /* RC fullwidth */
-		}
 
 		/*** Equal-height Columns ***/
 
 		#container {
+			width:100%;/*ie6 footer会消失*/
 			overflow: hidden;
+position:relative; /* ie7列背景会突破*/
 		}
 
 		#container .column {
@@ -62,19 +66,9 @@
 			margin-bottom: -1000em;     /* X */
 		}
 
-		/*** Footer Fix ***/
-
-		* html body {
-			overflow: hidden;
-		}
-		
-		* html #footer-wrapper {
-			float: left;
-			position: relative;
-			width: 100%;
-			padding-bottom: 10010px;
-			margin-bottom: -10000px;
-			background: #FFF;         /*** Same as body background ***/
+	#container .eqcol {
+			padding-bottom: 1001em;     /* X + padding-bottom */
+			margin-bottom: -1000em;     /* X */
 		}
 
 		/*** Just for Looks ***/
@@ -105,7 +99,6 @@
 		}
 
 		#container .column {
-			padding-top: 1em;
 			text-align: justify;
 		}
 
@@ -116,12 +109,14 @@
 
 	<div id="header">This is the header.</div>
 
-	<div id="container">
+	<div id="container" class="clearfix">
 
-		<div id="center" class="column">
+		<div id="center_wrap" class="column">
+			<div id="center" class="eqcol">
 			<h1>This is the main content.</h1>
 			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.</p>
 			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla.</p>
+		</div>
 		</div>
 
 		<div id="left" class="column">
@@ -135,10 +130,7 @@
 		</div>
 
 	</div>
-
-	<div id="footer-wrapper">
 		<div id="footer">This is the footer.</div>
-	</div>
 
 </body>
 

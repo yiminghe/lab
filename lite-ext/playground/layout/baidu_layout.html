@@ -1,57 +1,70 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>
 			baidu layout
 		</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="../../base/css/core.css">
 		<style type="text/css">
 /*<![CDATA[*/
-		/*all hack for ie,shit*/
+	
+	/*all hack for ie,shit*/
 
-		* html #container {
-		width: 100%;
+	#wrap {
+		width:95%;
+		margin:0 auto;
+	}
+	
+	#container {
+		width: 100%;/*if no ,footer 在ie6消失*/
+		overflow:hidden; /*所有浏览器列背景会突破*/
+		position:relative; /* ie6,7列背景会突破*/
+	}
+		
+		h1 {
+			font-size:30px;
 		}
 
-		* html #footer-wrapper {
-		float: left;
-			position: relative;
-			width: 100%;
-		padding-bottom: 10010px;
-		margin-bottom: -10000px;
-		background: #FFF;        /*** Same as body background ***/
+		.eqCol {  /*无限高列配置*/
+			margin-bottom:-10000px;
+			padding-bottom: 10000px;
+		}
+	
+		.col {  /*负边距 + 相对定位 固定列位置*/
+			float: left; margin-left: -100%; position: relative; display:inline;
 		}
 
 		/*]]>*/
 		</style>
 	</head>
-	<body>
+	<body><div id="wrap">
 		<h1 style="text-align:center;">
 			center:200px;<br />
 			left:40%-102px;<br />
 			right:60%-102px;
 		</h1>
-		<div id="container" style="overflow:hidden;">
-			<div style="width:40%; float: left; margin-left: -100%; position: relative; left: 100%;display:inline;">
-				<div style="background: black; margin-right: 102px; color: white; margin-bottom: -1000em; padding-bottom: 1001em;">
+		 
+		<div id="container" class="clearfix">
+			<div class="eqCol col" style="width:40%; left: 100%;">
+				<div class="eqCol" style="background: black; margin-right: 102px; color: white; ">
 					left<br />
 					left<br />
-					left<br />
-					left<br />
-					left<br />
+				
 				</div>
 			</div>
-			<div style="width:60%; float: left; margin-left: -100%; position: relative; left: 140%;display:inline;">
-				<div style="background: green; margin-left: 102px; margin-bottom: -1000em; padding-bottom: 1001em;">
+			<div class="eqCol col" style="width:60%; left: 140%;">
+				<div class="eqCol" style="background: green;margin-left: 102px;">
 					right<br />
 					right<br />
 					right<br />
 					right<br />
 					right<br />
-					right<br />
+					right<br />right<br />right<br />right<br />
 				</div>
 			</div>
-			<div style="width:200px; float: left; background: red; position: relative; left: 40%; margin-left: -100px; margin-bottom: -1000em; padding-bottom: 1001em;display:inline;">
+			<div class="eqCol col" style="width:200px; background: red;  left: 40%; margin-left: -100px;">
 				center<br />
 				center<br />
 				center<br />
@@ -60,10 +73,10 @@
 				center<br />
 			</div>
 		</div>
-		<div id="footer-wrapper">
-			<div id="footer" style="border:1px solid purple; clear: both;">
+			<div id="footer" style="border:1px solid purple;">
 				This is the footer.
 			</div>
-		</div>
+	</div>
 	</body>
 </html>
+ 
