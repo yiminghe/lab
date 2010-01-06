@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>TabPanelLite/javascript/tabpanel.js</string>
+	<string>playground/Ext.DD/dd-sample.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -165,79 +165,63 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>TabPanelLite/javascript/tabpanel.js</key>
+		<key>base/css/core.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>5</integer>
+				<integer>6</integer>
 				<key>line</key>
-				<integer>507</integer>
+				<integer>23</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>472</integer>
+			<integer>5</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>472</integer>
+				<integer>23</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>5</integer>
+				<integer>9</integer>
 				<key>line</key>
-				<integer>507</integer>
+				<integer>23</integer>
 			</dict>
 		</dict>
-		<key>TabPanelLite/tab.html</key>
+		<key>playground/Ext.DD/dd-sample.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>34</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>53</integer>
+				<integer>4</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>53</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>34</integer>
-				<key>line</key>
-				<integer>53</integer>
-			</dict>
 		</dict>
-		<key>TabPanelLite/tab_js.html</key>
+		<key>playground/Ext.DD/ddsample.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>5</integer>
+				<integer>11</integer>
 				<key>line</key>
-				<integer>66</integer>
+				<integer>11</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>51</integer>
+			<integer>11</integer>
 		</dict>
 		<key>playground/fduImgUploader/imgUploader.css</key>
 		<dict>
@@ -298,9 +282,9 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>TabPanelLite/javascript/tabpanel.js</string>
-		<string>TabPanelLite/tab.html</string>
-		<string>TabPanelLite/tab_js.html</string>
+		<string>playground/Ext.DD/ddsample.html</string>
+		<string>playground/Ext.DD/dd-sample.js</string>
+		<string>base/css/core.css</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
