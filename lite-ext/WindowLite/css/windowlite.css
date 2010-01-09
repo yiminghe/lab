@@ -2,10 +2,7 @@
 author : yiminghe
 version : v4(20090326)
 Any problem contact hym_sunrise@126.com
-
 **/
-
-
 div.windowContainer {
     text-align:left;
     position: absolute;
@@ -77,9 +74,6 @@ a.x-tool-restore:hover {
 	background-position:-15px -45px;
 }
 
-
-
-
 .window-header-text {
 	overflow:hidden;
   /*zoom:1; now in js*/ 
@@ -103,7 +97,6 @@ a.x-tool-restore:hover {
 	top:0;
 	z-index:1;
 	overflow:hidden;
- 
 }
 
 .window-body-ml {

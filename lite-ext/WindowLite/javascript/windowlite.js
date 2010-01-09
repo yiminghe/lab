@@ -35,7 +35,8 @@
   v3(20091010) 重要更新：增加 taskbar 配置，可以出现 窗口管理栏了，参见 windowlite_taskbar.html
     (20091014) 修正设置 containerId 时的定位行为
   v3.1(20091023) size问题调整 
-  v3.2(20091204) AOP利用事件重构，阴影处理分离主逻辑           
+  v3.2(20091204) AOP利用事件重构，阴影处理分离主逻辑，分离分离。   
+  v3.2.1(20100109) 延迟shim,shadow到显示时创建     
 */
 Ext.namespace('Ext.ux');
 Ext.ux.WindowLite = function(config) {
@@ -48,7 +49,7 @@ Ext.ux.WindowLite = function(config) {
     Ext.apply(this, config);
     this.buttonAlign = this.buttonAlign || 'right';
     this.addEvents('hide',
-    'beforehide', 'beforeclose', 'show',
+    'beforehide', 'beforeclose', 'show','beforeshow',
     'close', "resize", "ghost", "unghost"
     , "maximize", "restore",
     //便于手动更新 win.body Ext.Element 节点，之后触发 changecontent事件即可.
@@ -283,6 +284,9 @@ Ext.ux.WindowLite = function(config) {
       	设置阴影
       **/
     if (Ext.Shadow && this.shadow !== false) {
+    	/*延迟到初次窗体显示时创建*/
+    	function createShadow(){
+    		this.un("beforeshow",createShadow,this);
         this.shadowOffset = config.shadowOffset || 4;
         this.shadow = new Ext.Shadow({
             offset: this.shadowOffset,
@@ -305,27 +309,31 @@ Ext.ux.WindowLite = function(config) {
         this.on("ghost", hideShadow, this);
         this.on("hide", hideShadow, this);
         this.on("close", hideShadow, this);
-        this.el.setStyle({
-            'background-image': 'none'
-        });
+      }
+      this.on("beforeshow",createShadow,this);
     }
     /*
     		for ie6 iframe select relationship
 			*/
     if (Ext.isIE6) {
+    	function createShim(){
+    		this.un("beforeshow",createShim,this);
         this.shim = this.el.createShim();
         this.shim.hide();
         function hideIframe() {
             this.shim.hide();
         }
+        
+        /*分离，分离，AOP*/
         this.on("changecontent", this.showIframe, this);
-        this.on("show", this.showIframe, this);
+        this.on("beforeshow", this.showIframe, this);
         this.on("unghost", this.showIframe, this);
         this.on("resize", this.showIframe, this);
         this.on("maximize", this.showIframe, this);
         this.on("restore", hideIframe, this);
         this.on("hide", hideIframe, this);
-
+      }
+      this.on("beforeshow",createShim,this);
     }
     this._getOffsetHeightBodyToContainer();
     /**
@@ -388,9 +396,8 @@ Ext.ux.WindowLite = function(config) {
         },
         this);
         this.on("restore",
-        function() {
+        function(){
             this.resizer.enabled = true;
-
         },
         this);
         //this.resizer.on("beforeresize", this.beforeResize,this);
@@ -610,6 +617,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             this.toFront();
             return;
         }
+        this.fireEvent("beforeshow");
         
         //设定taskbar了！
         if (!animateTarget && this.animateTarget) {
