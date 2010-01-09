@@ -55,6 +55,13 @@ Ext.onReady(function() {
         		mwindow.fireEvent("changecontent");
         		evt.stopEvent();
         	}
+        },
+        {
+        	text:'得到宽度',
+        	handler:function(evt) {
+        		alert(mwindow.getWidth());
+        		evt.stopEvent();
+        	}
         }
         ],
         //是否模态窗口

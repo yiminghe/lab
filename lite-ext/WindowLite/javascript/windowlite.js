@@ -372,7 +372,8 @@ Ext.ux.WindowLite = function(config) {
         if (Ext.isIE6) {
 			//ie6 height100% no effect!!
             function ie6Fix() {
-                this.resizer.syncHandleHeight();
+            	this.el.repaint();
+              this.resizer.syncHandleHeight();
             }
             this.on("changecontent", ie6Fix, this);
             this.on("show", ie6Fix, this);
@@ -928,11 +929,13 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         if (!height) return this.el.getComputedHeight();
         return height + this._getOffsetHeightBodyToContainer() + this._FrameWidthTB;
     },
+    getWidth:function(){
+    		return this.el.getComputedWidth();
+    },
     /*
     	窗体内容改变，则如果整个窗体height没有设置，则body已设的高度要变化
     */
     _changeContentHandler:function(){
-    	
     },
     /*
 			还原窗口
