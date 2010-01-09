@@ -50,7 +50,9 @@ Ext.ux.WindowLite = function(config) {
     this.addEvents('hide',
     'beforehide', 'beforeclose', 'show',
     'close', "resize", "ghost", "unghost"
-    , "maximize", "restore");
+    , "maximize", "restore",
+    //便于手动更新 win.body Ext.Element 节点，之后触发 changecontent事件即可.
+    "changecontent");
     Ext.ux.WindowLite.superclass.constructor.call(this);
     this.el = Ext.DomHelper.append(Ext.get(config.containerId) || document.body, {
         tag: 'div',
@@ -294,6 +296,7 @@ Ext.ux.WindowLite = function(config) {
         function hideShadow() {
             this.shadow.hide();
         }
+        this.on("changecontent", showShadow, this);
         this.on("show", showShadow, this);
         this.on("unghost", showShadow, this);
         this.on("resize", showShadow, this);
@@ -315,6 +318,7 @@ Ext.ux.WindowLite = function(config) {
         function hideIframe() {
             this.shim.hide();
         }
+        this.on("changecontent", this.showIframe, this);
         this.on("show", this.showIframe, this);
         this.on("unghost", this.showIframe, this);
         this.on("resize", this.showIframe, this);
@@ -323,6 +327,7 @@ Ext.ux.WindowLite = function(config) {
         this.on("hide", hideIframe, this);
 
     }
+    this._getOffsetHeightBodyToContainer();
     /**
        设置按钮
     **/
@@ -348,6 +353,8 @@ Ext.ux.WindowLite = function(config) {
     this.setWidth(this.width,false);
     if (this.height) {
         this.setHeight(this.height,false);
+    } else {
+    		this.on("changecontent",this._changeContentHandler,this);
     }
     /**
 	     设置用户调节大小,动态设置css，width height
@@ -367,6 +374,7 @@ Ext.ux.WindowLite = function(config) {
             function ie6Fix() {
                 this.resizer.syncHandleHeight();
             }
+            this.on("changecontent", ie6Fix, this);
             this.on("show", ie6Fix, this);
             //this.on("unghost", ie6Fix, this);
             this.on("resize", ie6Fix, this);
@@ -539,6 +547,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     },
     addButton: function(config, noEvents) {
         //第一次高度变化，其他就不需要了
+        
         var first = false;
         if (this.bottom.hasClass('nobutton')) {
             first = true;
@@ -555,6 +564,8 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         if (first && noEvents !== false) {
             this.fireEvent("resize");
         }
+        //影响body和窗体高度差
+        this._getOffsetHeightBodyToContainer();
     },
     removeButton: function(text) {
         var b = this.bottom.select("[value='" + text + "']").item(0);
@@ -562,6 +573,8 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
             b.removeAllListeners();
             b.remove();
         }
+        //影响body和窗体高度差
+        this._getOffsetHeightBodyToContainer();
     },
     removeAllButtons: function(noEvents) {
         var bs = this.bottom.select("[type='button']");
@@ -573,6 +586,8 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         if (Ext.isIE6) {
             this.el.repaint();
         }
+        //影响body和窗体高度差
+        this._getOffsetHeightBodyToContainer();
     },
     focusButton: function(text) {
         var b = this.bottom.select("[value='" + text + "']").item(0);
@@ -914,6 +929,12 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         return height + this._getOffsetHeightBodyToContainer() + this._FrameWidthTB;
     },
     /*
+    	窗体内容改变，则如果整个窗体height没有设置，则body已设的高度要变化
+    */
+    _changeContentHandler:function(){
+    	
+    },
+    /*
 			还原窗口
 		*/
     restore: function(noEvents) {
@@ -921,6 +942,8 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
         this._maximizeA.setDisplayed(true);
         this._restoreA.setDisplayed(false);
         this.setSize(this.restoreSize.width, this.restoreSize.height, false);
+        this.restoreSize = null;
+        delete this.restoreSize;
         if(noEvents!==false)this.fireEvent("restore");
     }
 });
