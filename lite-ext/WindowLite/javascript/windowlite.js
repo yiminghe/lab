@@ -866,7 +866,7 @@ Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
     fitViewport: function(noEvents) {
         var maxView = Ext.getBody().getViewSize();
         //firefox 滚动条也占据 viewwidth .....
-        if (Ext.isGecko3 && !this.modal) {
+        if (!Ext.isIE && !this.modal) {
             var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
             var scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
             //4 magic number,滚动条使viewSize减少
