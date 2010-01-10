@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>playground/layout/holygrail-col-equalheight.html</string>
+	<string>playground/population-count/count.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -193,6 +193,36 @@
 			<key>firstVisibleLine</key>
 			<integer>35</integer>
 		</dict>
+		<key>playground/fduImgUploader/test.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>69</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+		</dict>
 		<key>playground/layout/baidu_layout.html</key>
 		<dict>
 			<key>caret</key>
@@ -222,20 +252,6 @@
 				<key>line</key>
 				<integer>83</integer>
 			</dict>
-		</dict>
-		<key>playground/layout/holygrail-col-equalheight.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>40</integer>
-				<key>line</key>
-				<integer>116</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>playground/layout/伪绝对定位.html</key>
 		<dict>
@@ -279,15 +295,45 @@
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
 		</dict>
+		<key>playground/population-count/count.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>113</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>87</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>113</integer>
+			</dict>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>playground/layout/baidu_layout.html</string>
-		<string>playground/layout/holygrail-col-equalheight.html</string>
+		<string>playground/population-count/count.html</string>
+		<string>playground/fduImgUploader/test.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{354, 0}, {926, 778}}</string>
+	<string>{{355, 0}, {915, 778}}</string>
 </dict>
 </plist>
