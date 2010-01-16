@@ -6,6 +6,7 @@ Form 2.2(200905191625) 加入验证失败覆盖层遮盖提交按钮，修改tip
 Form 2.3(200906021755) 错误提示修正，表单状态查询，validField增加
 Form 2.4(20090803) 增加msgType 配置，结合TipLite 实现错误信息 tip显示
 Form 2.4.1(20091215) 防止提示重复出现
+Form 2.4.2(20100116) placeholder for webkit 采用
 */
 
 Ext.ns('Ext.ux');
@@ -94,9 +95,14 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
 		点击即隐藏的提示,为input输入框创造悬停提示
 	*/
     _applyTip: function(el, tip, ignoreValue) {
-
-        var cel = Ext.get(el.dom);
         if (!tip) return;
+        if(Ext.isWebKit){
+        	el.dom.placeholder=tip;
+    			el.dom.autosave=el.dom.id+"_save";
+    			el.dom.results="10";
+        	return;
+        }
+        var cel = Ext.get(el.dom);
         if("OK" == cel.dom.getAttribute("_formLiteTipAlready")) return;
         //alert(cel.dom.getAttribute("_formLiteTipAlready"));
         cel.dom.setAttribute("_formLiteTipAlready","OK");
