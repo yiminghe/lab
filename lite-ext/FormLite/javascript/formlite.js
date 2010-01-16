@@ -98,8 +98,8 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
         if (!tip) return;
         if(Ext.isWebKit){
         	el.dom.placeholder=tip;
-    			el.dom.autosave=el.dom.id+"_save";
-    			el.dom.results="10";
+    			el.dom.setAttribute("autosave",el.dom.id+"_save");
+    			el.dom.setAttribute("results","10");
         	return;
         }
         var cel = Ext.get(el.dom);
