@@ -3,7 +3,12 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />	
 <script type="text/javascript" src="check.js"  charset="utf-8"></script>
 </head>
-<body onload="init()">
+<body onload="
+init();
+chrome.tabs.create({
+    url: 'option_page.html'
+});
+">
 <img id="piao_img" src="piao16_16.png">
 <canvas id="canvas" width="16" height="16">
 </body>

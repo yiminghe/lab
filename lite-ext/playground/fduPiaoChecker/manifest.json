@@ -1,11 +1,11 @@
 {
   "name": "fdu piao checker",
-  "icons": { 
+  "icons": {
 		"48": "piao48_48.png",
 		"32": "piao32_32.png",
 		"128": "piao128_128.png" 
   },
-  "version": "1.0",
+  "version": "1.15",
   "description": "Fudan BBS Piao Checker",
   "permissions": [
     "tabs", "http://*.fudan.edu.cn/", "http://*.fudan.sh.cn/"

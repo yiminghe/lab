@@ -10,18 +10,28 @@
 	<p>blog: yiminghe.javaeye.com</p>
 	<p>bbs_id: yiminghe</p>
 	<p>mail: hym_sunrise@126.com , yiminghe@fudan.edu.cn</p>
-	<p><label style="font-weight:bold;font-size:1.2em;">设置你的关注列车到达站列表(英文,号分隔):<input value="火星,地球" id="cities" style="font-size:1.2em;width:400px;"/></label></p>
-	<p><button id="save">保存</button></p>
+	<p><label style="font-weight:bold;font-size:1.2em;">设置你的关注列车到达站列表(逗号分隔):<input value="火星,地球" id="cities" style="font-size:1.2em;width:400px;"/></label></p>
+	<p><label>是否使用弹出框提醒：
+		<select id="alertW">
+		<option value="0">否</option>
+		<option value="1">是</option>
+		
+		</select>
+		</label></p>
 	<p>最后匹配贴子id : <span id="last">0</span></p>
+	<p><button id="save">保存</button></p>
 </div>
 <script>
 	if(localStorage.cities)
 	document.getElementById("cities").value=localStorage.cities;
 	if(localStorage.lastId)
 	document.getElementById("last").innerHTML=localStorage.lastId;
+	if(localStorage.alertW)
+	document.getElementById("alertW").value=localStorage.alertW;
 	document.getElementById("save").onclick=function(){
 		localStorage.cities=document.getElementById("cities").value;
 		localStorage.lastId="0";
+		localStorage.alertW=document.getElementById("alertW").value;
 		document.getElementById("last").innerHTML="0";
 		alert("保存成功");
 		chrome.extension.getBackgroundPage().init();

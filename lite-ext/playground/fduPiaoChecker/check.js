@@ -19,7 +19,7 @@ var lastId = 0;
 
 function getSavedCity() {
     var cities = localStorage.cities || "火星,地球";
-    cities = cities.split(",");
+    cities = cities.split(/,|，/);
     for (var i = 0; i < cities.length; i++) {
         if (!cities[i]) {
             cities.splice(i, 1);
@@ -39,6 +39,7 @@ function isQulifiedId(id) {
 }
 
 function isRelated(title) {
+	if(title.indexOf("求")!=-1) return false;
     var cities = getSavedCity();
     for (var i = 0; i < cities.length; i++) {
         if (title.indexOf(cities[i]) != -1)
@@ -252,6 +253,9 @@ function animateFlip() {
         chrome.browserAction.setBadgeBackgroundColor({
             color: [208, 0, 24, 255]
         });
+		if("1" == localStorage.alertW && unreadCount != "0") {
+			alert("有"+unreadCount+"条新车票信息，可以点击图标查看！");
+		}
     }
 }
 
@@ -279,7 +283,8 @@ function goToPiaos() {
         for (var i = 0, tab; tab = tabs[i]; i++) {
             if (tab.url && isPiaoUrl(tab.url)) {
                 chrome.tabs.update(tab.id, {
-                    selected: true
+                    selected: true,
+					url: getPiaoUrl()
                 });
                 return;
             }
