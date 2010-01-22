@@ -5,6 +5,7 @@
 </head>
 <body onload="
 init();
+if(!localStorage.cities)
 chrome.tabs.create({
     url: 'option_page.html'
 });
