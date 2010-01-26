@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+	<head>
+		<title>
+			Ext.Fx 示例
+		</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="../../base/css/core.css">
+		<style type="text/css">
+		#wrap {
+			width:600px;
+			margin:20px auto;
+			position:relative;
+		}
+			.overTip {
+				position:absolute;
+				right:300px;
+				top:10px;
+				-webkit-box-shadow: #CCC 10px 10px 10px;
+				background-color: yellow;
+				border: 2px solid gray;
+				border-bottom-left-radius: 10px 10px;
+				border-bottom-right-radius: 10px 10px;
+				border-top-left-radius: 10px 10px;
+				border-top-right-radius: 10px 10px;
+				padding: 5px 5px;
+				width: 150px;
+			}
+		</style>
+	</head>
+	<body>
+
+<div id="wrap">
+	<p>在上一个动画消失前点击按钮，正在进行的动画不会混乱</p>
+	
+	<input type="button" id="test" value="快速点我"/>
+	
+</div>
+
+	
+		<script type="text/javascript" src="../../base/javascript/ext-core-min.js">
+</script>
+
+<script type="text/javascript">
+Ext.onReady(function(){
+	var tip=Ext.DomHelper.append(Ext.getBody(),{
+		tag:"div",
+		cls:"overTip",
+		html:"我是提示"
+	},true);
+	tip.hide();
+	Ext.get("test").on("click",function(){
+		tip.fadeIn({
+			  concurrent:false,//use queue
+			  duration: 1
+		});
+		tip.fadeOut({
+			concurrent:false,//use queue ,after fade in
+		    duration: 5,
+		 	block:true //other subsequent fade canceled
+		});
+	});
+	
+});
+
+</script>
+	</body>
+</html>
