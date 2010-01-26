@@ -5,7 +5,7 @@
 		"32": "piao32_32.png",
 		"128": "piao128_128.png" 
   },
-  "version": "1.16",
+  "version": "1.17",
   "description": "Fudan BBS Piao Checker",
   "permissions": [
     "tabs", "http://*.fudan.edu.cn/", "http://*.fudan.sh.cn/"

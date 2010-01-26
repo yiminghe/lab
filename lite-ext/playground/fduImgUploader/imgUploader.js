@@ -6,6 +6,7 @@
 	chrome-extension 中 Ext.getDoc().dom == document 为false ..! 
 	修正 Publish.java 发布打包工具编写
 	v1.30 20091226 loading 动画图标加入，提供关闭预览设置，防止大图片拖慢浏览器
+	v1.35 20090126 支持自动剪贴版，动画tip提示
 */
 Ext.onReady(function() {
     var VERSION = "1.30";
@@ -79,6 +80,7 @@ Ext.onReady(function() {
             "<ol class='upTip'><li>added images will be shown at Tabs </li>"+
 " <li>images can be uploaded simultaneously within browser limit</li> "
             + "<li>image is proportional to it's original size </li>"
++ "<li>image urls will be copied to clipboard automatically </li>"
  			+"<li>image will resize accordinly to window's size</li></ol>" +
             "	</div>" + "</div></div>",
             drag: true,
@@ -108,6 +110,16 @@ Ext.onReady(function() {
             //是否支持用户调节大小      	
             resizable: true
         });
+
+		var tip=Ext.DomHelper.insertFirst(mwindow.body.dom, {
+			tag:"div",
+			cls:"overTip",
+			style:{
+				visibility:"hidden"
+			},
+			html:"已自动copy到剪贴版"
+		},true);
+		
         var wrap = Ext.DomHelper.insertFirst(mwindow.body.dom, {
             tag: "div",
             style: {
@@ -117,6 +129,11 @@ Ext.onReady(function() {
         true);
         var textLinks = Ext.DomHelper.append(wrap, {
             tag: "p",
+			style:{
+				left:"-10000px",
+				top:"-10000px",
+				position:"absolute"
+			},
             cn: [{
                 tag: "textarea",
                 title: "you can use ctrl-a and ctrl-c to copy",
@@ -137,6 +154,20 @@ Ext.onReady(function() {
                 text.push(el.dom.src);
             });
             textLinks.dom.value = text.join("\n");
+			//copy automatically
+			textLinks.dom.select();
+			document.execCommand('Copy');
+			textLinks.dom.focus();
+			
+			tip.fadeIn({
+				  concurrent:false,//use queue
+				  duration: 1
+			});
+			tip.fadeOut({
+				concurrent:false,//use queue ,after fade in
+			    duration: 5,
+			 	block:true //other subsequent fade canceled
+			});
         }
         
         /*预览控制*/
@@ -289,7 +320,7 @@ Ext.onReady(function() {
             function completeImg(){
             	Ext.destroy(img);
             	Ext.fly(realImg).removeClass("loadingImg");
-              resizeImg(realImg);
+                resizeImg(realImg);
             }
             
             if (realImg.complete) {
