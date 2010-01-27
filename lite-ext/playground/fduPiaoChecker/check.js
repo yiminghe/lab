@@ -3,6 +3,7 @@ v1.16(20100122) 支持选项设置，
 								支持content script高亮显示，
 								支持数字browser action badgetext,
 								支持摘要browser action title
+v1.2(20100127) 抛弃正则表达式，采用 jquery 来遍历 xml
 */
 var animationFrames = 36;
 var animationSpeed = 10;
@@ -10,28 +11,26 @@ var animationSpeed = 10;
 var canvas;
 var canvasContext;
 var piaoImage;
-var pollIntervalMin = 1000 * 5;
-// 1 minute
+var pollIntervalMin = 1000 * 10;
+// 10 seconds
 var pollIntervalMax = 1000 * 60;
-// 1 hour
+// 1 minute
 var requestFailureCount = 0;
 // used for exponential backoff
-var requestTimeout = 1000 * 2;
+var requestTimeout = 1000 * 5;
 // 5 seconds
 var rotation = 0;
 var unreadCount = -1;
 var loadingAnimation = new LoadingAnimation();
 var lastId = 0;
+
 function getSavedCity() {
     var cities = localStorage.cities || "火星,地球";
     cities = cities.split(/,|，/);
-    for (var i = 0; i < cities.length; i++) {
-        if (!cities[i]) {
-            cities.splice(i, 1);
-            i--;
-        }
-    }
-    return cities;
+    return $.map(cities, function (c) {
+        c = $.trim(c);
+        return c ? c : null;
+    });
 }
 function setLastId(id) {
     localStorage.lastId = id + "";
@@ -42,10 +41,9 @@ function isQulifiedId(id) {
 function isRelated(title) {
     if (title.indexOf("求") != -1) return false;
     var cities = getSavedCity();
-    for (var i = 0; i < cities.length; i++) {
-        if (title.indexOf(cities[i]) != -1) return true;
-    }
-    return false;
+    cities = "(" + cities.join("|") + ")";
+    var citiesReg = new RegExp(cities);
+    return citiesReg.test(title);
 }
 function getPiaoUrl() {
     var url = "http://bbs.fudan.edu.cn/bbs/tdoc?bid=288";
@@ -74,7 +72,7 @@ LoadingAnimation.prototype.paintFrame = function () {
     });
     this.current_++;
     if (this.current_ == this.maxCount_) this.current_ = 0;
-    console.log(text);
+    //console.log(text);
 }
 LoadingAnimation.prototype.start = function () {
     if (this.timerId_) return;
@@ -91,8 +89,8 @@ LoadingAnimation.prototype.stop = function () {
 }
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
     if (changeInfo.url && isPiaoUrl(changeInfo.url)) {
-        getRelatedCount(function (count) {
-            updateUnreadCount(count);
+        getRelatedCount(function (rspXml) {
+            updateUnreadCount(rspXml);
         });
     }
 });
@@ -127,77 +125,55 @@ function startRequest() {
     });
 }
 function getRelatedCount(onSuccess, onError) {
-    var xhr = new XMLHttpRequest();
-    var abortTimerId = window.setTimeout(function () {
-        xhr.abort();
-        // synchronously calls onreadystatechange
-    },
-    requestTimeout);
-    function handleSuccess(count) {
-        requestFailureCount = 0;
-        window.clearTimeout(abortTimerId);
-        if (onSuccess) onSuccess(count);
-    }
-    function handleError() {
-        ++requestFailureCount;
-        window.clearTimeout(abortTimerId);
-        if (onError) onError();
-    }
-    try {
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState != 4) return;
-            if (xhr.responseText) {
-                var html = xhr.responseText;
-                if (html) {
-                    handleSuccess(html);
-                    return;
-                } else {
-                    console.error("can not get info from bbs");
-                }
-            }
-            handleError();
+    $.ajax({
+        url: getPiaoUrl(),
+        type: "get",
+        cache: false,
+        timeout: requestTimeout,
+        error: function (xhr, status) {
+            ++requestFailureCount;
+            onError && onError();
+        },
+        success: function (data, status) {
+            requestFailureCount = 0;
+            onSuccess && onSuccess(data);
         }
-        xhr.onerror = function (error) {
-            handleError();
-        }
-        xhr.open("GET", getPiaoUrl(), true);
-        xhr.send(null);
-    } catch(e) {
-        console.error(e);
-        handleError();
-    }
+    });
 }
 //精通正则表达式 p200
 //<po x=">" >合法</po>
+//now use xml api,not pure text api
 var piaoReg = /<po(?:id='(\d+)'|"[^"]*"|'[^']*'|[^'">])*>(.+?)<\/po>/g;
-function getRelateTicketsInfo(countHtml) {
-    console.log("realHTML : " + countHtml);
-    var m;
+function getRelateTicketsInfo(rspXml) {
     var count = 0;
-    var rels=[];
-    while (m = piaoReg.exec(countHtml)) {
-        var id = parseInt(m[1]);
+    var rels = [];
+    var pos = $(rspXml).find("po");
+    pos.each(function (index, po) {
+        po = $(po);
+        var id = po.attr("id");
         if (!isQulifiedId(id)) {
-            continue;
+            return;
         }
-        var text = m[2].trim();
+        var text = po.text();
         if (isRelated(text)) {
             count++;
             rels.push(text);
             lastId = id;
         }
-    }
-    return {count:count,rels:rels};
-}
-function updateUnreadCount(countHtml) {
-    var relInfo = getRelateTicketsInfo(countHtml);
-    var count=relInfo.count;
-    if(count==0)
-    	relInfo.rels=["checking ..."];
-    chrome.browserAction.setTitle({
-    	title:relInfo.rels.join("\n")
     });
-    console.log(new Date() + " : " + count);
+    return {
+        count: count,
+        rels: rels
+    };
+}
+function updateUnreadCount(rspXml) {
+    var relInfo = getRelateTicketsInfo(rspXml);
+    var count = relInfo.count;
+    if (count == 0) relInfo.rels = ["checking ..."];
+    chrome.browserAction.setTitle({
+        title: relInfo.rels.join("\n")
+    });
+    console.log(relInfo.rels.join("\n"));
     if (unreadCount != count) {
         unreadCount = count;
         animateFlip();
@@ -237,6 +213,8 @@ function drawIconAtRotation() {
         imageData: canvasContext.getImageData(0, 0, canvas.width, canvas.height)
     });
 }
+
+//转到票务tab或者新建票务tab
 function goToPiaos(callback) {
     chrome.tabs.getAllInWindow(undefined, function (tabs) {
         for (var i = 0, tab; tab = tabs[i]; i++) {
@@ -261,24 +239,23 @@ function goToPiaos(callback) {
 chrome.browserAction.onClicked.addListener(function (tab) {
     goToPiaos(piaoTabViewUpdate);
 });
+
+//当重新选择票务tab则刷新页面，更新到最新
 chrome.tabs.onSelectionChanged.addListener(function (tabId, selectInfo) {
     chrome.tabs.get(tabId, function (tabInfo) {
         if (tabInfo.url && isPiaoUrl(tabInfo.url)) {
-            //piaoTabViewUpdate(tabId);
             goToPiaos(piaoTabViewUpdate);
         }
     });
 });
+
+//记录最后帖子id
 function piaoTabViewUpdate(tabId) {
-		//activeHighlight(tabId);
     setLastId(lastId);
     updateUnreadCount(0);
 }
-function activeHighlight(tabId) {
-    chrome.tabs.sendRequest(tabId, {
-        cities: getSavedCity()
-    });
-}
+
+//页面请求关注城市名字？
 chrome.extension.onRequest.addListener(
 function (request, sender, sendResponse) {
     if (request.msg && request.msg == "get") sendResponse({

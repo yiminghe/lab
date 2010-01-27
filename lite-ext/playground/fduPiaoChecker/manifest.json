@@ -5,7 +5,7 @@
 		"32": "piao32_32.png",
 		"128": "piao128_128.png" 
   },
-  "version": "1.17",
+  "version": "1.20",
   "description": "Fudan BBS Piao Checker",
   "permissions": [
     "tabs", "http://*.fudan.edu.cn/", "http://*.fudan.sh.cn/"
@@ -13,7 +13,7 @@
    "content_scripts": [
     {
       "matches": ["http://bbs.fudan.edu.cn/bbs/tdoc?bid=288"],
-      "js": ["ext-core-min.js","highlight.js"]
+      "js": ["jquery-1.4.1.min.js","highlight.js"]
     }
   ],
   "background_page": "background.html",
