@@ -11,7 +11,7 @@ var animationSpeed = 10;
 var canvas;
 var canvasContext;
 var piaoImage;
-var pollIntervalMin = 1000 * 10;
+var pollIntervalMin = 1000 * 8;
 // 10 seconds
 var pollIntervalMax = 1000 * 60;
 // 1 minute
@@ -105,7 +105,7 @@ function init() {
     startRequest();
 }
 function scheduleRequest() {
-    var randomness = Math.random() * 2;
+    var randomness = Math.max(1,Math.random() * 2);
     var exponent = Math.pow(2, requestFailureCount);
     var delay = Math.min(randomness * pollIntervalMin * exponent, pollIntervalMax);
     delay = Math.round(delay);
@@ -113,6 +113,7 @@ function scheduleRequest() {
 }
 // ajax stuff
 function startRequest() {
+		console.log("request @datetime: " + new Date() );
     getRelatedCount(
     function (count) {
         loadingAnimation.stop();
@@ -173,7 +174,7 @@ function updateUnreadCount(rspXml) {
     chrome.browserAction.setTitle({
         title: relInfo.rels.join("\n")
     });
-    console.log(relInfo.rels.join("\n"));
+    
     if (unreadCount != count) {
         unreadCount = count;
         animateFlip();
