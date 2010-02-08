@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"><head>
+
+    
+        <meta content="text/html; charset=UTF-8" 
+http-equiv="Content-Type">
+        <title>windywany 一个类似GOOGLE个性主页的简单实现 </title>
+        <style>
+            body,html{height:100%;}
+            .box{
+                border:1px solid #999;
+                margin:10px;
+            }
+            div{background:#FFF;}
+            .handle{
+            	cursor:default;
+                padding:0px;
+                margin:0px;
+                background:#ccc;
+            }
+            table.portal-wrapper{
+                width:100%;
+                height:50%;
+            }
+            table.portal-wrapper td{
+                vertical-align:top;
+                width:33%;
+                border:1px solid #f00;
+            }
+        </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+        <script src="jquery.event.drag.js"></script> 
+        <script src="jquery.event.drop.js"></script> 
+        
+        <script>
+            $(function(){
+                var dropx,dropTitle,curCol = null,curCols=[];
+                $('.portal').bind('dragstart',function(event){
+                        if($(event.target).is('.handle')){
+                            var w = $(this).width();
+                            var h = $(this).height();
+							$('body').selectable(false);
+                            oldCol= curCol = $(this).parent('td.portal-col');
+                            dropTitle = $(event.target).css('cursor','move');                            
+							dropx = $('<div class="box"><br/><div>').css({border:'1px dashed #666',height:h});
+                            $(this).before(dropx);
+                            $(this).css({position:'absolute',width:w,height:h,opacity:0.5}).removeClass('portal');
+                        }else{
+                            return false;
+                        }
+                }).bind('drag',function(e){
+                        $(this).css({top:e.offsetY,left:e.offsetX});
+                        if (curCol == null) return;
+                        var insert = false;
+                        if(curCols.length > 0){
+                            for( var i=0;i<curCols.length;i++){
+                                var $this = $(curCols[i]);
+                                var oft   = $this.offset();
+                                var h     = $this.outerHeight();
+                                if (e.offsetY < (h/2 + oft.top)){
+                                    $this.before(dropx);
+                                    insert = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(curCols.length == 0 || !insert){
+                            curCol.append(dropx);
+                        }
+                }).bind('dragend',function(event){
+                    dropTitle.css('cursor','auto');
+                    dropx.hide();
+                    dropx.before( $(this) );
+                    $(this).css({position:'static',width:'auto',height:'auto',opacity:1}).addClass("portal");
+                    dropx.remove();
+                   	$('body').selectable(true);
+                });
+
+                $('.portal-col').bind('dropstart',function(event){
+                    curCol  = $(this).css({background:'#0f0'});
+                    curCols = $(this).find('.portal');
+                }).bind('drop',function(event){
+                    //dropx.before( event.dragTarget );
+                    //dropx.remove();
+                }).bind('dropend',function(){
+                    $(this).css({background:'#fff'})
+                });
+                
+                $.fn.selectable = function(bool){
+				    $(this).each(function(i,elem){
+				    	//var elem = $(n).dom;
+					    elem.unselectable = bool ? "off" : "on"; // IE
+					    elem.onselectstart = function(){ return bool; }; // IE
+					    if ( elem.style ) elem.style.MozUserSelect = bool ? "" : "none"; // FF
+				    });
+				};
+            });
+            
+        </script>
+    </head><body>
+    
+    <table class="portal-wrapper">
+        <tbody><tr>
+            <td class="portal-col" id="col1">
+                <div class="box portal">
+                    <h2 class="handle">From Javaeye windywany</h2>
+                    <div class="selectable">
+                      
+                          <img src="013-53.jpg" width="200">
+ 
+                        <br>
+                          asdfasdfasfsadfsadfsf<br>
+                        asdfasdfasfsadfsadfsf<br>
+                        asdfasdfasfsadfsadfsf<br>
+                        asdfasdfasfsadfsadfsf<br>
+                        asdfasdfasfsadfsadfsf<br>
+                        asdfasdfasfsadfsadfsf<br>
+                        
+                    </div>
+                </div>
+                <div class="box portal">
+                    <h2 class="handle">drag me2</h2>
+                    <div class="selectable">
+                        asdfasdfasfsadfsadfsf
+                    </div>
+                </div>
+                <div class="box portal">
+                    <h2 class="handle">drag me3</h2>
+                    <div class="selectable">
+                        asdfasdfasfsadfsadfsf
+                         
+                    </div>
+                </div>
+            </td>
+            <td class="portal-col" id="col2">
+                <div class="box portal">
+                    <h2 class="handle">drag me4</h2>
+                    <div class="selectable">
+                        asdfasdfasfsadfsadfsf
+                    </div>
+                </div>
+                <div class="box portal">
+                    <h2 class="handle">drag me5</h2>
+                    <div class="selectable">
+                        5555555555
+                         <img src="012-53.jpg" width="200">
+                    </div>
+                </div>
+                <div class="box portal">
+                    <h2 class="handle">drag me5ext</h2>
+                    <div class="selectable">
+                          3exttt
+                    </div>
+            </div></td>
+            <td class="portal-col" id="col3">
+                <div class="box portal">
+                    <h2 class="handle">drag me6</h2>
+                    <div class="selectable">
+                        asdfasdfasfsadfsadfsf
+                        	 
+                    </div>
+                </div>
+                 <div class="box portal">
+                    <h2 class="handle">drag me7</h2>
+                    <div class="selectable">
+                       777
+                        	 <img src="011-53.jpg" width="200">
+                    </div>
+                </div>
+                
+                 <div class="box portal">
+                    <h2 class="handle">drag me8</h2>
+                    <div class="selectable">
+                          88888
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody></table>
+    <br>  
+   
+    </body></html>
