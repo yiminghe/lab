@@ -73,6 +73,7 @@ Ext.onReady(function () {
 Ext.onReady(function () {
     //拖放区域内的所有item处理拖（drag）
     new Ext.dd.DragZone("zone2", {
+    		ddGroup:"zone2DD",
         //开始拖动，则当前元素当做占位符外表
         onStartDrag: function () {
             Ext.fly(this.dragData.ddel).addClass("item-replace");
@@ -95,6 +96,7 @@ Ext.onReady(function () {
     }).proxy.el.child(".x-dd-drop-icon").setDisplayed(false);
     //拖放区域内的所有item处理放（drop）
     new Ext.dd.DropZone("zone2", {
+    		ddGroup:"zone2DD",
         //自己和自己不应该反应
         //@param target{HTMLElement} 当前的hover对象
         //@param data.ddel{HTMLElement} 当前的drag对象
