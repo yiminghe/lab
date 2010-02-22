@@ -5,6 +5,7 @@
 	<head>
 		<title>简易tooltip</title>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
 		<style>
 		.tooltip {
 			background:none repeat scroll 0 0 #444466;
@@ -18,6 +19,7 @@
 			text-decoration:none;
 			margin-top:0.5em;
 			margin-left:-1em;
+			display:inline;
 		}
 		
 			.tooltip .title {
@@ -27,7 +29,7 @@
 			.tooltip .content {
 				padding:5px;
 			}
-			.tool:hover .tooltip {
+			.tool:hover .tooltip ,.tool.over .tooltip {
 				left:auto;
 				
 			}
@@ -39,15 +41,20 @@
 				width:80px;
 			}
 			
-			#s:hover {
+			#s:hover,#s.over {
 				background:yellow;
 			}
 		</style>
 	</head>
 	<body>
 		<p>
-			很简单的tooltip,<a id="s" class="tool" href="#">掠过我 
-				<span class="tooltip"><div class="title">我是标题</div><div class="content">我是具体内容,我是具体内容</div></span></a>就知道了
+			很简单的tooltip,<div id="s" class="tool" href="#">掠过我<div class="tooltip">
+<div class="title">我是标题</div><div class="content">我是具体内容,我是具体内容</div>
+</div></div>就知道了
 		</p>
+<script>
+	if($.browser.msie &&$.browser.version=="6.0")
+		$(".tool").hover(function(){$(this).addClass("over");},function(){$(this).removeClass("over");});
+</script>
 	</body>
 </html>
