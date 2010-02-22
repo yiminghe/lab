@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+	<head>
+		<title>简易tooltip</title>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<style>
+		.tooltip {
+			background:none repeat scroll 0 0 #444466;
+			border:1px solid white;
+			color:white;
+			font-weight:bold;
+			left:-999em;
+			padding:2px 4px;
+			position:absolute;
+			text-decoration:none;
+			margin-top:0.5em;
+			margin-left:-1em;
+		}
+		
+			.tooltip .title {
+				font-size:1.5em;
+				text-align:center;
+			}
+			.tooltip .content {
+				padding:5px;
+			}
+			.tool:hover .tooltip {
+				left:auto;
+				
+			}
+			
+			#s {
+				display:block;
+				margin:10px;
+				border:1px solid green;
+				width:80px;
+			}
+			
+			#s:hover {
+				background:yellow;
+			}
+		</style>
+	</head>
+	<body>
+		<p>
+			很简单的tooltip,<a id="s" class="tool" href="#">掠过我 
+				<span class="tooltip"><div class="title">我是标题</div><div class="content">我是具体内容,我是具体内容</div></span></a>就知道了
+		</p>
+	</body>
+</html>
