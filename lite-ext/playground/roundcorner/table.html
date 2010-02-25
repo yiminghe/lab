@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>
+			不定高色块 float四个边脚实现(九宫格表格布局实现)
+		</title>
+		<style type="text/css">
+/*<![CDATA[*/
+	.box {
+	background:#F0F0F0 none repeat scroll 0 0;
+	}
+	div.box, table.box {
+	margin:10px 0;
+	}
+	table {
+	border-collapse:collapse;
+	clear:both;
+	width:100%;
+	}
+		p {
+		margin: 0;
+		padding: 0;
+		padding: 10px;
+		}
+		tr.t th.l {
+		background-position:0 -144px;
+		}
+		tr.t th, tr.b th {
+		background:transparent url(mix_nr.gif) no-repeat scroll 0 0;
+		height:8px;
+		}
+		th {
+		width:8px;
+		}
+		
+		tr.t td.c {
+		background-position:0 -108px;
+		}
+		tr.t td , tr.b td {
+		background:transparent url(mix_rx.gif) repeat-x scroll 0 0;
+		height:8px;
+		}
+		tr.t th.r {
+		background-position:-8px -144px;
+		}
+		tr.c th.l {
+		background-position:-52px 0;
+		}
+		tr.c th {
+		-moz-background-clip:border;
+		-moz-background-inline-policy:continuous;
+		-moz-background-origin:padding;
+		background:transparent url(mix_ry.gif) repeat-y scroll 0 0;
+		}
+		tr.c th.r {
+		background-position:-60px 0;
+		}
+		tr.b th.l {
+		background-position:0 -152px;
+		}
+		tr.b td.c {
+		background-position:0 -116px;
+		}
+		tr.b th.r {
+		background-position:-8px -152px;
+		}
+		/*]]>*/
+		</style>
+	</head>
+	<body>
+		<table class="box">
+		<tbody><tr class="t">
+		<th class="l"></th>
+		<td class="c"></td>
+		<th class="r"></th>
+		</tr>
+		<tr class="c">
+		<th class="l"></th>
+		<td class="c">
+		<p>用表格布置一个九宫格，周为的8个单元格作为补充边脚，以放置圆角相关的背景图片</p>
+		</td>
+		<th class="r"></th>
+		</tr>
+		<tr class="b">
+		<th class="l"></th>
+		<td class="c"></td>
+		<th class="r"></th>
+		</tr>
+		</tbody></table>
+		
+	</body>
+</html>

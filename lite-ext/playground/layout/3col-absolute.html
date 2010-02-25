@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+	<title>Three Columns - Flanking Menus</title>
+	<style type="text/css" media="screen">@import "layout3.css";</style>
+	
+</head>
+
+<body>
+
+<div class="content">
+	<h1>Flanking Menus</h1>
+	<p>With the popularity of three column layouts, this layout is bound to be useful to many. You may have seen this technique used at <a href="http://www.wrongwaygoback.com/" title="wrongwaygoback">dynamic ribbon device</a>. In fact, this "flanking menus" technique was devised by BlueRobot for that site. Surprisingly, the technique has caused quite a bit of talk. The concept is simple: a content box with large margins is flanked by two additional (menu) boxes.</p>
+	<p>An important benefit of this technique is the order of elements in the HTML source. Here, the order is essentially content, menu one, menu two. For old browsers, text-only browsers, screen-readers, and many alternative devices, this means that the content is displayed before the menus. And, after all, most users visit a page for its content.</p>
+</div>
+
+<div class="content">
+	<h2>Known Issues</h2>
+	<p>This layout fails in IE4.5/Mac. That browser has poor support for CSS absolute positioning, yet it recognizes and executes the CSS @import statement used to hide CSS from broken browsers. Currently, there is no known solution.</p>
+</div>
+
+<div class="content">
+	<a href="index.html" title="Layouts to make your own...">&lt; Return to the Layout Reservoir</a> &nbsp;::&nbsp; <a href="view_css.php?layout=layout3" title="">View the CSS</a>
+</div>
+
+<div id="navAlpha">
+	<h2>Links</h2>
+	<p>
+		<a href="http://www.alistapart.com/" title="A List Apart: For People Who Make Websites">A List Apart</a><br>
+		<a href="http://greasyskillet.org/" title="The Website of Dave Elfving">Greasy Skillet</a><br>
+		<a href="http://royrosenow.com/" title="Sketches, illustrations, and Voodoo Bob">Roy Rosenow</a><br>
+		<a href="http://swankyal.com/" title="A swanky weblog">SwankyAl</a><br>
+		<a href="" title="">Fake Link One</a><br>
+		<a href="" title="">Nothing Here</a><br>
+		<a href="" title="">Links Nowhere</a><br>
+		<a href="" title="">Fake Link Four</a><br>
+		<a href="" title="">Fifth Fake Link</a><br>
+	</p>
+</div>
+
+<div id="navBeta">
+	<h2>A Call To Action</h2>
+	<p>Much effort has been made to ensure that the layouts in the BlueRobot Layout Reservoir appear as intended in CSS2 compliant browsers. The content should be viewable, though unstyled, in other web browsers. If you encounter a problem that is not listed as a known issue, I am most likely not aware of it. <em>Please</em> <a href="mailto:rob@bluerobot.com?subject=Layout Reservoir" title="Email BlueRobot about a layout issue">email me</a> a heads-up. Your help will benefit the other five or six people who visit this site.</p>
+</div>
+
+<!-- BlueRobot was here. -->
+
+</body>
+</html>

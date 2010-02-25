@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title>贪吃蛇canvas</title> 
+<script> 
+	
+	//四个方向
+	var UP = 0,DOWN = 1,LEFT = 2,RIGHT = 3;
+	//四个方向键值
+	var KEY_UP = 38,KEY_DOWN = 40,KEY_LEFT = 37,KEY_RIGHT = 39;
+	//画图的元素
+	var game,context;
+	//界面宽和高
+	var width = 300,height = 300;
+	//方块的大小
+	var blockSize = 10;
+	//贪吃蛇对象
+	var snake;
+	//方向对应的增量数组
+	var dirx = [0,0,-1,1];
+	var diry = [-1,1,0,0];
+	
+	//食物数组
+	var foods = new Array();
+	
+	//游戏状态 0 未开始 1进行中 2 GameOver
+	var state = 0;
+	
+	//级别
+	var level = 1;
+	//分数
+	var score = 0;
+	//游戏速度
+	var speed = 100;
+	//当前食物
+	var currentFood = 0;
+	
+	var headImg = new Image();
+	var bodyImg = new Image();	
+	var foodImgs = new Array();
+	
+	//贪吃蛇的某一节身体
+	function Block(index,x,y){
+		this.index = index;
+		this.x = x;
+		this.y = y;
+	}
+	
+	Block.prototype.draw = function(){
+		var xy = get_real_xy(this.x,this.y);
+		if(this.index == 0){
+			context.drawImage(headImg, xy.x , xy.y , blockSize, blockSize);			
+		}else{
+			context.drawImage(bodyImg, xy.x, xy.y, blockSize , blockSize );			
+		}
+		
+	}
+	
+	//贪吃蛇的类，表示一条蛇，传入初始的身体数组和初始运动方向
+	function Snake(blocks,direction){
+		this.blocks = blocks;
+		this.direction = direction;
+	}
+	//画出整条蛇
+	Snake.prototype.draw = function(){
+		for(var i=0;i<this.blocks.length;i++){
+			var block = this.blocks[i];
+			block.draw();
+		}
+	}
+	
+	//下一步
+	Snake.prototype.next = function(){
+	
+		//确定头的下一个位置
+		var head = this.blocks[0];
+		var newX = head.x + dirx[this.direction];
+		var newY = head.y + diry[this.direction];
+		//判断是否合法、是否有吃的
+		if(newX > width / blockSize - 1)
+			newX = 0;
+			
+		if(newY > height / blockSize - 1)
+			newY = 0;
+		
+		if(newX < 0)
+			newX = width / blockSize - 1;
+		
+		if(newY < 0)
+			newY = height / blockSize - 1;
+			
+		var st = this.check(newX,newY);
+		if(st == 1){
+			state = 2;
+		}else if(st == 2){
+			//吃掉食物，增加一节
+			//增加一个
+			var block = new Block(0,0);
+			this.blocks.push(block);
+			for(var i=this.blocks.length-1;i>0;i--){
+				this.blocks[i].x = this.blocks[i-1].x;
+				this.blocks[i].y = this.blocks[i-1].y;								
+			}
+			this.blocks[0].x = newX;
+			this.blocks[0].y = newY;
+			for(var i=0;i<this.blocks.length;i++){
+				this.blocks[i].index = i;
+			}
+			score++;
+			speed = speed--;
+			//去掉食物
+			foods = new Array();
+			currentFood = rand(0,9);
+			putFood();
+		}else {		
+			//依次跟进
+			for(var i=this.blocks.length-1;i>0;i--){
+				this.blocks[i].x = this.blocks[i-1].x;
+				this.blocks[i].y = this.blocks[i-1].y;				
+			}
+			this.blocks[0].x = newX;
+			this.blocks[0].y = newY;
+		}
+	}
+	
+	//检查在x,y的状态
+	Snake.prototype.check = function(x,y){
+		for(var i=0;i<this.blocks.length;i++){
+			var block = this.blocks[i];
+			if(block.x == x && block.y == y){
+				//有自己
+				return 1;
+			}
+		}
+		for(var i=0;i<foods.length;i++){
+			var food = foods[i];
+			if(food.x == x && food.y == y){
+				//有食物
+				return 2;
+			}
+		}
+		
+		return 0;
+	}
+	
+	function get_real_xy(x,y){
+		return {x:x*blockSize,y:y*blockSize};
+	}
+	
+	function init(){	
+		game = document.getElementById("game");
+		context = game.getContext('2d');
+		if(!context){
+			alert("初始化失败！");
+			return;	
+		}	
+		game.width = 500;
+		game.height = 500;		
+		headImg.src = "head.png";
+		bodyImg.src = "snake.png";
+		for(var i=1;i<=10;i++){
+			var foodImg = new Image();
+			foodImg.src = "pixgif-0001.gif";
+			//foodImg.src = "pixgif-00" + ((i>=10)?i:"0"+i) + ".gif";
+			foodImgs.push(foodImg);
+		}
+		initGame();
+	}
+	
+	function initGame(){
+		state = 0;
+		
+		//初始化蛇
+		var startx = width/blockSize/2;
+		var starty = height/blockSize/2;
+		var blocks = new Array();
+		for(var i=0;i<10;i++){
+			var block = new Block(i,startx+i,starty);
+			blocks.push(block);
+		}
+		snake = new Snake(blocks,UP);
+		foods = new Array();
+		//放置食物
+		putFood();
+	}
+	
+	function drawBackground(){
+		//var bgImage = new Image();
+		//bgImage.src = "";
+		context.fillStyle   = '#eeeeee';
+		context.strokeStyle = '#f00'; // red
+		context.lineWidth   = 3;
+		context.shadowColor   = 'rgba(200, 200, 200, 0.5)';
+		context.shadowOffsetX = 5;
+		context.shadowOffsetY = 5;
+		context.shadowBlur    = 4;
+		context.fillRect  (0,   0, width + 1, height + 1);
+	}
+	//画游戏
+	function drawGame(){
+		
+		if(state == 0){
+			drawStartScreen();
+		}
+		else if(state == 1){
+			drawBackground();
+			drawFood();
+			if(snake)
+				snake.draw();
+			drawScore();
+		}
+		else if(state == 2){
+			drawGameOverScreen();
+		}
+		else if(state ==3) {
+			drawResumeScreen();
+		}
+	}
+	
+	//游戏循环
+	function gameRun(){
+		if(state == 1)
+			snake.next();	
+		drawGame();
+		gameTimer = setTimeout("gameRun()",speed);
+	}
+	//随机放置食物
+	function putFood(){
+		while(true){
+			//随机生成
+			var x = rand(0,width/blockSize-1);
+			var y = rand(0,height/blockSize-1);
+			if(canPutFood(x,y)){
+				var food = new Object();
+				food.x = x;
+				food.y = y;
+				foods.push(food);
+				break;
+			}
+		}
+	}
+	
+	//产生随机数
+	function rand(Min,Max){
+        var Range = Max - Min;
+        var Rand = Math.random();
+        return(Min + Math.round(Rand * Range));
+	}
+	
+	function drawFood(){
+		for(var i=0;i<foods.length;i++){
+			var food = foods[i];
+			var xy = get_real_xy(food.x,food.y);
+			context.drawImage(foodImgs[currentFood], xy.x , xy.y , blockSize, blockSize);	
+		}
+	}
+	
+	//判断某个位置是否能放置食物
+	function canPutFood(x,y){
+		//先看有没有蛇
+		for(var i=0;i<snake.blocks.length;i++){
+			if(snake.blocks[i].x == x && snake.blocks[i].y == y){
+				return false;
+			}
+		}
+		//再看有没有食物
+		for(var i=0;i<foods.length;i++){
+			if(foods[i].x == x && foods[i].y == y)
+				return false;
+		}
+		return true;
+	}
+	
+	function getKey(e){ 
+		e = e || window.event;
+		var keycode = e.which ? e.which : e.keyCode; 
+		
+		if (keycode == KEY_UP){ //如果按下ENTER键 
+			if(snake.direction != DOWN){
+				snake.direction = UP;
+			}
+		}
+		if (keycode == KEY_DOWN){ //如果按下ENTER键 
+			if(snake.direction != UP){
+				snake.direction = DOWN;
+			}
+		}
+		if (keycode == KEY_LEFT){
+			if(snake.direction != RIGHT){
+				snake.direction = LEFT;
+			}
+		}
+		if (keycode == KEY_RIGHT){ //如果按下ENTER键 
+			if(snake.direction != LEFT){
+				snake.direction = RIGHT;
+			}
+		}
+		if(keycode == 32){
+			if(state == 0){
+				state = 1;
+			}
+			else if(state == 2){
+				initGame();
+			}
+			//已经开始，就暂停
+			else if (state==1) {
+				state=3;
+				clearTimeout(gameTimer);
+				drawGame();
+			}
+			//暂停就重新开始
+			else if(state==3) {
+				state=1;
+				gameRun();
+			}
+		}
+		drawGame();
+	} 
+	
+	function drawStartScreen(){
+		drawBackground();
+		context.fillStyle    = '#00f';
+		context.font         = '30px 宋体';
+		context.textBaseline = 'top';
+		context.fillText  ('按空格开始游戏', width/2 - 110, height/2);
+	}
+	
+	function drawResumeScreen(){
+		drawBackground();
+		drawFood();
+		if(snake)
+			snake.draw();
+		drawScore();
+	}
+	
+	function drawGameOverScreen(){
+		//drawBackground();
+		context.fillStyle    = '#00f';
+		context.font         = '30px 宋体';
+		context.textBaseline = 'top';
+		context.fillText  ('游戏结束，空格继续', width/2 - 140, height/2);
+	}
+	
+	function drawScore(){
+		context.fillStyle    = '#f0f';
+		context.font         = '12px bold 宋体';
+		context.textBaseline = 'top';
+		context.fillText  ('游戏得分:' + score + "/100，按空格"+(state==1?"暂停":"继续")+"游戏", 5, 5);
+	}
+	
+	document.addEventListener( "keyup" ,getKey, false ); 
+	
+	var gameTimer = setTimeout("gameRun()",speed);
+	
+ 
+</script> 
+</head> 
+<body onload="init()"> 
+<div id="msg"></div> 
+<canvas id="game">您的浏览器不支持HTML5的Canvas元素，无法游戏！</canvas> 
+</body> 
+</html> 

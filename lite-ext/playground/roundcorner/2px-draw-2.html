@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>
+
+
+
+
+		content两象素无缺口圆角
+
+		使用4个sup和sub作为边脚，通过background和border画出圆角
+
+</title>
+<style type="text/css">
+.box{position:relative; zoom:1;}
+.box_bd{border:1px solid #ccc;}
+.box sup,.box sub{display:block; position:absolute; width:1px; height:1px; overflow:hidden; background:#ccc;}
+.box sup{top:0; border-top:1px solid #fff;}
+.box sub{bottom:0; border-bottom:1px solid #fff;}
+.box .l{left:0; border-left:1px solid #fff;}
+.box .r{right:0; border-right:1px solid #fff;}
+p{margin:0;padding:0;}
+</style>
+</head>
+
+<body>
+	<div class="box">
+	<sup class="r"></sup><sup class="l"></sup>
+	<div class="box_bd">
+	<p>content两象素无缺口圆角</p>
+	<p>使用4个sup和sub作为边脚，通过background和border画出圆角</p>
+	</div>
+	<sub class="r"></sub><sub class="l"></sub>
+	</div>
+
+</body>
+</html>
