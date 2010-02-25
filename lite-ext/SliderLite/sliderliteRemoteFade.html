@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>渐隐显示</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="../base/javascript/ext-core-min.js"></script>
+		<!-- 以下为自定义组件-->
+		<script type="text/javascript" src="javascript/sliderlite.js" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
+		<link rel="stylesheet" type="text/css" href="css/sliderlite.css" />
+		<style type="text/css">
+			#wrap {
+				width:950px;
+				margin:0 auto;
+			}
+			h2 {
+				font-size:20px;
+				margin:20px auto;
+			}
+			#test,#test2 {
+				margin:0 auto;
+			}
+		</style>
+		<script type="text/javascript">
+		//<![CDATA[
+		Ext.onReady(function(){
+			var sl=new Ext.ux.SliderLite({
+				id:'test2',
+				interval:4000 // 轮转间隔 3秒，最少 1秒
+			});
+			setTimeout(function(){
+			sl.stopSlider();
+		},6000);
+		});
+		//]]>
+		
+		</script>
+	
+	
+	</head>
+	<body>
+		<div id="wrap">
+	
+		
+		<h2>渐隐显示 slider </h2>
+		
+		<p style="margin:50px auto;">
+			其他效果：
+			<br/>
+			
+			<a href="sliderliteHorizonal.html">水平滑动</a><br/>
+			<a href="sliderliteVertical.html">垂直滑动</a><br/>
+			<a href="sliderlite.html">图片分解效果</a>
+		</p>
+		
+			<div class="sliderLite" id='test2' style="height:268px;width:220px;"> 
+                
+                <ul class="sliderImages clearfix"> 
+ 
+                    
+ 
+                    <li style="width:220px;"><a href="http://www.12580zgz.com/news.html" target="_blank" style="display:block;"> 
+                        <img 
+                                src="http://www.12580zgz.com/common/download.jsp?file=/mhr_files/content_admin/imageSrc1245336440202.jpg&showOnly=true" alt="12580开通仪式"
+ 
+                                style="display:block;"/></a></li> 
+                    
+ 
+                    <li style="width:220px;"><a href="http://www.12580zgz.com/news4.html" target="_blank" style="display:block;"> 
+                        <img 
+                                src="http://www.12580zgz.com/common/download.jsp?file=/mhr_files/content_admin/imageSrc1245336792836.jpg&showOnly=true" alt="12580就业援助行动"
+ 
+                                style="display:block;"/></a></li> 
+                    
+ 
+                    <li style="width:220px;"><a href="adTemplate.jsp?id=89" target="_blank" style="display:block;"> 
+                        <img 
+                                src="http://www.12580zgz.com/common/download.jsp?file=/mhr_files/content_admin/imageSrc1257254634906.gif&showOnly=true" alt="12580扬子求职通启动仪式"
+ 
+                                style="display:block;"/></a></li> 
+                    
+ 
+                    <li style="width:220px;"><a href="adTemplate.jsp?id=129" target="_blank" style="display:block;"> 
+                        <img 
+                                src="http://www.12580zgz.com/common/download.jsp?file=/mhr_files/content_admin/imageSrc1257831041957.jpg&showOnly=true" alt="就业信息发布建设工作座谈会"
+ 
+                                style="display:block;"/></a></li> 
+                    
+ 
+                    <li style="width:220px;"><a href="adTemplate.jsp?id=132" target="_blank" style="display:block;"> 
+                        <img 
+                                src="http://www.12580zgz.com/common/download.jsp?file=/mhr_files/content_admin/imageSrc1258349012166.jpg&showOnly=true" alt="11月15日招聘会"
+ 
+                                style="display:block;"/></a></li> 
+                    
+ 
+                    <li style="width:220px;"><a href="adTemplate.jsp?id=148" target="_blank" style="display:block;"> 
+                        <img 
+                                src="http://www.12580zgz.com/common/download.jsp?file=/mhr_files/content_admin/imageSrc1260862338374.jpg&showOnly=true" alt="12月13日招聘会"
+ 
+                                style="display:block;"/></a></li> 
+                    
+ 
+                    <li style="width:220px;"><a href="adTemplate.jsp?id=154" target="_blank" style="display:block;"> 
+                        <img 
+                                src="http://www.12580zgz.com/common/download.jsp?file=/mhr_files/content_admin/imageSrc1262586484964.jpg&showOnly=true" alt="09年年终答谢会"
+ 
+                                style="display:block;"/></a></li> 
+                    
+ 
+                </ul> 
+ 
+                <ul class="sliderNumbers"> 
+                    
+                    <li class="">1
+                    </li> 
+                    
+                    <li class="">2
+                    </li> 
+                    
+                    <li class="">3
+                    </li> 
+                    
+                    <li class="">4
+                    </li> 
+                    
+                    <li class="">5
+                    </li> 
+                    
+                    <li class="">6
+                    </li> 
+                    
+                    <li class="">7
+                    </li> 
+                    
+                </ul> 
+ 
+                
+            </div> 
+	</div>
+	</body>
+</html>
