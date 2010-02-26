@@ -37,9 +37,8 @@ Ext.ux.SliderLite = function (config) {
     }
     var containerWidth = this.el.getWidth(true);
     var containerHeight = this.el.getHeight(true);
-
     function update(holder) {
-        holder.unmask(); 
+        holder.unmask();
     }
     this._images.each(function (el) {
         var img = el.child("img");
@@ -200,22 +199,22 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
     getNumberLiByIndex: function (num) {
         return this._numbers.item(num);
     },
-    _mouseover: function (evt, numEl) {
-        var numInt = numEl.sliderNumberIndex;
+    _goTo: function (numInt) {
+        if (this._currentNum == numInt) return;
+        this._stopAnims();
         this._numbers.removeClass("current");
         this.getNumberLiByIndex(numInt).addClass("current");
         this[this.anim](numInt);
-        
         this._currentNum = numInt;
+    },
+    _mouseover: function (evt, numEl) {
+        var numInt = numEl.sliderNumberIndex;
+        this._goTo(numInt);
     },
     //自动轮换
     _timeRunner: function (numInt) {
-        this._numbers.removeClass("current");
-        this.getNumberLiByIndex(numInt).addClass("current");
-        this[this.anim](numInt);
+        this._goTo(numInt);
         this.startSlider();
-        
-        this._currentNum = numInt;
     },
     _randIt: function (l, u) {
         return l + Math.floor(Math.random() * (u - l + 1));
@@ -225,13 +224,13 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             for (var i = 0; i < this.anims.length; i++) {
                 var anim = this.anims[i];
                 Ext.lib.AnimMgr.stop(anim);
-            }
+            }            
         }
+        this.anims = [];
     },
     scrollHorizontal: function (numInt) {
         var d = this._getScrollDistance(0, numInt).width;
         var that = this;
-        this._stopAnims();
         var animOpt = {
             duration: 1,
             callback: function () {
@@ -241,13 +240,11 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             }
         };
         this.scrollWrap.scrollTo("left", d, animOpt);
-        this.anims = [];
         this.anims.push(animOpt.anim);
     },
     scrollVertical: function (numInt) {
         var d = this._getScrollDistance(0, numInt).height;
         var that = this;
-        this._stopAnims();
         var animOpt = {
             duration: 1,
             callback: function () {
@@ -257,13 +254,10 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             }
         };
         this.scrollWrap.scrollTo("top", d, animOpt);
-        this.anims = [];
         this.anims.push(animOpt.anim);
     },
     //inspired by :http://cnwander.com/blog/?p=13
     puzzleTo: function (numInt) {
-        this._stopAnims();
-        this.anims = [];
         this.getImageByIndex(this._currentNum).setDisplayed(false);
         //current image to show
         var curImg = this.getImageByIndex(numInt).child("img");
@@ -342,8 +336,6 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
     },
     //设置当前图片
     fadeTo: function (numInt) {
-        this._stopAnims();
-        this.anims = [];
         var oneHide = this.getImageByIndex(this._currentNum);
         var oneShow = this.getImageByIndex(numInt);
         var oneHZ = +oneHide.getStyle("zIndex");
@@ -362,7 +354,6 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
             //ie6 canot hide ,if set Zindex	
             ,
             callback: function (el) {
-            		
                 el.setOpacity(0);
             }
         };
@@ -376,7 +367,6 @@ Ext.extend(Ext.ux.SliderLite, Ext.util.Observable, {
         this.getImageByIndex(numInt).fadeIn(animOpt);
         this.anims.push(animOpt.anim);
     },
-    
     //自动轮换开始
     _runSlider: function () {
         var nextInt = (this._currentNum + 1) % this._totalNum;
