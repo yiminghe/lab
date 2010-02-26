@@ -70,6 +70,23 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
         });
     },
 
+	showError:function(el, errorStr){
+		el=Ext.get(el);
+		this[this.msgType](el, errorStr);
+		el.addClass('invalidInput');
+	},
+	
+	hideError:function(el){
+		el=Ext.get(el);
+		this["un"+this.msgType](el);
+		el.removeClass('invalidInput');
+	},
+	
+	isFieldValid:function(el){
+		el=Ext.get(el);
+		return !el.hasClass("invalidInput");
+	},
+
 
     //手动使得复位
     validField: function(fid) {
@@ -176,7 +193,7 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
                     var reg = this.regs[i].reg;
                     if (!reg.test(this.getValue())) {
                         //反馈更新当前规则对应的出错信息
-                        me[me.msgType](this, this.regs[i].info);
+                        me.showError(this, this.regs[i].info);
                         cuurentElOk = false;
                         break;
                     }
@@ -185,7 +202,7 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
                 if (this.validator) {
                     var errorStr = this.validator();
                     if (errorStr) {
-                        me[me.msgType](this, errorStr);
+                        me.showError(this, errorStr);
                         cuurentElOk = false;
                     }
                 }
@@ -193,16 +210,11 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
 
                 //显示出错信息
                 if (!cuurentElOk) {
-
-                    me[me.msgType](this);
-                    this.addClass('invalidInput');
                     that.fireEvent('invalid', [this]);
                     eventExt.stopEvent();
 
                 } else {
-
-                    this.removeClass('invalidInput');
-                    me['un' + me.msgType](this);
+                    me.hideError(this);
 
                 }
 
@@ -233,7 +245,7 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
                     if (!reg.test(currentEl.getValue())) {
 
                         //反馈更新当前规则对应的出错信息
-                        me[me.msgType](currentEl, regs[ii].info);
+                        me.showError(currentEl, regs[ii].info);
 
                         cuurentElOk = false;
                         break;
@@ -243,7 +255,7 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
                 if (this.checkFields[i].validator) {
                     var errorStr = this.checkFields[i].validator.apply(currentEl);
                     if (errorStr) {
-                        me[me.msgType](currentEl, errorStr);
+                        me.showError(currentEl, errorStr);
                         cuurentElOk = false;
                     }
 
@@ -253,12 +265,9 @@ Ext.extend(Ext.ux.FormLite, Ext.util.Observable, {
                 //当前的表单域失败,则整个表单失败
                 if (!cuurentElOk) {
                     formOk = false;
-                    me[me.msgType](currentEl);
-                    currentEl.addClass('invalidInput');
                     errorFields.push(currentEl);
                 } else {
-                    currentEl.removeClass('invalidInput');
-                    me['un' + me.msgType](currentEl);
+                    me.hideError(currentEl);
                 }
             }
 

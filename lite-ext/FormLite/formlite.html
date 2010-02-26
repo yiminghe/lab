@@ -214,7 +214,38 @@ for jsp include
 
 		{fieldId:'contactEmail',regs:[{reg:/.+/,info:'必填哦'}]},
 
-		{fieldId:'employerId',regs:[{reg:/.+/,info:'必填哦'}]},
+		{fieldId:'employerId',
+		//模拟 ajax 发送请求验证是否重名
+		validator:function(){
+			if(this.checkTimer) {
+				return;
+			}
+			function check(){
+				//已经出错，不管
+				if(!formValidator.isFieldValid(this)) return;
+				var img=Ext.DomHelper.insertAfter(this,{
+					tag:"img",
+					style:"padding-left:10px",
+					src:"../GridLite/images/loading.gif",
+					title:"正在检查是否可用..."
+				},true);
+				
+				//模拟ajax,随机正负例
+				(function(){
+					img.remove();
+					this.checkTimer=null;
+					if(Math.random()>0.5){
+						formValidator.showError(this,"重名!");
+					}else{
+						formValidator.hideError(this);
+					}
+					
+				}).defer(3000,this);
+			}
+			this.checkTimer=check.defer(500,this);
+			return '';
+		},
+		regs:[{reg:/.+/,info:'必填哦'}]},
 
 		{fieldId:'loginPassword',regs:[{reg:/.+/,info:'必填哦'}]},
 
