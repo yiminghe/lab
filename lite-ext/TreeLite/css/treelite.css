@@ -3,30 +3,54 @@
 	padding:0;
 	margin:0;
 }
-.treeLite li ul li {
-	padding-left:20px;
-	padding-top:5px;
-}
-.ext-ie6 .treeLite li ul li {
-	padding-left:23px;
-}
+
 .treeLite .indent {
-	padding:0 8px;
+	display:inline-block;
+	background-repeat:no-repeat;
+	border:0 none;
+	height:18px;
+	margin:0;
+	padding:0;
+	vertical-align:top;
+	width:16px;
 }
 
-.treeLite a.tree-node-group {
-	background:transparent url(../../base/images/group-expand-sprite.gif) no-repeat scroll 0 0;
-	padding:0 8px;
-	outline:0;
-	text-decoration:none;
+.treeLite .line{
+	background-image:url(../images/elbow-line.gif);
+}
+
+.treeLite .end{
+	background-image:url(../images/elbow-end.gif);
+}
+
+.treeLite .cross{
+	background-image:url(../images/elbow.gif);
+}
+.treeLite .tree-node-group {
+	display:inline-block;
+	background-repeat:no-repeat;
+	border:0 none;
+	height:18px;
+	margin:0;
+	padding:0;
+	vertical-align:top;
+	width:16px;
+}
+
+.treeLite .folder-open{
+	background-image:url(../images/folder-open.gif);
+}
+
+.treeLite .folder{
+	background-image:url(../images/folder.gif);
 }
 
 .treeLite a.tree-node-collapse {
-	background-position:3px 0;
+	background-image:url(../images/elbow-plus.gif);
 }
 
 .treeLite a.tree-node-expand {
-	background-position:3px -50px;
+	background-image:url(../images/elbow-minus.gif);
 }
 
 .treeLite a.nodeItem:link,.treeLite a.nodeItem:visited {
