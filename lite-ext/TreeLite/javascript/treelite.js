@@ -84,7 +84,7 @@ Ext.extend(Ext.ux.TreeLite, Ext.util.Observable, {
     buildSubtree: function (node, ul, end) {
         var parentLi = document.createElement("li");
         ul.appendChild(parentLi);
-        if (node.cn) {
+        if (node.cn && node.cn.length!=0) {
             parentLi.innerHTML = '<div>' + this.indent + '<a class="tree-node-group tree-node-expand" href="#" hideFocus="on"></a><span class="tree-node-group folder-open"></span>' + node.text + '</div>';
             //如果为最后一个文件夹，则只缩进就可以了不要连接线
             this.indent += "<span class='indent " + (end ? "" : "line") + "'></span>";
