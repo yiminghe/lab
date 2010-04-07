@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="gbk" />
+	<title>星级评定</title>
+	<style id="skinCss">
+		ul,li {
+			list-style-type:none;
+			margin:0;
+			padding:0;
+		}
+		ul.rate {
+			width:100px;
+			position:relative;
+			height:19px;
+			/*background:url("star.png") no-repeat scroll left top;*/
+		}
+		
+		ul.rate li {
+			float:left;
+			width:20px;
+			height:19px;
+		}
+		
+		ul.rate li a{
+			position:absolute;
+			display:block;
+			width:20px;
+			height:19px;
+			overflow:hidden;
+		}
+		
+		ul.rate li a img {
+			border:none;
+		}
+		
+		ul.rate li a:hover{
+			left:0;
+			background-color:red;
+		}
+		
+		a.r1{
+			z-index:4;
+		}
+		
+		a.r2{
+			z-index:3;
+		}
+		
+		a.r2:hover {
+			width:40px;
+			
+		}
+		
+		a.r3 {
+			z-index:2;
+		}
+		
+		a.r3:hover {
+			width:60px;
+		}
+		
+		a.r4 {
+			z-index:1;
+		}
+		
+		a.r4:hover {
+			width:80px;
+		}
+		
+		a.r5:hover {
+			width:100px;
+		}
+	</style>
+</head>
+<body>
+	
+	
+	<ul class="rate">
+		
+		
+		<li>
+			<a href="rate.htm?rate=1" class="r1"><img src="star.png" alt="1星" /></a>
+		</li>
+		
+		<li>
+			<a href="rate.htm?rate=2" class="r2"><img src="star.png" alt="2星" /></a>
+		</li>
+		
+		<li>
+			<a href="rate.htm?rate=3" class="r3"><img src="star.png" alt="3星" /></a>
+		</li>
+		
+		<li>
+			<a href="rate.htm?rate=4" class="r4"><img src="star.png" alt="4星" /></a>
+		</li>
+		
+		<li>
+			<a href="rate.htm?rate=5" class="r5"><img src="star.png" alt="5星" /></a>
+		</li>
+		
+		
+	</ul>
+	
+	<div style="margin:50px;">
+	<label>星星颜色：
+		<select id="skin">
+			<option value="red">red</option>
+			<option value="green">green</option>
+			<option value="purple">purple</option>
+		
+		</select>
+		</label>
+	</div>
+	
+	<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
+	<script type="text/javascript">
+	
+		YUI().use("node","stylesheet",function(Y){
+			var skin=Y.one("#skin");
+			var skinCss=Y.StyleSheet("#skinCss");
+			skin.on("change",function(e){
+				
+				var v=this.get("value");
+				skinCss.set("ul.rate li a:hover",{
+					"backgroundColor":v
+				});
+				
+			});
+		});
+	
+	</script>
+</body>
+</html>
