@@ -95,9 +95,7 @@
 	<div style="margin:50px;">
 	<label>ÐÇÐÇÑÕÉ«£º
 		<select id="skin">
-			<option value="red">red</option>
-			<option value="green">green</option>
-			<option value="purple">purple</option>
+			
 		
 		</select>
 		</label>
@@ -106,14 +104,21 @@
 	<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
 	<script type="text/javascript">
 	
-		YUI().use("node","stylesheet",function(Y){
+		YUI({filter:"DEBUG"}).use("node","stylesheet",function(Y){
 			var skin=Y.one("#skin");
 			var skinCss=Y.StyleSheet("#skinCss");
+			var opts="";
+			Y.each(Y.Color.KEYWORDS,function(v,k){
+				opts+="<"+"option value='"+v+"'"+">"+k+"</option>";
+			});
+			
+			skin.append(opts);  
+			
 			skin.on("change",function(e){
 				
 				var v=this.get("value");
 				skinCss.set("ul.rate li a:hover",{
-					"backgroundColor":v
+					"backgroundColor":Y.Color.toHex(v)
 				});
 				
 			});
