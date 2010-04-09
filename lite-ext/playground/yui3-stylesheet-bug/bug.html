@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+	<head>
+		<title>yui3 stylesheet bug</title>
+		<style type="text/css" id="test">
+		div {
+			color:red;
+		}
+		
+		div{
+			color:green;
+		}
+		
+		a{
+			color:black;
+			text-decoration:none;
+		}
+		
+		a[href='#'][title='note'] {
+			color:green;
+		}
+		</style>
+	</head>
+	<body>	
+		<div>
+			color should be green
+		</div>
+		<a href="#" title="note" >color should be red</a>
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
+		<script type="text/javascript">
+	
+		YUI().use("node","stylesheet",function(Y){
+			
+			var skinCss=Y.StyleSheet("#test");
+			
+			skinCss.set("a[href='#'][title='note']",{color:"red"});
+		
+		});
+		</script>
+	</body>
+</html>
