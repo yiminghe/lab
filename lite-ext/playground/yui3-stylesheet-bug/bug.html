@@ -19,13 +19,48 @@
 		a[href='#'][title='note'] {
 			color:green;
 		}
+		
+		p {
+			border:1px solid green;
+			margin:50px;
+			padding:10px;
+		}
 		</style>
 	</head>
 	<body>	
 		<div>
 			color should be green
 		</div>
+		
+		<p>
+			
+			bug @ stylesheet-debug.js line 211
+			<br/>
+			cssRules[sel].style.cssText +=";"+ r.style.cssText;
+			<br/>
+			<strong>should change to</strong>
+			<br/>
+			
+			cssRules[sel].style.cssText = r.style.cssText+";"+cssRules[sel].style.cssText;
+			
+			
+			
+			</p>
 		<a href="#" title="note" >color should be red</a>
+		
+		<p>
+			
+			bug @ stylesheet-debug.js line 528
+			
+			<br/>
+			replace(/([^ ])\[.*?\]/g,'$1').
+			<br/>
+			<strong>should change to</strong>
+			<br/>
+			
+			replace(/([^ ])(\[.*?\])+/g,'$1').
+			</p>
+		
 		<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
 		<script type="text/javascript">
 	
