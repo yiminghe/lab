@@ -1,0 +1,53 @@
+<label>每行几个：<input id="num" value="75"/></label>
+<textarea style="width:950px;height:400px;margin:10px auto;display:block;" id="test">
+</textarea>
+
+<button id="run">运行</button>
+<script>
+	if(!String.prototype.trim)String.prototype.trim=function(){
+		return this.replace(/^\s+/,"").replace(/\s+$/,"");
+	};
+	
+	document.getElementById("run").onclick=function(){
+		var v=document.getElementById("test");
+		var vs=v.value.split("\n");
+		var content="";
+		var numInt=parseInt(document.getElementById("num").value.trim());
+		var reg=new RegExp("(.{"+numInt+","+numInt+"})","g");
+		for(var i=0;i<vs.length;i++) {
+			var l=vs[i].trim();
+			if(!l.trim()){
+				content+="\n";
+				continue;
+			}
+			if(/^>/.test(l)){
+				content+=l+"\n";
+				continue;
+			}
+			
+			var t="";
+			while(i<vs.length){
+				l=vs[i].trim();
+				if(!l.trim()) {
+					i--;
+					break;
+				}
+				if(/^>/.test(l)){
+					i--;
+					break;
+				}
+				t+=l;
+				i++;
+			}
+			if(t){
+				t=t.replace(reg,"$1\n");
+				t+="\n";
+				content+=t;
+			}
+		
+		}
+		v.value=content.trim();
+	};
+	
+	
+	</script>
