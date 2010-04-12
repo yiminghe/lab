@@ -6,6 +6,11 @@
 		white-space: nowrap;
 }
 
+.x-btn-wrap {
+	display:inline-block;
+	*display:inline;
+	*zoom:1;
+}
 .x-btn button {
     border:0 none;
     background:transparent;

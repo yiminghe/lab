@@ -26,7 +26,9 @@ Ext.extend(Ext.ux.ButtonLite, Ext.util.Observable, {
 	_decorate : function (){
 		
 		this.el = Ext.DomHelper.insertAfter(this._button,{
-		
+			tag:"div",
+			cls:"x-btn-wrap",
+		  cn:[{
 			tag:'table',
 			cellSpacing:'0',
 			cls:'x-btn  x-btn-noicon',
@@ -131,7 +133,8 @@ Ext.extend(Ext.ux.ButtonLite, Ext.util.Observable, {
 				}
 			]
 			
-		},true);		
+		}
+	]},true);		
 		this._replace();
 	},
 	
@@ -139,7 +142,9 @@ Ext.extend(Ext.ux.ButtonLite, Ext.util.Observable, {
 	_decorateVersion : function (version){		
 		
 		this.el = Ext.DomHelper.insertAfter(this._button,{
-		
+		tag:"div",
+			cls:"x-btn-wrap",
+		  cn:[{
 			tag:'table',
 			cellSpacing:'0',
 			cellPadding:'0',
@@ -189,7 +194,7 @@ Ext.extend(Ext.ux.ButtonLite, Ext.util.Observable, {
 				}
 			]
 			
-		},true);		
+		}]},true);		
 		this._replace();
 	},
 	
