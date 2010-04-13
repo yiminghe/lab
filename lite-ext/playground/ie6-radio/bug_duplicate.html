@@ -14,20 +14,20 @@
     	
     	
 <div id="dialog" title="模板选择" >	
-	 <input type="radio" name="template" value="1" />
-	 <input type="radio" name="template" value="2" id="testRadio" />
-	 <input type="radio" name="template" value="3" /> 
+	
+	 <input type="radio" name="template" value="2"/> <!--id="testRadio"-->
+	  
+	 
+</div>
+
+<div id="d2">
 </div>
 <script>
 $(function(){
 	 $("#dialog input:radio").attr("checked", false);
    $("#test").click(function(){
-    		$("#dialog input:radio[value=" + "2" + "]").attr("checked", true); 
-    		//或者$("#testRadio").appendTo("body");
-    		$("#dialog").appendTo("body");
-        $("#dialog").css({
-        	display:""
-        });
+    		$("input").attr("checked",true);
+    		$("#d2").html($("#dialog").html());
    });
 });
 </script>
