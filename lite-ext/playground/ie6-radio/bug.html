@@ -1,0 +1,50 @@
+﻿<!doctype html>
+<html>
+    <head>
+        
+        <meta charset="UTF-8" />
+				<title>radio bug in ie6</title>
+	
+    </head>
+    <body>
+    	
+    	<p>ie6下 -- 下面按钮不起作用(ie7,8未测试)</p>
+    	<button id="test">选中第二个radio</button>
+    	
+    	
+    	
+<div id="dialog" title="模板选择" >
+	
+	 <input type="radio" name="template" value="1" />
+	 <input type="radio" name="template" value="2" />
+	 <input type="radio" name="template" value="3" />
+ 
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
+<script>
+$(function(){
+	 $("#dialog input:radio").attr("checked", false);
+	  
+   /*$("#dialog").dialog({
+    	autoOpen:false,
+    	height:300,
+    	width:500
+    	,modal:true
+    	
+   });*/
+  
+   $("#test").click(function(){
+    		$("#dialog input:radio[value=" + "2" + "]").attr("checked", true); 
+    		$("#dialog").appendTo("body");
+    		//$("#dialog").dialog("open");
+        $("#dialog").css({
+        	display:""
+        });
+   });
+
+});
+</script>
+</body>
+</html>
