@@ -37,8 +37,8 @@ $(function(){
   
    $("#test").click(function(){
     		$("#dialog input:radio[value=" + "2" + "]").attr("checked", true); 
-    		//或者：$("#testRadio").appendTo("body");
-    		$("#dialog").dialog("open");
+    		//或者$("#testRadio").appendTo("body");
+    		$("#dialog").appendTo("body");
         $("#dialog").css({
         	display:""
         });
