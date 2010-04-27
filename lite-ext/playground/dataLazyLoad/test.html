@@ -4572,27 +4572,24 @@
 <script type="text/javascript" src="datalazyload.js"></script>
 -->
 <script>
-    YUI({
-    	modules:  {
-         dataLazyLoad: {
-             fullpath: 'datalazyload.js',
-             requires:['event', 'base', 'node', 'test']
-         }
-      }
-    }).use("dataLazyLoad",function(Y){
-    	
-    	var dataLazyLoad=new Y.DataLazyLoad({
-    		//Y.all参数格式
-    		containers:"body"
-    	});
-    	
-    	//即将由于延迟加载而显示的图片元素
-    	dataLazyLoad.on("lazyShow",function(e){
-    		var img=e.details[0];
-    		if(window.console) console.log(img);
-    	});
-    	
+YUI({
+    modules: {
+        dataLazyLoad: {
+            fullpath: 'datalazyload.js',
+            requires: ['event', 'base', 'node', 'test']
+        }
+    }
+}).use("dataLazyLoad", function (Y) {
+    var dataLazyLoad = new Y.DataLazyLoad({
+        //Y.all参数格式
+        containers: "body"
     });
+    //即将由于延迟加载而显示的图片元素
+    dataLazyLoad.on("lazyShow", function (e) {
+        var img = e.details[0];
+        if (window.console) console.log(img);
+    });
+});
 </script>
 </body>
 </html>
