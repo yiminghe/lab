@@ -28,13 +28,18 @@
 			left:0;			
 			height:19px;
 			overflow:hidden;
+			
 		}
 		
 		ul.rate li a img {
 			border:none;
 		}
 		
-		ul.rate li a:hover{
+		ul.rate li a.operable{
+			cursor:pointer;
+		}
+		
+		ul.rate li a.operable:hover{
 			background-color:red;
 		}
 		
@@ -66,27 +71,27 @@
 <body>
 	
 	
-	<ul class="rate">
+	<ul class="rate" id="rateContainer">
 		
 		
 		<li>
-			<a href="rate.htm?rate=1" class="r1" title="1星" ><img src="star.png" alt="1星" /></a>
+			<a href="rate.htm?rate=1" class="r1 operable" title="1星" ><img src="star.png" alt="1星" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=2" class="r2" title="2星" ><img src="star.png" alt="2星" /></a>
+			<a href="rate.htm?rate=2" class="r2 operable" title="2星" ><img src="star.png" alt="2星" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=3" class="r3" title="3星" ><img src="star.png" alt="3星" /></a>
+			<a href="rate.htm?rate=3" class="r3 operable" title="3星" ><img src="star.png" alt="3星" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=4" class="r4" title="4星" ><img src="star.png" alt="4星" /></a>
+			<a href="rate.htm?rate=4" class="r4 operable" title="4星" ><img src="star.png" alt="4星" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=5" class="r5" title="5星" ><img src="star.png" alt="5星" /></a>
+			<a href="rate.htm?rate=5" class="r5 operable" title="5星" ><img src="star.png" alt="5星" /></a>
 		</li>
 		
 		
@@ -109,7 +114,7 @@
 			var skinCss=Y.StyleSheet("#skinCss");
 			var opts="";
 			Y.each(Y.Color.KEYWORDS,function(v,k){
-				opts+="<"+"option value='"+v+"'"+">"+k+"</option>";
+				opts+="<"+"option value='#"+v+"'"+">"+k+"</option>";
 			});
 			
 			skin.append(opts);  
@@ -117,11 +122,31 @@
 			skin.on("change",function(e){
 				
 				var v=this.get("value");
-				skinCss.set("ul.rate li a:hover",{
+				skinCss.set("ul.rate li a.operable:hover",{
 					"backgroundColor":Y.Color.toHex(v)
 				});
 				
 			});
+			skin.set("value","#f00");
+			
+			
+			var rate=Y.one("#rateContainer");
+			var rateAs=rate.all("a");
+			//js可用，则去除href
+			rateAs.removeAttribute("href");
+			//js可用，则点击后去除绑定事件以及不再可鼠标掠过改变
+			var rateHandler=rate.delegate("click",function(e){				
+				this.setStyles({
+					"backgroundColor":skin.get("value")
+				});
+				rateAs.removeClass("operable");
+				e.halt();
+				rateHandler.detach();
+				alert("选择了"+this.get("title"));
+			},"a.operable");
+			
+			
+			
 		});
 	
 	</script>
