@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Photos Around You</title>
+		
+		<link rel="stylesheet" type="text/css" href="reset.css" />
+		<link rel="stylesheet" type="text/css" href="base.css" />		
+		<link rel="stylesheet" type="text/css" href="button.css" />
+		<!--[if gte IE 7]><link rel="stylesheet" type="text/css" href="button-ie.css" /><![endif]-->
+
+		
+		<style type="text/css">
+			
+			.section { width: 950px; }
+			
+			.yui3-overlay-content {
+				-webkit-box-shadow: 0 0 14px rgba(0, 0, 0, 0.50);
+				-moz-box-shadow: 0 0 14px rgba(0, 0, 0, 0.50);
+				box-shadow: 0 0 14px rgba(0, 0, 0, 0.50);
+				border: #333 1px solid;
+				border-top-color: #555;
+				border-bottom-color: #111;
+				-webkit-border-radius: 3px;
+				-moz-border-radius: 3px;
+				border-radius: 3px;
+				color: #f9f9f9;
+				background: rgb(34, 34, 34);
+				background: rgba(34, 34, 34, 0.90);
+				padding: 19px;
+			}
+			.yui3-overlay-content .close {
+				position: absolute;
+				top: -10px;
+				left: -10px;
+				-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.50);
+				-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.50);
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.50);
+				border: #f9f9f9 2px solid;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				background: rgb(34, 34, 34);
+				width: 18px;
+				height: 18px;
+				line-height: 16px;
+				text-align: center;
+				font-size: 1.143em;
+				font-weight: 700;
+				cursor: pointer;
+			}
+			.yui3-overlay .yui3-widget-bd div {
+				-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.90);
+				-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.90);
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.90);
+				background: #f9f9f9;
+				padding: 5px;
+				text-align: center;
+				width: 500px;
+			}
+			.yui3-overlay-content img {
+				display: block;
+				margin: 0 auto;
+			}
+			.yui3-overlay-content p {
+				margin: 14px 0 0 0;
+			}
+			
+			h1 {
+				float: left;
+				display: inline;
+			}
+			#info {
+				float: right;
+				display: inline;
+				text-align: right;
+				line-height: 2.0;
+				color: #adadad;
+				text-shadow: 0 1px 0 #fff;
+				margin-bottom: 0;
+			}
+			
+			#loading {
+				position: absolute;
+				z-index: 10;
+				top: 140px;
+				left: 0;
+				width: 100%;
+				font-size: 1.285em;
+				line-height: 1.944;
+				padding-bottom: 32px;
+				background: url(loader-large.gif) bottom center no-repeat;
+				text-align: center;
+				font-style: italic;
+			}
+			
+			#photos { margin: 14px 0; }
+			#photos .photo {
+				-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.50);
+				-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.50);
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.50);
+				position: relative;
+				width: 75px;
+				height: 75px;
+				margin: 10px;
+				list-style: none;
+				float: left;
+				display: inline;
+				cursor: pointer;
+			}
+			#photos .photo img {
+				outline: #f9f9f9 1px solid;
+				width: 75px;
+				height: 75px;
+				display: block;
+			}
+			#photos .photo.loading { background: url(loader-large.gif) center center no-repeat; }
+			#photos .photo.loading img { opacity: 0.50; }
+			
+			#more {
+				margin: 0;
+				text-align: center;
+			}
+		
+		</style>
+		
+		<script src="/mint/?js"></script>
+	</head>
+	
+	<body class="yui3-skin-sam">
+	
+		<div id="content" class="section">
+		
+			<div class="layout">
+				<h1>Photos Around You</h1>
+
+				<p id="info">
+					Hacked together by: <a href="http://twitter.com/ericf">Eric Ferraiuolo</a><br />
+					Powered by: <a href="http://yuilibrary.com">YUI 3.1</a>,
+								<a href="http://developer.yahoo.com/yql/">YQL</a>,
+								<a href="http://www.flickr.com">Flickr</a>
+				</p>
+			</div>
+
+			
+			<p id="loading">Determining Your Location…</p>
+			<ul id="photos" class="layout"></ul>
+			
+		</div>
+		
+		<script src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
+		<script>
+			YUI().use('node', 'overlay', 'substitute', 'gallery-jsonp', 'gallery-yql', 'gallery-markout', function(Y){
+			
+				var getLocation, getPhotos, getPhotoURL, getPhotoPageURL, getDataURI, loadImg, renderThumbnail, renderPhoto,
+					photoOverlay;
+				
+				getLocation = (function(){
+					
+					// inspired by: Christian Heilmann (http://github.com/codepo8/YQL-Geo-Library)
+					
+					var getIP, locFromIP, locFromPos;
+					
+					getIP = function (callback) {
+						Y.jsonp('http://jsonip.appspot.com/', function(data){
+							callback(data.ip);
+						});
+					};
+					
+					locFromIP = function (ip, callback) {
+						var query = 'select * from geo.places where woeid in ' +
+									'(select place.woeid from flickr.places where (lat, lon) in ' +
+									'(select Latitude, Longitude from ip.location where ip="{ip}"));',
+							yql;
+									
+						yql = new Y.yql(Y.substitute(query, { ip: ip }), function(r){
+							callback(r.query && r.query.results ? r.query.results.place : null);
+						});
+					};
+					
+					locFromPos = function (pos, callback) {
+						var position = { lat: pos.coords.latitude, lon: pos.coords.longitude },
+							query = 'select * from geo.places where woeid in ' + 
+									'(select place.woeid from flickr.places where lat={lat} and lon={lon});',
+							yql;
+						
+						yql = new Y.yql(Y.substitute(query, position), function(r){
+							callback(r.query && r.query.results ? r.query.results.place : null);
+						});
+					};
+					
+					return (function(callback){
+						
+						if (navigator.geolocation) {
+							navigator.geolocation.getCurrentPosition(
+								Y.rbind(locFromPos, null, callback),
+								Y.bind(getIP, null, Y.rbind(locFromIP, this, callback))
+							);
+						} else {
+							getIP(Y.rbind(locFromIP, null, callback));
+						}
+						
+					});
+				}());
+				
+				getPhotos = (function(){
+				
+					var query = 'select * from flickr.photos.search({start},{num}) ' +
+								'where woe_id="{woeid}" and radius_units="mi" and sort="interestingness-desc" and extras="path_alias";';
+					
+					return (function (loc, start, num, callback) {
+						var yql = new Y.yql(Y.substitute(query, { woeid: loc.woeid, start: start, num: num }), function(r){
+							callback(r.query && r.query.results? r.query.results.photo : null);
+						});
+					});
+				}());
+				
+				getPhotoURL = (function(){
+					
+					var template = 'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}{size}.jpg';
+					
+					return (function (photo, size) {
+						return Y.substitute(template, Y.merge(photo, { size: size ? '_'+size : '' }));
+					});
+				}());
+				
+				getPhotoPageURL = (function(){
+					
+					var template = 'http://www.flickr.com/photos/{user}/{id}';
+					
+					return (function (photo) {
+						return Y.substitute(template, { id: photo.id, user: photo.pathalias || photo.owner });
+					});
+				}());
+				
+				getDataURI = (function(){
+					
+					var multiQuery = 'select * from query.multi where queries=\'{queries}\'',
+						dataURIQuery = 'select * from data.uri where url="{url}"';
+								
+					return (function(photos, callback){
+						var dataURIQueries = [],
+							yql;
+							
+						Y.each(Y.Array(photos), function(photo){
+							dataURIQueries.push(Y.substitute(dataURIQuery, { url: getPhotoURL(photo, 's') }));
+						});
+						yql = new Y.yql(Y.substitute(multiQuery, { queries: dataURIQueries.join(';') }), function(r){
+							callback(r.query && r.query.results? r.query.results.results : null);
+						});
+					});
+				}());
+				
+				loadImg = function (src, callback) {
+					
+					// insired by: Lucas Smith (http://lucassmith.name/2008/11/is-my-image-loaded.html)
+					
+					var img = new Image(),
+						prop = img.naturalWidth ? 'naturalWidth' : 'width';
+					
+					img.src = src;
+					
+					if (img.complete) {
+						callback(img[prop] ? img : null);
+					} else {
+						img.onload = Y.bind(callback, this, img);
+						img.onerror = Y.bind(callback, this, null);
+					}
+				};
+				
+				renderPhoto = function (photo, size) {
+				
+					var df = Y.Markout();
+					df.div().a({ title: 'View on Flickr', href: getPhotoPageURL(photo) }).img({ src: getPhotoURL(photo, size), alt: photo.title });
+					df.p().text(photo.title);
+					return df.getNode();
+				};
+				
+				renderThumbnail = function (photo) {
+				
+					var li = Y.Markout().li({ 'class': 'photo' });
+					li.img({ src: photo.thumbnail, title: photo.title });
+					return li.getNode();
+				};
+				
+				// Do It!
+				
+				photoOverlay = new Y.Overlay({
+					visible			: false,
+					centered		: true,
+					width			: '550px',
+					zIndex			: 100,
+					constrain		: true,
+					headerContent	: '<span class="close">&times;<\/span>',
+					render			: true
+				});
+				
+				Y.delegate('click', function(e){
+					
+					var thumbnail = e.currentTarget.addClass('loading'),
+						photoData = thumbnail.getData();
+						
+					loadImg(getPhotoURL(photoData), function(){
+						photoOverlay.setStdModContent(Y.WidgetStdMod.BODY, renderPhoto(photoData));
+						photoOverlay.show().centered();
+						thumbnail.removeClass('loading');
+					});
+					
+				}, '#photos', '.photo');
+				
+				Y.one('.close').on('click', Y.bind(photoOverlay.hide, photoOverlay));
+				
+				// Get the user's location
+				getLocation(function(loc){
+					
+					var locality = loc ? loc.locality1.content : null,
+						num = 100,
+						start = 1,
+						heading = Y.one('h1'),
+						loading = Y.one('#loading');
+					
+					if ( ! loc) {
+						loading.remove();
+						heading.set('text', 'No Photos Around You :-(');
+						return;
+					}
+					
+					loading.set('text', 'Fetching ' + locality + ' Photos…');
+					heading.set('text', 'Photos Around ' + locality);
+					
+					// Get the initial photos for location
+					getPhotos(loc, start, num, function(photos){
+						
+						loading.remove();
+						
+						if ( ! photos) {
+							heading.set('text', 'No Photos Around ' + locality + ' :-(');
+							return;
+						}
+						
+						photos = Y.Array(photos);
+						
+						var photosNode = Y.one('#photos'),
+							processPhotos, renderThumbnails, renderMore;
+							
+						processPhotos = function (photos, callbacks) {
+							
+							var isFunction = Y.Lang.isFunction,
+								dataURIRequests = [],
+								request;
+								
+							Y.each(photos, function(photo){
+								if ( ! request || request.photos.length === 10) {
+									request = { photos: [], complete: false };
+									dataURIRequests.push(request);
+								}
+								request.photos.push(photo);
+							});
+							
+							Y.each(dataURIRequests, function(request){
+								getDataURI(request.photos, function(dataURIs){
+									
+									request.complete = true;
+									
+									if (isFunction(callbacks.data)) {
+										callbacks.data(request.photos, Y.Array(dataURIs));
+									}
+									
+									if (isFunction(callbacks.data)) {
+										if ( ! Y.Array.some(dataURIRequests, function(d){ return ( ! d.complete); })) {									
+											callbacks.complete();
+										}
+									}
+									
+								});
+							});
+							
+						};
+						
+						renderThumbnails = function (photos, dataURIs) {
+						
+							var df = Y.Markout().getNode();
+							
+							Y.each(photos, function(photo, i){
+								photo.thumbnail = dataURIs[i].url || getPhotoURL(photo, 's');
+								df.append(renderThumbnail(photo).setData(photo));
+							});
+							
+							photosNode.append(df);
+							
+						};
+							
+						renderMore = function () {
+							
+							var more = Y.Markout('#content').p({ id: 'more' }).button().getNode().set('text', 'More ' + locality + ' Photos');
+							more.on('click', function(){
+							
+								more.set('disabled', true).set('text', 'Loading More ' + locality + ' Photos…');
+								
+								getPhotos(loc, start+=num, num, function(photos){
+									photos = Y.Array(photos);
+									processPhotos(photos, {
+										data		: renderThumbnails,
+										complete	: function(){
+											more.set('disabled', photos.length < num).set('text', 'More ' + locality + ' Photos');
+										}
+									});
+								});
+								
+							});
+							
+						};
+						
+						processPhotos(photos, {
+							data		: renderThumbnails,
+							complete	: function(){
+								if (photos.length === num) {
+									renderMore();
+								}
+							}
+						});
+						
+					});
+					
+				});
+			
+			});
+		</script>
+	
+	</body>
+</html>

@@ -1,0 +1,63 @@
+/**
+ * Button — IE Fixes
+ * 
+ * Oddnut Software
+ * Copyright (c) 2010 Eric Ferraiuolo - http://eric.ferraiuolo.name
+ * MIT License - http://www.opensource.org/licenses/mit-license.php
+ */
+
+button,
+input[type=button],
+input[type=submit],
+input[type=reset],
+a.button {
+	*overflow: visible;						/* IE7 width fix */
+	color: #222;							/* IE7 is funky with colors */
+}
+
+/**
+ * Focus
+ */
+
+button:focus,
+input[type=button]:focus,
+input[type=submit]:focus,
+input[type=reset]:focus,
+a.button:focus {
+	outline: 1px solid rgb(63, 152, 221);
+	*border: 1px solid rgb(63, 152, 221);	/* IE7 */
+}
+
+/**
+ * Active
+ */
+
+button:active,
+input[type=button]:active,
+input[type=submit]:active,
+input[type=reset]:active {
+	padding: 0 11px 0 9px;					/* IE8 help with text shifting */
+	background-position: 1px 1px;
+}
+
+/**
+ * Large - Active
+ */
+
+button.large:active,
+input[type=button].large:active,
+input[type=submit].large:active,
+input[type=reset].large:active {
+	padding: 0 16px 0 14px;					/* IE8 help with text shifting */
+}
+
+/**
+ * Huge - Active
+ */
+
+button.huge:active,
+input[type=button].huge:active,
+input[type=submit].huge:active,
+input[type=reset].huge:active {
+	padding: 0 21px 0 19px;					/* IE8 help with text shifting */
+}
