@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>得到占位图片的真实地址</title>
+<link href="holder.css" media="screen" rel="stylesheet" type="text/css" /> 
+</head>
+<body>
+	<h1>背景图片表现:</h1>
+	
+<div class="holder" id="hol">
+</div>
+<br/>
+<br/>
+<br/>
+<p style="display:none" id="imp">
+	image 标签表现：<br/>
+<img id="im" src="" alt="semantic??" />
+</p>
+<button id="run">
+	得到图片真实地址
+</button>
+
+<script>
+var GET_COMPUTED_STYLE = GET_COMPUTED_STYLE = 'getComputedStyle',
+    OWNER_DOCUMENT = 'ownerDocument',
+    DEFAULT_VIEW = 'defaultView',
+    DOCUMENT_ELEMENT = 'documentElement',
+    CURRENT_STYLE = 'currentStyle';
+/*Just From Yui2 ,我是抄的！*/
+    
+var myGetComputedStyle = function () {
+    if (window[GET_COMPUTED_STYLE]) { // W3C DOM method
+        return function (el, property) {
+            property = (property === 'float') ? property = 'cssFloat' : (property);
+            var value = el.style[property],
+                computed;
+            if (!value) {
+                computed = el[OWNER_DOCUMENT][DEFAULT_VIEW][GET_COMPUTED_STYLE](el, null);
+                if (computed) { // test computed before touching for safari
+                    value = computed[property];
+                }
+            }
+            return value;
+        };
+    } else if (document.documentElement[CURRENT_STYLE]) {
+        return function (el, property) {
+            var value;
+            switch (property) {
+            case 'opacity':
+                // IE opacity uses filter
+                value = 100;
+                try { // will error if no DXImageTransform
+                    value = el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
+                } catch(e) {
+                    try { // make sure its in the document
+                        value = el.filters('alpha').opacity;
+                    } catch(err) {
+                        YAHOO.log('getStyle: IE filter failed', 'error', 'Dom');
+                    }
+                }
+                return value / 100;
+            case 'float':
+                // fix reserved word
+                property = 'styleFloat'; // fall through
+            default:
+                value = el[CURRENT_STYLE] ? el[CURRENT_STYLE][property] : null;
+                return (el.style[property] || value);
+            }
+        }
+    }
+}();
+document.getElementById("run").onclick = function () {
+    var url = myGetComputedStyle(document.getElementById("hol"), "backgroundImage");
+    url=(url.replace(/url\("([^"]+)"\)/, "$1"));
+    alert(url);
+    var im=document.getElementById("im");
+    var imp=document.getElementById("imp");
+    im.src=url;
+    imp.style.display="";
+};
+
+
+
+</script>
+
+</body>
+</html>
