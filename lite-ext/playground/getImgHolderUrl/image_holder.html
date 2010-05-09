@@ -71,7 +71,7 @@ var myGetComputedStyle = function () {
 }();
 document.getElementById("run").onclick = function () {
     var url = myGetComputedStyle(document.getElementById("hol"), "backgroundImage");
-    url=(url.replace(/url\("([^"]+)"\)/, "$1"));
+    url=(url.replace(/url\("?([^"]+)"?\)/i, "$1"));
     alert(url);
     var im=document.getElementById("im");
     var imp=document.getElementById("imp");
