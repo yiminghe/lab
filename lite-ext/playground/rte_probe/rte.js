@@ -486,11 +486,13 @@ YUI({
         console.log("************************************************");
         var selection = "{}" || Y.dump(RTE._getSelection());
         if (selection == "{}") selection = RTE._getSelection() + "";
+        if(Y.UA.ie) selection=RTE._getSelection().text||"";
         console.log("selection:", RTE._getSelection());
         var selectedElement = Y.dump(RTE._getSelectedElement());
         console.log("selectedElement:", RTE._getSelectedElement());
         var range = "{}" || Y.dump(RTE._getRange());
         if (range == "{}") range = RTE._getRange() + "";
+        if(Y.UA.ie) range=RTE._getRange().text||"";
         console.log("range:", RTE._getRange());
         status.setContent("<p>selection :" + selection + "</p>" + "<p>selectedElement :" + selectedElement + "</p>" + "<p>range :" + range + "</p>");
     });
