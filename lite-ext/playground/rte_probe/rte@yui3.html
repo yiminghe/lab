@@ -1,11 +1,13 @@
-<!doctype html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-		<meta charset="utf-8" />
-		
-		<title>yui3 rte</title>
+		<meta charset="utf-8">
+		<title>
+			yui3 rte
+		</title>
 		<style type="text/css" id="test">
-		#rteContainer {
+#rteContainer {
 			border:1px solid green;
 			height:230px;
 		}
@@ -19,64 +21,122 @@
 		}
 		</style>
 	</head>
-	<body>	
-		
-		<h1>编辑区</h1>
-		<div id="rteContainer">
+	<body>
+		<h1>
+			编辑区
+		</h1>
+		<div id="rteContainer"></div>
+		<div>
+			<br/>
+			<button id="srun">探测编辑区状态(选中文字或光标所在)，详细信息(firefox,chrome)查看控制台输出</button>
+			
+			 <button id="createCurrentElement">__createCurrentElement 试验</button> 
+			
+			<p>
+				<label>__createCurrentElement 的 tagName <input id="createCurrentElementTag" value="span"></label></p>
+				<p>
+				 <label>__createCurrentElement 的 css json 描述 
+			<textarea id="createCurrentElementCss">
+{color:'red'}
+</textarea></label>
+</p>
+
 		</div>
-		<br/>
-		<button id="srun">
-			探测编辑区状态(选中文字或光标所在)，详细信息(firefox,chrome)查看控制台输出
-		</button>
+		
 		<div id="status"></div>
-		<h1>html:</h1>
-		<textarea id="htext"> <h1>测试</h1>
-			<div style="text-align:center">1,2,3,4,<span style="color:red;">5,6</span>,7,8</div>
-		<img src="http://www.google.com.hk/intl/zh-CN/images/logo_cn.gif" alt="i love google"/>
-			</textarea>
-			<br/><br/>
-		<button id="hrun">
-			html到编辑器
-		</button>
-		<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
-		<!--
+		<h1>
+			html:
+		</h1>
+		<p>
+		
+			<textarea id="htext">
+				<h1>
+					测试
+				</h1>
+				<div style="text-align:center">
+					1,2,3,4,<span style="color:red;">5,6</span>,7,8
+				</div>
+				<p>	<img src="http://www.google.com.hk/intl/zh-CN/images/logo_cn.gif" alt="i love google"></p>
+</textarea>
+		</p>
+	
+		<p>
+	
+			<button id="hrun">html到编辑器</button>
+		</p>
+		<script type="text/javascript"     src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script><!--
 		<script type="text/javascript" src="yui/yui-min.js"></script>
 		-->
 		<script type="text/javascript" src="rte.js"></script>
-		
-		
-		
-		<p>
-			
-			<div class="section">
-        <h2>References:(From <a href="http://kissy.googlecode.com/svn/trunk/src/editor/test.html">kissy</a>)</h2>
-        <ol>
-            <li><a href="http://msdn.microsoft.com/en-us/library/ms533049%28VS.85%29.aspx">Command Identifiers</a> (MSDN)</li>
-            <li><a href="http://msdn.microsoft.com/en-us/library/ms535869%28VS.85%29.aspx">selection Object</a> (MSDN)</li>
-            <li><a href="http://msdn.microsoft.com/en-us/library/ms535872%28VS.85%29.aspx">TextRange Object</a> (MSDN)</li>
-            <li><a href="http://msdn.microsoft.com/en-us/library/ms537447%28VS.85%29.aspx">controlRange Collection</a> (MSDN)</li>
-            <li><a href="https://developer.mozilla.org/en/Rich-Text_Editing_in_Mozilla">Rich-Text Editing in Mozilla</a> (MDC)</li>
-            <li><a href="https://developer.mozilla.org/en/DOM/Selection">Selection</a> (MDC)</li>
-            <li><a href="https://developer.mozilla.org/en/DOM%3arange">range</a> (MDC)</li>
-            <li><a href="http://www.quirksmode.org/dom/execCommand.html">execCommand Compatibility</a> (让人佩服的 PPK)</li>
-            <li><a href="http://www.quirksmode.org/dom/range_intro.html">Introduction to Range</a> (通俗易懂的 PPK)</li>
-            <li><a href="http://www.quirksmode.org/dom/w3c_range.html">Range Compatibility Table</a> (Range is EVIL)</li>
-            <li><a href="http://www.quirksmode.org/dom/execCommand/">contentEditable Demo</a> (PPK 的尝试)</li>
-            <li><a href="http://starkravingfinkle.org/blog/2007/07/firefox-3-contenteditable/">Firefox 3 &ndash; ContentEditable</a></li>
-            <li><a href="http://www.mozilla.org/editor/midas-spec.html">Midas Specification</a> (MDC)</li>
-            <li><a href="http://www.mozilla.org/editor/midasdemo/">Midas Demo</a></li>
-            <li><a href="http://www.kevinroth.com/rte/demo.htm">Cross-Browser Rich Text Editor (RTE) Demo</a></li>
-            <li><a href="http://ckeditor.com/demo/">CKEditor</a> (FCKEditor 的新一代产品，RTE 中的王者)</li>
-            <li><a href="http://tinymce.moxiecode.com/examples/full.php">TinyMCE</a>（后起之秀，我接触的第一个 RTE）</li>
-            <li><a href="http://docs.google.com/">Google Docs</a> (简单与复杂的权衡)</li>
-            <li><a href="http://developer.yahoo.com/yui/examples/editor/code_editor.html">YUI RTE</a>（爱恨交加）</li>
-            <li><a href="http://nicedit.com/demos.php">NicEditor</a>（采用 ContentEditable，跨域）</li>
-            <li><a href="http://bai.sohu.com/app/blog/#/app/blog/entry/edit.do">白社会编辑器</a>（简单够用，挺好）</li>
-        </ol>
-    </div>
-
-
-
-		</p>
+		<div class="section">
+			<h2>
+				References:(From <a href="http://kissy.googlecode.com/svn/trunk/src/editor/test.html">kissy</a>)
+			</h2>
+			<ol>
+				<li>
+					<a href="http://msdn.microsoft.com/en-us/library/ms533049%28VS.85%29.aspx">Command Identifiers</a> (MSDN)
+				</li>
+				<li>
+					<a href="http://msdn.microsoft.com/en-us/library/ms535869%28VS.85%29.aspx">selection Object</a> (MSDN)
+				</li>
+				<li>
+					<a href="http://msdn.microsoft.com/en-us/library/ms535872%28VS.85%29.aspx">TextRange Object</a> (MSDN)
+				</li>
+				<li>
+					<a href="http://msdn.microsoft.com/en-us/library/ms537447%28VS.85%29.aspx">controlRange Collection</a> (MSDN)
+				</li>
+				<li>
+					<a href="https://developer.mozilla.org/en/Rich-Text_Editing_in_Mozilla">Rich-Text Editing in Mozilla</a> (MDC)
+				</li>
+				<li>
+					<a href="https://developer.mozilla.org/en/DOM/Selection">Selection</a> (MDC)
+				</li>
+				<li>
+					<a href="https://developer.mozilla.org/en/DOM%3arange">range</a> (MDC)
+				</li>
+				<li>
+					<a href="http://www.quirksmode.org/dom/execCommand.html">execCommand Compatibility</a> (让人佩服的 PPK)
+				</li>
+				<li>
+					<a href="http://www.quirksmode.org/dom/range_intro.html">Introduction to Range</a> (通俗易懂的 PPK)
+				</li>
+				<li>
+					<a href="http://www.quirksmode.org/dom/w3c_range.html">Range Compatibility Table</a> (Range is EVIL)
+				</li>
+				<li>
+					<a href="http://www.quirksmode.org/dom/execCommand/">contentEditable Demo</a> (PPK 的尝试)
+				</li>
+				<li>
+					<a href="http://starkravingfinkle.org/blog/2007/07/firefox-3-contenteditable/">Firefox 3 – ContentEditable</a>
+				</li>
+				<li>
+					<a href="http://www.mozilla.org/editor/midas-spec.html">Midas Specification</a> (MDC)
+				</li>
+				<li>
+					<a href="http://www.mozilla.org/editor/midasdemo/">Midas Demo</a>
+				</li>
+				<li>
+					<a href="http://www.kevinroth.com/rte/demo.htm">Cross-Browser Rich Text Editor (RTE) Demo</a>
+				</li>
+				<li>
+					<a href="http://ckeditor.com/demo/">CKEditor</a> (FCKEditor 的新一代产品，RTE 中的王者)
+				</li>
+				<li>
+					<a href="http://tinymce.moxiecode.com/examples/full.php">TinyMCE</a>（后起之秀，我接触的第一个 RTE）
+				</li>
+				<li>
+					<a href="http://docs.google.com/">Google Docs</a> (简单与复杂的权衡)
+				</li>
+				<li>
+					<a href="http://developer.yahoo.com/yui/examples/editor/code_editor.html">YUI RTE</a>（爱恨交加）
+				</li>
+				<li>
+					<a href="http://nicedit.com/demos.php">NicEditor</a>（采用 ContentEditable，跨域）
+				</li>
+				<li>
+					<a href="http://bai.sohu.com/app/blog/#/app/blog/entry/edit.do">白社会编辑器</a>（简单够用，挺好）
+				</li>
+			</ol>
+		</div>
 	</body>
 </html>

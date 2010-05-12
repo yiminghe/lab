@@ -1,9 +1,10 @@
 YUI({
     //filter: "DEBUG"
-}).use("node", "stylesheet", "substitute", "event-simulate", "event", "event-custom", "dump", function (Y) {
+    }).use("node", "stylesheet", "substitute", "event-simulate", "event", "event-custom", "dump", "json",
+function(Y) {
     if (!window.console) {
         window.console = {
-            log: function () {}
+            log: function() {}
         };
     }
     var RTE = {
@@ -11,10 +12,10 @@ YUI({
         container: "#rteContainer",
         _docType: '<!DOCTYPE HTML PUBLIC "-/' + '/W3C/' + '/DTD HTML 4.01/' + '/EN" "http:/' + '/www.w3.org/TR/html4/strict.dtd">',
         css: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font: 13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a, a:visited, a:hover { color: blue !important; text-decoration: underline !important; cursor: text !important; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; } body.ptags.webkit div.yui-wk-p { margin: 11px 0; } body.ptags.webkit div.yui-wk-div { margin: 0; }',
-        get: function (prop) {
+        get: function(prop) {
             return this[prop] || {};
         },
-        _createIframe: function () {
+        _createIframe: function() {
             var ifrmDom = document.createElement('iframe');
             ifrmDom.id = this.get('id') + '_editor';
             var config = {
@@ -42,7 +43,7 @@ YUI({
             ifrmDom.style.visibility = 'hidden';
             return ifrmDom;
         },
-        _isElement: function (el, tag) {
+        _isElement: function(el, tag) {
             try {
                 if (el._node) el = el._node;
             } catch(e) {}
@@ -54,7 +55,7 @@ YUI({
             }
             return false;
         },
-        _getDoc: function () {
+        _getDoc: function() {
             var value = false;
             try {
                 if (this.get('iframe').contentWindow.document) {
@@ -65,10 +66,10 @@ YUI({
                 return false;
             }
         },
-        _getWindow: function () {
+        _getWindow: function() {
             return this.get('iframe').contentWindow;
         },
-        _hasSelection: function () {
+        _hasSelection: function() {
             var sel = this._getSelection();
             var range = this._getRange();
             var hasSel = false;
@@ -96,7 +97,7 @@ YUI({
             }
             return hasSel;
         },
-        _getSelection: function () {
+        _getSelection: function() {
             var _sel = null;
             if (this._getDoc() && this._getWindow()) {
                 if (this._getDoc().selection) {
@@ -122,12 +123,201 @@ YUI({
             }
             return _sel;
         },
-        _selectNode: function (node, collapse) {
+        _createCurrentElement: function(tagName, tagStyle) {
+            tagName = ((tagName) ? tagName: 'a');
+            var tar = null,
+            el = [],
+            _doc = this._getDoc();
+
+            if (this.currentFont) {
+                if (!tagStyle) {
+                    tagStyle = {};
+                }
+                tagStyle.fontFamily = this.currentFont;
+                this.currentFont = null;
+            }
+            this.currentElement = [];
+
+            var _elCreate = function(tagName, tagStyle) {
+                var el = null;
+                tagName = ((tagName) ? tagName: 'span');
+                tagName = tagName.toLowerCase();
+                switch (tagName) {
+                case 'h1':
+                case 'h2':
+                case 'h3':
+                case 'h4':
+                case 'h5':
+                case 'h6':
+                    el = _doc.createElement(tagName);
+                    break;
+                default:
+                    el = _doc.createElement(tagName);
+                    var elwrap = Y.one(el);
+                    if (tagName === 'span') {
+                        elwrap.addClass('yui-tag-' + tagName);
+                        elwrap.addClass('yui-tag');
+                        el.setAttribute('tag', tagName);
+                    }
+
+                    for (var k in tagStyle) {
+                        if (tagStyle.hasOwnProperty(k)) {
+                            el.style[k] = tagStyle[k];
+                        }
+                    }
+                    break;
+                }
+                return el;
+            };
+
+            if (!this._hasSelection()) {
+                if (this._getDoc().queryCommandEnabled('insertimage')) {
+                    this._getDoc().execCommand('insertimage', false, 'yui-tmp-img');
+                    var imgs = this._getDoc().getElementsByTagName('img');
+                    for (var j = 0; j < imgs.length; j++) {
+                        if (imgs[j].getAttribute('src', 2) == 'yui-tmp-img') {
+                            el = _elCreate(tagName, tagStyle);
+                            imgs[j].parentNode.replaceChild(el, imgs[j]);
+                            this.currentElement[this.currentElement.length] = el;
+                        }
+                    }
+                } else {
+                    if (this.currentEvent) {
+                        tar = this.currentEvent.target._node;
+                    } else {
+                        //For Safari..
+                        tar = this._getDoc().body;
+                    }
+                }
+                if (tar) {
+                    /*
+                    * @knownissue Safari Cursor Position
+                    * @browser Safari 2.x
+                    * @description The issue here is that we have no way of knowing where the cursor position is
+                    * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
+                    */
+                    el = _elCreate(tagName, tagStyle);
+                    if (this._isElement(tar, 'body') || this._isElement(tar, 'html')) {
+                        if (this._isElement(tar, 'html')) {
+                            tar = this._getDoc().body;
+                        }
+                        tar.appendChild(el);
+                    } else if (tar.nextSibling) {
+                        tar.parentNode.insertBefore(el, tar.nextSibling);
+                    } else {
+                        tar.parentNode.appendChild(el);
+                    }
+                    //this.currentElement = el;
+                    this.currentElement[this.currentElement.length] = el;
+                    this.currentEvent = null;
+                    if (Y.UA.webkit) {
+                        //Force Safari to focus the new element
+                        this._getSelection().setBaseAndExtent(el, 0, el, 0);
+                        if (Y.UA.webkit3) {
+                            this._getSelection().collapseToStart();
+                        } else {
+                            this._getSelection().collapse(true);
+                        }
+                    }
+                }
+                var el = this.currentElement[0];
+                if (Y.UA.webkit) {
+                    //Little Safari Hackery here..
+                    el.innerHTML = '<span class="yui-non">&nbsp;</span>';
+                    el = el.firstChild;
+                    this._getSelection().setBaseAndExtent(el, 1, el, el.innerText.length);
+                } else if (Y.UA.ie || Y.UA.opera) {
+                    el.innerHTML = '&nbsp;';
+                }
+                this.focus();
+                this._selectNode(el, true);
+                return el;
+            } else {
+                //Force CSS Styling for this action...
+                this._setEditorStyle(true);
+                this._getDoc().execCommand('fontname', false, 'yui-tmp');
+                var _tmp = [],
+                __tmp,
+                __els = ['font', 'span', 'i', 'b', 'u'];
+
+                if (!this._isElement(this._getSelectedElement(), 'body')) {
+                    __els[__els.length] = this._getDoc().getElementsByTagName(this._getSelectedElement().tagName);
+                    __els[__els.length] = this._getDoc().getElementsByTagName(this._getSelectedElement().parentNode.tagName);
+                }
+                for (var _els = 0; _els < __els.length; _els++) {
+                    var _tmp1 = this._getDoc().getElementsByTagName(__els[_els]);
+                    for (var e = 0; e < _tmp1.length; e++) {
+                        _tmp[_tmp.length] = _tmp1[e];
+                    }
+                }
+
+
+                for (var i = 0; i < _tmp.length; i++) {
+                    var _tmpwrap = Y.one(_tmp[i]);
+                    if ((_tmpwrap.getStyle('fontFamily') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
+                        if (tagName !== 'span') {
+                            el = _elCreate(tagName, tagStyle);
+                        } else {
+                            el = _elCreate(_tmp[i].tagName, tagStyle);
+                        }
+                        el.innerHTML = _tmp[i].innerHTML;
+                        if (this._isElement(_tmp[i], 'ol') || (this._isElement(_tmp[i], 'ul'))) {
+                            var fc = _tmp[i].getElementsByTagName('li')[0];
+                            _tmp[i].style.fontFamily = 'inherit';
+                            fc.style.fontFamily = 'inherit';
+                            el.innerHTML = fc.innerHTML;
+                            fc.innerHTML = '';
+                            fc.appendChild(el);
+                            this.currentElement[this.currentElement.length] = el;
+                        } else if (this._isElement(_tmp[i], 'li')) {
+                            _tmp[i].innerHTML = '';
+                            _tmp[i].appendChild(el);
+                            _tmp[i].style.fontFamily = 'inherit';
+                            this.currentElement[this.currentElement.length] = el;
+                        } else {
+                            if (_tmp[i].parentNode) {
+                                _tmp[i].parentNode.replaceChild(el, _tmp[i]);
+                                this.currentElement[this.currentElement.length] = el;
+                                this.currentEvent = null;
+                                if (Y.UA.webkit) {
+                                    //Force Safari to focus the new element
+                                    this._getSelection().setBaseAndExtent(el, 0, el, 0);
+                                    if (Y.UA.webkit3) {
+                                        this._getSelection().collapseToStart();
+                                    } else {
+                                        this._getSelection().collapse(true);
+                                    }
+                                }
+                                if (Y.UA.ie && tagStyle && tagStyle.fontSize) {
+                                    this._getSelection().empty();
+                                }
+                                if (Y.UA.gecko) {
+                                    this._getSelection().collapseToStart();
+                                }
+                            }
+                        }
+                    }
+                }
+                var len = this.currentElement.length;
+                for (var o = 0; o < len; o++) {
+                    if ((o + 1) != len) {
+                        //Skip the last one in the list
+                        if (this.currentElement[o] && this.currentElement[o].nextSibling) {
+                            if (this._isElement(this.currentElement[o], 'br')) {
+                                this.currentElement[this.currentElement.length] = this.currentElement[o].nextSibling;
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        _selectNode: function(node, collapse) {
             if (!node) {
                 return false;
             }
             var sel = this._getSelection(),
-                range = null;
+            range = null;
             if (Y.UA.ie) {
                 try {
                     //IE freaks out here sometimes..
@@ -156,7 +346,7 @@ YUI({
                 sel.addRange(range);
             }
         },
-        _getRange: function () {
+        _getRange: function() {
             var sel = this._getSelection();
             if (sel === null) {
                 return null;
@@ -183,10 +373,16 @@ YUI({
             }
             return null;
         },
-        _initEditorEvents: function () {
+        _setEditorStyle: function(stat) {
+            try {
+                this._getDoc().execCommand('useCSS', false, !stat);
+            } catch(ex) {
+                }
+        },
+        _initEditorEvents: function() {
             //Setup Listeners on iFrame
             var doc = Y.one(this._getDoc()),
-                win = Y.one(this._getWindow());
+            win = Y.one(this._getWindow());
             doc.on('mouseup', this._handleMouseUp, this);
             doc.on('mousedown', this._handleMouseDown, this);
             doc.on('click', this._handleClick, this);
@@ -195,10 +391,10 @@ YUI({
             doc.on('keyup', this._handleKeyUp, this);
             doc.on('keydown', this._handleKeyDown, this);
         },
-        _setInitialContent: function (raw) {
+        _setInitialContent: function(raw) {
             console.log('Populating editor body with contents of the text area', 'info', 'SimpleEditor');
             var value = this.value || "",
-                doc = null;
+            doc = null;
             if (value === '') {
                 value = '<br>';
             }
@@ -233,12 +429,12 @@ YUI({
             }
             Y.one(this.get('iframe')).setStyle('visibility', '');
         },
-        _getSelectedElement: function () {
+        _getSelectedElement: function() {
             var doc = this._getDoc(),
-                range = null,
-                sel = null,
-                elm = null,
-                check = true;
+            range = null,
+            sel = null,
+            elm = null,
+            check = true;
             if (Y.UA.ie) {
                 if (this._getWindow().event) this.currentEvent = Y.Event.getEvent(this._getWindow().event);
                 else this.currentEvent = null;
@@ -249,7 +445,7 @@ YUI({
                     if (this._hasSelection()) {
                         //TODO
                         //WTF.. Why can't I get an element reference here?!??!
-                    }
+                        }
                     if (elm === doc.body) {
                         elm = null;
                     }
@@ -266,7 +462,7 @@ YUI({
                 //TODO
                 if (!this._hasSelection() && Y.UA.webkit3) {
                     //check = false;
-                }
+                    }
                 if (Y.UA.gecko) {
                     //Added in 2.6.0
                     if (range.startContainer) {
@@ -333,7 +529,7 @@ YUI({
             } else if ((this.currentElement && this.currentElement[0]) && (!Y.UA.ie)) {
                 //TODO is this still needed?
                 //elm = this.currentElement[0];
-            }
+                }
             if (Y.UA.opera || Y.UA.webkit) {
                 if (this.currentEvent && !elm) {
                     elm = this.currentEvent.target._node;
@@ -359,10 +555,10 @@ YUI({
             }
             return elm;
         },
-        _setCurrentEvent: function (ev) {
+        _setCurrentEvent: function(ev) {
             this.currentEvent = ev;
         },
-        _handleClick: function (ev) {
+        _handleClick: function(ev) {
             this._setCurrentEvent(ev);
             if (Y.UA.webkit) {
                 var tar = ev.target;
@@ -371,8 +567,8 @@ YUI({
                 }
             } else {}
         },
-        _handleMouseUp: function (ev) {},
-        _handleMouseDown: function (ev) {
+        _handleMouseUp: function(ev) {},
+        _handleMouseDown: function(ev) {
             this._setCurrentEvent(ev);
             var sel = ev.target;
             if (Y.UA.webkit && this._hasSelection()) {
@@ -397,16 +593,16 @@ YUI({
                 }
             }
         },
-        _handleKeyUp: function (ev) {
+        _handleKeyUp: function(ev) {
             this._setCurrentEvent(ev);
         },
-        _handleKeyPress: function (ev) {
+        _handleKeyPress: function(ev) {
             this._setCurrentEvent(ev);
         },
-        _handleKeyDown: function (ev) {
+        _handleKeyDown: function(ev) {
             this._setCurrentEvent(ev);
         },
-        _checkLoaded: function () {
+        _checkLoaded: function() {
             if (this._contentTimer) {
                 clearTimeout(this._contentTimer);
             }
@@ -433,14 +629,14 @@ YUI({
                 this._editable();
             } else {
                 var self = this;
-                this._contentTimer = setTimeout(function () {
+                this._contentTimer = setTimeout(function() {
                     self._checkLoaded();
                 },
                 20);
             }
         },
         html: '<html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><base href="' + this._baseHREF + '"><style>{CSS}</style><style>{HIDDEN_CSS}</style><style>{EXTRA_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
-        _editable: function () {
+        _editable: function() {
             this._initEditorEvents();
             try {
                 this._getDoc().designMode = 'on';
@@ -449,19 +645,19 @@ YUI({
                 console.log(e);
             }
         },
-        init: function () {
+        init: function() {
             this.container = Y.one(this.container);
             this.iframe = this._createIframe();
             this.container.append(this.iframe);
             this._setInitialContent();
             this._checkLoaded();
         },
-        setHtml: function (html) {
+        setHtml: function(html) {
             this._getDoc().body.innerHTML = Y.Lang.trim(html);
         },
-        focus: function () {
+        focus: function() {
             var self = this;
-            setTimeout(function () {
+            setTimeout(function() {
                 self._getWindow().focus();
             },
             400);
@@ -470,11 +666,12 @@ YUI({
     RTE.init();
     var hrun = Y.one("#hrun");
     var htext = Y.one("#htext");
-    hrun.on("click", function () {
+    hrun.on("click",
+    function() {
         RTE.setHtml(htext.get("value"));
         RTE.focus();
     });
-    setTimeout(function () {
+    setTimeout(function() {
         Y.Event.simulate(hrun._node, "click");
     },
     200);
@@ -482,18 +679,33 @@ YUI({
     //hrun.simulate("click");
     var srun = Y.one("#srun");
     var status = Y.one("#status");
-    srun.on("click", function () {
+    function reportStatus() {
         console.log("************************************************");
         var selection = "{}" || Y.dump(RTE._getSelection());
         if (selection == "{}") selection = RTE._getSelection() + "";
-        if(Y.UA.ie) selection=RTE._getSelection().text||"";
+        if (Y.UA.ie) selection = RTE._getSelection().text || "";
         console.log("selection:", RTE._getSelection());
         var selectedElement = Y.dump(RTE._getSelectedElement());
         console.log("selectedElement:", RTE._getSelectedElement());
         var range = "{}" || Y.dump(RTE._getRange());
         if (range == "{}") range = RTE._getRange() + "";
-        if(Y.UA.ie) range=RTE._getRange().text||"";
+        if (Y.UA.ie) range = RTE._getRange().text || "";
         console.log("range:", RTE._getRange());
         status.setContent("<p>selection :" + selection + "</p>" + "<p>selectedElement :" + selectedElement + "</p>" + "<p>range :" + range + "</p>");
+
+    }
+    srun.on("click", reportStatus);
+
+
+
+
+    var createCurrentElementBtn = Y.one("#createCurrentElement");
+    var createCurrentElementCssText = Y.one("#createCurrentElementCss");
+    var createCurrentElementTagInput = Y.one("#createCurrentElementTag");
+    createCurrentElementBtn.on("click",
+    function() {
+        RTE._createCurrentElement(Y.Lang.trim(createCurrentElementTagInput.get("value")) || "span", eval("(" + (Y.Lang.trim(createCurrentElementCssText.get("value")) || "{}") + ")"));
+        reportStatus();
     });
+
 });
