@@ -137,7 +137,12 @@ function(Y) {
                 this.currentFont = null;
             }
             this.currentElement = [];
-
+			var CSS_RE=/-(\w)/g;
+			function cssProp(p){
+				return p.replace(CSS_RE,function(g0,g1){
+					return g1.toUpperCase();
+				});
+			}
             var _elCreate = function(tagName, tagStyle) {
                 var el = null;
                 tagName = ((tagName) ? tagName: 'span');
@@ -162,7 +167,7 @@ function(Y) {
 
                     for (var k in tagStyle) {
                         if (tagStyle.hasOwnProperty(k)) {
-                            el.style[k] = tagStyle[k];
+                            el.style[cssProp(k)] = tagStyle[k];
                         }
                     }
                     break;
