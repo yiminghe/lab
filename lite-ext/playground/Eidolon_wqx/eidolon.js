@@ -724,7 +724,7 @@
         if (GraphicUtils.initCanvas(id)) {
             return new Game(cfg);
         } else {
-            alert("Browser too old!");
+            alert("Browser too old,do not use ie.");
         }
     };
     
