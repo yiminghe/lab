@@ -1,0 +1,22 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>精灵岛 移植</title>
+<style>
+	html,body{
+		height:100%;
+		overflow:hidden;
+	}
+</style>
+</head>
+<body>
+<canvas id="tutorial" height="100" width="800" style="margin:0 auto;"></canvas> 
+
+<div style="margin-top:100px">
+	<canvas id="game" height="600" width="800" style="margin:0 auto;">
+	</canvas> 
+</div>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="eidolon.js"></script>
+</body>
