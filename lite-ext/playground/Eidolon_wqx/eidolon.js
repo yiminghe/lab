@@ -1,4 +1,9 @@
-﻿YUI.add('EidolonGame',
+﻿/**
+  @author:yiminghe.javaeye.com
+  @date:2010-05-26
+  @contact:yiminghe@gmail.com
+**/
+YUI.add('EidolonGame',
 function(Y) {
     if (!window.console) {
         window.console = {};
