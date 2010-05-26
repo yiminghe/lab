@@ -1,7 +1,8 @@
-﻿YUI.add('EidolonGame', function (Y) {
-    if(!window.console){
-        window.console={};
-        window.console.log=function(){};
+﻿YUI.add('EidolonGame',
+function(Y) {
+    if (!window.console) {
+        window.console = {};
+        window.console.log = function() {};
     }
     function randInt(l, u) {
         return l + Math.floor(Math.random() * (u - l));
@@ -14,7 +15,7 @@
         底层图形引擎
     */
     var GraphicUtils = {
-        initCanvas: function (id) {
+        initCanvas: function(id) {
             var canvas = document.getElementById(id);
             if (canvas.getContext) {
                 var ctx = canvas.getContext('2d');
@@ -23,14 +24,14 @@
             }
             return false;
         },
-        unDraw: function (XX, YY, l) {
+        unDraw: function(XX, YY, l) {
             var ctx = this.ctx;
             l = l || 8;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
             ctx.clearRect(XX, YY, l * ZOOM, l * ZOOM);
         },
-        drawEidolon: function (XX, YY) {
+        drawEidolon: function(XX, YY) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -41,7 +42,7 @@
             ctx.clearRect(XX + 5 * ZOOM, YY + 2 * ZOOM, 1 * ZOOM, 2 * ZOOM);
             ctx.fillRect(XX + 1 * ZOOM, YY + 7 * ZOOM, 5 * ZOOM, 1 * ZOOM);
         },
-        drawDevil: function (XX, YY) {
+        drawDevil: function(XX, YY) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -55,7 +56,7 @@
             ctx.clearRect(XX + 1 * ZOOM, YY + 7 * ZOOM, 1 * ZOOM, 1 * ZOOM)
             ctx.clearRect(XX + 6 * ZOOM, YY + 7 * ZOOM, 1 * ZOOM, 1 * ZOOM)
         },
-        drawBrick: function (XX, YY) {
+        drawBrick: function(XX, YY) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -64,13 +65,13 @@
             ctx.clearRect(XX + 4 * ZOOM, YY + 4 * ZOOM, 4 * ZOOM, 1 * ZOOM)
             ctx.clearRect(XX + 3.5 * ZOOM, YY + 4 * ZOOM, 1 * ZOOM, 4 * ZOOM)
         },
-        drawStroke: function (XX, YY) {
+        drawStroke: function(XX, YY) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
             ctx.strokeRect(XX, YY, 8 * ZOOM, 8 * ZOOM)
         },
-        drawPlate: function (XX, YY) {
+        drawPlate: function(XX, YY) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -80,7 +81,7 @@
             ctx.clearRect(XX + 6 * ZOOM, YY + 1 * ZOOM, 1 * ZOOM, 6 * ZOOM)
             ctx.clearRect(XX + 1 * ZOOM, YY + 6 * ZOOM, 6 * ZOOM, 1 * ZOOM)
         },
-        drawHeart: function (XX, YY) {
+        drawHeart: function(XX, YY) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -93,7 +94,7 @@
             ctx.fillRect(XX + 3 * ZOOM, YY + 5 * ZOOM, 2 * ZOOM, 2 * ZOOM);
             ctx.fillStyle = "black";
         },
-        drawWait: function (XX, YY) {
+        drawWait: function(XX, YY) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -109,7 +110,7 @@
             ctx.closePath();
             ctx.stroke();
         },
-        drawProgress: function (XX, YY, perc) {
+        drawProgress: function(XX, YY, perc) {
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -122,20 +123,32 @@
     /*
         地图字典
     */
-    var MapConfig = (function () {
+    var MapConfig = (function() {
         var MAPS = [
         //关数
-        [
-        //行数
-        "BBBBBBBBBBBBBBBBB***", "B******A*B**A***B***", "B*BBBBBB*B*B*BB*B***", "BA*******B*B*BB*B***", "B*BBBBBB*BA****AB***", "BA******AB*BBBB*B***", "B*BBBBBB**A*****B***", "BA******ABBBBB**B***", "B*************A*B***", "BBBBBBBBBBBBBBBBB***"],
-            ["DDDDDDDDDDDDDDDDD***", "D*******A*******D***", "D*DDDDDD*DDDDDD*D***", "DA*****AAA*****AD***", "D*DDDDD*D*DDDDD*D***", "DA****D*D*D****AD***", "D*DDD*D*D*D*DDD*D***", "D***D*D*D*D*D***D***", "D****A*A*A*A**A*D***", "DDDDDDDDDDDDDDDDD***", ]
+        ["BBBBBBBBBBBBBBBBB***", "B******A*B**A***B***", "B*BBBBBB*B*B*BB*B***", "BA*******B*B*BB*B***", "B*BBBBBB*BA****AB***", "BA******AB*BBBB*B***", "B*BBBBBB**A*****B***", "BA******ABBBBB**B***", "B*************A*B***", "BBBBBBBBBBBBBBBBB***"],
+        ["DDDDDDDDDDDDDDDDD***", "D*******A*******D***", "D*DDDDDD*DDDDDD*D***", "DA*****AAA*****AD***", "D*DDDDD*D*DDDDD*D***", "DA****D*D*D****AD***", "D*DDD*D*D*D*DDD*D***", "D***D*D*D*D*D***D***", "D****A*A*A*A**A*D***", "DDDDDDDDDDDDDDDDD***"],
+        ["CCCCCCCCCCCCCCCCC***", "C*A*****A*****A*C***", "C**BBBBB*BBBBB**C***", "CAA*A***A***A*AAC***", "C**B*CCCCCCC*B**C***", "C**B*CCCCCCC*B**C***", "CAA*A***A***A*AAC***", "C**BBBBB*BBBBB**C***", "C*A*****A*****A*C***", "CCCCCCCCCCCCCCCCC***"],
+        ["BBBBBBBBBBBBBBBBB***", "B**A****A****A**B***", "B*C*CCC***CCC*C*B***", "B*C*****B*****C*B***", "B*C**BBBBBBB**C*B***", "B*C*****B*****C*B***", "BA*A****B***A**AB***", "B*CCCCC*C*CCCCC*B***", "B******A*A******B***", "BBBBBBBBBBBBBBBBB***"],
+        ["DDDDDDDDDDDDDDDDD***", "C***A*******A***C***", "C**B*********B**C***", "C**B*DDDDDDD*B**C***", "CA**A**A*A**A**AC***", "C*A****A*A****A*C***", "C*BBBBB*B*BBBBB*C***", "CA*****A*A*****AC***", "C**BBB*****BBB**C***", "DDDDDDDDDDDDDDDDD***"],
+        ["BBBBBBBBBBBBBBBBB***", "B***A*A**C***B**B***", "B*B**B*B*C***B**B***", "B*B**B*B*C*****AB***", "B*B**B*B*C*BBBB*B***", "BA**A*AB*CA****AB***", "B*DDDD*B*C**BB**B***", "B*DDDD*B****BB**B***", "B*****A*A*A***A*B***", "BBBBBBBBBBBBBBBBB***"],
+        ["CCCCCCCCCCCCCCCCC***", "C**E****A****E**C***", "C**E*EEE*EEE*E**C***", "C**EA**AAA**AE**C***", "C**E*EE***EE*E**C***", "CAA*AEE*E*EEA*AAC***", "C**E*EE*E*EE*E**C***", "C**EA**A*A**AE**C***", "C*A*AEE***EEA*A*C***", "CCCCCCCCCCCCCCCCC***"],
+        ["CCCCCCCCCCCCCCCCC***", "D***A*A***A*A***D***", "D*BB*B*EEE*B*BB*D***", "D*BB*B*EEE*B*BB*D***", "DA**A*AA*AA*A**AD***", "D***BBB*D*BBB***D***", "D***BBB*D*BBB***D***", "D*CA***A*A***AC*D***", "D**A***BBB***A**D***", "CCCCCCCCCCCCCCCCC***"],
+        ["BCCCCCCCCCCCCCCCC***", "B***A**A*****A**E***", "B*E****ACCCCCA**E***", "B*EEEEE*C*A*C*D*E***", "BA*A**E*C***C*D*E***", "BA*AB*E*C*B*C*D*E***", "B*E*B*****B*C*D*E***", "B*E*BBBBBBBA*A*AE***", "B**A*********A**E***", "DDDDDDDDDDDDDDDDE***"],
+        ["CCCCCCCCCCCCCCCCC***", "C**A******A**A**C***", "CA**BBBBBBBBB**AC***", "C**A*********A**C***", "C*B**BBBBBBB**B*C***", "C*BA*********AB*C***", "C*B*BBBBBBBBB*B*C***", "C***************C***", "C**A****A****A**C***", "CCCCCCCCCCCCCCCCC***"],
+        ["BBBBBBBBBBBBBBBBB***", "B*****A*A*A*****B***", "B*CCCC*C*C*CCCC*B***", "BA****AC*CA*A**AB***", "B*CCCC*C*C*C**C*B***", "B*CCCC*C*C*C**C*B***", "BA****AC*CA**A*AB***", "B*CCCC*C*C*CCCC*B***", "B*****A*A*A*****B***", "BBBBBBBBBBBBBBBBB***"],
+        ["DDDDDDDDDDDDDDDDD***", "E****A**A*A*A*A*E***", "E*BBB**E*****B**E***", "EA*****E*****B**E***", "E*BBB**AAAEEA*A*E***", "EA*A*A*AAA******E***", "E*B**EE**E**BBB*E***", "E*B******E*****AE***", "E***A***A**A*A**E***", "BBBBBBBBBBBBBBBBB***"],
+        ["BBBBBBBBBBBBBBBBB***", "D***A**A*A******B***", "D**B*B**B*BBBBB*B***", "D*BB*BB*BA**A**AB***", "DA**A**AB**B*B**B***", "DA**A**AB*BB*BB*B***", "D*BB*BB*BAA*A***B***", "D**B*B**B**BBB**B***", "D***A**A*A******B***", "CCCCCCCCCCCCCCCCC***"],
+        ["CCCCCCCCCCCCCCCCC***", "C**A**A***A**A**C***", "C***B***B***B***C***", "CA**A***A***A**AC***", "C*BAAABAAABAAAB*C***", "CA**A*A*A*A*A**AC***", "C***BAAABAAAB***C***", "C*****C***C*****C***", "C**A*A*****A*A**C***", "CCCCCCCCCCCCCCCCC***"],
+        ["BBBBBBBBBBBBBBBBB***", "B**A*A*A*A*A*A**B***", "B*E*E*E*E*E*E*E*B***", "BA*A*********A*AB***", "B*E*E*E*E*E*E*E*B***", "BA*A***A*A***A*AB***", "B*E*E*E*E*E*E*E*B***", "BA*A*A*A*A*A*A*AB***", "B**A***A****A***B***", "BBBBBBBBBBBBBBBBB***"]
+
         ];
         var mapGen = {
             'B': Y.bind(GraphicUtils.drawBrick, GraphicUtils),
             'C': Y.bind(GraphicUtils.drawStroke, GraphicUtils),
             'D': Y.bind(GraphicUtils.drawPlate, GraphicUtils),
-            '*': function () {},
-            'A': function () {}
+            '*': function() {},
+            'A': function() {}
             //,'A':drawPlate
         }
         return {
@@ -143,33 +156,33 @@
              插入关卡
              @map:关
              **/
-            insertMap: function (map) {
+            insertMap: function(map) {
                 MAPS[MAPS.length] = map;
             },
             /**
              @gen{Function} 对应关标志处理函数
              **/
-            insertGens: function (gen) {
+            insertGens: function(gen) {
                 Y.mix(mapGen, gen);
             },
-            getLevel: function (level) {
+            getLevel: function(level) {
                 return MAPS[level];
             },
-            isMapEmpty: function (level, x, y) {
+            isMapEmpty: function(level, x, y) {
                 var rows = MAPS[level];
                 return rows[y][x] == "*" || rows[y][x] == "A";
             },
-            isThinkPoint: function (level, x, y) {
+            isThinkPoint: function(level, x, y) {
                 var rows = MAPS[level];
                 return rows[y][x] == "A";
             },
-            getLevels: function () {
+            getLevels: function() {
                 return MAPS.length;
             },
             /**
              选择制定关卡
              **/
-            drawMap: function (level) {
+            drawMap: function(level) {
                 var cx = 0;
                 var cy = 0;
                 GraphicUtils.unDraw(cx, cy, 8 * 17);
@@ -225,18 +238,18 @@
         /*
         渲染生物
         */
-        draw: function () {
+        draw: function() {
             var pos = this.get("pos");
             this.drawAtPos(pos);
         },
         /*
         搽除
         */
-        unDraw: function () {
+        unDraw: function() {
             var pos = this.get("pos");
             GraphicUtils.unDraw(pos.x, pos.y);
         },
-        unDrawAtPos: function (pos) {
+        unDrawAtPos: function(pos) {
             GraphicUtils.unDraw(pos.x, pos.y);
         }
     });
@@ -252,13 +265,13 @@
     }
     Eidolon.NAME = "Eidolon";
     Y.extend(Eidolon, Creature, {
-        initializer: function (cfg) {
+        initializer: function(cfg) {
             /*
           位置属性改变处理
           */
             this.after("posChange", this._posChange, this);
         },
-        _posChange: function (e) {
+        _posChange: function(e) {
             var oldPos = e.prevVal;
             var newPos = e.newVal;
             if (equalPos(oldPos, newPos)) return;
@@ -273,20 +286,20 @@
                 game.eat();
             }
         },
-        drawAtPos: function (pos) {
+        drawAtPos: function(pos) {
             GraphicUtils.drawEidolon(pos.x, pos.y);
         },
         /*
             根据当前方移动
         */
-        move: function () {
+        move: function() {
             var edirection = this.get("direction");
             var pos = this.get("pos");
             var ex = pos.x,
-                ey = pos.y;
+            ey = pos.y;
             if (edirection) {
                 var nx = ex,
-                    ny = ey;
+                ny = ey;
                 if (edirection == DIRECTIONS.UP) {
                     ny -= 1;
                 } else if (edirection == DIRECTIONS.DOWN) {
@@ -328,13 +341,13 @@
         }
     };
     Y.extend(Devil, Creature, {
-        initializer: function (cfg) {
+        initializer: function(cfg) {
             /*
             位置属性改变处理函数
             */
             this.after("posChange", this._posChange, this);
         },
-        _posChange: function (e) {
+        _posChange: function(e) {
             var oldPos = e.prevVal;
             var newPos = e.newVal;
             if (equalPos(oldPos, newPos)) return;
@@ -367,16 +380,16 @@
         /*
         撞墙或者到了思考点，就思考下
         */
-        think: function () {
+        think: function() {
             var game = this.get("game");
             var god = (Math.random() > 0.5);
             var pos = this.get("pos");
             var eidolon = game.get("eidolon");
             var ePos = eidolon.get("pos");
             var ex = ePos.x,
-                ey = ePos.y,
-                dx = pos.x,
-                dy = pos.y;
+            ey = ePos.y,
+            dx = pos.x,
+            dy = pos.y;
             if (ex > dx && (ey == dy || god) && game.isLevelMapEmpty(dx + 1, dy)) {
                 ddirection = DIRECTIONS.RIGHT;
             } else if (ex < dx && (ey == dy || god) && game.isLevelMapEmpty(dx - 1, dy)) {
@@ -390,21 +403,21 @@
             }
             this.set("direction", ddirection);
         },
-        drawAtPos: function (pos) {
+        drawAtPos: function(pos) {
             GraphicUtils.drawDevil(pos.x, pos.y);
         },
         /*
             AI 移动
         */
-        move: function () {
+        move: function() {
             var game = this.get("game");
             var ddirection = this.get("direction");
             var pos = this.get("pos");
             var dx = pos.x,
-                dy = pos.y;
+            dy = pos.y;
             if (ddirection) {
                 var nx = dx,
-                    ny = dy;
+                ny = dy;
                 if (ddirection == DIRECTIONS.UP) {
                     ny -= 1;
                 } else if (ddirection == DIRECTIONS.DOWN) {
@@ -449,19 +462,20 @@
         game: {}
     };
     Y.extend(Heart, Y.Base, {
-        unDraw: function () {
+        unDraw: function() {
             var pos = this.get("pos");
             if (pos.x != -1) GraphicUtils.unDraw(pos.x, pos.y);
         },
         /*
             随机位置显示
         */
-        show: function () {
+        show: function() {
             var game = this.get("game");
             var eidolonPos = game.get("eidolon").get("pos");
             var devilPos = game.get("devil").get("pos");
             this.unDraw();
-            var hx, hy;
+            var hx,
+            hy;
             while (true) {
                 hx = randInt(1, 16);
                 hy = randInt(1, 10);
@@ -476,13 +490,13 @@
             });
             this.draw();
         },
-        eaten: function () {
+        eaten: function() {
             this.set("pos", {
                 x: -1,
                 y: -1
             })
         },
-        draw: function () {
+        draw: function() {
             var pos = this.get("pos");
             GraphicUtils.drawHeart(pos.x, pos.y);
         }
@@ -503,9 +517,9 @@
         //当前关
         level: {
             value: 0,
-            setter: function (e) {
+            setter: function(e) {
                 console.log("level setter", e, this.get("map").getLevels())
-                if (e == this.get("map").getLevels()) {
+                if (e >= this.get("map").getLevels()) {
                     e = 0;
                     return e;
                 }
@@ -513,7 +527,7 @@
         },
         //当前精灵
         eidolon: {
-            valueFn: function () {
+            valueFn: function() {
                 return new Eidolon({
                     game: this
                 });
@@ -521,7 +535,7 @@
         },
         //当前恶魔
         devil: {
-            valueFn: function () {
+            valueFn: function() {
                 return new Devil({
                     game: this
                 });
@@ -530,7 +544,7 @@
         //精灵生命
         life: {
             value: 3,
-            setter: function (e) {
+            setter: function(e) {
                 if (e <= 0) {
                     return this.get("max_life");
                 }
@@ -543,7 +557,7 @@
         //收集心数
         eats: {
             value: 0,
-            setter: function (e) {
+            setter: function(e) {
                 if (e == this.get("max_eat")) {
                     return 0;
                 }
@@ -551,7 +565,7 @@
         },
         //过关收集心上限
         max_eat: {
-            value: 10
+            value: 2
         },
         //是否暂停
         waitFlag: {
@@ -559,7 +573,7 @@
         },
         //心产生器
         heart: {
-            valueFn: function () {
+            valueFn: function() {
                 return new Heart({
                     game: this
                 });
@@ -570,12 +584,12 @@
         /*
             游戏缩放
         */
-        zoomAdjust: function (z) {
+        zoomAdjust: function(z) {
             GraphicUtils.unDraw(0, 0, 2000, 2000);
             ZOOM = z;
             this.start();
         },
-        initializer: function () {
+        initializer: function() {
             /*
             对应属性变化处理
             */
@@ -589,7 +603,8 @@
             /*
             键盘操作初始化
             */
-            Y.one(document).on("keydown", function (e) {
+            Y.one(document).on("keydown",
+            function(e) {
                 if (e.keyCode == 80) {
                     this.pause();
                 }
@@ -601,32 +616,41 @@
             this);
             this.start();
         },
-        _onLifeChange: function (e) {
+        _onLifeChange: function(e) {
             console.log("on life change");
         },
-        _lifeChange: function (e) {
+        _lifeChange: function(e) {
             console.log("after life change");
             var life = e.newVal;
             console.log(life)
             this.updateLife(life);
         },
-        _onLevelChange: function (e) {
+        _onLevelChange: function(e) {
             console.log("on level change");
         },
-        _levelChange: function (e) {
+        _levelChange: function(e) {
             console.log("after level change");
             var level = e.newVal;
+            //移开初始位置，以便reset触发事件
+            this.get("eidolon").set("pos", {
+                x: 1,
+                y: 8
+            });
+            this.get("devil").set("pos", {
+                x: 15,
+                y: 8
+            });
             this.get("map").drawMap(e.newVal);
         },
-        _onEatsChange: function (e) {
+        _onEatsChange: function(e) {
             var eats = e.newVal;
             console.log("eats:" + eats);
         },
-        _eatsChange: function (e) {
+        _eatsChange: function(e) {
             this.updateEats(e.newVal);
             this.get("heart").show();
         },
-        _waitFlagChange: function (e) {
+        _waitFlagChange: function(e) {
             var w = e.newVal;
             if (w) {
                 GraphicUtils.drawWait(18, 1);
@@ -637,23 +661,26 @@
                 this.loopRun = Y.later(200, this, this.tick, true, true);
             }
         },
-        pause: function () {
+        pause: function(a) {
+            if (typeof a !== "undefined")
+            this.set("waitFlag", a);
+            else
             this.set("waitFlag", !this.get("waitFlag"));
         },
-        getLevelMap: function () {
+        getLevelMap: function() {
             return this.get("map").getLevel(this.get("level"));
         },
-        isLevelMapEmpty: function (x, y) {
+        isLevelMapEmpty: function(x, y) {
             return this.get("map").isMapEmpty(this.get("level"), x, y);
         },
-        isLevelThinkPoint: function (x, y) {
+        isLevelThinkPoint: function(x, y) {
             return this.get("map").isThinkPoint(this.get("level"), x, y);
         },
         /*
         开始游戏
         */
-        start: function () {
-            this.get("map").drawMap(0);
+        start: function() {
+            this.get("map").drawMap(this.get("level"));
             var eidolon = this.get("eidolon");
             var devil = this.get("devil");
             eidolon.draw();
@@ -671,8 +698,8 @@
         /*
         死了？继续游戏
         */
-        startLife: function () {
-            this.pause();
+        startLife: function() {
+            this.pause(true);
             var eidolon = this.get("eidolon");
             var devil = this.get("devil");
             devil.reset("direction");
@@ -680,16 +707,16 @@
             devil.reset("pos");
             eidolon.reset("pos");
         },
-        updateEats: function (eats) {
+        updateEats: function(eats) {
             GraphicUtils.drawProgress(17, 8, 100 * eats / this.get("max_eat"));
         },
-        updateLife: function (life) {
+        updateLife: function(life) {
             GraphicUtils.drawProgress(17, 4, life * 100 / this.get("max_life"));
         },
         /*
         恶魔回调，吃精灵
         */
-        die: function () {
+        die: function() {
             //全部死光，才reset eats
             if (this.get("life") - 1 == 0) {
                 alert("Game over!");
@@ -702,10 +729,11 @@
         /*
         精灵回调，收集心
         */
-        eat: function () {
+        eat: function() {
             if (this.get("eats") + 1 == this.get("max_eat")) {
-                alert("next level");
+                
                 this.set("level", this.get("level") + 1);
+                alert("next level : "+(this.get("level")+1));
                 this.startLife();
             }
             this.set("eats", this.get("eats") + 1);
@@ -713,21 +741,21 @@
         /*
         模拟时钟
         */
-        tick: function () {
+        tick: function() {
             var eidolon = this.get("eidolon");
             var devil = this.get("devil");
             devil.move();
             eidolon.move();
         }
     });
-    Y.EidolonGame = function (id, cfg) {
+    Y.EidolonGame = function(id, cfg) {
         if (GraphicUtils.initCanvas(id)) {
             return new Game(cfg);
         } else {
             alert("Browser too old,do not use ie.");
         }
     };
-    
+
     /*
     issue@ie:
     <!--[if IE]>

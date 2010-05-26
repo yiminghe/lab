@@ -26,6 +26,20 @@
 	</option>
 					
 </select>
+
+当前关卡：<select id="level">
+	
+	<script type="text/javascript">
+	(function(){
+		for(var i=0;i<15;i++){
+			document.writeln("<option value='"+i+"'>"+(i+1)+"</option>");
+		}
+	})();
+	
+	</script>
+					
+</select>
+
 <div style="margin:10px auto;width:90%;">
 	<canvas id="game" height="800" width="1024"></canvas> 
 </div>
@@ -50,6 +64,17 @@ YUI({
 	    Y.one("#zoom").on("change",function(e){
 	        g.zoomAdjust(Y.one("#zoom").get("value"));
 	        Y.one("#zoom").blur();
+	    });
+		g.after("levelChange",function(e){
+			Y.one("#level").set("value",e.newVal);
+		},g);
+		Y.one("#level").set("value",0);
+		Y.one("#level").on("change",function(e){
+	        var l=(Y.one("#level").get("value"));
+			Y.one("#level").blur();
+			g.set("level",parseInt(l));
+			g.start();
+			
 	    });
 });
 </script>
