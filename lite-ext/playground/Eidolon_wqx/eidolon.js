@@ -565,7 +565,7 @@ function(Y) {
         },
         //过关收集心上限
         max_eat: {
-            value: 2
+            value: 10
         },
         //是否暂停
         waitFlag: {
