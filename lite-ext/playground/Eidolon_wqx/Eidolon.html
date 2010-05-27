@@ -55,12 +55,14 @@ current level:<select id="level">
 -->
 <script type="text/javascript">
 YUI({
+	
      modules: {  
 	         EidolonGame: {  
 	             fullpath: 'eidolon.js',  
 	            requires: ['event', 'base', 'node']  
 	         }  
 	 }
+	,filter:"DEBUG"
 }).use("node", "event", "base","EidolonGame",
 	function(Y) {
 		var g=Y.EidolonGame("game");

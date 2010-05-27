@@ -17,9 +17,12 @@ function(Y) {
     */
     var ZOOM = 3;
     /*
-        底层图形引擎
+        底层图形引擎，绑定canvas，多块游戏的话要多个实例
     */
-    var GraphicUtils = {
+    function GraphicUtils(){}
+    
+    GraphicUtils.prototype={
+        constructor:GraphicUtils,
         initCanvas: function(id) {
             var canvas = document.getElementById(id);
             if (canvas.getContext) {
@@ -28,6 +31,9 @@ function(Y) {
                 return true;
             }
             return false;
+        },
+        getCanvas:function(){
+            return this.ctx;
         },
         unDraw: function(XX, YY, l) {
             var ctx = this.ctx;
@@ -124,11 +130,11 @@ function(Y) {
             var prog = perc * 21 / 100;
             if (prog * ZOOM > 4) ctx.fillRect(XX + 4, YY + 4, prog * ZOOM - 4, 5 * ZOOM - 4);
         }
-    }
+    };
     /*
         地图字典
     */
-    var MapConfig = (function() {
+    function MapConfig(GraphicUtils) {
         var MAPS = [
         //关数
         ["BBBBBBBBBBBBBBBBB***", "B******A*B**A***B***", "B*BBBBBB*B*B*BB*B***", "BA*******B*B*BB*B***", "B*BBBBBB*BA****AB***", "BA******AB*BBBB*B***", "B*BBBBBB**A*****B***", "BA******ABBBBB**B***", "B*************A*B***", "BBBBBBBBBBBBBBBBB***"],
@@ -202,7 +208,7 @@ function(Y) {
                 }
             }
         };
-    })();
+    }
     var DIRECTIONS = {
         UP: 38,
         DOWN: 40,
@@ -252,10 +258,10 @@ function(Y) {
         */
         unDraw: function() {
             var pos = this.get("pos");
-            GraphicUtils.unDraw(pos.x, pos.y);
+            this.get("game").get("ctx").unDraw(pos.x, pos.y);
         },
         unDrawAtPos: function(pos) {
-            GraphicUtils.unDraw(pos.x, pos.y);
+            this.get("game").get("ctx").unDraw(pos.x, pos.y);
         }
     });
     function equalPos(p1, p2) {
@@ -292,7 +298,7 @@ function(Y) {
             }
         },
         drawAtPos: function(pos) {
-            GraphicUtils.drawEidolon(pos.x, pos.y);
+            this.get("game").get("ctx").drawEidolon(pos.x, pos.y);
         },
         /*
             根据当前方移动
@@ -409,7 +415,7 @@ function(Y) {
             this.set("direction", ddirection);
         },
         drawAtPos: function(pos) {
-            GraphicUtils.drawDevil(pos.x, pos.y);
+            this.get("game").get("ctx").drawDevil(pos.x, pos.y);
         },
         /*
             AI 移动
@@ -469,7 +475,7 @@ function(Y) {
     Y.extend(Heart, Y.Base, {
         unDraw: function() {
             var pos = this.get("pos");
-            if (pos.x != -1) GraphicUtils.unDraw(pos.x, pos.y);
+            if (pos.x != -1) this.get("game").get("ctx").unDraw(pos.x, pos.y);
         },
         /*
             随机位置显示
@@ -503,7 +509,7 @@ function(Y) {
         },
         draw: function() {
             var pos = this.get("pos");
-            GraphicUtils.drawHeart(pos.x, pos.y);
+            this.get("game").get("ctx").drawHeart(pos.x, pos.y);
         }
     });
     /*
@@ -515,9 +521,13 @@ function(Y) {
     }
     Game.NAME = "Game";
     Game.ATTRS = {
+        //图形引擎，和canvas绑定
+        ctx:{},
         //地图
         map: {
-            value: MapConfig
+            valueFn:function(){
+                return MapConfig(this.get("ctx"));
+            } 
         },
         //当前关
         level: {
@@ -636,15 +646,6 @@ function(Y) {
         _levelChange: function(e) {
             console.log("after level change");
             var level = e.newVal;
-            //移开初始位置，以便reset触发事件
-            this.get("eidolon").set("pos", {
-                x: 1,
-                y: 8
-            });
-            this.get("devil").set("pos", {
-                x: 15,
-                y: 8
-            });
             this.get("map").drawMap(e.newVal);
         },
         _onEatsChange: function(e) {
@@ -658,11 +659,11 @@ function(Y) {
         _waitFlagChange: function(e) {
             var w = e.newVal;
             if (w) {
-                GraphicUtils.drawWait(18, 1);
+                this.get("ctx").drawWait(18, 1);
                 this.loopRun && this.loopRun.cancel();
                 this.loopRun = null;
             } else {
-                GraphicUtils.unDraw(18, 1);
+                this.get("ctx").unDraw(18, 1);
                 this.loopRun = Y.later(200, this, this.tick, true, true);
             }
         },
@@ -695,7 +696,7 @@ function(Y) {
                 y: 3
             });
             this.updateLife(this.get("max_life"));
-            GraphicUtils.drawHeart(18, 7);
+            this.get("ctx").drawHeart(18, 7);
             this.updateEats(0);
             this.get("heart").show();
             this.startLife();
@@ -711,12 +712,15 @@ function(Y) {
             eidolon.reset("direction");
             devil.reset("pos");
             eidolon.reset("pos");
+            //强制重绘，防止开始地死亡不出发posChange
+            eidolon.draw();
+            devil.draw();
         },
         updateEats: function(eats) {
-            GraphicUtils.drawProgress(17, 8, 100 * eats / this.get("max_eat"));
+            this.get("ctx").drawProgress(17, 8, 100 * eats / this.get("max_eat"));
         },
         updateLife: function(life) {
-            GraphicUtils.drawProgress(17, 4, life * 100 / this.get("max_life"));
+            this.get("ctx").drawProgress(17, 4, life * 100 / this.get("max_life"));
         },
         /*
         恶魔回调，吃精灵
@@ -754,7 +758,12 @@ function(Y) {
         }
     });
     Y.EidolonGame = function(id, cfg) {
-        if (GraphicUtils.initCanvas(id)) {
+        var ctx=new GraphicUtils();
+        if (ctx.initCanvas(id)) {
+            cfg=cfg||{};
+            Y.mix(cfg,{
+                ctx:ctx
+            });
             return new Game(cfg);
         } else {
             alert("Browser too old,do not use ie.");
