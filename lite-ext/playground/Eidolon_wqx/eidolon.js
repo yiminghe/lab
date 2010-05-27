@@ -600,7 +600,7 @@ function(Y) {
             游戏缩放
         */
         zoomAdjust: function(z) {
-            GraphicUtils.unDraw(0, 0, 2000, 2000);
+            this.get("ctx").unDraw(0, 0, 2000, 2000);
             ZOOM = z;
             this.start();
         },
