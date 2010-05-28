@@ -12,16 +12,17 @@ function(Y) {
     function randInt(l, u) {
         return l + Math.floor(Math.random() * (u - l));
     }
-    /*
-        缩放倍数
-    */
-    var ZOOM = 3;
+    
     /*
         底层图形引擎，绑定canvas，多块游戏的话要多个实例
     */
     function GraphicUtils(){}
     
     GraphicUtils.prototype={
+        /*
+            缩放倍数
+        */
+        ZOOM:3,
         constructor:GraphicUtils,
         initCanvas: function(id) {
             var canvas = document.getElementById(id);
@@ -36,6 +37,7 @@ function(Y) {
             return this.ctx;
         },
         unDraw: function(XX, YY, l) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             l = l || 8;
             XX *= ZOOM * 8;
@@ -43,6 +45,7 @@ function(Y) {
             ctx.clearRect(XX, YY, l * ZOOM, l * ZOOM);
         },
         drawEidolon: function(XX, YY) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -54,6 +57,7 @@ function(Y) {
             ctx.fillRect(XX + 1 * ZOOM, YY + 7 * ZOOM, 5 * ZOOM, 1 * ZOOM);
         },
         drawDevil: function(XX, YY) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -68,6 +72,7 @@ function(Y) {
             ctx.clearRect(XX + 6 * ZOOM, YY + 7 * ZOOM, 1 * ZOOM, 1 * ZOOM)
         },
         drawBrick: function(XX, YY) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -77,12 +82,14 @@ function(Y) {
             ctx.clearRect(XX + 3.5 * ZOOM, YY + 4 * ZOOM, 1 * ZOOM, 4 * ZOOM)
         },
         drawStroke: function(XX, YY) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
             ctx.strokeRect(XX, YY, 8 * ZOOM, 8 * ZOOM)
         },
         drawPlate: function(XX, YY) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -93,6 +100,7 @@ function(Y) {
             ctx.clearRect(XX + 1 * ZOOM, YY + 6 * ZOOM, 6 * ZOOM, 1 * ZOOM)
         },
         drawHeart: function(XX, YY) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -106,6 +114,7 @@ function(Y) {
             ctx.fillStyle = "black";
         },
         drawWait: function(XX, YY) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -122,6 +131,7 @@ function(Y) {
             ctx.stroke();
         },
         drawProgress: function(XX, YY, perc) {
+            var ZOOM=this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -601,7 +611,7 @@ function(Y) {
         */
         zoomAdjust: function(z) {
             this.get("ctx").unDraw(0, 0, 2000, 2000);
-            ZOOM = z;
+            this.get("ctx").ZOOM = z;
             this.start();
         },
         initializer: function() {
