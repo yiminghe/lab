@@ -12,18 +12,18 @@ function(Y) {
     function randInt(l, u) {
         return l + Math.floor(Math.random() * (u - l));
     }
-    
+
     /*
         底层图形引擎，绑定canvas，多块游戏的话要多个实例
     */
-    function GraphicUtils(){}
-    
-    GraphicUtils.prototype={
+    function GraphicUtils() {}
+
+    GraphicUtils.prototype = {
         /*
             缩放倍数
         */
-        ZOOM:3,
-        constructor:GraphicUtils,
+        ZOOM: 3,
+        constructor: GraphicUtils,
         initCanvas: function(id) {
             var canvas = document.getElementById(id);
             if (canvas.getContext) {
@@ -33,11 +33,11 @@ function(Y) {
             }
             return false;
         },
-        getCanvas:function(){
+        getCanvas: function() {
             return this.ctx;
         },
         unDraw: function(XX, YY, l) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             l = l || 8;
             XX *= ZOOM * 8;
@@ -45,7 +45,7 @@ function(Y) {
             ctx.clearRect(XX, YY, l * ZOOM, l * ZOOM);
         },
         drawEidolon: function(XX, YY) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -57,7 +57,7 @@ function(Y) {
             ctx.fillRect(XX + 1 * ZOOM, YY + 7 * ZOOM, 5 * ZOOM, 1 * ZOOM);
         },
         drawDevil: function(XX, YY) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -72,7 +72,7 @@ function(Y) {
             ctx.clearRect(XX + 6 * ZOOM, YY + 7 * ZOOM, 1 * ZOOM, 1 * ZOOM)
         },
         drawBrick: function(XX, YY) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -82,14 +82,14 @@ function(Y) {
             ctx.clearRect(XX + 3.5 * ZOOM, YY + 4 * ZOOM, 1 * ZOOM, 4 * ZOOM)
         },
         drawStroke: function(XX, YY) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
             ctx.strokeRect(XX, YY, 8 * ZOOM, 8 * ZOOM)
         },
         drawPlate: function(XX, YY) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -100,7 +100,7 @@ function(Y) {
             ctx.clearRect(XX + 1 * ZOOM, YY + 6 * ZOOM, 6 * ZOOM, 1 * ZOOM)
         },
         drawHeart: function(XX, YY) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -114,7 +114,7 @@ function(Y) {
             ctx.fillStyle = "black";
         },
         drawWait: function(XX, YY) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -131,7 +131,7 @@ function(Y) {
             ctx.stroke();
         },
         drawProgress: function(XX, YY, perc) {
-            var ZOOM=this.ZOOM;
+            var ZOOM = this.ZOOM;
             var ctx = this.ctx;
             XX *= ZOOM * 8;
             YY *= ZOOM * 8;
@@ -224,7 +224,8 @@ function(Y) {
         DOWN: 40,
         LEFT: 37,
         RIGHT: 39,
-        UNSET: 0
+        UNSET: 0,
+        PAUSE: 80
     };
     /**
      生物，恶魔，精灵公共父类
@@ -532,12 +533,12 @@ function(Y) {
     Game.NAME = "Game";
     Game.ATTRS = {
         //图形引擎，和canvas绑定
-        ctx:{},
+        ctx: {},
         //地图
         map: {
-            valueFn:function(){
+            valueFn: function() {
                 return MapConfig(this.get("ctx"));
-            } 
+            }
         },
         //当前关
         level: {
@@ -628,18 +629,22 @@ function(Y) {
             /*
             键盘操作初始化
             */
-            Y.one(document).on("keydown",
-            function(e) {
-                if (e.keyCode == 80) {
-                    this.pause();
-                }
-                if (this.get("waitFlag")) return;
-                if (e.keyCode == DIRECTIONS.UP || e.keyCode == DIRECTIONS.DOWN || e.keyCode == DIRECTIONS.LEFT || e.keyCode == DIRECTIONS.RIGHT) {
-                    this.get("eidolon").set("direction", e.keyCode);
-                }
-            },
-            this);
+            this._keyHanlder=Y.one(document).on("key",
+            this._keyDown
+            , "down:" + DIRECTIONS.PAUSE + "," + DIRECTIONS.UP + "," + DIRECTIONS.DOWN + "," + DIRECTIONS.LEFT + "," + DIRECTIONS.RIGHT
+            , this);
             this.start();
+        },
+        destructor:function(){
+          this._keyHanlder.detach();
+        },
+        _keyDown: function(e) {
+            console.log(e);
+            if (e.keyCode == DIRECTIONS.PAUSE) {
+                this.pause();
+            }
+            if (this.get("waitFlag")) return;
+            this.get("eidolon").set("direction", e.keyCode);
         },
         _onLifeChange: function(e) {
             console.log("on life change");
@@ -750,9 +755,9 @@ function(Y) {
         */
         eat: function() {
             if (this.get("eats") + 1 == this.get("max_eat")) {
-                
+
                 this.set("level", this.get("level") + 1);
-                alert("next level : "+(this.get("level")+1));
+                alert("next level : " + (this.get("level") + 1));
                 this.startLife();
             }
             this.set("eats", this.get("eats") + 1);
@@ -768,11 +773,11 @@ function(Y) {
         }
     });
     Y.EidolonGame = function(id, cfg) {
-        var ctx=new GraphicUtils();
+        var ctx = new GraphicUtils();
         if (ctx.initCanvas(id)) {
-            cfg=cfg||{};
-            Y.mix(cfg,{
-                ctx:ctx
+            cfg = cfg || {};
+            Y.mix(cfg, {
+                ctx: ctx
             });
             return new Game(cfg);
         } else {

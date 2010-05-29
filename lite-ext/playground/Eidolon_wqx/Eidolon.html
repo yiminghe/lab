@@ -62,7 +62,7 @@ YUI({
 	            requires: ['event', 'base', 'node']  
 	         }  
 	 }
-	//,filter:"DEBUG"
+	,filter:"DEBUG"
 }).use("node", "event", "base","EidolonGame",
 	function(Y) {
 		var g=Y.EidolonGame("game");
@@ -80,7 +80,6 @@ YUI({
 			Y.one("#level").blur();
 			g.set("level",parseInt(l));
 			g.start();
-			
 	    });
 });
 </script>
