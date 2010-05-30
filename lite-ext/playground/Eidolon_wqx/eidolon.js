@@ -534,6 +534,14 @@ function(Y) {
     Game.ATTRS = {
         //图形引擎，和canvas绑定
         ctx: {},
+        zoom:{
+            getter:function(){
+                return this.get("ctx").ZOOM;
+            },
+            setter:function(z){
+                this.get("ctx").ZOOM=z;
+            }
+        },
         //地图
         map: {
             valueFn: function() {
@@ -610,9 +618,8 @@ function(Y) {
         /*
             游戏缩放
         */
-        zoomAdjust: function(z) {
+        _afterZoomChange: function(e) {
             this.get("ctx").unDraw(0, 0, 2000, 2000);
-            this.get("ctx").ZOOM = z;
             this.start();
         },
         initializer: function() {
@@ -626,6 +633,7 @@ function(Y) {
             this.after("levelChange", this._levelChange, this);
             this.on("levelChange", this._onLevelChange, this);
             this.on("lifeChange", this._onLifeChange, this);
+            this.after("zoomChange",this._afterZoomChange,this);
             /*
             键盘操作初始化
             */

@@ -68,7 +68,8 @@ YUI({
 		var g=Y.EidolonGame("game");
 	    Y.one("#zoom").set("value",3);
 	    Y.one("#zoom").on("change",function(e){
-	        g.zoomAdjust(Y.one("#zoom").get("value"));
+			var c=Y.one("#zoom").get("value");
+	        g.set("zoom",c);
 	        Y.one("#zoom").blur();
 	    });
 		g.after("levelChange",function(e){
