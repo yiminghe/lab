@@ -1,0 +1,147 @@
+数字(0到3)：<input id="v" value="0" readonly/> <br/>
+<input type="button" id="r" value="增加">
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script> 
+<script>
+
+YUI().use("node","attribute",function(Y){
+	
+	/*
+	1.原始类，业务逻辑与ui混合
+	*/
+function Increaser(domInput,domAction){
+	this.input=domInput;
+	this.domAction=domAction;
+	this.domAction.on("click",this.increasing,this);
+}
+
+
+Increaser.prototype.increasing=function(e){
+	
+	if(this.input.get("value")=="3"){
+		this.input.set("value",0);
+	}else{
+		this.input.set("value",parseInt(this.input.get("value"))+1);
+	}
+};
+
+
+//new Increaser(Y.one("#v"),Y.one("#r"));
+
+
+/*
+2.改进类，区分业务domain与ui，duplicate observed data，
+将数据复制到一个领域对象中，建立一个observer模式，用以同步领域对象和gui对象内的重复数据
+*/
+
+function GuiIncreaser(domInput,domAction){
+	this.input=domInput;
+	this.domAction=domAction;
+	this.domainIncreaser=new DomainIncreaser(this.input.get("value"));
+	this.domainIncreaser.addObserver(this);
+	this.domAction.on("click",this.increasing,this);
+}
+
+
+GuiIncreaser.prototype={
+	constructor:GuiIncreaser,
+	increasing:function(e){
+		this.domainIncreaser.increase();
+	},
+	//observer
+	update:function(v){
+		this.input.set("value",v);
+	}
+	
+	
+	
+}
+
+
+
+
+function DomainIncreaser(v){
+	this.v=v;
+	this.observers=[];
+}
+
+DomainIncreaser.prototype={
+	constructor:DomainIncreaser,
+	addObserver:function(o){
+		if(Y.Array.indexOf(this.observers,o)==-1){
+			this.observers.push(o);
+		}
+	},
+	checkChange:function(){
+		if(this.v=="4") this.v=0;
+	},
+	//observable
+	notify:function(){
+		for(var i=this.observers.length-1;i>=0;i--){
+			this.observers[i].update(this.v);
+		}
+		
+	},
+	
+	increase:function(){
+		this.v=parseInt(this.v)+1;
+		this.checkChange();
+		this.notify();
+	}
+
+
+}
+
+
+//new GuiIncreaser(Y.one("#v"),Y.one("#r"));
+
+
+
+/*
+3.利用 yui3 attribute 简化2，将domain和gui重新结合，利用yui3 attribute分离与同步
+*/
+
+
+function AttributeIncreaser(domInput,domAction){
+		this.input=domInput;
+		this.domAction=domAction;
+    var attrs = {
+        "v" : {
+            value:this.input.get("value"),
+            //domain业务逻辑
+            setter:function(v){
+            	if(v=="4")return 0;
+            }
+        }
+    };
+    this.addAttrs(attrs);
+    
+    //domain业务逻辑
+		this.domAction.on("click",this.increase,this);
+		
+		//属性与gui同步
+		this.after("vChange",this.afterVChange,this);
+}
+
+AttributeIncreaser.prototype={
+	constructor:AttributeIncreaser,
+	
+	increase:function(){
+		this.set("v",parseInt(this.get("v"))+1);
+	},
+	
+	afterVChange:function(e){
+		this.input.set("value",e.newVal);
+	}
+	
+};
+Y.augment(AttributeIncreaser, Y.Attribute);
+
+
+//2,3的另一个好处是尽可能少得 touch dom,提高效率
+
+new AttributeIncreaser(Y.one("#v"),Y.one("#r"));
+
+
+});
+	
+</script>
