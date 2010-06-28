@@ -72,7 +72,8 @@ function createTimeline(cfg) {
     function toDate(str) {
         var m = str.match(dataRe);
         if (m) {
-            return new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]), 8, 0, 0, 0);
+        		//标准时间与本地时间差异
+            return new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]), -(new Date().getTimezoneOffset()/60), 0, 0, 0);
         }
         return null;
     }
