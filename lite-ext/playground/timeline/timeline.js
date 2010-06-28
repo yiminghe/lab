@@ -154,15 +154,18 @@ function createTimeline(cfg) {
     var eventSource = new Timeline.DefaultEventSource(),
         theme = Timeline.ClassicTheme.create();
     theme.event.bubble.width = 450;
+    var base=new Date(2010,1,1);
     var bandInfos = [
     Timeline.createBandInfo({
         eventSource: eventSource,
+        date:base,
         width: "70%",
         theme: theme,
         intervalUnit: Timeline.DateTime.DAY,
         intervalPixels: 100
     }), Timeline.createBandInfo({
         overview: true,
+        date:base,
         eventSource: eventSource,
         width: "20%",
         theme: theme,
@@ -170,6 +173,7 @@ function createTimeline(cfg) {
         intervalPixels: 200
     }), Timeline.createBandInfo({
         overview: true,
+        date:base,
         eventSource: eventSource,
         width: "10%",
         theme: theme,
