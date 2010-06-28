@@ -214,8 +214,10 @@ function createTimeline(container, gateway) {
         update: function (cfg) {
             var params = urlEncode(cfg);
             var req = createXhrObject();
+            tl.showLoadingMessage();
             req.onreadystatechange = function () {
                 if (req.readyState == 4) {
+                		tl.hideLoadingMessage();
                     if (!trim(req.responseText)) {
                         return;
                     }
