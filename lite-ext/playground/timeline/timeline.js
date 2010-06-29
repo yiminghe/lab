@@ -63,7 +63,7 @@ function createTimeline(cfg) {
         if (resizeTimerID == null) {
             resizeTimerID = window.setTimeout(function () {
                 resizeTimerID = null;
-                tl.layout();
+                //tl.layout();
             },
             500);
         }
