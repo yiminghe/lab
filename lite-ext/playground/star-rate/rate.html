@@ -35,11 +35,11 @@
 			border:none;
 		}
 		
-		ul.rate li a.operable{
+		ul.rate.operable li a{
 			cursor:pointer;
 		}
 		
-		ul.rate li a.operable:hover{
+		ul.rate.operable li a:hover{
 			background-color:red;
 		}
 		
@@ -71,27 +71,27 @@
 <body>
 	
 	
-	<ul class="rate" id="rateContainer">
+	<ul class="rate operable" id="rateContainer">
 		
 		
 		<li>
-			<a href="rate.htm?rate=1" hidefocus="on" class="r1 operable" title="1–«" ><img src="star.png" alt="1–«" /></a>
+			<a href="rate.htm?rate=1" hidefocus="on" class="r1" title="1–«" ><img src="star.png" alt="1–«" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=2" hidefocus="on" class="r2 operable" title="2–«" ><img src="star.png" alt="2–«" /></a>
+			<a href="rate.htm?rate=2" hidefocus="on" class="r2" title="2–«" ><img src="star.png" alt="2–«" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=3" hidefocus="on" class="r3 operable" title="3–«" ><img src="star.png" alt="3–«" /></a>
+			<a href="rate.htm?rate=3" hidefocus="on" class="r3" title="3–«" ><img src="star.png" alt="3–«" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=4" hidefocus="on" class="r4 operable" title="4–«" ><img src="star.png" alt="4–«" /></a>
+			<a href="rate.htm?rate=4" hidefocus="on" class="r4" title="4–«" ><img src="star.png" alt="4–«" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=5" hidefocus="on" class="r5 operable" title="5–«" ><img src="star.png" alt="5–«" /></a>
+			<a href="rate.htm?rate=5" hidefocus="on" class="r5" title="5–«" ><img src="star.png" alt="5–«" /></a>
 		</li>
 		
 		
@@ -145,11 +145,11 @@
 				this.setStyles({
 					"backgroundColor":skin.get("value")
 				});
-				rateAs.removeClass("operable");
+				rate.removeClass("operable");
 				e.halt();
 				rateHandler.detach();
 				alert("—°‘Ò¡À"+this.get("title"));
-			},"a.operable");
+			},"a");
 			
 			
 			
