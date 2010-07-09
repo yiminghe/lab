@@ -125,7 +125,7 @@
 				
 				var v=this.get("value");
 				//直接操纵external css
-				skinCss.set("ul.rate li a.operable:hover",{
+				skinCss.set("ul.rate.operable li a:hover",{
 					"backgroundColor":Y.Color.toHex(v)
 				});
 				
@@ -150,8 +150,6 @@
 				rateHandler.detach();
 				alert("选择了"+this.get("title"));
 			},"a");
-			
-			
 			
 		});
 	
