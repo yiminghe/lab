@@ -1,7 +1,7 @@
-<!doctype html>
+ï»¿<!doctype html>
 <html>
 <head>
-<meta charset="gbk"/>
+<meta charset="utf-8"/>
 <title>InnerHTML and Script Tags</title>
 </head>
 <body>
@@ -12,17 +12,17 @@
 <div id="test">test</div>
 <div id="test2">test2</div>
 <div id="test3">test3</div>
-
+<div id="test4">test4</div>
 <h2>References</h2>
 <ul>
     <li><a href="http://msdn.microsoft.com/en-us/library/ms533897(VS.85).aspx">innerHTML Property - MSDN</a></li>
     <li><a href="https://developer.mozilla.org/en/HTML/Element/Script">script - MDC</a></li>
-    <li><a href="http://yiminghe.javaeye.com/blog/459087">¸³Öµ script µ½ innerHTMl µÄExtjs ½â¾ö·½°¸</a></li>
+    <li><a href="http://yiminghe.javaeye.com/blog/459087">èµ‹å€¼ script åˆ° innerHTMl çš„Extjs è§£å†³æ–¹æ¡ˆ</a></li>
     <li><a href="http://poeticcode.wordpress.com/2007/10/03/innerhtml-and-script-tags/">innerHTML and SCRIPT tags</a></li>
     <li><a href="http://24ways.org/2005/have-your-dom-and-script-it-too">Have Your DOM and Script It Too</a></li>
 </ul>
 
-<script src="http://kissy.googlecode.com/svn/trunk/build/packages/ks-core-min.js"></script>
+<script src="http://kissy.googlecode.com/svn/trunk/build/packages/ks-core.js"></script>
 <script>
 
     var doc = document, bd = doc.body,
@@ -30,60 +30,67 @@
         t = doc.getElementById('test'),
         t2 = doc.getElementById('test2'),
         t3 = doc.getElementById('test3'),
+        t4 = doc.getElementById('test4'),
         div;
 
     /////////////////////////////////////////////////
-    // Ò»¡¢inline script µÄÖ´ĞĞ
+    // ä¸€ã€inline script çš„æ‰§è¡Œ
 
-    // ËùÓĞä¯ÀÀÆ÷¶¼²»»áÖ´ĞĞ script ÄÚÈİ
+    // æ‰€æœ‰æµè§ˆå™¨éƒ½ä¸ä¼šæ‰§è¡Œ script å†…å®¹
     t.innerHTML = 'html 1<script>alert("set innerHTML directly");<\/script>';
 
-    // ie »áÖ´ĞĞ
+    // ie ä¼šæ‰§è¡Œ
     t.innerHTML = 'html 2<script defer>alert("set innerHTML via defer");<\/script>';
-    // ²âÊÔ´¿ script - ie ÏÂ²»»áÖ´ĞĞ¡£½â¾ö°ì·¨ÊÇÔÚ script Ç°Ãæ¼ÓÈÎÒâÒ»¸ö×Ö·û£¬±ÈÈç -
+    // æµ‹è¯•çº¯ script - ie ä¸‹ä¸ä¼šæ‰§è¡Œã€‚è§£å†³åŠæ³•æ˜¯åœ¨ script å‰é¢åŠ ä»»æ„ä¸€ä¸ªå­—ç¬¦ï¼Œæ¯”å¦‚ -
     t.innerHTML = '<script defer>alert("set innerHTML(only script) via defer");<\/script>';
 
-    // firefox »áÖ´ĞĞ
+    // firefox ä¼šæ‰§è¡Œ
     div = doc.createElement('DIV');
     div.innerHTML = 'html 3<script>alert("set innerHTML via appendChild");<\/script>';
     t.appendChild(div);
 
-    // firefox ºÍ ie »áÖ´ĞĞ
+    // firefox å’Œ ie ä¼šæ‰§è¡Œ
     div = doc.createElement('DIV');
     div.innerHTML = 'html 4<script defer>alert("set innerHTML via appendChild + defer");<\/script>';
     t.appendChild(div);
 
-    // ËùÓĞä¯ÀÀÆ÷¶¼Ö´ĞĞ
-    // ½âÎö³ö inline script ´úÂë¶Î£¬ÔÙ globalEval, Ïê¼û KISSY.DOM.html ·½·¨µÄÊµÏÖ
-    DOM.html(t, 'html 6<script>alert("set innerHTML via KISSY.DOM.html()");<\/script>', true);
-
-    // ËùÓĞä¯ÀÀÆ÷¶¼»áÖ´ĞĞ
+    // æ‰€æœ‰æµè§ˆå™¨éƒ½ä¼šæ‰§è¡Œ
     t.innerHTML = 'html 5<img src="http://lifesinger.org/blog/wp-content/uploads/avatar2009.png" onload="alert(\'set innerHTML via image onload\')" />';
     
+		// æ‰€æœ‰æµè§ˆå™¨éƒ½æ‰§è¡Œ
+    // è§£æå‡º inline script ä»£ç æ®µï¼Œå† globalEval, è¯¦è§ KISSY.DOM.html æ–¹æ³•çš„å®ç°
+    DOM.html(t, 'html 6<script>alert("set innerHTML via KISSY.DOM.html()");<\/script>', true);
 
     /////////////////////////////////////////////////
-    // ¶ş¡¢src script µÄÖ´ĞĞ
+    // äºŒã€src script çš„æ‰§è¡Œ
 
-    // ËùÓĞä¯ÀÀÆ÷¶¼²»»áÖ´ĞĞ
+    // æ‰€æœ‰æµè§ˆå™¨éƒ½ä¸ä¼šæ‰§è¡Œ
     t2.innerHTML = 'html 1<script src="innerhtml-and-script-tags.js"><\/script>';
 
-    // ËùÓĞä¯ÀÀÆ÷¶¼²»»áÖ´ĞĞ
+    // æ‰€æœ‰æµè§ˆå™¨éƒ½ä¸ä¼šæ‰§è¡Œ
     t2.innerHTML = 'html 2<script defer src="innerhtml-and-script-tags.js"><\/script>';
 
-    // ËùÓĞä¯ÀÀÆ÷¶¼Ö´ĞĞ
-    // ½âÎö³ö script src£¬ ¶¯Ì¬´´½¨ script, Ìí¼Óµ½ head Àï£¬Ïê¼û KISSY.DOM.html ·½·¨µÄÊµÏÖ
+    // æ‰€æœ‰æµè§ˆå™¨éƒ½æ‰§è¡Œ
+    // è§£æå‡º script srcï¼Œ åŠ¨æ€åˆ›å»º script, æ·»åŠ åˆ° head é‡Œï¼Œè¯¦è§ KISSY.DOM.html æ–¹æ³•çš„å®ç°
     DOM.html(t2, 'html 3<script src="innerhtml-and-script-tags.js"><\/script>', true);
 
 
     /////////////////////////////////////////////////
-    // Èı¡¢ÌØ±ğ×¢Òâµã
+    // ä¸‰ã€ç‰¹åˆ«æ³¨æ„ç‚¹
 
-    // 1. Ö±½Ó¸ø table.innerHTML = 'xx' ÔÚ ie ÏÂ»á±¨´í£¬ĞèÒªÓÃ DOM ²Ù×÷
+    // 1. ç›´æ¥ç»™ table.innerHTML = 'xx' åœ¨ ie ä¸‹ä¼šæŠ¥é”™ï¼Œéœ€è¦ç”¨ DOM æ“ä½œ
     
-    // 2. script Ö´ĞĞÊ±£¬DOM ÔªËØÓĞ¿ÉÄÜÉĞ²»¿ÉÓÃ£¬ÒªµÈ´ı
+    // 2. script æ‰§è¡Œæ—¶ï¼ŒDOM å…ƒç´ æœ‰å¯èƒ½å°šä¸å¯ç”¨ï¼Œè¦ç­‰å¾…
     div = doc.createElement('DIV');
     div.id = 'test-div';
-    div.innerHTML = 'test div<script defer>alert(document.getElementById("test-div"));<\/script>';
+    div.innerHTML = 'test div<script defer>alert("è¿˜å¾—ä¸åˆ°å…ƒç´ ï¼š"+document.getElementById("test-div"));<\/script>';
+    
+    
+    //å››ã€‚ç›´æ¥åˆ›å»ºscriptæ·»åŠ å„ä¸ªæµè§ˆå™¨éƒ½æ²¡é—®é¢˜
+    var script=document.createElement("script");
+    script.text="alert('script èŠ‚ç‚¹ç›´æ¥ append å¯è¡Œï¼');";
+    t4.appendChild(script);
+    
 
 </script>
 </body>
