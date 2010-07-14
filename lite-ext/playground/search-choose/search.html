@@ -38,7 +38,7 @@
 
             word = bwords;
             for (var i = 0, len = word.length; i < len; i++) {
-                if (this._word.toUpperCase().indexOf(word[i]) != -1) {
+                if (this._word.indexOf(word[i]) != -1) {
                     location.href = this._sSUrl + encodeURIComponent(this._word);
                     return false;
                 }
