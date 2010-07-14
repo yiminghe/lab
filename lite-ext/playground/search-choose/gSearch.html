@@ -1,0 +1,204 @@
+<script type="text/javascript">
+/** google搜索过滤
+ *
+ *  @author Tony
+ *  @modified yiminghe@gmail.com(chengyu)
+ *  @date   2010-03-31 ,2010-07-14
+ */
+var xhr = null,
+    isIE =
+/*@cc_on!@*/
+! 1;
+function initXhr() {
+    if (window.XMLHttpRequest) {
+        try {
+            xhr = new XMLHttpRequest();
+        } catch(e) {
+            xhr = false;
+        }
+    } else if (window.ActiveXObject) {
+        try {
+            xhr = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch(e) {
+            try {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch(e) {
+                xhr = false;
+            }
+        }
+    }
+}
+String.prototype.trim = function () {
+    return this.replace(/(^\s*)|(\s*$)/g, "");
+};
+var BWord = {
+    _loc: null,
+    _word: null,
+    //if local file?
+    _local:/^file:/i.test(location.href),
+    //keyword
+    _bWord: "bword.dat",
+    _gSUrl: "http://www.google.com.hk/search",
+    _sSUrl: "http://www.sogou.com/sogou?ie=gb2312&query=",
+    handleBWord: function (word) {
+        word = word.toString().toUpperCase().split("&");
+        for (var i = 0, len = word.length; i < len; i++) {
+            if (this._word.toUpperCase().indexOf(word[i]) != -1) {
+                location.href = this._sSUrl + this._word;
+                return false;
+            }
+        }
+        this.getURL(this._gSUrl + this._loc);
+    },
+    init: function () {
+        this._loc = location.search;
+        if (! (this._word = this.getKWord())) {
+            location.href = "http://www.google.com.hk/webhp?hl=zh-CN&client=aff-9991&channel=link";
+        } else {           
+            if (localStorageFake.getItem("_bword")) {
+                BWord.handleBWord(localStorageFake.getItem("_bword"));
+            } else {
+                this.loadBWord();
+            }
+        }
+    },
+    getKWord: function () {
+        try {
+            return this._loc.split("&")[0].split("q=")[1].toString().trim().toUpperCase();
+        } catch(e) {
+            return null;
+        }
+    },
+    loadBWord: function () {
+        initXhr();
+        if (xhr) {
+            xhr.onreadystatechange = this._callBack;
+            xhr.open("GET", this._bWord, true);
+            xhr.send(null);
+        }
+    },
+    _callBack: function () {    	
+        if (xhr.readyState == 4 && (BWord._local||xhr.status == 200)) {
+        		xhr.onreadystatechange=null;
+            localStorageFake.setItem('_bword', xhr.responseText);
+            BWord.handleBWord(xhr.responseText);
+        }
+    },
+    getURL: function (url) {
+        location.href = url;
+    }
+};
+window.onload = function () {
+    if (! ('localStorage' in window)) {
+        window.localStorageFake = function () {
+            var oStorage, inited = false,
+                EMPTY_FUNC = function () {},
+                _setItem = EMPTY_FUNC,
+                _getItem = EMPTY_FUNC,
+                
+                _removeItem = EMPTY_FUNC;
+            return {
+                init: function () {
+                    var doc = document,
+                        ie = isIE,
+                        STR_UNDEFINED = 'undefined',
+                        IE_STORE_NAME = 'IEDataStore'; // IE6，7下，保存数据的xml文件名
+                    if (inited) {
+                        return;
+                    }
+                    
+                    if (typeof localStorage !== STR_UNDEFINED) {
+                        // for IE8, FF 3.6, Chrome 4.1+, Safari 4+, Opera 10.5
+                        oStorage = localStorage;
+                    } else if (typeof globalStorage !== STR_UNDEFINED) {
+                        // for FF unsupport localStorage
+                        oStorage = globalStorage[location.hostname];
+                    } else if (ie) { // IE6, 7，使用userData
+                        oStorage = doc.createElement('input');
+                        oStorage.type = 'hidden';
+                        doc.body.appendChild(oStorage);
+                        oStorage.addBehavior('#default#userData');
+                    }
+                    _setItem = function (key, value) {
+                        var func = EMPTY_FUNC;
+                       
+                        if ('setItem' in oStorage) {
+                            func = function (key, value) {
+                                oStorage.setItem(key, value);
+                            };
+                        } else {
+                            func = function (key, value) {
+                                /*
+						 * 添加try...catch的原因是：某些用户的IE，可能将安全级别设置得过高，或当前站点被添加至"受限站点"中(会
+						 * 禁用掉"安全"tab下的"持续使用用户数据"选项，从而导致userData无法使用，这里通过try...catch来避免此
+						 * 情况下的JS报错，下同。
+						 */
+                                try {
+                                    oStorage.setAttribute(key, value);
+                                    oStorage.save(IE_STORE_NAME);
+                                } catch(e) {}
+                            };
+                        }
+                        return func;
+                    }();
+                    _getItem = function (key) {
+                        var func = EMPTY_FUNC;
+                        if ('getItem' in oStorage) {
+                            func = function (key) {
+                                return oStorage.getItem(key);
+                            };
+                        } else {
+                            func = function (key) {
+                                try {
+                                    oStorage.load(IE_STORE_NAME);
+                                    return oStorage.getAttribute(key);
+                                } catch(e) {}
+                            };
+                        }
+                        return func;
+                    }();
+                    _removeItem = function (key) {
+                        var func = EMPTY_FUNC;
+                        if ('removeItem' in oStorage) {
+                            func = function (key) {
+                                oStorage.removeItem(key);
+                            };
+                        } else if (ie) {
+                            func = function (key) {
+                                try {
+                                    oStorage.removeAttribute(key);
+                                    oStorage.save(IE_STORE_NAME);
+                                } catch(e) {}
+                            };
+                        }
+                        return func;
+                    }();
+                    inited = true;
+                },
+                setItem: function (key, value) {
+                    return _setItem(key, value);
+                },
+                getItem: function (key) {
+                    return _getItem(key);
+                },
+                removeItem: function (key) {
+                    return _removeItem(key);
+                }
+            };
+        }();
+        localStorageFake.init();
+    }else {
+    	window.localStorageFake=window.localStorage;
+    }
+   
+    	
+  	
+    //写入
+    //localStorageFake.setItem('name', 'Joe');
+    //读取
+    //alert(localStorageFake.getItem('name'));
+    //删除
+    //localStorage.removeItem('name');
+    BWord.init();
+};	
+</script>
