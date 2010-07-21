@@ -1,0 +1,1 @@
+KISSY.app("KISSYEDITOR");

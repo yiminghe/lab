@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk"/>
+<title>range Test</title>
+<script type="text/javascript"
+        src="http://chengyu.taobao.ali.com/kissy/build/packages/ks-core.js"></script>
+<script type="text/javascript"
+        src="editor.js"></script>
+<script type="text/javascript"
+        src="dtd.js"></script>
+<script type="text/javascript"
+        src="elementpath.js"></script>
+<script type="text/javascript"
+        src="dom.js"></script>
+<script type="text/javascript"
+        src="walker.js"></script>
+<script type="text/javascript"
+        src="range.js"></script>
+<script type="text/javascript"
+        src="selection.js"></script>
+</head>
+<body>
+
+<div style="margin:10px;padding:10px;border:1px solid green;" id="p">
+
+    <span>
+        <span id="t1">1</span>
+        <span id="t2">2</span>
+    </span>
+
+    <span>middle</span>
+    
+    <span>
+        <span id="t3">3</span>
+        <span id="t4">4</span>
+    </span>
+
+</div>
+
+<div id="re" style="margin:10px;padding:10px;border:1px solid green;"></div>
+<script type="text/javascript">
+
+    KISSY.ready(function(S) {
+        var Range = S.Range,Node=S.Node;
+        var r = new Range(document);
+        r.startContainer = S.one("#t2");
+        r.endContainer = S.one("#t4");
+        r.startOffset = r.endOffset = 0;
+        var d = document.createDocumentFragment();
+        r.execContentsAction(1, d);
+        S.one("#re")[0].appendChild(d);
+        //r.select();
+        console.log(r);
+        var n=new Node("<span>insert</span>");
+        r.insertNode(n);
+        console.log(r);
+        
+
+
+    });
+
+</script>
+</body>
+</html>

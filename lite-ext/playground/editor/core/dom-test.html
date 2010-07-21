@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk"/>
+<title>editor dom Test</title>
+<script type="text/javascript"
+        src="http://localhost/kissy/build/packages/ks-core.js"></script>
+<script type="text/javascript"
+        src="dom.js"></script>
+</head>
+<body>
+<div id="test"><a>测试</a><b><i></i></b><b><i></i></b><a>测试</a></div>
+<script>
+    KISSY.ready(function(S) {
+        var t = S.one("#test").one("a");
+        console.log(t);
+        t._4e_mergeSiblings();
+    });
+</script>
+</body>
+</html>
