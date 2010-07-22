@@ -5,7 +5,7 @@
  */
 KISSY.add("editor-walker", function(S) {
 
-    var KEN = KISSYEDITOR.NODE,Node=S.Node;
+    var KEN = KISSYEDITOR.NODE,Node = S.Node;
     // This function is to be called under a "walker" instance scope.
     function iterate(rtl, breakOnFalse) {
         // Return null if we have reached the end.
@@ -17,7 +17,7 @@ KISSY.add("editor-walker", function(S) {
             guard,
             userGuard = this.guard,
             type = this.type,
-            getSourceNodeFn = ( rtl ? 'getPreviousSourceNode' : 'getNextSourceNode' );
+            getSourceNodeFn = ( rtl ? '_4e_previousSourceNode' : '_4e_nextSourceNode' );
 
         // This is the first call. Initialize it.
         if (!this._.start) {
@@ -44,7 +44,7 @@ KISSY.add("editor-walker", function(S) {
             this._.guardLTR = function(node, movingOut) {
                 return ( ( !movingOut || limitLTR[0] !== node[0] )
                     && ( !blockerLTR[0] || node[0] !== (blockerLTR[0]) )
-                    && ( node[0].nodeType != KEN.NODE_ELEMENT || !movingOut || node.getName() != 'body' ) );
+                    && ( node[0].nodeType != KEN.NODE_ELEMENT || !movingOut || node._4e_name() != 'body' ) );
             };
         }
 
@@ -55,9 +55,13 @@ KISSY.add("editor-walker", function(S) {
                 blockerRTL = ( range.startOffset > 0 ) && new Node(limitRTL[0].childNodes[range.startOffset - 1]);
 
             this._.guardRTL = function(node, movingOut) {
-                return ( ( !movingOut || limitRTL[0] !== node[0] )
-                    && ( !blockerRTL[0] || node[0] !== blockerRTL[0] )
-                    && ( node[0].nodeType != KEN.NODE_ELEMENT || !movingOut || node[0].nodeName != 'body' ) );
+
+                return (
+                    node
+                        && node[0]
+                        && ( !movingOut || limitRTL[0] !== node[0] )
+                        && ( !blockerRTL[0] || node[0] !== blockerRTL[0] )
+                        && ( node[0].nodeType != KEN.NODE_ELEMENT || !movingOut || node._4e_name() != 'body' ) );
             };
         }
 
@@ -87,30 +91,30 @@ KISSY.add("editor-walker", function(S) {
 
                 if (range.endOffset > 0)
                 {
-                    node = new Node(node.childNodes[range.endOffset - 1]);
+                    node = new Node(node[0].childNodes[range.endOffset - 1]);
                     if (guard(node) === false)
                         node = null;
                 }
                 else
                     node = ( guard(node, true) === false ) ?
-                        null : node.getPreviousSourceNode(true, type, guard);
+                        null : node._4e_previousSourceNode(true, type, guard);
             }
             else {
                 node = range.startContainer;
-                node = new Node(node.childNodes[range.startOffset]);
+                node = new Node(node[0].childNodes[range.startOffset]);
 
-                if (node)
+                if (node && node[0])
                 {
                     if (guard(node) === false)
                         node = null;
                 }
                 else
                     node = ( guard(range.startContainer, true) === false ) ?
-                        null : range.startContainer.getNextSourceNode(true, type, guard);
+                        null : range.startContainer._4e_nextSourceNode(true, type, guard);
             }
         }
 
-        while (node && !this._.end) {
+        while (node && node[0] && !this._.end) {
             this.current = node;
 
             if (!this.evaluator || this.evaluator(node) !== false) {
@@ -272,7 +276,7 @@ KISSY.add("editor-walker", function(S) {
     Walker.blockBoundary = function(customNodeNames) {
         return function(node, type)
         {
-            return ! ( node.type == CKEDITOR.NODE_ELEMENT
+            return ! ( node[0].nodeType == CKEDITOR.NODE_ELEMENT
                 && node._4e_isBlockBoundary(customNodeNames) );
         };
     };
@@ -296,15 +300,15 @@ KISSY.add("editor-walker", function(S) {
          */
         Walker.bookmark = function(contentOnly, isReject) {
             function isBookmarkNode(node) {
-                return ( node && node.getName
-                    && node.getName() == 'span'
-                    && node.hasAttribute('_fck_bookmark') );
+                return ( node && node[0]
+                    && node._4e_name() == 'span'
+                    && node.attr('_ke_bookmark') );
             }
 
             return function(node) {
                 var isBookmark, parent;
                 // Is bookmark inner text node?
-                isBookmark = ( node && !node.getName && ( parent = node.getParent() )
+                isBookmark = ( node && node[0] && node[0].nodeType == KEN.NODE_TEXT && ( parent = node.getParent() )
                     && isBookmarkNode(parent) );
                 // Is bookmark node?
                 isBookmark = contentOnly ? isBookmark : isBookmark || isBookmarkNode(node);
@@ -337,7 +341,7 @@ KISSY.add("editor-walker", function(S) {
             // 2. Empty inline elements, e.g. <b></b> we're checking here
             // 'offsetHeight' instead of 'offsetWidth' for properly excluding
             // all sorts of empty paragraph, e.g. <br />.
-            var isInvisible = whitespace(node) || node.is && !node.$.offsetHeight;
+            var isInvisible = whitespace(node) || node[0].nodeType == KEN.NODE_ELEMENT && !node[0].offsetHeight;
             return isReject ^ isInvisible;
         };
     };

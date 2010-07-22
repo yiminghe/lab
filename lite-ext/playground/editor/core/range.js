@@ -104,10 +104,10 @@ KISSY.add("editor-range", function(S) {
                 endNode = this.endContainer;
 
             if (startNode.is && startNode.is('span')
-                && startNode.hasAttribute('_fck_bookmark'))
+                && startNode.hasAttribute('_ke_bookmark'))
                 this.setStartAt(startNode, KER.POSITION_BEFORE_START);
             if (endNode && endNode.is && endNode.is('span')
-                && endNode.hasAttribute('_fck_bookmark'))
+                && endNode.hasAttribute('_ke_bookmark'))
                 this.setEndAt(endNode, KER.POSITION_AFTER_END);
         },
         /**
@@ -536,7 +536,7 @@ KISSY.add("editor-range", function(S) {
                         return false;
 
                     // Stop when we've already walked "through" an element.
-                    if (movingOut && node[0] == currentElement)
+                    if (movingOut && node == currentElement)
                         return false;
 
                     if (!movingOut && node.nodeType == KEN.NODE_ELEMENT)
@@ -702,8 +702,7 @@ KISSY.add("editor-range", function(S) {
                 DOM.insertBefore(node[0] || node, nextNode);
             }
             else
-                startContainer.append(node);
-
+                startContainer[0].appendChild(node[0] || node);
             // Check if we need to update the end boundary.
             if (node.parent()[0] === this.endContainer[0])
                 this.endOffset++;
@@ -916,7 +915,7 @@ KISSY.add("editor-range", function(S) {
                                 if (!enlargeable && !next) {
                                     // Set the sibling as enlargeable, so it's
                                     // parent will be get later outside this while.
-                                    enlargeable = sibling;
+                                    enlargeable = new Node(sibling);
                                     sibling = null;
                                     break;
                                 }
@@ -1049,7 +1048,7 @@ KISSY.add("editor-range", function(S) {
                                 next = sibling.nextSibling;
 
                                 if (!enlargeable && !next) {
-                                    enlargeable = sibling;
+                                    enlargeable = new Node(sibling);
                                     sibling = null;
                                     break;
                                 }
@@ -1257,7 +1256,7 @@ KISSY.add("editor-range", function(S) {
         return node[0].nodeType != KEN.NODE_TEXT
             && node._4e_name() in dtd.$removeEmpty
             || !S.trim(node[0].nodeValue)
-            || node.parent().attr('_fck_bookmark');
+            || node.parent().attr('_ke_bookmark');
     }
 
     function getCheckStartEndBlockEvalFunction(isStart) {
@@ -1291,7 +1290,7 @@ KISSY.add("editor-range", function(S) {
     function bookmark(contentOnly, isReject) {
         function isBookmarkNode(node) {
             return ( node && node.nodeName == 'span'
-                && node.getAttribute('_fck_bookmark') );
+                && node.getAttribute('_ke_bookmark') );
         }
 
         return function(node) {

@@ -359,11 +359,11 @@ KISSY.add("editor-dom", function(S) {
 
             if (!node)
                 return null;
-
+            node = new Node(node);
             if (guard && guard(node) === false)
                 return null;
 
-            if (nodeType && nodeType != node.type)
+            if (nodeType && nodeType != node[0].nodeType)
                 return node._4e_nextSourceNode(false, nodeType, guard);
 
             return node;
@@ -421,14 +421,16 @@ KISSY.add("editor-dom", function(S) {
                         el != node && el.contains(node);
                 }
                 :
-                function(node) {
+                function(el, node) {
+                    el = el[0] || el;
+                    node = node[0] || node;
                     return !!( el.compareDocumentPosition(node) & 16 );
                 },
         _4e_commonAncestor:function(el, node) {
             if (node[0] === el[0])
-                return this;
+                return el;
 
-            if (node._4e_contains && node._4e_contains(this))
+            if (node._4e_contains && node._4e_contains(el))
                 return node;
 
             var start = el[0].nodeType == KEN.NODE_TEXT ? el.parent() : el;
@@ -436,7 +438,7 @@ KISSY.add("editor-dom", function(S) {
             do   {
                 if (start._4e_contains(node))
                     return start;
-            } while (( start = start.getParent() ));
+            } while (( start = start.parent() ));
 
             return null;
         },
@@ -490,6 +492,7 @@ KISSY.add("editor-dom", function(S) {
             }
             :
             function(el) {
+                el = el[0] || el;
                 var attributes = el.attributes;
                 return ( attributes.length > 1 || ( attributes.length == 1 && attributes[0].nodeName != '_ke_expando' ) );
             },
@@ -581,9 +584,53 @@ KISSY.add("editor-dom", function(S) {
             }
 
             return address;
-        }
+        },
+        _4e_breakParent : function(el, parent) {
+            var KERange = S.Range;
+            var range = new KERange(el[0].ownerDocument);
 
+            // We'll be extracting part of this element, so let's use our
+            // range to get the correct piece.
+            range.setStartAfter(el);
+            range.setEndAfter(parent);
+
+            // Extract it.
+            var docFrag = range.extractContents();
+
+            // Move the element outside the broken element.
+            range.insertNode(el.remove());
+
+            // Re-insert the extracted piece after the element.
+            el[0].parentNode.insertBefore(docFrag, el[0].nextSibling);
+        },
+        _4e_style:function(el, styleName, val) {
+            if (val !== undefined) {
+                return el.css(styleName, val);
+            }
+            el = el[0] || el;
+            return el.style[normalizeStyle(styleName)];
+        },
+        _4e_remove : function(el, preserveChildren) {
+            var $ = el[0] || el;
+            var parent = $.parentNode;
+            if (parent) {
+                if (preserveChildren) {
+                    // Move all children before the node.
+                    for (var child; ( child = $.firstChild );) {
+                        parent.insertBefore($.removeChild(child), $);
+                    }
+                }
+                parent.removeChild($);
+            }
+            return this;
+        }
     };
+
+    function normalizeStyle(styleName) {
+        return styleName.replace(/-(\w)/g, function(m, g1) {
+            return g1.toUpperCase();
+        })
+    }
 
     S.mix(DOM, editorDom);
     for (var dm in editorDom) {

@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk"/>
+<title>range Test</title>
+<script type="text/javascript"
+        src="http://chengyu.taobao.ali.com/kissy/build/packages/ks-core.js"></script>
+<script type="text/javascript"
+        src="editor.js"></script>
+<script type="text/javascript"
+        src="dtd.js"></script>
+<script type="text/javascript"
+        src="elementpath.js"></script>
+<script type="text/javascript"
+        src="dom.js"></script>
+<script type="text/javascript"
+        src="walker.js"></script>
+<script type="text/javascript"
+        src="range.js"></script>
+<script type="text/javascript"
+        src="selection.js"></script>
+<script type="text/javascript"
+        src="styles.js"></script>
+</head>
+<body>
+
+<div style="margin:10px;padding:10px;border:1px solid green;" id="p">
+    123 456 7890123 45678 abcdef ghijk
+</div>
+
+<div id="re" style="margin:10px;padding:10px;border:1px solid green;"></div>
+<button id="run">run</button>
+<script type="text/javascript">
+
+    KISSY.ready(function(S) {
+        var Range = S.Range,
+                Node = S.Node,
+                KEStyle = S.Style,
+                KESelection = S.Selection,
+                s = new KESelection(document);
+
+        var fontSize_style = {
+            element        : 'span',
+            styles        : { 'font-size' : '#(size)' },
+            overrides    : [
+                { element : 'font', attributes : { 'size' : null } }
+            ]
+        };
+        var fontStyle = new KEStyle(fontSize_style, {
+            size:"30px"
+        });
+        /*
+         var r = new Range(document);
+         r.startContainer = S.one("#t2");
+         r.endContainer = S.one("#t4");
+         r.startOffset = r.endOffset = 0;
+         */
+        S.one("#run").on("click", function() {
+            s.reset();
+            var r = s.getRanges()[0];
+            console.log(r);
+            fontStyle.applyToRange(r);
+            r.select();
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

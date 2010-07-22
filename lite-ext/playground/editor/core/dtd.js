@@ -27,7 +27,13 @@ KISSY.add("editor-dtd", function(KISSY) {
      */
     KISSYEDITOR.XHTML_DTD = (function()
     {
-        var X = KISSY.mix,
+        var X = function(r) {
+            var i = arguments.length - 1;
+            while (i > 0) {
+                KISSY.mix(r, arguments[i--]);
+            }
+            return r;
+        },
 
             A = {isindex:1,fieldset:1},
             B = {input:1,button:1,select:1,textarea:1,label:1},
