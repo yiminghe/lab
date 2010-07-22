@@ -24,11 +24,17 @@
 </head>
 <body>
 
+<h1>选择区域文字后 run </h1>
+
 <div style="margin:10px;padding:10px;border:1px solid green;" id="p">
     123 456 7890123 45678 abcdef ghijk
 </div>
 
-<div id="re" style="margin:10px;padding:10px;border:1px solid green;"></div>
+
+<h1>生成格式化html：</h1>
+<textarea id="re" style="margin:10px auto;border:1px solid green;width:80%;height:100px;" readonly></textarea>
+
+<br>
 <button id="run">run</button>
 <script type="text/javascript">
 
@@ -58,11 +64,14 @@
         S.one("#run").on("click", function() {
             s.reset();
             var r = s.getRanges()[0];
-            console.log(r);
+            //console.log(r);
             fontStyle.applyToRange(r);
             r.select();
-        });
 
+            S.one("#re").val(S.one("#p").html());
+        });
+        S.one("#re")._4e_unselectable();
+        S.one("#re").val(S.one("#p").html());
 
     });
 

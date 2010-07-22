@@ -289,7 +289,7 @@ KISSY.add("editor-styles", function(S) {
 
                     // Check if the style element can be a child of the current
                     // node parent or if the element is not defined in the DTD.
-                    if (currentParent[0]
+                    if (currentParent&&currentParent[0]
                         && ( ( KE.XHTML_DTD[currentParent._4e_name()] || KE.XHTML_DTD.span )[ elementName ] || isUnknownElement )
                         && ( !def.parentRule || def.parentRule(currentParent) )) {
                         // This node will be part of our range, so if it has not
