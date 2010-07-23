@@ -289,7 +289,7 @@ KISSY.add("editor-styles", function(S) {
 
                     // Check if the style element can be a child of the current
                     // node parent or if the element is not defined in the DTD.
-                    if (currentParent&&currentParent[0]
+                    if (currentParent && currentParent[0]
                         && ( ( KE.XHTML_DTD[currentParent._4e_name()] || KE.XHTML_DTD.span )[ elementName ] || isUnknownElement )
                         && ( !def.parentRule || def.parentRule(currentParent) )) {
                         // This node will be part of our range, so if it has not
@@ -477,7 +477,7 @@ KISSY.add("editor-styles", function(S) {
                         continue;
                     else
                         newElement = newElement._4e_clone();
-                    newElement.append(clonedElement);
+                    newElement[0].appendChild(clonedElement[0]);
                     clonedElement = newElement;
                 }
                 DOM[ boundaryElement.match == 'start' ?
@@ -529,8 +529,7 @@ KISSY.add("editor-styles", function(S) {
 
             // Now, do the DFS walk.
             var currentNode = new Node(startNode[0].nextSibling);
-            while (!currentNode[0] == endNode[0])
-            {
+            while (currentNode[0] !== endNode[0]) {
                 /*
                  * Need to get the next node first because removeFromElement() can remove
                  * the current node from DOM tree.

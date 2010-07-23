@@ -209,12 +209,16 @@ KISSY.add("editor-selection", function(S) {
 
                         // Gets the element that encloses the range entirely.
                         var parent = range.parentElement();
+                        console.log("ie get range :");
+                        console.log("parent:" + parent.innerHTML);
                         var siblings = parent.childNodes;
 
                         var testRange;
 
                         for (var i = 0; i < siblings.length; i++) {
                             var child = siblings[ i ];
+                            console.log("child:" + child.nodeType == KEN.NODE_ELEMENT ?
+                                ("el: " + child.innerHTML) : ("text:" + child.nodeValue));
                             if (child.nodeType == KEN.NODE_ELEMENT) {
                                 testRange = range.duplicate();
 
@@ -224,7 +228,7 @@ KISSY.add("editor-selection", function(S) {
                                     comparisonEnd = testRange.compareEndPoints('EndToStart', range);
 
                                 testRange.collapse();
-
+                                //中间有其他标签
                                 if (comparisonStart > 0)
                                     break;
                                 // When selection stay at the side of certain self-closing elements, e.g. BR,
@@ -253,6 +257,9 @@ KISSY.add("editor-selection", function(S) {
 
                         try {
                             while (distance > 0)
+                                //bug? 可能不是文本节点 nodeValue undefined
+                                //永远不会出现 textnode<img/>textnode
+                                //停止时，前面一定为textnode
                                 distance -= siblings[ --i ].nodeValue.length;
                         }
                             // Measurement in IE could be somtimes wrong because of <select> element. (#4611)

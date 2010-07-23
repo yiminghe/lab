@@ -10,9 +10,9 @@
 <script type="text/javascript"
         src="dtd.js"></script>
 <script type="text/javascript"
-        src="elementpath.js"></script>
-<script type="text/javascript"
         src="dom.js"></script>
+<script type="text/javascript"
+        src="elementpath.js"></script>
 <script type="text/javascript"
         src="walker.js"></script>
 <script type="text/javascript"
@@ -27,7 +27,7 @@
 <h1>选择区域文字后 run </h1>
 
 <div style="margin:10px;padding:10px;border:1px solid green;" id="p">
-    123 456 7890123 45678 abcdef ghijk
+    123 456 7890123 45678<img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"/> abcdef ghijk
 </div>
 
 
@@ -35,7 +35,8 @@
 <textarea id="re" style="margin:10px auto;border:1px solid green;width:80%;height:100px;" readonly></textarea>
 
 <br>
-<button id="run">run</button>
+<button id="run">格式化</button>
+<button id="unrun">清除格式化</button>
 <script type="text/javascript">
 
     KISSY.ready(function(S) {
@@ -64,7 +65,7 @@
         S.one("#run").on("click", function() {
             s.reset();
             var r = s.getRanges()[0];
-            //console.log(r);
+            console.log(r);
             fontStyle.applyToRange(r);
             r.select();
 
@@ -72,6 +73,16 @@
         });
         S.one("#re")._4e_unselectable();
         S.one("#re").val(S.one("#p").html());
+
+        S.one("#unrun").on("click", function() {
+            s.reset();
+            var r = s.getRanges()[0];
+            console.log(r);
+            fontStyle.removeFromRange(r);
+            r.select();
+
+            S.one("#re").val(S.one("#p").html());
+        });
 
     });
 

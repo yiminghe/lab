@@ -4,7 +4,10 @@
  */
 KISSY.add("editor-elementpath", function(S) {
 
-    var KE = KISSYEDITOR,dtd = KE.XHTML_DTD,KEN = KE.NODE;
+    var KE = KISSYEDITOR,
+        dtd = KE.XHTML_DTD,
+        KEN = KE.NODE,
+        UA = S.UA;
     // Elements that may be considered the "Block boundary" in an element path.
     var pathBlockElements = { address:1,blockquote:1,dl:1,h1:1,h2:1,h3:1,h4:1,h5:1,h6:1,p:1,pre:1,li:1,dt:1,dd:1 };
 
