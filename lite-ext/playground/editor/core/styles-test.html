@@ -4,7 +4,9 @@
 <meta charset="gbk"/>
 <title>range Test</title>
 <script type="text/javascript"
-        src="http://kissy.googlecode.com/svn/trunk/build/packages/ks-core-min.js"></script>
+        src="http://kissy.googlecode.com/svn/trunk/build/packages/ks-core.js"></script>
+<script type="text/javascript"
+        src="http://github.com/yiminghe/kissy-sandbox/raw/master/attribute/attribute.js"></script>
 <script type="text/javascript"
         src="editor.js"></script>
 <script type="text/javascript"
@@ -21,67 +23,44 @@
         src="selection.js"></script>
 <script type="text/javascript"
         src="styles.js"></script>
+<script type="text/javascript"
+        src="../plugins/font/plugin.js"></script>
 </head>
 <body>
 
 <h1>选择区域文字后 run </h1>
 
-<div style="margin:10px;padding:10px;border:1px solid green;" id="p">
-    123 456 7890123 45678<img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"/> abcdef ghijk
-</div>
+<iframe style="width:90%;margin:10px auto;padding:10px;border:1px solid green;" id="p"
+        src="">
+</iframe>
 
+
+<div id="tools"></div>
 
 <h1>生成格式化html：</h1>
 <textarea id="re" style="margin:10px auto;border:1px solid green;width:80%;height:100px;" readonly></textarea>
 
 <br>
-<button id="run">格式化</button>
-<button id="unrun">清除格式化</button>
+
 <script type="text/javascript">
 
     KISSY.ready(function(S) {
-        var Range = S.Range,
-                Node = S.Node,
-                KEStyle = S.Style,
-                KESelection = S.Selection,
-                s = new KESelection(document);
-
-        var fontSize_style = {
-            element        : 'span',
-            styles        : { 'font-size' : '#(size)' },
-            overrides    : [
-                { element : 'font', attributes : { 'size' : null } }
-            ]
-        };
-        var fontStyle = new KEStyle(fontSize_style, {
-            size:"30px"
-        });
-        /*
-         var r = new Range(document);
-         r.startContainer = S.one("#t2");
-         r.endContainer = S.one("#t4");
-         r.startOffset = r.endOffset = 0;
-         */
-        S.one("#run").on("click", function() {
-            s.reset();
-            var r = s.getRanges()[0];
-            console.log(r);
-            fontStyle.applyToRange(r);
-            r.select();
-
-            S.one("#re").val(S.one("#p").html());
-        });
+        var Node = S.Node,
+                iframe = S.one("#p")[0].contentWindow.document,
+                editor = new S.Editor(iframe, S.one("#tools"));
         S.one("#re")._4e_unselectable();
-        S.one("#re").val(S.one("#p").html());
+        iframe.open();
+        iframe.writeln("<html><body><div>123 456 7890123 45678" +
+                "<img src='http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif'" + " / " + " > "
+                + "abcdef ghijk</body></div></html>");
+        iframe.close();
+        iframe.designMode = 'on';
 
-        S.one("#unrun").on("click", function() {
-            s.reset();
-            var r = s.getRanges()[0];
-            console.log(r);
-            fontStyle.removeFromRange(r);
-            r.select();
-
-            S.one("#re").val(S.one("#p").html());
+        editor.on("fontSizeChange", function() {
+            S.one("#re").val(iframe.body.innerHTML);
+        });
+        S.one("#p").on("load", function() {
+            S.one("#re").val(iframe.body.innerHTML);
         });
 
     });

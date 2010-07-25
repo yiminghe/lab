@@ -7,6 +7,7 @@ KISSY.add("editor-styles", function(S) {
     var KE = KISSYEDITOR,
         KEST = KE.STYLE = {},
         KER = KE.RANGE,
+        KESelection = S.Selection,
         KEN = KE.NODE,
         KEP = KE.POSITION,
         KERange = S.Range,
@@ -51,6 +52,20 @@ KISSY.add("editor-styles", function(S) {
         this._ = {
             definition : styleDefinition
         };
+    }
+
+    function applyStyle(document, remove) {
+        // Get all ranges from the selection.
+        var selection = new KESelection(document);
+        var ranges = selection.getRanges();
+
+        var func = remove ? this.removeFromRange : this.applyToRange;
+        // Apply the style to the ranges.
+        for (var i = 0; i < ranges.length; i++)
+            func.call(this, ranges[ i ]);
+
+        // Select the ranges again.
+        selection.selectRanges(ranges);
     }
 
     KEStyle.prototype = {
@@ -220,8 +235,9 @@ KISSY.add("editor-styles", function(S) {
         }
 
         // Assign all defined styles.
+
         if (styles)
-            el.attr('style', styles);
+            el[0].style.cssText = styles;
 
         return el;
     }
@@ -250,9 +266,9 @@ KISSY.add("editor-styles", function(S) {
         var bookmark = range.createBookmark();
 
         // Expand the range.
+
         range.enlarge(KER.ENLARGE_ELEMENT);
         range.trim();
-
         // Get the first node to be processed and the last, which concludes the
         // processing.
         var boundaryNodes = range.createBookmark(),
@@ -361,10 +377,14 @@ KISSY.add("editor-styles", function(S) {
                             if (styleNode.attr(attName) == parent.attr(attName))
                                 styleNode[0].removeAttribute(attName);
                         }
-
+                        //bug notice add by yiminghe@gmail.com
+                        //<span style="font-size:70px"><span style="font-size:30px">xcxx</span></span>
+                        //下一次格式xxx为70px
+                        var exit = false;
                         for (var styleName in def.styles) {
-                            if (styleNode._4e_style(styleName) == parent._4e_style(styleName))
+                            if (styleNode._4e_style(styleName) == parent._4e_style(styleName)) {
                                 styleNode._4e_style(styleName, "");
+                            }
                         }
 
                         if (!styleNode._4e_hasAttributes()) {
@@ -466,7 +486,7 @@ KISSY.add("editor-styles", function(S) {
             // Re-create the style tree after/before the boundary element,
             // the replication start from bookmark start node to define the
             // new range.
-            if (boundaryElement) {
+            if (boundaryElement && boundaryElement[0]) {
                 var clonedElement = startNode;
                 for (i = 0; ; i++) {
                     var newElement = startPath.elements[ i ];
@@ -556,7 +576,6 @@ KISSY.add("editor-styles", function(S) {
                 currentNode = nextNode;
             }
         }
-
         range.moveToBookmark(bookmark);
     }
 
@@ -593,8 +612,9 @@ KISSY.add("editor-styles", function(S) {
             // Injects the style in a temporary span object, so the browser parses it,
             // retrieving its final format.
             var temp = document.createElement('span');
-            temp.setAttribute('style', unparsedCssText);
-            styleText = temp.getAttribute('style') || '';
+            temp.style.cssText = unparsedCssText;
+            //temp.setAttribute('style', unparsedCssText);
+            styleText = temp.style.cssText || '';
         }
         else
             styleText = unparsedCssText;

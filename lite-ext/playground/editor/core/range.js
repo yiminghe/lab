@@ -571,8 +571,7 @@ KISSY.add("editor-range", function(S) {
             var startNode, endNode;
             var baseId;
             var clone;
-
-            startNode = new Node("<span></span>");
+            startNode = new Node("<span></span>", null, this.document);
             startNode.attr('_ke_bookmark', 1);
             startNode.css('display', 'none');
 
@@ -862,7 +861,7 @@ KISSY.add("editor-range", function(S) {
                                 // If this is a visible element.
                                 // We need to check for the bookmark attribute because IE insists on
                                 // rendering the display:none nodes we use for bookmarks. (#3363)
-                                if (sibling.offsetWidth > 0 && !sibling.getAttribute('_fck_bookmark'))
+                                if (sibling.offsetWidth > 0 && !sibling.getAttribute('_ke_bookmark'))
                                 {
                                     // We'll accept it only if we need
                                     // whitespace, and this is an inline
@@ -1007,7 +1006,7 @@ KISSY.add("editor-range", function(S) {
                                 // If this is a visible element.
                                 // We need to check for the bookmark attribute because IE insists on
                                 // rendering the display:none nodes we use for bookmarks. (#3363)
-                                if (sibling.offsetWidth > 0 && !sibling.getAttribute('_fck_bookmark')) {
+                                if (sibling.offsetWidth > 0 && !sibling.getAttribute('_ke_bookmark')) {
                                     // We'll accept it only if we need
                                     // whitespace, and this is an inline
                                     // element with whitespace only.
@@ -1253,11 +1252,16 @@ KISSY.add("editor-range", function(S) {
     function elementBoundaryEval(node) {
         // Reject any text node unless it's being bookmark
         // OR it's spaces. (#3883)
-        return node[0].nodeType != KEN.NODE_TEXT
-            && node._4e_name() in dtd.$removeEmpty
-            || !S.trim(node[0].nodeValue)
-            || node.parent().attr('_ke_bookmark');
+        //如果不是文本节点并且是空的就是边界了
+        var c1 = node[0].nodeType != KEN.NODE_TEXT
+            && node._4e_name() in dtd.$removeEmpty,
+            //文本为空也是边界
+            c2 = !S.trim(node[0].nodeValue),
+            //恩，进去了书签还是边界了
+            c3 = !!node.parent().attr('_ke_bookmark');
+        return c1 || c2 || c3;
     }
+
 
     function getCheckStartEndBlockEvalFunction(isStart) {
         var hadBr = false, bookmarkEvaluator = Walker.bookmark(true);
@@ -1305,8 +1309,7 @@ KISSY.add("editor-range", function(S) {
     }
 
     function whitespaces(isReject) {
-        return function(node)
-        {
+        return function(node) {
             var isWhitespace = node && ( node.nodeType == KEN.NODE_TEXT )
                 && !S.trim(node.nodeValue);
             return isReject ^ isWhitespace;

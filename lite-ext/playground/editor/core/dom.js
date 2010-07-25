@@ -29,7 +29,7 @@ KISSY.add("editor-dom", function(S) {
             return (elem && ('scrollTo' in elem) && elem["document"]) ?
                 elem :
                 elem && elem.nodeType === 9 ?
-                    elem.defaultView || elem.parentWindow :
+                    elem.parentWindow || elem.defaultView :
                     false;
         },
         _4e_index:function(el) {
@@ -331,9 +331,10 @@ KISSY.add("editor-dom", function(S) {
             el = el[0] || el;
             // If "guard" is a node, transform it in a function.
             if (guard && !guard.call) {
-                var guardNode = guard;
+                var guardNode = guard || guard[0];
                 guard = function(node) {
-                    return !node.equals(guardNode);
+                    node = node[0] || node;
+                    return node !== guardNode;
                 };
             }
 
@@ -370,11 +371,9 @@ KISSY.add("editor-dom", function(S) {
         },
         _4e_previousSourceNode : function(el, startFromSibling, nodeType, guard) {
             el = el[0] || el;
-            if (guard && !guard.call)
-            {
+            if (guard && !guard.call) {
                 var guardNode = guard[0] || guardNode;
                 guard = function(node) {
-
                     node = node[0] || node;
                     return node !== guardNode;
                 };
@@ -391,7 +390,7 @@ KISSY.add("editor-dom", function(S) {
                 node = el.previousSibling;
             }
 
-            while (!node && ( parent = parent.getParent() ))
+            while (!node && ( parent = parent.parent() ))
             {
                 // The guard check sends the "true" paramenter to indicate that
                 // we are moving "out" of the element.
@@ -402,11 +401,11 @@ KISSY.add("editor-dom", function(S) {
 
             if (!node)
                 return null;
-
+            node = new Node(node);
             if (guard && guard(node) === false)
                 return null;
 
-            if (nodeType && node.type != nodeType)
+            if (nodeType && node[0].nodeType != nodeType)
                 return node._4e_previousSourceNode(false, nodeType, guard);
 
             return node;
@@ -456,7 +455,11 @@ KISSY.add("editor-dom", function(S) {
             }
             return null;
         },
-
+        _4e_hasAttribute : function(el, name) {
+            el = el[0] || el;
+            var $attr = el.attributes.getNamedItem(name);
+            return !!( $attr && $attr.specified );
+        },
         _4e_hasAttributes: UA.ie ?
             function(el) {
                 el = el[0] || el;

@@ -35,7 +35,7 @@ KISSY.add("editor-elementpath", function(S) {
         var elements = [];
         var e = lastNode;
 
-        while (e[0]) {
+        while (e && e[0]) {
             if (e[0].nodeType == KEN.NODE_ELEMENT) {
                 if (!this.lastElement)
                     this.lastElement = e;

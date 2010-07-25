@@ -7,6 +7,7 @@ KISSY.add("editor-selection", function(S) {
     KISSYEDITOR.SELECTION = {};
     var KES = KISSYEDITOR.SELECTION,
         KEN = KISSYEDITOR.NODE,
+        EventTarget = S.EventTarget,
         Walker = S.Walker,
         ElementPath = S.ElementPath,
         KERange = S.Range;
@@ -54,7 +55,7 @@ KISSY.add("editor-selection", function(S) {
 
     function isBlockBoundary(el) {
         return blockBoundaryDisplayMatch[ el.css('display') ] ||
-            blockBoundaryNodeNameMatch[ this.getName() ];
+            blockBoundaryNodeNameMatch[ el._4e_name() ];
     }
 
     function tryThese() {
@@ -91,8 +92,6 @@ KISSY.add("editor-selection", function(S) {
                 this.isInvalid = true;
             }
         }
-
-        return this;
     }
 
     var styleObjectElements = {
@@ -100,7 +99,9 @@ KISSY.add("editor-selection", function(S) {
         a:1, input:1, form:1, select:1, textarea:1, button:1, fieldset:1, th:1, thead:1, tfoot:1
     };
 
-    KESelection.prototype = {
+    S.augment(KESelection, {
+
+
         /**
          * Gets the native selection object from the browser.
          * @function
@@ -209,16 +210,16 @@ KISSY.add("editor-selection", function(S) {
 
                         // Gets the element that encloses the range entirely.
                         var parent = range.parentElement();
-                        console.log("ie get range :");
-                        console.log("parent:" + parent.innerHTML);
+                        //console.log("ie get range :");
+                        //console.log("parent:" + parent.innerHTML);
                         var siblings = parent.childNodes;
 
                         var testRange;
 
                         for (var i = 0; i < siblings.length; i++) {
                             var child = siblings[ i ];
-                            console.log("child:" + child.nodeType == KEN.NODE_ELEMENT ?
-                                ("el: " + child.innerHTML) : ("text:" + child.nodeValue));
+                            //console.log("child:" + child.nodeType == KEN.NODE_ELEMENT ?
+                            //    ("el: " + child.innerHTML) : ("text:" + child.nodeValue));
                             if (child.nodeType == KEN.NODE_ELEMENT) {
                                 testRange = range.duplicate();
 
@@ -432,7 +433,7 @@ KISSY.add("editor-selection", function(S) {
                     }
             }
 
-            return cache.startElement = ( node ? new CKEDITOR.dom.element(node) : null );
+            return cache.startElement = ( node ? new Node(node) : null );
         },
 
         /**
@@ -606,7 +607,7 @@ KISSY.add("editor-selection", function(S) {
                         ( UA.gecko && UA.gecko < 10900 ) &&
                         startContainer.type == KEN.NODE_ELEMENT &&
                         !startContainer[0].childNodes.length) {
-                        startContainer[0].appendChild(document.createTextNode(""));
+                        startContainer[0].appendChild(this.document.createTextNode(""));
                     }
 
                     nativeRange.setStart(startContainer[0], range.startOffset);
@@ -674,7 +675,7 @@ KISSY.add("editor-selection", function(S) {
             var start = this.getStartElement();
             start.scrollIntoView();
         }
-    };
+    });
 
 
     S.Selection = KESelection;
