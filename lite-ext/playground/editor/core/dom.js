@@ -33,8 +33,8 @@ KISSY.add("editor-dom", function(S) {
                     false;
         },
         _4e_index:function(el) {
-            var siblings = el.parent()[0].childNodes;
             el = el[0] || el;
+            var siblings = el.parentNode.childNodes;
             for (var i = 0; i < siblings.length; i++) {
                 if (siblings[i] === el) return i;
             }

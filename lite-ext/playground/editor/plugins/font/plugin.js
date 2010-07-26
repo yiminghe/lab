@@ -51,6 +51,7 @@ KISSY.add("editor-plugin-font", function(S) {
 
         _vChange:function(ev) {
             var editor = this.get("editor"),v = ev.newVal,pre = ev.preVal;
+            editor.focus();
             if (!v) {
                 v = pre;
                 FONT_STYLES[v].remove(editor.document);
@@ -65,6 +66,7 @@ KISSY.add("editor-plugin-font", function(S) {
         },
 
         _selectionChange:function(ev) {
+            var editor = this.get("editor");
             var currentValue = this.get("v");
             var elementPath = ev.path,
                 elements = elementPath.elements;
@@ -80,6 +82,7 @@ KISSY.add("editor-plugin-font", function(S) {
                             this._set("v", value);
                             this.el.val(value);
                         }
+
                         return;
                     }
                 }
@@ -90,6 +93,7 @@ KISSY.add("editor-plugin-font", function(S) {
                 this._set("v", '');
                 this.el.val("");
             }
+
         }
     });
 

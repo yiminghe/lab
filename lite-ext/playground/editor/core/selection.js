@@ -6,6 +6,7 @@ KISSY.add("editor-selection", function(S) {
     var UA = S.UA,DOM = S.DOM,Node = S.Node;
     KISSYEDITOR.SELECTION = {};
     var KES = KISSYEDITOR.SELECTION,
+        KER = KISSYEDITOR.RANGE,
         KEN = KISSYEDITOR.NODE,
         EventTarget = S.EventTarget,
         Walker = S.Walker,
@@ -491,8 +492,7 @@ KISSY.add("editor-selection", function(S) {
             this.isLocked = true;
         },
 
-        unlock : function(restore)
-        {
+        unlock : function(restore) {
             var doc = this.document,
                 //!TODO save ?
                 lockedSelection = null;
@@ -604,8 +604,8 @@ KISSY.add("editor-selection", function(S) {
                     // element, we must add something to it otherwise the caret
                     // will not be visible.
                     if (range.collapsed &&
-                        ( UA.gecko && UA.gecko < 10900 ) &&
-                        startContainer.type == KEN.NODE_ELEMENT &&
+                        ( UA.gecko && UA.gecko < 1.0900 ) &&
+                        startContainer[0].nodeType == KEN.NODE_ELEMENT &&
                         !startContainer[0].childNodes.length) {
                         startContainer[0].appendChild(this.document.createTextNode(""));
                     }
@@ -709,7 +709,9 @@ KISSY.add("editor-selection", function(S) {
             var ieRange = this.document.body.createTextRange();
 
             // Position the range at the start boundary.
+
             ieRange.moveToElementText(startNode[0]);
+
             ieRange.moveStart('character', 1);
 
             if (endNode) {
@@ -745,14 +747,15 @@ KISSY.add("editor-selection", function(S) {
                 dummySpan = this.document.createElement('span');
                 dummySpan.innerHTML = '&#65279;';	// Zero Width No-Break Space (U+FEFF). See #1359.
                 dummySpan = new Node(dummySpan);
-                dummySpan.insertBefore(startNode);
+
+                DOM.insertBefore(dummySpan[0], startNode[0]);
 
                 if (isStartMarkerAlone) {
                     // To expand empty blocks or line spaces after <br>, we need
                     // instead to have any char, which will be later deleted using the
                     // selection.
                     // \ufeff = Zero Width No-Break Space (U+FEFF). (#1359)
-                    new Node(this.document.createText('\ufeff')).insertBefore(startNode);
+                    DOM.insertBefore(this.document.createTextNode('\ufeff'), startNode[0]);
                 }
             }
 

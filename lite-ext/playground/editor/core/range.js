@@ -435,8 +435,7 @@ KISSY.add("editor-range", function(S) {
             if (toStart) {
                 this.endContainer = this.startContainer;
                 this.endOffset = this.startOffset;
-            }
-            else {
+            } else {
                 this.startContainer = this.endContainer;
                 this.startOffset = this.endOffset;
             }

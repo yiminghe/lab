@@ -56,16 +56,18 @@ KISSY.add("editor-styles", function(S) {
 
     function applyStyle(document, remove) {
         // Get all ranges from the selection.
+
+        var func = remove ? this.removeFromRange : this.applyToRange,self = this;
+        // Apply the style to the ranges.
+        //ie select 选中期间document得不到range
+        document.body.focus();
         var selection = new KESelection(document);
         var ranges = selection.getRanges();
-
-        var func = remove ? this.removeFromRange : this.applyToRange;
-        // Apply the style to the ranges.
         for (var i = 0; i < ranges.length; i++)
-            func.call(this, ranges[ i ]);
-
+            func.call(self, ranges[ i ]);
         // Select the ranges again.
         selection.selectRanges(ranges);
+
     }
 
     KEStyle.prototype = {
