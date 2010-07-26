@@ -21,6 +21,7 @@ KISSY.add("editor-range", function(S) {
 
     var KEN = KISSYEDITOR.NODE,
         KER = KISSYEDITOR.RANGE,
+        KEP = KISSYEDITOR.POSITION,
         Walker = S.Walker,
         DOM = S.DOM,
         dtd = KISSYEDITOR.XHTML_DTD,
@@ -1241,6 +1242,57 @@ KISSY.add("editor-range", function(S) {
             walker.evaluator = elementBoundaryEval;
             return walker[ checkType == KER.START ?
                 'checkBackward' : 'checkForward' ]();
+        },
+
+        getBoundaryNodes : function() {
+            var startNode = this.startContainer,
+                endNode = this.endContainer,
+                startOffset = this.startOffset,
+                endOffset = this.endOffset,
+                childCount;
+
+            if (startNode[0].nodeType == KEN.NODE_ELEMENT) {
+                childCount = startNode[0].childNodes.length;
+                if (childCount > startOffset)
+                    startNode = startNode[0].childNodes[startOffset];
+                else if (childCount < 1)
+                    startNode = startNode._4e_previousSourceNode();
+                else        // startOffset > childCount but childCount is not 0
+                {
+                    // Try to take the node just after the current position.
+                    startNode = startNode[0];
+                    while (startNode.lastChild)
+                        startNode = startNode.lastChild;
+                    startNode = new Node(startNode);
+
+                    // Normally we should take the next node in DFS order. But it
+                    // is also possible that we've already reached the end of
+                    // document.
+                    startNode = startNode._4e_nextSourceNode() || startNode;
+                }
+            }
+            if (endNode[0].nodeType == KEN.NODE_ELEMENT) {
+                childCount = endNode[0].childNodes.length;
+                if (childCount > endOffset)
+                    endNode = new Node(endNode[0].childNodes[endOffset])._4e_previousSourceNode(true);
+                else if (childCount < 1)
+                    endNode = endNode._4e_previousSourceNode();
+                else        // endOffset > childCount but childCount is not 0
+                {
+                    // Try to take the node just before the current position.
+                    endNode = endNode[0];
+                    while (endNode.lastChild)
+                        endNode = endNode.lastChild;
+                    endNode = new Node(endNode);
+                }
+            }
+
+            // Sometimes the endNode will come right before startNode for collapsed
+            // ranges. Fix it. (#3780)
+            if (startNode._4e_position(endNode) & KEP.POSITION_FOLLOWING)
+                startNode = endNode;
+
+            return { startNode : startNode, endNode : endNode };
         }
 
     });

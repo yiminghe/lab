@@ -20,7 +20,7 @@ KISSY.add("editor-plugin-font", function(S) {
         });
         FONT_SELECTION_HTML += "<option value='" + size + "'>" + size + "</option>"
     }
-    FONT_SELECTION_HTML += "select";
+    FONT_SELECTION_HTML += "</select>";
 
 
     function Font(cfg) {

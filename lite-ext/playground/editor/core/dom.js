@@ -23,8 +23,33 @@ KISSY.add("editor-dom", function(S) {
     KEP.POSITION_PRECEDING = 4;
     KEP.POSITION_IS_CONTAINED = 8;
     KEP.POSITION_CONTAINS = 16;
+    /*
+     * Anything whose display computed style is block, list-item, table,
+     * table-row-group, table-header-group, table-footer-group, table-row,
+     * table-column-group, table-column, table-cell, table-caption, or whose node
+     * name is hr, br (when enterMode is br only) is a block boundary.
+     */
+    var blockBoundaryDisplayMatch = {
+        block : 1,
+        'list-item' : 1,
+        table : 1,
+        'table-row-group' : 1,
+        'table-header-group' : 1,
+        'table-footer-group' : 1,
+        'table-row' : 1,
+        'table-column-group' : 1,
+        'table-column' : 1,
+        'table-cell' : 1,
+        'table-caption' : 1
+    },
+        blockBoundaryNodeNameMatch = { hr : 1 };
+
 
     var editorDom = {
+        _4e_isBlockBoundary:function(el) {
+            return blockBoundaryDisplayMatch[ el.css('display') ] ||
+                blockBoundaryNodeNameMatch[ el._4e_name() ];
+        },
         _4e_getWin:function(elem) {
             return (elem && ('scrollTo' in elem) && elem["document"]) ?
                 elem :
@@ -626,8 +651,72 @@ KISSY.add("editor-dom", function(S) {
                 parent.removeChild($);
             }
             return this;
+        },
+        _4e_trim : function(el) {
+            el._4e_ltrim();
+            el._4e_rtrim();
+        },
+
+        _4e_ltrim : function(el) {
+            el = el[0] || el;
+            var child;
+            while (( child = el.firstChild )) {
+                if (child.nodeType == KEN.NODE_TEXT) {
+                    var trimmed = ltrim(child.nodeValue),
+                        originalLength = child.nodeValue.length;
+
+                    if (!trimmed) {
+                        DOM.remove(child);
+                        continue;
+                    }
+                    else if (trimmed.length < originalLength) {
+                        new Node(child).split(originalLength - trimmed.length);
+                        // IE BUG: child.remove() may raise JavaScript errors here. (#81)
+                        el.removeChild(el.firstChild);
+                    }
+                }
+                break;
+            }
+        },
+
+        _4e_rtrim : function(el) {
+            el = el[0] || el;
+            var child;
+            while (( child = el.lastChild )) {
+                if (child.type == KEN.NODE_TEXT) {
+                    var trimmed = rtrim(child.nodeValue),
+                        originalLength = child.nodeValue.length;
+
+                    if (!trimmed) {
+                        DOM.remove(child);
+                        continue;
+                    } else if (trimmed.length < originalLength) {
+                        child.split(trimmed.length);
+                        // IE BUG: child.getNext().remove() may raise JavaScript errors here.
+                        // (#81)
+                        el.lastChild.parentNode.removeChild(el.lastChild);
+                    }
+                }
+                break;
+            }
+
+            if (!UA.ie && !UA.opera) {
+                child = el.lastChild;
+                if (child && child.nodeType == 1 && child.nodeName.toLowerCase() == 'br') {
+                    // Use "eChildNode.parentNode" instead of "node" to avoid IE bug (#324).
+                    child.parentNode.removeChild(child);
+                }
+            }
         }
     };
+
+    function ltrim(str) {
+        return str.replace(/^\s+/, "");
+    }
+
+    function rtrim(str) {
+        return str.replace(/\s+$/, "");
+    }
 
     function normalizeStyle(styleName) {
         return styleName.replace(/-(\w)/g, function(m, g1) {

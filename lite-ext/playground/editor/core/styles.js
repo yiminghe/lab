@@ -166,7 +166,41 @@ KISSY.add("editor-styles", function(S) {
                 }
             }
             return false;
+        },
+
+        /**
+         * Get the style state inside an element path. Returns "true" if the
+         * element is active in the path.
+         */
+        checkActive : function(elementPath) {
+            switch (this.type) {
+                case KEST.STYLE_BLOCK :
+                    return this.checkElementRemovable(elementPath.block || elementPath.blockLimit, true);
+
+                case KEST.STYLE_OBJECT :
+                case KEST.STYLE_INLINE :
+
+                    var elements = elementPath.elements;
+
+                    for (var i = 0, element; i < elements.length; i++) {
+                        element = elements[ i ];
+
+                        if (this.type == KEST.STYLE_INLINE
+                            && ( elementPath.block && element[0] == elementPath.block[0]
+                            || elementPath.blockLimit && element[0] == elementPath.blockLimit[0] ))
+                            continue;
+
+                        if (this.type == KEST.STYLE_OBJECT
+                            && !( element._4e_name() in objectElements ))
+                            continue;
+
+                        if (this.checkElementRemovable(element, true))
+                            return true;
+                    }
+            }
+            return false;
         }
+
     };
 
     KEStyle.getStyleText = function(styleDefinition) {
@@ -242,6 +276,57 @@ KISSY.add("editor-styles", function(S) {
             el[0].style.cssText = styles;
 
         return el;
+    }
+
+    function applyBlockStyle(range) {
+        // Serializible bookmarks is needed here since
+        // elements may be merged.
+        var bookmark = range.createBookmark(true);
+
+        var iterator = range.createIterator();
+        iterator.enforceRealBlocks = true;
+
+        // make recognize <br /> tag as a separator in ENTER_BR mode (#5121)
+        //if (this._.enterMode)
+        iterator.enlargeBr = true;//( this._.enterMode != CKEDITOR.ENTER_BR );
+
+        var block;
+        var doc = range.document;
+        var previousPreBlock;
+        // Only one =
+        while (( block = iterator.getNextParagraph() )) {
+            var newBlock = getElement(this, doc);
+            replaceBlock(block, newBlock);
+        }
+
+        range.moveToBookmark(bookmark);
+    }
+
+    // Replace the original block with new one, with special treatment
+    // for <pre> blocks to make sure content format is well preserved, and merging/splitting adjacent
+    // when necessary.(#3188)
+    function replaceBlock(block, newBlock) {
+        var newBlockIsPre = newBlock.is('pre');
+        var blockIsPre = block.is('pre');
+
+        var isToPre = newBlockIsPre && !blockIsPre;
+        var isFromPre = !newBlockIsPre && blockIsPre;
+
+        if (isToPre)
+            newBlock = toPre(block, newBlock);
+        else if (isFromPre)
+        // Split big <pre> into pieces before start to convert.
+            newBlock = fromPres(splitIntoPres(block), newBlock);
+        else
+            block.moveChildren(newBlock);
+
+        newBlock.replace(block);
+
+        if (newBlockIsPre)
+        {
+            // Merge previous <pre> blocks.
+            mergePre(newBlock);
+        }
     }
 
     function applyInlineStyle(range) {

@@ -39,26 +39,6 @@ KISSY.add("editor-selection", function(S) {
      */
     KES.SELECTION_ELEMENT = 3;
 
-    var blockBoundaryDisplayMatch = {
-        block : 1,
-        'list-item' : 1,
-        table : 1,
-        'table-row-group' : 1,
-        'table-header-group' : 1,
-        'table-footer-group' : 1,
-        'table-row' : 1,
-        'table-column-group' : 1,
-        'table-column' : 1,
-        'table-cell' : 1,
-        'table-caption' : 1
-    },
-        blockBoundaryNodeNameMatch = { hr : 1 };
-
-    function isBlockBoundary(el) {
-        return blockBoundaryDisplayMatch[ el.css('display') ] ||
-            blockBoundaryNodeNameMatch[ el._4e_name() ];
-    }
-
     function tryThese() {
         var returnValue;
         for (var i = 0, length = arguments.length; i < length; i++) {
@@ -398,7 +378,7 @@ KISSY.add("editor-selection", function(S) {
                                 // Limit the fix only to non-block elements.(#3950)
                                 if (startOffset == ( startContainer[0].childNodes ?
                                     startContainer[0].childNodes.length : startContainer[0].nodeValue.length )
-                                    && !isBlockBoundary(startContainer))
+                                    && !startContainer._4e_isBlockBoundary())
                                     range.setStartAfter(startContainer);
                                 else break;
                             }

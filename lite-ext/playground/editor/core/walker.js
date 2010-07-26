@@ -253,39 +253,9 @@ KISSY.add("editor-walker", function(S) {
     });
 
 
-    /*
-     * Anything whose display computed style is block, list-item, table,
-     * table-row-group, table-header-group, table-footer-group, table-row,
-     * table-column-group, table-column, table-cell, table-caption, or whose node
-     * name is hr, br (when enterMode is br only) is a block boundary.
-     */
-    var blockBoundaryDisplayMatch = {
-        block : 1,
-        'list-item' : 1,
-        table : 1,
-        'table-row-group' : 1,
-        'table-header-group' : 1,
-        'table-footer-group' : 1,
-        'table-row' : 1,
-        'table-column-group' : 1,
-        'table-column' : 1,
-        'table-cell' : 1,
-        'table-caption' : 1
-    },
-        blockBoundaryNodeNameMatch = { hr : 1 };
-
-    Node.prototype._4e_isBlockBoundary = function(customNodeNames) {
-        var nodeNameMatches = S.clone(blockBoundaryNodeNameMatch);
-        S.mix(nodeNameMatches, customNodeNames || {});
-
-        return blockBoundaryDisplayMatch[ this.getComputedStyle('display') ] ||
-            nodeNameMatches[ this.getName() ];
-    };
-
     Walker.blockBoundary = function(customNodeNames) {
-        return function(node, type)
-        {
-            return ! ( node[0].nodeType == CKEDITOR.NODE_ELEMENT
+        return function(node, type) {
+            return ! ( node[0].nodeType == KEN.NODE_ELEMENT
                 && node._4e_isBlockBoundary(customNodeNames) );
         };
     };
@@ -317,7 +287,7 @@ KISSY.add("editor-walker", function(S) {
             return function(node) {
                 var isBookmark, parent;
                 // Is bookmark inner text node?
-                isBookmark = ( node && node[0] && node[0].nodeType == KEN.NODE_TEXT && ( parent = node.getParent() )
+                isBookmark = ( node && node[0] && node[0].nodeType == KEN.NODE_TEXT && ( parent = node.parent() )
                     && isBookmarkNode(parent) );
                 // Is bookmark node?
                 isBookmark = contentOnly ? isBookmark : isBookmark || isBookmarkNode(node);
