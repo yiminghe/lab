@@ -1,11 +1,17 @@
+/**
+ * Just For Fun ,no copy no copy 
+ * @author:yiminghe@gmail.com
+ * @声明：我支持开放
+ */
 KISSY.ready(function(S) {
     var t = "textarea",
+        m = "禁止copy!",
         Event = S.Event,
         doc = document,
         body = doc.body,
         DOM = S.DOM,
-        Node=S.Node,
-        clip = new Node(body.appendChild(DOM.create('<' + t + ' rows="1" cols="1" id="clipboard" style="position:absolute;left:-9999px;"></' + t + '>')))
+        Node = S.Node,
+        clip = new Node(body.appendChild(DOM.create('<' + t + ' rows="1" cols="1" id="clipboard" style="position:absolute;left:-9999px;">' + m + '</' + t + '>')))
 
     Event.on(document, "contextmenu", function(ev) {
         ev.halt();
@@ -23,7 +29,7 @@ KISSY.ready(function(S) {
             //保存原来的选择区域
             var s = new S.Selection(doc),r = s.getRanges()[0];
             //警告
-            clip.html("禁止copy！");
+            // clip.html("禁止copy！");
             clip[0].focus();
             clip[0].select();
             //异步
