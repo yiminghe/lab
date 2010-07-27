@@ -11,7 +11,7 @@ KISSY.ready(function(S) {
         body = doc.body,
         DOM = S.DOM,
         Node = S.Node,
-        clip = new Node(body.appendChild(DOM.create('<' + t + ' rows="1" cols="1" style="position:absolute;left:-9999px;">' + m + '</' + t + '>')))
+        clip = new Node(body.appendChild(DOM.create('<' + t + ' style="position:absolute;left:-9999px;">' + m + '</' + t + '>')))
 
     Event.on(document, "contextmenu", function(ev) {
         ev.halt();
