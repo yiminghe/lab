@@ -255,6 +255,7 @@ KISSY.add("editor-walker", function(S) {
 
     Walker.blockBoundary = function(customNodeNames) {
         return function(node, type) {
+            if(!node[0]) node=new Node(node);
             return ! ( node[0].nodeType == KEN.NODE_ELEMENT
                 && node._4e_isBlockBoundary(customNodeNames) );
         };

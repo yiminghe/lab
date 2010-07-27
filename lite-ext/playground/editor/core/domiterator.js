@@ -62,7 +62,7 @@ KISSY.add("editor-domiterator", function(S) {
                 // If that node is the lastNode, it would cause our logic to leak to the
                 // next block.(#3887)
                 if (this._.lastNode &&
-                    this._.lastNode.type == KEN.NODE_TEXT &&
+                    this._.lastNode[0].nodeType == KEN.NODE_TEXT &&
                     !S.trim(this._.lastNode[0].nodeValue) &&
                     this._.lastNode.parent()._4e_isBlockBoundary()) {
                     var testRange = new KERange(range.document);
@@ -95,7 +95,7 @@ KISSY.add("editor-domiterator", function(S) {
 
                 // includeNode indicates that the current node is good to be part
                 // of the range. By default, any non-element node is ok for it.
-                var includeNode = ( currentNode.type != KEN.NODE_ELEMENT ),
+                var includeNode = ( currentNode[0].nodeType != KEN.NODE_ELEMENT ),
                     continueFromSibling = false;
 
                 // If it is an element node, let's check if it can be part of the
@@ -163,7 +163,7 @@ KISSY.add("editor-domiterator", function(S) {
                 // If we are in an element boundary, let's check if it is time
                 // to close the range, otherwise we include the parent within it.
                 if (range && !closeRange) {
-                    while (!currentNode[0].firstChild && !isLast) {
+                    while (!currentNode[0].nextSibling && !isLast) {
                         var parentNode = currentNode.parent();
 
                         if (parentNode._4e_isBlockBoundary(this.forceBrBreak && { br : 1 })) {
@@ -174,7 +174,7 @@ KISSY.add("editor-domiterator", function(S) {
 
                         currentNode = parentNode;
                         includeNode = true;
-                        isLast = ( currentNode === lastNode[0] );
+                        isLast = ( currentNode[0] === lastNode[0] );
                         continueFromSibling = true;
                     }
                 }
@@ -195,8 +195,7 @@ KISSY.add("editor-domiterator", function(S) {
                     // Drop the range if it only contains bookmark nodes, and is
                     // not because of the original collapsed range. (#4087,#4450)
                     if (boundaryNodes.startNode.parent()[0] === (startPath.blockLimit[0])
-                        && isBookmark(boundaryNodes.startNode) && isBookmark(boundaryNodes.endNode))
-                    {
+                        && isBookmark(boundaryNodes.startNode) && isBookmark(boundaryNodes.endNode)) {
                         range = null;
                         this._.nextNode = null;
                     }
@@ -248,8 +247,8 @@ KISSY.add("editor-domiterator", function(S) {
                         block = block._4e_clone(false);
 
                         // Extract the range contents, moving it to the new block.
-                        range.extractContents().appendTo(block);
-                        block.trim();
+                        block[0].appendChild(range.extractContents());
+                        block._4e_trim();
 
                         // Split the block. At this point, the range will be in the
                         // right position for our intents.
@@ -262,42 +261,37 @@ KISSY.add("editor-domiterator", function(S) {
                         range.insertNode(block);
                     }
                 }
-                else if (!isLast)
-                {
+                else if (!isLast) {
                     // LIs are returned as is, with all their children (due to the
                     // nested lists). But, the next node is the node right after
                     // the current range, which could be an <li> child (nested
                     // lists) or the next sibling <li>.
 
-                    this._.nextNode = ( block.equals(lastNode) ? null :
-                        range.getBoundaryNodes().endNode.getNextSourceNode(true, null, lastNode) );
+                    this._.nextNode = ( block[0] === (lastNode[0]) ? null :
+                        range.getBoundaryNodes().endNode._4e_nextSourceNode(true, null, lastNode) );
                 }
             }
 
-            if (removePreviousBr)
-            {
-                var previousSibling = block.getPrevious();
-                if (previousSibling && previousSibling.type == CKEDITOR.NODE_ELEMENT)
-                {
-                    if (previousSibling.getName() == 'br')
+            if (removePreviousBr) {
+                var previousSibling = new Node(block[0].previousSibling);
+                if (previousSibling && previousSibling.nodeType == KEN.NODE_ELEMENT) {
+                    if (previousSibling._4e_name() == 'br')
                         previousSibling.remove();
-                    else if (previousSibling.getLast() && previousSibling.getLast().$.nodeName.toLowerCase() == 'br')
-                        previousSibling.getLast().remove();
+                    else if (previousSibling[0].lastChild && previousSibling[0].lastChild.nodeName.toLowerCase() == 'br')
+                        DOM.remove(previousSibling[0].lastChild);
                 }
             }
 
-            if (removeLastBr)
-            {
+            if (removeLastBr) {
                 // Ignore bookmark nodes.(#3783)
-                var bookmarkGuard = CKEDITOR.dom.walker.bookmark(false, true);
+                var bookmarkGuard = Walker.bookmark(false, true);
 
-                var lastChild = block.getLast();
-                if (lastChild && lastChild.type == CKEDITOR.NODE_ELEMENT && lastChild.getName() == 'br')
-                {
+                var lastChild = new Node(block[0].lastChild);
+                if (lastChild && lastChild[0].nodeType == KEN.NODE_ELEMENT && lastChild._4e_name() == 'br') {
                     // Take care not to remove the block expanding <br> in non-IE browsers.
-                    if (CKEDITOR.env.ie
-                        || lastChild.getPrevious(bookmarkGuard)
-                        || lastChild.getNext(bookmarkGuard))
+                    if (UA.ie
+                        || lastChild._4e_previous(bookmarkGuard)
+                        || lastChild._4e_next(bookmarkGuard))
                         lastChild.remove();
                 }
             }
@@ -305,10 +299,9 @@ KISSY.add("editor-domiterator", function(S) {
             // Get a reference for the next element. This is important because the
             // above block can be removed or changed, so we can rely on it for the
             // next interation.
-            if (!this._.nextNode)
-            {
-                this._.nextNode = ( isLast || block.equals(lastNode) ) ? null :
-                    block.getNextSourceNode(true, null, lastNode);
+            if (!this._.nextNode) {
+                this._.nextNode = ( isLast || block[0] === (lastNode[0]) ) ? null :
+                    block._4e_nextSourceNode(true, null, lastNode);
             }
 
             return block;

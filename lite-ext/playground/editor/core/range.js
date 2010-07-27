@@ -24,6 +24,7 @@ KISSY.add("editor-range", function(S) {
         KEP = KISSYEDITOR.POSITION,
         Walker = S.Walker,
         DOM = S.DOM,
+        UA = S.UA,
         dtd = KISSYEDITOR.XHTML_DTD,
         ElementPath = S.ElementPath,
         Node = S.Node,
@@ -81,23 +82,19 @@ KISSY.add("editor-range", function(S) {
                     this.setEndAfter(container);
             }
         },
-        setStartAfter : function(node)
-        {
+        setStartAfter : function(node) {
             this.setStart(node.parent(), node._4e_index() + 1);
         },
 
-        setStartBefore : function(node)
-        {
+        setStartBefore : function(node) {
             this.setStart(node.parent(), node._4e_index());
         },
 
-        setEndAfter : function(node)
-        {
+        setEndAfter : function(node) {
             this.setEnd(node.parent(), node._4e_index() + 1);
         },
 
-        setEndBefore : function(node)
-        {
+        setEndBefore : function(node) {
             this.setEnd(node.parent(), node._4e_index());
         },
         optimizeBookmark: function() {
@@ -345,8 +342,7 @@ KISSY.add("editor-range", function(S) {
 
             // Remove all previous sibling nodes for every node in the
             // endParents tree.
-            for (var k = i; k < endParents.length; k++)
-            {
+            for (var k = i; k < endParents.length; k++) {
                 levelStartNode = endParents[ k ];
 
                 // For Extract and Clone, we must clone this level.
@@ -431,8 +427,7 @@ KISSY.add("editor-range", function(S) {
                 endNode.remove();
         },
 
-        collapse : function(toStart)
-        {
+        collapse : function(toStart) {
             if (toStart) {
                 this.endContainer = this.startContainer;
                 this.endOffset = this.startOffset;
@@ -512,8 +507,7 @@ KISSY.add("editor-range", function(S) {
                         walkerRange.setEndBefore(endContainer);
                     else if (endOffset >= endContainer[0].nodeValue.length)
                         walkerRange.setEndAfter(endContainer);
-                    else
-                    {
+                    else {
                         walkerRange.setEndAfter(endContainer);
                         moveEnd = 0;
                     }
@@ -713,8 +707,8 @@ KISSY.add("editor-range", function(S) {
             // Created with createBookmark().
             {
                 var serializable = bookmark.serializable,
-                    startNode = serializable ? S.one("#" + bookmark.startNode) : bookmark.startNode,
-                    endNode = serializable ? S.one("#" + bookmark.endNode) : bookmark.endNode;
+                    startNode = serializable ? S.one("#" + bookmark.startNode, this.document) : bookmark.startNode,
+                    endNode = serializable ? S.one("#" + bookmark.endNode, this.document) : bookmark.endNode;
 
                 // Set the range start at the bookmark start node position.
                 this.setStartBefore(startNode);
@@ -724,8 +718,7 @@ KISSY.add("editor-range", function(S) {
 
                 // Set the range end at the bookmark end node position, or simply
                 // collapse it if it is not available.
-                if (endNode)
-                {
+                if (endNode&&endNode[0]) {
                     this.setEndBefore(endNode);
                     endNode.remove();
                 }
@@ -861,8 +854,7 @@ KISSY.add("editor-range", function(S) {
                                 // If this is a visible element.
                                 // We need to check for the bookmark attribute because IE insists on
                                 // rendering the display:none nodes we use for bookmarks. (#3363)
-                                if (sibling.offsetWidth > 0 && !sibling.getAttribute('_ke_bookmark'))
-                                {
+                                if (sibling.offsetWidth > 0 && !sibling.getAttribute('_ke_bookmark')) {
                                     // We'll accept it only if we need
                                     // whitespace, and this is an inline
                                     // element with whitespace only.
@@ -873,13 +865,10 @@ KISSY.add("editor-range", function(S) {
 
                                         if ((/[^\s\ufeff]/).test(siblingText))    // Spaces + Zero Width No-Break Space (U+FEFF)
                                             sibling = null;
-                                        else
-                                        {
+                                        else {
                                             var allChildren = sibling.all || sibling.getElementsByTagName('*');
-                                            for (var i = 0, child; child = allChildren[ i++ ];)
-                                            {
-                                                if (!dtd.$removeEmpty[ child.nodeName.toLowerCase() ])
-                                                {
+                                            for (var i = 0, child; child = allChildren[ i++ ];) {
+                                                if (!dtd.$removeEmpty[ child.nodeName.toLowerCase() ]) {
                                                     sibling = null;
                                                     break;
                                                 }
@@ -978,8 +967,7 @@ KISSY.add("editor-range", function(S) {
                             if (!body._4e_contains(enlargeable))
                                 break;
 
-                            if (!needsWhiteSpace || enlargeable.css('display') != 'inline')
-                            {
+                            if (!needsWhiteSpace || enlargeable.css('display') != 'inline') {
                                 needsWhiteSpace = false;
 
                                 if (commonReached)
@@ -1115,7 +1103,7 @@ KISSY.add("editor-range", function(S) {
                     // the document position of it with 'enlargeable' node.
                     this.setStartAt(
                         blockBoundary,
-                        !blockBoundary._4e_name() == 'br' &&
+                        blockBoundary._4e_name() != 'br' &&
                             ( !enlargeable && this.checkStartOfBlock()
                                 || enlargeable && blockBoundary._4e_contains(enlargeable) ) ?
                             KER.POSITION_AFTER_START :
@@ -1190,8 +1178,7 @@ KISSY.add("editor-range", function(S) {
 
             // If the ending node is a text node, and non-empty after the offset,
             // then we're surely not at the end of block.
-            if (endContainer[0].nodeType == KEN.NODE_TEXT)
-            {
+            if (endContainer[0].nodeType == KEN.NODE_TEXT) {
                 var textAfter = S.trim(endContainer[0].nodeValue.substring(endOffset));
                 if (textAfter.length)
                     return false;
@@ -1204,7 +1191,7 @@ KISSY.add("editor-range", function(S) {
 
             // We need to grab the block element holding the start boundary, so
             // let's use an element path for it.
-            var path = ElementPath(this.endContainer);
+            var path = new ElementPath(this.endContainer);
 
             // Creates a range starting at the block start until the range start.
             var walkerRange = this.clone();
@@ -1216,11 +1203,15 @@ KISSY.add("editor-range", function(S) {
 
             return walker.checkForward();
         },
+        deleteContents:function() {
+            if (this.collapsed)
+                return;
+            this.execContentsAction(0);
+        },
         extractContents : function() {
             var docFrag = this.document.createDocumentFragment();
             if (!this.collapsed)
                 this.execContentsAction(1, docFrag);
-
             return docFrag;
         },
         /**
@@ -1254,7 +1245,7 @@ KISSY.add("editor-range", function(S) {
             if (startNode[0].nodeType == KEN.NODE_ELEMENT) {
                 childCount = startNode[0].childNodes.length;
                 if (childCount > startOffset)
-                    startNode = startNode[0].childNodes[startOffset];
+                    startNode = new Node(startNode[0].childNodes[startOffset]);
                 else if (childCount < 1)
                     startNode = startNode._4e_previousSourceNode();
                 else        // startOffset > childCount but childCount is not 0
@@ -1271,6 +1262,7 @@ KISSY.add("editor-range", function(S) {
                     startNode = startNode._4e_nextSourceNode() || startNode;
                 }
             }
+
             if (endNode[0].nodeType == KEN.NODE_ELEMENT) {
                 childCount = endNode[0].childNodes.length;
                 if (childCount > endOffset)
@@ -1293,6 +1285,107 @@ KISSY.add("editor-range", function(S) {
                 startNode = endNode;
 
             return { startNode : startNode, endNode : endNode };
+        },
+        fixBlock : function(isStart, blockTag) {
+            var bookmark = this.createBookmark(),
+                fixedBlock = new Node(this.document.createElement(blockTag));
+
+            this.collapse(isStart);
+
+            this.enlarge(KER.ENLARGE_BLOCK_CONTENTS);
+            fixedBlock[0].appendChild(this.extractContents());
+            fixedBlock.trim();
+
+            if (!UA.ie)
+                fixedBlock._4e_appendBogus();
+
+            this.insertNode(fixedBlock);
+
+            this.moveToBookmark(bookmark);
+
+            return fixedBlock;
+        },
+        splitBlock : function(blockTag) {
+            var startPath = new ElementPath(this.startContainer),
+                endPath = new ElementPath(this.endContainer);
+
+            var startBlockLimit = startPath.blockLimit,
+                endBlockLimit = endPath.blockLimit;
+
+            var startBlock = startPath.block,
+                endBlock = endPath.block;
+
+            var elementPath = null;
+            // Do nothing if the boundaries are in different block limits.
+            if (startBlockLimit[0] !== endBlockLimit[0])
+                return null;
+
+            // Get or fix current blocks.
+            if (blockTag != 'br') {
+                if (!startBlock) {
+                    startBlock = this.fixBlock(true, blockTag);
+                    endBlock = new ElementPath(this.endContainer).block;
+                }
+
+                if (!endBlock)
+                    endBlock = this.fixBlock(false, blockTag);
+            }
+
+            // Get the range position.
+            var isStartOfBlock = startBlock && this.checkStartOfBlock(),
+                isEndOfBlock = endBlock && this.checkEndOfBlock();
+
+            // Delete the current contents.
+            // TODO: Why is 2.x doing CheckIsEmpty()?
+            this.deleteContents();
+
+            if (startBlock && startBlock[0] == endBlock[0]) {
+                if (isEndOfBlock) {
+                    elementPath = new ElementPath(this.startContainer);
+                    this.moveToPosition(endBlock, KER.POSITION_AFTER_END);
+                    endBlock = null;
+                }
+                else if (isStartOfBlock) {
+                    elementPath = new ElementPath(this.startContainer);
+                    this.moveToPosition(startBlock, KER.POSITION_BEFORE_START);
+                    startBlock = null;
+                }
+                else {
+                    endBlock = this.splitElement(startBlock);
+
+                    // In Gecko, the last child node must be a bogus <br>.
+                    // Note: bogus <br> added under <ul> or <ol> would cause
+                    // lists to be incorrectly rendered.
+                    if (!UA.ie && !S.inArray(startBlock._4e_name(), ['ul', 'ol']))
+                        startBlock._4e_appendBogus();
+                }
+            }
+
+            return {
+                previousBlock : startBlock,
+                nextBlock : endBlock,
+                wasStartOfBlock : isStartOfBlock,
+                wasEndOfBlock : isEndOfBlock,
+                elementPath : elementPath
+            };
+        },
+        splitElement : function(toSplit) {
+            if (!this.collapsed)
+                return null;
+
+            // Extract the contents of the block from the selection point to the end
+            // of its contents.
+            this.setEndAt(toSplit, KER.POSITION_BEFORE_END);
+            var documentFragment = this.extractContents();
+
+            // Duplicate the element after it.
+            var clone = toSplit.clone(false);
+
+            // Place the extracted contents into the duplicated element.
+            clone[0].appendChild(documentFragment);
+            clone.insertAfter(toSplit);
+            this.moveToPosition(toSplit, KER.POSITION_AFTER_END);
+            return clone;
         }
 
     });
@@ -1329,7 +1422,7 @@ KISSY.add("editor-range", function(S) {
             else if (node[0].nodeType == KEN.NODE_ELEMENT) {
                 // If there are non-empty inline elements (e.g. <img />), then we're not
                 // at the start.
-                if (!inlineChildReqElements[ node.getName() ]) {
+                if (!inlineChildReqElements[ node._4e_name() ]) {
                     // If we're working at the end-of-block, forgive the first <br /> in non-IE
                     // browsers.
                     if (!isStart && !UA.ie && node._4e_name() == 'br' && !hadBr)

@@ -46,9 +46,11 @@ KISSY.add("editor-dom", function(S) {
 
 
     var editorDom = {
-        _4e_isBlockBoundary:function(el) {
+        _4e_isBlockBoundary:function(el, customNodeNames) {
+            var nodeNameMatches = S.mix(S.mix({}, blockBoundaryNodeNameMatch), customNodeNames || {});
+
             return blockBoundaryDisplayMatch[ el.css('display') ] ||
-                blockBoundaryNodeNameMatch[ el._4e_name() ];
+                nodeNameMatches[ el._4e_name() ];
         },
         _4e_getWin:function(elem) {
             return (elem && ('scrollTo' in elem) && elem["document"]) ?
@@ -138,13 +140,11 @@ KISSY.add("editor-dom", function(S) {
 
             var child;
 
-            if (toStart)
-            {
+            if (toStart) {
                 while (( child = $.lastChild ))
                     target.insertBefore($.removeChild(child), target.firstChild);
             }
-            else
-            {
+            else {
                 while (( child = $.firstChild ))
                     target.appendChild($.removeChild(child));
             }
@@ -415,8 +415,7 @@ KISSY.add("editor-dom", function(S) {
                 node = el.previousSibling;
             }
 
-            while (!node && ( parent = parent.parent() ))
-            {
+            while (!node && ( parent = parent.parent() )) {
                 // The guard check sends the "true" paramenter to indicate that
                 // we are moving "out" of the element.
                 if (guard && guard(parent, true) === false)
@@ -583,8 +582,7 @@ KISSY.add("editor-dom", function(S) {
             var $documentElement = el.ownerDocument.documentElement;
             var node = el;
 
-            while (node && node != $documentElement)
-            {
+            while (node && node != $documentElement) {
                 var parentNode = node.parentNode;
                 var currentIndex = -1;
 
@@ -707,6 +705,65 @@ KISSY.add("editor-dom", function(S) {
                     child.parentNode.removeChild(child);
                 }
             }
+        },
+
+        _4e_appendBogus : function(el) {
+            el = el[0] || el;
+            var lastChild = el.lastChild;
+
+            // Ignore empty/spaces text.
+            while (lastChild && lastChild.nodeType == KEN.NODE_TEXT && !S.trim(lastChild.nodeValue))
+                lastChild = lastChild.previousSibling;
+            if (!lastChild || lastChild.nodeType == KEN.NODE_TEXT || DOM._4e_name(lastChild) === 'br') {
+                var bogus = UA.opera ?
+                    this.getDocument().createTextNode('') :
+                    this.getDocument().createElement('br');
+
+                UA.gecko && bogus.setAttribute('type', '_moz');
+
+                el.appendChild(bogus);
+            }
+        },
+        _4e_revious : function(el, evaluator) {
+            var previous = el[0] || el, retval;
+            do
+            {
+                previous = previous.previousSibling;
+                retval = previous && new Node(previous);
+            }
+            while (retval && evaluator && !evaluator(retval))
+            return retval;
+        },
+
+        /**
+         * Gets the node that follows this element in its parent's child list.
+         * @param {Function} evaluator Filtering the result node.
+         * @returns {CKEDITOR.dom.node} The next node or null if not available.
+         * @example
+         * var element = CKEDITOR.dom.element.createFromHtml( '&lt;div&gt;&lt;b&gt;Example&lt;/b&gt; &lt;i&gt;next&lt;/i&gt;&lt;/div&gt;' );
+         * var first = <b>element.getFirst().getNext()</b>;
+         * alert( first.getName() );  // "i"
+         */
+        _4e_next : function(el, evaluator) {
+            var next = el[0] || el, retval;
+            do            {
+                next = next.nextSibling;
+                retval = next && new Node(next);
+            }
+            while (retval && evaluator && !evaluator(retval))
+            return retval;
+        },
+        _4e_outerHtml : function(el) {
+            el = el[0] || el;
+            if (el.outerHTML) {
+                // IE includes the <?xml:namespace> tag in the outerHTML of
+                // namespaced element. So, we must strip it here. (#3341)
+                return el.outerHTML.replace(/<\?[^>]*>/, '');
+            }
+
+            var tmpDiv = el.ownerDocument.createElement('div');
+            tmpDiv.appendChild(el.cloneNode(true));
+            return tmpDiv.innerHTML;
         }
     };
 

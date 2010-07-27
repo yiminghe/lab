@@ -264,8 +264,7 @@ KISSY.add("editor-styles", function(S) {
 
         // Assign all defined attributes.
         if (attributes) {
-            for (var att in attributes)
-            {
+            for (var att in attributes) {
                 el.attr(att, attributes[ att ]);
             }
         }
@@ -300,14 +299,85 @@ KISSY.add("editor-styles", function(S) {
         }
 
         range.moveToBookmark(bookmark);
+
+    }
+
+    // Wrapper function of String::replace without considering of head/tail bookmarks nodes.
+    function replace(str, regexp, replacement) {
+        var headBookmark = '',
+            tailBookmark = '';
+
+        str = str.replace(/(^<span[^>]+_ke_bookmark.*?\/span>)|(<span[^>]+_ke_bookmark.*?\/span>$)/gi,
+            function(str, m1, m2) {
+                m1 && ( headBookmark = m1 );
+                m2 && ( tailBookmark = m2 );
+                return '';
+            });
+        return headBookmark + str.replace(regexp, replacement) + tailBookmark;
+    }
+
+    /**
+     * Converting from a non-PRE block to a PRE block in formatting operations.
+     */
+    function toPre(block, newBlock) {
+        // First trim the block content.
+        var preHtml = block.html();
+
+        // 1. Trim head/tail spaces, they're not visible.
+        preHtml = replace(preHtml, /(?:^[ \t\n\r]+)|(?:[ \t\n\r]+$)/g, '');
+        // 2. Delete ANSI whitespaces immediately before and after <BR> because
+        //    they are not visible.
+        preHtml = preHtml.replace(/[ \t\r\n]*(<br[^>]*>)[ \t\r\n]*/gi, '$1');
+        // 3. Compress other ANSI whitespaces since they're only visible as one
+        //    single space previously.
+        // 4. Convert &nbsp; to spaces since &nbsp; is no longer needed in <PRE>.
+        preHtml = preHtml.replace(/([ \t\n\r]+|&nbsp;)/g, ' ');
+        // 5. Convert any <BR /> to \n. This must not be done earlier because
+        //    the \n would then get compressed.
+        preHtml = preHtml.replace(/<br\b[^>]*>/gi, '\n');
+
+        // Krugle: IE normalizes innerHTML to <pre>, breaking whitespaces.
+        if (UA.ie) {
+            var temp = block[0].ownerDocument.createElement('div');
+            temp.appendChild(newBlock[0]);
+            newBlock[0].outerHTML = '<pre>' + preHtml + '</pre>';
+            newBlock = new Node(temp.firstChild);
+            newBlock.remove();
+        }
+        else
+            newBlock.html(preHtml);
+
+        return newBlock;
+    }
+
+    /**
+     * Split into multiple <pre> blocks separated by double line-break.
+     * @param preBlock
+     */
+    function splitIntoPres(preBlock) {
+        // Exclude the ones at header OR at tail,
+        // and ignore bookmark content between them.
+        var duoBrRegex = /(\S\s*)\n(?:\s|(<span[^>]+_ck_bookmark.*?\/span>))*\n(?!$)/gi,
+            blockName = preBlock._4e_name(),
+            splittedHtml = replace(preBlock._4e_outerHtml(),
+                duoBrRegex,
+                function(match, charBefore, bookmark) {
+                    return charBefore + '</pre>' + bookmark + '<pre>';
+                });
+
+        var pres = [];
+        splittedHtml.replace(/<pre\b.*?>([\s\S]*?)<\/pre>/gi, function(match, preContent) {
+            pres.push(preContent);
+        });
+        return pres;
     }
 
     // Replace the original block with new one, with special treatment
     // for <pre> blocks to make sure content format is well preserved, and merging/splitting adjacent
     // when necessary.(#3188)
     function replaceBlock(block, newBlock) {
-        var newBlockIsPre = newBlock.is('pre');
-        var blockIsPre = block.is('pre');
+        var newBlockIsPre = newBlock._4e_name == ('pre');
+        var blockIsPre = block._4e_name == ('pre');
 
         var isToPre = newBlockIsPre && !blockIsPre;
         var isFromPre = !newBlockIsPre && blockIsPre;
@@ -318,15 +388,79 @@ KISSY.add("editor-styles", function(S) {
         // Split big <pre> into pieces before start to convert.
             newBlock = fromPres(splitIntoPres(block), newBlock);
         else
-            block.moveChildren(newBlock);
+            block._4e_moveChildren(newBlock);
 
-        newBlock.replace(block);
-
-        if (newBlockIsPre)
-        {
+        block[0].parentNode.replaceChild(newBlock[0], block[0]);
+        if (newBlockIsPre) {
             // Merge previous <pre> blocks.
             mergePre(newBlock);
         }
+    }
+
+    /**
+     * Merge a <pre> block with a previous sibling if available.
+     */
+    function mergePre(preBlock) {
+        var previousBlock;
+        if (!( ( previousBlock = preBlock._4e_previousSourceNode(true, KEN.NODE_ELEMENT) )
+            && previousBlock._4e_name() == ('pre') ))
+            return;
+
+        // Merge the previous <pre> block contents into the current <pre>
+        // block.
+        //
+        // Another thing to be careful here is that currentBlock might contain
+        // a '\n' at the beginning, and previousBlock might contain a '\n'
+        // towards the end. These new lines are not normally displayed but they
+        // become visible after merging.
+        var mergedHtml = replace(previousBlock.html(), /\n$/, '') + '\n\n' +
+            replace(preBlock.html(), /^\n/, '');
+
+        // Krugle: IE normalizes innerHTML from <pre>, breaking whitespaces.
+        if (UA.ie)
+            preBlock[0].outerHTML = '<pre>' + mergedHtml + '</pre>';
+        else
+            preBlock.html(mergedHtml);
+
+        previousBlock.remove();
+    }
+
+    /**
+     * Converting a list of <pre> into blocks with format well preserved.
+     */
+    function fromPres(preHtmls, newBlock) {
+        var docFrag = newBlock[0].ownerDocument.createDocumentFragment();
+        for (var i = 0; i < preHtmls.length; i++) {
+            var blockHtml = preHtmls[ i ];
+
+            // 1. Trim the first and last line-breaks immediately after and before <pre>,
+            // they're not visible.
+            blockHtml = blockHtml.replace(/(\r\n|\r)/g, '\n');
+            blockHtml = replace(blockHtml, /^[ \t]*\n/, '');
+            blockHtml = replace(blockHtml, /\n$/, '');
+            // 2. Convert spaces or tabs at the beginning or at the end to &nbsp;
+            blockHtml = replace(blockHtml, /^[ \t]+|[ \t]+$/g, function(match, offset, s) {
+                if (match.length == 1)    // one space, preserve it
+                    return '&nbsp;';
+                else if (!offset)        // beginning of block
+                    return new Array(match.length).join('&nbsp;') + ' ';
+                else                // end of block
+                    return ' ' + new Array(match.length).join('&nbsp;');
+            });
+
+            // 3. Convert \n to <BR>.
+            // 4. Convert contiguous (i.e. non-singular) spaces or tabs to &nbsp;
+            blockHtml = blockHtml.replace(/\n/g, '<br>');
+            blockHtml = blockHtml.replace(/[ \t]{2,}/g,
+                function (match) {
+                    return new Array(match.length).join('&nbsp;') + ' ';
+                });
+
+            var newBlockClone = newBlock._4e_clone();
+            newBlockClone.html(blockHtml);
+            docFrag.appendChild(newBlockClone[0]);
+        }
+        return docFrag;
     }
 
     function applyInlineStyle(range) {
@@ -685,8 +819,7 @@ KISSY.add("editor-styles", function(S) {
             if (!( name in target &&
                 ( target[ name ] == source[ name ]
                     || source[ name ] == 'inherit'
-                    || target[ name ] == 'inherit' ) ))
-            {
+                    || target[ name ] == 'inherit' ) )) {
                 return false;
             }
         }
@@ -794,8 +927,7 @@ KISSY.add("editor-styles", function(S) {
                     // could have different override definitions for the same
                     // attribute name.
                     var overrideAttrs = ( overrideEl.attributes = overrideEl.attributes || new Array() );
-                    for (var attName in attrs)
-                    {
+                    for (var attName in attrs) {
                         // Each item in the attributes array is also an array,
                         // where [0] is the attribute name and [1] is the
                         // override value.

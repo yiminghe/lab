@@ -9,9 +9,9 @@ KISSY.add("editor-plugin-format", function(S) {
             "БъЬт5":"h5"
         },FORMAT_STYLES = {},KEStyle = S.Style;
 
-    for (var f in FORMATS) {
+    for (var p in FORMATS) {
         if (FORMATS[p]) {
-            FORMAT_STYLES[p] = new KEStyle({
+            FORMAT_STYLES[FORMATS[p]] = new KEStyle({
                 element:FORMATS[p]
             });
             FORMAT_SELECTION_HTML += "<option value='" + FORMATS[p] + "'>" + p + "</option>"
