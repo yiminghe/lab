@@ -48,7 +48,12 @@ KISSY.add("editor-dom", function(S) {
 
 
     var editorDom = {
+        _4e_remove:function(el) {
+            el = el[0] || el;
+            el.parentNode.removeChild(el);
+        },
         _4e_isBlockBoundary:function(el, customNodeNames) {
+            if (!el[0]) el = new Node(el);
             var nodeNameMatches = S.mix(S.mix({}, blockBoundaryNodeNameMatch), customNodeNames || {});
 
             return blockBoundaryDisplayMatch[ el.css('display') ] ||
@@ -111,7 +116,7 @@ KISSY.add("editor-dom", function(S) {
             if (UA.ie) {
                 for (i = 0; i < otherLength; i++) {
                     attribute = otherAttribs[ i ];
-                    if (attribute.specified && attribute.nodeName != '_cke_expando'
+                    if (attribute.specified && attribute.nodeName != '_ke_expando'
                         && attribute.nodeValue != thisElement.attr(attribute.nodeName))
                         return false;
                 }
@@ -292,17 +297,18 @@ KISSY.add("editor-dom", function(S) {
 
         _4e_splitText : function(el, offset) {
             el = el[0] || el;
+            var doc = el.ownerDocument;
             if (!el || el.nodeType != KEN.NODE_TEXT) return;
             // If the offset is after the last char, IE creates the text node
             // on split, but don't include it into the DOM. So, we have to do
             // that manually here.
             if (UA.ie && offset == el.nodeValue.length) {
-                var next = this.getDocument().createText('');
-                next.insertAfter(this);
+                var next = doc.createTextNode("");
+                DOM.insertAfter(next, el);
                 return next;
             }
 
-            var doc = el.ownerDocument;
+
             var retval = new Node(el.splitText(offset));
 
             // IE BUG: IE8 does not update the childNodes array in DOM after splitText(),
@@ -337,7 +343,8 @@ KISSY.add("editor-dom", function(S) {
                         return;
 
                     node.removeAttribute('id', false);
-                    node.removeAttribute('_cke_expando', false);
+                    //复制时不要复制expando
+                    node.removeAttribute('_ke_expando', false);
 
                     var childs = node.childNodes;
                     for (var i = 0; i < childs.length; i++)
@@ -668,7 +675,7 @@ KISSY.add("editor-dom", function(S) {
                         originalLength = child.nodeValue.length;
 
                     if (!trimmed) {
-                        DOM.remove(child);
+                        el.removeChild(child);
                         continue;
                     }
                     else if (trimmed.length < originalLength) {
@@ -690,13 +697,13 @@ KISSY.add("editor-dom", function(S) {
                         originalLength = child.nodeValue.length;
 
                     if (!trimmed) {
-                        DOM.remove(child);
+                        el.removeChild(child);
                         continue;
                     } else if (trimmed.length < originalLength) {
                         new Node(child)._4e_splitText(trimmed.length);
                         // IE BUG: child.getNext().remove() may raise JavaScript errors here.
                         // (#81)
-                        el.lastChild.parentNode.removeChild(el.lastChild);
+                        el.removeChild(el.lastChild);
                     }
                 }
                 break;
@@ -718,7 +725,7 @@ KISSY.add("editor-dom", function(S) {
             // Ignore empty/spaces text.
             while (lastChild && lastChild.nodeType == KEN.NODE_TEXT && !S.trim(lastChild.nodeValue))
                 lastChild = lastChild.previousSibling;
-            if (!lastChild || lastChild.nodeType == KEN.NODE_TEXT || DOM._4e_name(lastChild) === 'br') {
+            if (!lastChild || lastChild.nodeType == KEN.NODE_TEXT || DOM._4e_name(lastChild) !== 'br') {
                 var bogus = UA.opera ?
                     el.ownerDocument.createTextNode('') :
                     el.ownerDocument.createElement('br');
@@ -806,7 +813,7 @@ KISSY.add("editor-dom", function(S) {
 
         _4e_getData :function(el, key) {
             el = el[0] || el;
-            var expandoNumber = el._ke_expando,
+            var expandoNumber = el.getAttribute('_ke_expando'),
                 dataSlot = expandoNumber && customData[ expandoNumber ];
 
             return dataSlot && dataSlot[ key ];
@@ -815,11 +822,11 @@ KISSY.add("editor-dom", function(S) {
 
         _4e_removeData : function(el, key) {
             el = el[0] || el;
-            var expandoNumber = el._ke_expando,
+            var expandoNumber = el.getAttribute('_ke_expando'),
                 dataSlot = expandoNumber && customData[ expandoNumber ],
                 retval = dataSlot && dataSlot[ key ];
 
-            if (typeof retval != 'undefined')
+            if (typeof retval != 'undefined' && dataSlot)
                 delete dataSlot[ key ];
             if (S.isEmptyObject(dataSlot))
                 DOM._4e_clearData(el);
@@ -829,12 +836,14 @@ KISSY.add("editor-dom", function(S) {
 
         _4e_clearData : function(el) {
             el = el[0] || el;
-            var expandoNumber = el._ke_expando;
+            var expandoNumber = el.getAttribute('_ke_expando');
             expandoNumber && delete customData[ expandoNumber ];
+            //ie inner html 会把属性带上，删掉！
+            expandoNumber && el.removeAttribute("_ke_expando");
         },
         _4e_getUniqueId : function(el) {
             el = el[0] || el;
-            return el._ke_expando || ( el._ke_expando = S.guid());
+            return el.getAttribute('_ke_expando') || ( el.setAttribute('_ke_expando', S.guid()));
         },
 
         _4e_copyAttributes : function(el, dest, skipAttributes) {
@@ -886,18 +895,19 @@ KISSY.add("editor-dom", function(S) {
         })
     }
 
-    S.mix(DOM, editorDom);
-    for (var dm in editorDom) {
-        if (editorDom.hasOwnProperty(dm))
-            (function(dm) {
-                Node.prototype[dm] = function() {
-                    var args = [].slice.call(arguments, 0);
-                    args.unshift(this);
-                    return editorDom[dm].apply(null, args);
-                };
-            })(dm);
-    }
+    S.DOM._4e_inject = function(editorDom) {
+        S.mix(DOM, editorDom);
+        for (var dm in editorDom) {
+            if (editorDom.hasOwnProperty(dm))
+                (function(dm) {
+                    Node.prototype[dm] = function() {
+                        var args = [].slice.call(arguments, 0);
+                        args.unshift(this);
+                        return editorDom[dm].apply(null, args);
+                    };
+                })(dm);
+        }
+    };
+    S.DOM._4e_inject(editorDom);
 
-
-})
-    ;
+});

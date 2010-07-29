@@ -18,7 +18,7 @@ KISSY.add("editor-plugin-list", function(S) {
          * manipulate. This operation should be non-intrusive in the sense that it
          * does not change the DOM tree, with the exception that it may add some
          * markers to the list item nodes when database is specified.
-         * 扁平化处理
+         * 扁平化处理，深度遍历，利用 indent 和顺序来表示一棵树
          */
         listToArray : function(listNode, database, baseArray, baseIndentLevel, grandparentNode) {
             if (!listNodeNames[ listNode._4e_name() ])
@@ -64,6 +64,7 @@ KISSY.add("editor-plugin-list", function(S) {
         },
 
         // Convert our internal representation of a list back to a DOM forest.
+        //根据包含indent属性的元素数组来生成树
         arrayToList : function(listArray, database, baseIndex, paragraphMode) {
             if (!baseIndex)
                 baseIndex = 0;
@@ -83,6 +84,7 @@ KISSY.add("editor-plugin-list", function(S) {
                         ||
                         //用于替换标签,ul->ol ,ol->ul
                         listArray[ currentIndex ].parent._4e_name() != rootNode._4e_name()) {
+
                         rootNode = listArray[ currentIndex ].parent._4e_clone(false, true);
                         retval.appendChild(rootNode[0]);
                     }
@@ -115,7 +117,7 @@ KISSY.add("editor-plugin-list", function(S) {
                         if (currentListItem.lastChild
                             && currentListItem.lastChild.nodeType == KEN.NODE_ELEMENT
                             && currentListItem.lastChild.getAttribute('type') == '_moz')
-                            DOM.remove(currentListItem.lastChild);
+                            DOM._4e_remove(currentListItem.lastChild);
                         DOM._4e_appendBogus(currentListItem);
                     }
 
@@ -151,8 +153,11 @@ KISSY.add("editor-plugin-list", function(S) {
             if (database) {
                 var currentNode = new Node(retval.firstChild);
                 while (currentNode && currentNode[0]) {
-                    if (currentNode[0].nodeType == KEN.NODE_ELEMENT)
-                        currentNode._4e_clearMarkers(database);
+                    if (currentNode[0].nodeType == KEN.NODE_ELEMENT) {
+                        currentNode._4e_clearMarkers(database,true);
+                        //add by yiminghe:no need _ke_expando copied!
+
+                    }
                     currentNode = currentNode._4e_nextSourceNode();
                 }
             }
@@ -162,174 +167,173 @@ KISSY.add("editor-plugin-list", function(S) {
     };
 
 
-    function changeListType(editor, groupObj, database, listsCreated) {
-        // This case is easy...
-        // 1. Convert the whole list into a one-dimensional array.
-        // 2. Change the list type by modifying the array.
-        // 3. Recreate the whole list by converting the array to a list.
-        // 4. Replace the original list with the recreated list.
-        var listArray = list.listToArray(groupObj.root, database),
-            selectedListItems = [];
-
-        for (var i = 0; i < groupObj.contents.length; i++) {
-            var itemNode = groupObj.contents[i];
-            itemNode = itemNode._4e_ascendant('li', true);
-            if ((!itemNode || !itemNode[0]) || itemNode._4e_getData('list_item_processed'))
-                continue;
-            selectedListItems.push(itemNode);
-            itemNode._4e_setMarker(database, 'list_item_processed', true);
-        }
-
-        var fakeParent = new Node(groupObj.root[0].ownerDocument.createElement(this.type));
-        for (i = 0; i < selectedListItems.length; i++) {
-            var listIndex = selectedListItems[i]._4e_getData('listarray_index');
-            listArray[listIndex].parent = fakeParent;
-        }
-        var newList = list.arrayToList(listArray, database, null, "p");
-        var child, length = newList.listNode.childNodes.length;
-        for (i = 0; i < length && ( child = new Node(newList.listNode.childNodes[i]) ); i++) {
-            if (child._4e_name() == this.type)
-                listsCreated.push(child);
-        }
-        DOM.insertBefore(newList.listNode, groupObj.root[0]);
-        groupObj.root.remove();
-    }
-
     var headerTagRegex = /^h[1-6]$/;
 
-    function createList(editor, groupObj, listsCreated) {
-        var contents = groupObj.contents,
-            doc = groupObj.root[0].ownerDocument,
-            listContents = [];
-
-        // It is possible to have the contents returned by DomRangeIterator to be the same as the root.
-        // e.g. when we're running into table cells.
-        // In such a case, enclose the childNodes of contents[0] into a <div>.
-        if (contents.length == 1 && contents[0][0] === groupObj.root[0]) {
-            var divBlock = new Node(doc.createElement('div'));
-            contents[0][0].nodeType != KEN.NODE_TEXT && contents[0]._4e_moveChildren(divBlock);
-            contents[0][0].appendChild(divBlock);
-            contents[0] = divBlock;
-        }
-
-        // Calculate the common parent node of all content blocks.
-        var commonParent = groupObj.contents[0].parent();
-        for (var i = 0; i < contents.length; i++)
-            commonParent = commonParent._4e_commonAncestor(contents[i].parent());
-
-        // We want to insert things that are in the same tree level only, so calculate the contents again
-        // by expanding the selected blocks to the same tree level.
-        for (i = 0; i < contents.length; i++) {
-            var contentNode = contents[i],
-                parentNode;
-            while (( parentNode = contentNode.parent() )) {
-                if (parentNode[0] === commonParent[0]) {
-                    listContents.push(contentNode);
-                    break;
-                }
-                contentNode = parentNode;
-            }
-        }
-
-        if (listContents.length < 1)
-            return;
-
-        // Insert the list to the DOM tree.
-        var insertAnchor = new Node(listContents[ listContents.length - 1 ][0].nextSibling),
-            listNode = new Node(doc.createElement(this.type));
-
-        listsCreated.push(listNode);
-        while (listContents.length) {
-            var contentBlock = listContents.shift(),
-                listItem = new Node(doc.createElement('li'));
-
-            // Preserve heading structure when converting to list item. (#5271)
-            if (headerTagRegex.test(contentBlock._4e_name())) {
-                listItem[0].appendChild(contentBlock[0]);
-            } else {
-                contentBlock._4e_copyAttributes(listItem);
-                contentBlock._4e_moveChildren(listItem);
-                contentBlock.remove();
-            }
-            listNode[0].appendChild(listItem[0]);
-
-            // Append a bogus BR to force the LI to render at full height
-            if (!UA.ie)
-                listItem._4e_appendBogus();
-        }
-        if (insertAnchor)
-            DOM.insertBefore(listNode[0], insertAnchor[0]);
-        else
-            commonParent[0].appendChild(listNode[0]);
-    }
-
-    function removeList(editor, groupObj, database) {
-        // This is very much like the change list type operation.
-        // Except that we're changing the selected items' indent to -1 in the list array.
-        var listArray = list.listToArray(groupObj.root, database),
-            selectedListItems = [];
-
-        for (var i = 0; i < groupObj.contents.length; i++) {
-            var itemNode = groupObj.contents[i];
-            itemNode = itemNode._4e_ascendant('li', true);
-            if (!itemNode || itemNode._4e_getData('list_item_processed'))
-                continue;
-            selectedListItems.push(itemNode);
-            itemNode._4e_setMarker(database, 'list_item_processed', true);
-        }
-
-        var lastListIndex = null;
-        for (i = 0; i < selectedListItems.length; i++) {
-            var listIndex = selectedListItems[i]._4e_getData('listarray_index');
-            listArray[listIndex].indent = -1;
-            lastListIndex = listIndex;
-        }
-
-        // After cutting parts of the list out with indent=-1, we still have to maintain the array list
-        // model's nextItem.indent <= currentItem.indent + 1 invariant. Otherwise the array model of the
-        // list cannot be converted back to a real DOM list.
-        for (i = lastListIndex + 1; i < listArray.length; i++) {
-            //if (listArray[i].indent > listArray[i - 1].indent + 1) {
-            //modified by yiminghe
-            if (listArray[i].indent > Math.max(listArray[i - 1].indent, 0)) {
-                var indentOffset = listArray[i - 1].indent + 1 - listArray[i].indent;
-                var oldIndent = listArray[i].indent;
-                while (listArray[i]
-                    && listArray[i].indent >= oldIndent) {
-                    listArray[i].indent += indentOffset;
-                    i++;
-                }
-                i--;
-            }
-        }
-
-        var newList = list.arrayToList(listArray, database, null, "p");
-
-        // Compensate <br> before/after the list node if the surrounds are non-blocks.(#3836)
-        var docFragment = newList.listNode, boundaryNode, siblingNode;
-
-        function compensateBrs(isStart) {
-            if (( boundaryNode = new Node(docFragment[ isStart ? 'firstChild' : 'lastChild' ]) )
-                && !( boundaryNode[0].nodeType == KEN.NODE_ELEMENT && boundaryNode._4e_isBlockBoundary() )
-                && ( siblingNode = groupObj.root[ isStart ? '_4e_previous' : '_4e_next' ]
-                (Walker.whitespaces(true)) )
-                && !( boundaryNode[0].nodeType == KEN.NODE_ELEMENT && siblingNode._4e_isBlockBoundary({ br : 1 }) ))
-
-                DOM[ isStart ? 'insertBefore' : 'insertAfter' ](editor.document.createElement('br'), boundaryNode[0]);
-        }
-
-        compensateBrs(true);
-        compensateBrs();
-
-        DOM.insertBefore(docFragment, groupObj.root);
-        groupObj.root.remove();
-    }
 
     function listCommand(type) {
         this.type = type;
     }
 
     listCommand.prototype = {
+        changeListType:function(editor, groupObj, database, listsCreated) {
+            // This case is easy...
+            // 1. Convert the whole list into a one-dimensional array.
+            // 2. Change the list type by modifying the array.
+            // 3. Recreate the whole list by converting the array to a list.
+            // 4. Replace the original list with the recreated list.
+            var listArray = list.listToArray(groupObj.root, database),
+                selectedListItems = [];
+
+            for (var i = 0; i < groupObj.contents.length; i++) {
+                var itemNode = groupObj.contents[i];
+                itemNode = itemNode._4e_ascendant('li', true);
+                if ((!itemNode || !itemNode[0]) || itemNode._4e_getData('list_item_processed'))
+                    continue;
+                selectedListItems.push(itemNode);
+                itemNode._4e_setMarker(database, 'list_item_processed', true);
+            }
+
+            var fakeParent = new Node(groupObj.root[0].ownerDocument.createElement(this.type));
+            for (i = 0; i < selectedListItems.length; i++) {
+                var listIndex = selectedListItems[i]._4e_getData('listarray_index');
+                listArray[listIndex].parent = fakeParent;
+            }
+            var newList = list.arrayToList(listArray, database, null, "p");
+            var child, length = newList.listNode.childNodes.length;
+            for (i = 0; i < length && ( child = new Node(newList.listNode.childNodes[i]) ); i++) {
+                if (child._4e_name() == this.type)
+                    listsCreated.push(child);
+            }
+            DOM.insertBefore(newList.listNode, groupObj.root[0]);
+            groupObj.root._4e_remove();
+        },
+        createList:function(editor, groupObj, listsCreated) {
+            var contents = groupObj.contents,
+                doc = groupObj.root[0].ownerDocument,
+                listContents = [];
+
+            // It is possible to have the contents returned by DomRangeIterator to be the same as the root.
+            // e.g. when we're running into table cells.
+            // In such a case, enclose the childNodes of contents[0] into a <div>.
+            if (contents.length == 1 && contents[0][0] === groupObj.root[0]) {
+                var divBlock = new Node(doc.createElement('div'));
+                contents[0][0].nodeType != KEN.NODE_TEXT && contents[0]._4e_moveChildren(divBlock);
+                contents[0][0].appendChild(divBlock);
+                contents[0] = divBlock;
+            }
+
+            // Calculate the common parent node of all content blocks.
+            var commonParent = groupObj.contents[0].parent();
+            for (var i = 0; i < contents.length; i++)
+                commonParent = commonParent._4e_commonAncestor(contents[i].parent());
+
+            // We want to insert things that are in the same tree level only, so calculate the contents again
+            // by expanding the selected blocks to the same tree level.
+            for (i = 0; i < contents.length; i++) {
+                var contentNode = contents[i],
+                    parentNode;
+                while (( parentNode = contentNode.parent() )) {
+                    if (parentNode[0] === commonParent[0]) {
+                        listContents.push(contentNode);
+                        break;
+                    }
+                    contentNode = parentNode;
+                }
+            }
+
+            if (listContents.length < 1)
+                return;
+
+            // Insert the list to the DOM tree.
+            var insertAnchor = new Node(listContents[ listContents.length - 1 ][0].nextSibling),
+                listNode = new Node(doc.createElement(this.type));
+
+            listsCreated.push(listNode);
+            while (listContents.length) {
+                var contentBlock = listContents.shift(),
+                    listItem = new Node(doc.createElement('li'));
+
+                // Preserve heading structure when converting to list item. (#5271)
+                if (headerTagRegex.test(contentBlock._4e_name())) {
+                    listItem[0].appendChild(contentBlock[0]);
+                } else {
+                    contentBlock._4e_copyAttributes(listItem);
+                    contentBlock._4e_moveChildren(listItem);
+                    contentBlock._4e_remove();
+                }
+                listNode[0].appendChild(listItem[0]);
+
+                // Append a bogus BR to force the LI to render at full height
+                if (!UA.ie)
+                    listItem._4e_appendBogus();
+            }
+            if (insertAnchor && insertAnchor[0])
+                DOM.insertBefore(listNode[0], insertAnchor[0]);
+            else
+                commonParent[0].appendChild(listNode[0]);
+        },
+        removeList:function(editor, groupObj, database) {
+            // This is very much like the change list type operation.
+            // Except that we're changing the selected items' indent to -1 in the list array.
+            var listArray = list.listToArray(groupObj.root, database),
+                selectedListItems = [];
+
+            for (var i = 0; i < groupObj.contents.length; i++) {
+                var itemNode = groupObj.contents[i];
+                itemNode = itemNode._4e_ascendant('li', true);
+                if (!itemNode || itemNode._4e_getData('list_item_processed'))
+                    continue;
+                selectedListItems.push(itemNode);
+                itemNode._4e_setMarker(database, 'list_item_processed', true);
+            }
+
+            var lastListIndex = null;
+            for (i = 0; i < selectedListItems.length; i++) {
+                var listIndex = selectedListItems[i]._4e_getData('listarray_index');
+                listArray[listIndex].indent = -1;
+                lastListIndex = listIndex;
+            }
+
+            // After cutting parts of the list out with indent=-1, we still have to maintain the array list
+            // model's nextItem.indent <= currentItem.indent + 1 invariant. Otherwise the array model of the
+            // list cannot be converted back to a real DOM list.
+            for (i = lastListIndex + 1; i < listArray.length; i++) {
+                //if (listArray[i].indent > listArray[i - 1].indent + 1) {
+                //modified by yiminghe
+                if (listArray[i].indent > Math.max(listArray[i - 1].indent, 0)) {
+                    var indentOffset = listArray[i - 1].indent + 1 - listArray[i].indent;
+                    var oldIndent = listArray[i].indent;
+                    while (listArray[i]
+                        && listArray[i].indent >= oldIndent) {
+                        listArray[i].indent += indentOffset;
+                        i++;
+                    }
+                    i--;
+                }
+            }
+
+            var newList = list.arrayToList(listArray, database, null, "p");
+
+            // Compensate <br> before/after the list node if the surrounds are non-blocks.(#3836)
+            var docFragment = newList.listNode, boundaryNode, siblingNode;
+
+            function compensateBrs(isStart) {
+                if (( boundaryNode = new Node(docFragment[ isStart ? 'firstChild' : 'lastChild' ]) )
+                    && !( boundaryNode[0].nodeType == KEN.NODE_ELEMENT && boundaryNode._4e_isBlockBoundary() )
+                    && ( siblingNode = groupObj.root[ isStart ? '_4e_previous' : '_4e_next' ]
+                    (Walker.whitespaces(true)) )
+                    && !( boundaryNode[0].nodeType == KEN.NODE_ELEMENT && siblingNode._4e_isBlockBoundary({ br : 1 }) ))
+
+                    DOM[ isStart ? 'insertBefore' : 'insertAfter' ](editor.document.createElement('br'), boundaryNode[0]);
+            }
+
+            compensateBrs(true);
+            compensateBrs();
+
+            DOM.insertBefore(docFragment, groupObj.root);
+            groupObj.root._4e_remove();
+        },
+
         exec : function(editor) {
             editor.focus();
             var doc = editor.document,
@@ -422,12 +426,12 @@ KISSY.add("editor-plugin-list", function(S) {
                 groupObj = listGroups.shift();
                 if (this.state == "off") {
                     if (listNodeNames[ groupObj.root._4e_name() ])
-                        changeListType.call(this, editor, groupObj, database, listsCreated);
+                        this.changeListType(editor, groupObj, database, listsCreated);
                     else
-                        createList.call(this, editor, groupObj, listsCreated);
+                        this.createList(editor, groupObj, listsCreated);
                 }
                 else if (this.state == "on" && listNodeNames[ groupObj.root._4e_name() ])
-                    removeList.call(this, editor, groupObj, database);
+                    this.removeList(editor, groupObj, database);
             }
 
             // For all new lists created, merge adjacent, same type lists.
@@ -443,7 +447,7 @@ KISSY.add("editor-plugin-list", function(S) {
                         '_4e_previous' : '_4e_next' ](Walker.whitespaces(true));
                     if (sibling && sibling[0] &&
                         sibling._4e_name() == listCommand.type) {
-                        sibling.remove();
+                        sibling._4e_remove();
                         // Move children order by merge direction.(#3820)
                         sibling._4e_moveChildren(listNode, rtl ? true : false);
                     }
@@ -455,26 +459,11 @@ KISSY.add("editor-plugin-list", function(S) {
             // Clean up, restore selection and update toolbar button states.
             for (var i in database)
                 database[i]._4e_clearMarkers(database, true);
+
             selection.selectBookmarks(bookmarks);
             editor.focus();
         }
     };
-
-    var dtd = KISSYEDITOR.XHTML_DTD;
-    var tailNbspRegex = /[\t\r\n ]*(?:&nbsp;|\xa0)$/;
-
-    function indexOfFirstChildElement(element, tagNameList) {
-        var child,
-            children = element.children(),
-            length = children.length;
-
-        for (var i = 0; i < length; i++) {
-            child = new Node(children[ i ]);
-            if (( child._4e_name() in tagNameList ))
-                return i;
-        }
-        return length;
-    }
 
 
     var LIST_HTML = "<button></button>";
@@ -485,6 +474,7 @@ KISSY.add("editor-plugin-list", function(S) {
         self.el = new Node(LIST_HTML);
         this.listCommand = new listCommand(this.get("type"));
         this.listCommand.state = this.get("status");
+        this._selectionChange({path:1});
         this._init();
     }
 
@@ -502,6 +492,7 @@ KISSY.add("editor-plugin-list", function(S) {
                 el = this.el;
             var self = this;
             toolBarDiv[0].appendChild(this.el[0]);
+
             el.on("click", this._change, this);
             editor.on("selectionChange", this._selectionChange, this);
             this.on("afterStatusChange", this._statusChange, this);
@@ -520,8 +511,12 @@ KISSY.add("editor-plugin-list", function(S) {
             editor.fire(type + "Change", this.get("v"));
         },
         _change:function() {
-            var el = this.el;
-            this.set("status", this.get("status") == "off" ? "on" : "off");
+            var editor = this.get("editor"),el = this.el,self = this;
+            editor.focus();
+            //ie要等会才能获得焦点窗口的选择区域
+            setTimeout(function() {
+                self.set("status", self.get("status") == "off" ? "on" : "off");
+            }, 10);
         },
 
         _selectionChange:function(ev) {
@@ -534,21 +529,22 @@ KISSY.add("editor-plugin-list", function(S) {
 
 
             // Grouping should only happen under blockLimit.(#3940).
-            for (var i = 0; i < elements.length && ( element = elements[ i ] )
-                && element[0] !== blockLimit[0]; i++) {
-                var ind = S.indexOf(elements[i]._4e_name(), listNodeNames_arr);
-                //ul,ol一个生效后，另一个就失效
-                if (ind !== -1) {
-                    if (listNodeNames_arr[ind] === type) {
-                        this._set("status", "on");
-                        this.el.html(type + "(on)");
-                        return;
-                    } else {
-                        break;
-                    }
+            if (elements)
+                for (var i = 0; i < elements.length && ( element = elements[ i ] )
+                    && element[0] !== blockLimit[0]; i++) {
+                    var ind = S.indexOf(elements[i]._4e_name(), listNodeNames_arr);
+                    //ul,ol一个生效后，另一个就失效
+                    if (ind !== -1) {
+                        if (listNodeNames_arr[ind] === type) {
+                            this._set("status", "on");
+                            this.el.html(type + "(on)");
+                            return;
+                        } else {
+                            break;
+                        }
 
+                    }
                 }
-            }
             this._set("status", "off");
             this.el.html(type + "(off)");
         }
