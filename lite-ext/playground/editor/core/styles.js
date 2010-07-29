@@ -297,9 +297,7 @@ KISSY.add("editor-styles", function(S) {
             var newBlock = getElement(this, doc);
             replaceBlock(block, newBlock);
         }
-
         range.moveToBookmark(bookmark);
-
     }
 
     // Wrapper function of String::replace without considering of head/tail bookmarks nodes.

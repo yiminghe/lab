@@ -222,7 +222,7 @@ KISSY.add("editor-domiterator", function(S) {
                     checkLimits = { div : 1, th : 1, td : 1 };
                 block = startPath.block;
 
-                if (!block
+                if ((!block||!block[0])
                     && !this.enforceRealBlocks
                     && checkLimits[ startBlockLimit._4e_name() ]
                     && range.checkStartOfBlock()

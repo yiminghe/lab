@@ -1,7 +1,7 @@
 /*
 Copyright 2010, KISSY UI Library v1.1.0
 MIT Licensed
-build time: Jul 27 11:10
+build time: Jul 27 19:34
 */
 /**
  * @module kissy
@@ -925,7 +925,7 @@ KISSY.add('kissy-ua', function(S) {
 /*
 Copyright 2010, KISSY UI Library v1.1.0
 MIT Licensed
-build time: Jul 27 12:58
+build time: Jul 27 19:33
 */
 /**
  * @module  dom
@@ -1011,7 +1011,7 @@ KISSY.add('selector', function(S, undefined) {
 
             // selector 为 #id 是最常见的情况，特殊优化处理
             if (REG_ID.test(selector)) {
-                t = getElementById(selector.slice(1));
+                t = getElementById(selector.slice(1),context);
                 if (t) ret = [t]; // #id 无效时，返回空数组
             }
             // selector 为支持列表中的其它 6 种
@@ -1021,7 +1021,7 @@ KISSY.add('selector', function(S, undefined) {
                 tag = match[2];
                 cls = match[3];
 
-                if ((context = id ? getElementById(id) : context)) {
+                if ((context = id ? getElementById(id,context) : context)) {
 
                     // #id .cls | #id tag.cls | .cls | tag.cls
                     if (cls) {
@@ -1030,7 +1030,7 @@ KISSY.add('selector', function(S, undefined) {
                         }
                         // 处理 #id.cls
                         else {
-                            t = getElementById(id);
+                            t = getElementById(id,context);
                             if(t && DOM.hasClass(t, cls)) {
                                 ret = [t];
                             }
@@ -1093,8 +1093,8 @@ KISSY.add('selector', function(S, undefined) {
     }
 
     // query #id
-    function getElementById(id) {
-        return doc.getElementById(id);
+    function getElementById(id,context) {
+        return context.getElementById(id);
     }
 
     // query tag
@@ -2331,8 +2331,8 @@ KISSY.add('dom-create', function(S, undefined) {
         PARENT_NODE = 'parentNode',
         DEFAULT_DIV = doc.createElement(DIV),
         RE_TAG = /<(\w+)/,
-        RE_SCRIPT = /<script([^>]*)>([\s\S]*?)<\/script>/ig,
         RE_SIMPLE_TAG = /^<(\w+)\s*\/?>(?:<\/\1>)?$/,
+        RE_SCRIPT = /<script([^>]*)>([\s\S]*?)<\/script>/ig,
         RE_SCRIPT_SRC = /\ssrc=(['"])(.*?)\1/i,
         RE_SCRIPT_CHARSET = /\scharset=(['"])(.*?)\1/i;
 
@@ -2477,15 +2477,18 @@ KISSY.add('dom-create', function(S, undefined) {
 
         var id = S.guid('ks-tmp-');
         html += '<span id="' + id + '"></span>';
-
+        //see S.globalEval(text);
+        //if text contains html() then will reset public shared RE_SCRIPT
+        //so dupliacate our own
+        var RE_SCRIPT_INNER = new RegExp(RE_SCRIPT);
         // 确保脚本执行时，相关联的 DOM 元素已经准备好
         S.available(id, function() {
             var hd = S.get('head'),
                 match, attrs, srcMatch, charsetMatch,
                 t, s, text;
-
-            RE_SCRIPT.lastIndex = 0;
-            while ((match = RE_SCRIPT.exec(html))) {
+            //share between intervals
+            RE_SCRIPT_INNER.lastIndex = 0;
+            while ((match = RE_SCRIPT_INNER.exec(html))) {
                 attrs = match[1];
                 srcMatch = attrs ? attrs.match(RE_SCRIPT_SRC) : false;
 
@@ -2519,7 +2522,7 @@ KISSY.add('dom-create', function(S, undefined) {
 
     // 直接通过 innerHTML 设置 html
     function setHTMLSimple(elem, html) {
-        html = html.replace(/<script([^>]*)>([\s\S]*?)<\/script>/ig, ''); // 过滤掉所有 script
+        html = html.replace(RE_SCRIPT, ''); // 过滤掉所有 script
         try {
             elem.innerHTML = html;
         } catch(ex) { // table.innerHTML = html will throw error in ie.
@@ -2647,7 +2650,7 @@ KISSY.add('dom-insertion', function(S) {
 /*
 Copyright 2010, KISSY UI Library v1.1.0
 MIT Licensed
-build time: Jul 27 11:10
+build time: Jul 27 19:33
 */
 /**
  * @module  event
@@ -3228,7 +3231,7 @@ KISSY.add('event-focusin', function(S) {
 /*
 Copyright 2010, KISSY UI Library v1.1.0
 MIT Licensed
-build time: Jul 27 11:10
+build time: Jul 27 19:34
 */
 /**
  * @module  node
@@ -3536,7 +3539,7 @@ KISSY.add('node-attach', function(S, undefined) {
 /*
 Copyright 2010, KISSY UI Library v1.1.0
 MIT Licensed
-build time: Jul 27 11:10
+build time: Jul 27 19:33
 */
 /**
  * @module  ajax

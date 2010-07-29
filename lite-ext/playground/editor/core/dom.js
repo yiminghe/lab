@@ -12,7 +12,8 @@ KISSY.add("editor-dom", function(S) {
         REMOVE_EMPTY = {abbr:1,acronym:1,address:1,b:1,bdo:1,big:1,cite:1,code:1,del:1,dfn:1,em:1,font:1,i:1,ins:1,label:1,kbd:1,q:1,s:1,samp:1,small:1,span:1,strike:1,strong:1,sub:1,sup:1,tt:1,u:1,'var':1};
     KISSYEDITOR.NODE = {
         NODE_ELEMENT:1,
-        NODE_TEXT:3
+        NODE_TEXT:3,
+        NODE_DOCUMENT_FRAGMENT:11
     };
     KISSYEDITOR.POSITION = {};
     var KEN = KISSYEDITOR.NODE,KEP = KISSYEDITOR.POSITION;
@@ -23,6 +24,7 @@ KISSY.add("editor-dom", function(S) {
     KEP.POSITION_PRECEDING = 4;
     KEP.POSITION_IS_CONTAINED = 8;
     KEP.POSITION_CONTAINS = 16;
+    var customData = {};
     /*
      * Anything whose display computed style is block, list-item, table,
      * table-row-group, table-header-group, table-footer-group, table-row,
@@ -81,7 +83,8 @@ KISSY.add("editor-dom", function(S) {
         },
 
         _4e_name:function(thisElement) {
-            return thisElement[0].nodeName.toLowerCase();
+            thisElement = thisElement[0] || thisElement;
+            return thisElement.nodeName.toLowerCase();
         },
         _4e_isIdentical : function(thisElement, otherElement) {
             if (thisElement._4e_name() != otherElement._4e_name())
@@ -185,6 +188,7 @@ KISSY.add("editor-dom", function(S) {
 
             return function(thisElement) {
                 if (!thisElement[0]) return;
+                //note by yiminghe,why not just merge whatever
                 // Merge empty links and anchors also. (#5567)
                 if (!( REMOVE_EMPTY[ thisElement._4e_name() ] || thisElement._4e_name() == "a" ))
                     return;
@@ -356,7 +360,7 @@ KISSY.add("editor-dom", function(S) {
             el = el[0] || el;
             // If "guard" is a node, transform it in a function.
             if (guard && !guard.call) {
-                var guardNode = guard || guard[0];
+                var guardNode = guard[0] || guard;
                 guard = function(node) {
                     node = node[0] || node;
                     return node !== guardNode;
@@ -397,7 +401,7 @@ KISSY.add("editor-dom", function(S) {
         _4e_previousSourceNode : function(el, startFromSibling, nodeType, guard) {
             el = el[0] || el;
             if (guard && !guard.call) {
-                var guardNode = guard[0] || guardNode;
+                var guardNode = guard[0] || guard;
                 guard = function(node) {
                     node = node[0] || node;
                     return node !== guardNode;
@@ -537,7 +541,7 @@ KISSY.add("editor-dom", function(S) {
                 return KEP.POSITION_IDENTICAL;
 
             // Only element nodes support contains and sourceIndex.
-            if (this.type == KEP.NODE_ELEMENT && otherNode.type == KEP.NODE_ELEMENT) {
+            if ($.nodeType == KEN.NODE_ELEMENT && $other.nodeType == KEN.NODE_ELEMENT) {
                 if ($.contains) {
                     if ($.contains($other))
                         return KEP.POSITION_CONTAINS + KEP.POSITION_PRECEDING;
@@ -556,7 +560,7 @@ KISSY.add("editor-dom", function(S) {
             // For nodes that don't support compareDocumentPosition, contains
             // or sourceIndex, their "address" is compared.
 
-            var addressOfThis = this._4e_address(),
+            var addressOfThis = el._4e_address(),
                 addressOfOther = otherNode._4e_address(),
                 minLevel = Math.min(addressOfThis.length, addressOfOther.length);
 
@@ -651,8 +655,8 @@ KISSY.add("editor-dom", function(S) {
             return this;
         },
         _4e_trim : function(el) {
-            el._4e_ltrim();
-            el._4e_rtrim();
+            DOM._4e_ltrim(el);
+            DOM._4e_rtrim(el);
         },
 
         _4e_ltrim : function(el) {
@@ -668,7 +672,7 @@ KISSY.add("editor-dom", function(S) {
                         continue;
                     }
                     else if (trimmed.length < originalLength) {
-                        new Node(child).split(originalLength - trimmed.length);
+                        new Node(child)._4e_splitText(originalLength - trimmed.length);
                         // IE BUG: child.remove() may raise JavaScript errors here. (#81)
                         el.removeChild(el.firstChild);
                     }
@@ -689,7 +693,7 @@ KISSY.add("editor-dom", function(S) {
                         DOM.remove(child);
                         continue;
                     } else if (trimmed.length < originalLength) {
-                        child.split(trimmed.length);
+                        new Node(child)._4e_splitText(trimmed.length);
                         // IE BUG: child.getNext().remove() may raise JavaScript errors here.
                         // (#81)
                         el.lastChild.parentNode.removeChild(el.lastChild);
@@ -716,15 +720,15 @@ KISSY.add("editor-dom", function(S) {
                 lastChild = lastChild.previousSibling;
             if (!lastChild || lastChild.nodeType == KEN.NODE_TEXT || DOM._4e_name(lastChild) === 'br') {
                 var bogus = UA.opera ?
-                    this.getDocument().createTextNode('') :
-                    this.getDocument().createElement('br');
+                    el.ownerDocument.createTextNode('') :
+                    el.ownerDocument.createElement('br');
 
                 UA.gecko && bogus.setAttribute('type', '_moz');
 
                 el.appendChild(bogus);
             }
         },
-        _4e_revious : function(el, evaluator) {
+        _4e_previous : function(el, evaluator) {
             var previous = el[0] || el, retval;
             do
             {
@@ -764,6 +768,107 @@ KISSY.add("editor-dom", function(S) {
             var tmpDiv = el.ownerDocument.createElement('div');
             tmpDiv.appendChild(el.cloneNode(true));
             return tmpDiv.innerHTML;
+        },
+
+        _4e_setMarker : function(element, database, name, value) {
+            if (!element[0]) element = new Node(element);
+            var id = element._4e_getData('list_marker_id') ||
+                ( element._4e_setData('list_marker_id', S.guid())._4e_getData('list_marker_id')),
+                markerNames = element._4e_getData('list_marker_names') ||
+                    ( element._4e_setData('list_marker_names', {})._4e_getData('list_marker_names'));
+            database[id] = element;
+            markerNames[name] = 1;
+
+            return element._4e_setData(name, value);
+        },
+        _4e_clearMarkers : function(element, database, removeFromDatabase) {
+            if (!element[0]) element = new Node(element);
+            var names = element._4e_getData('list_marker_names'),
+                id = element._4e_getData('list_marker_id');
+            for (var i in names)
+                element._4e_removeData(i);
+            element._4e_removeData('list_marker_names');
+            if (removeFromDatabase) {
+                element._4e_removeData('list_marker_id');
+                delete database[id];
+            }
+        },
+
+        _4e_setData : function(el, key, value) {
+            var expandoNumber = DOM._4e_getUniqueId(el),
+                dataSlot = customData[ expandoNumber ] || ( customData[ expandoNumber ] = {} );
+
+            dataSlot[ key ] = value;
+
+            return el;
+        },
+
+
+        _4e_getData :function(el, key) {
+            el = el[0] || el;
+            var expandoNumber = el._ke_expando,
+                dataSlot = expandoNumber && customData[ expandoNumber ];
+
+            return dataSlot && dataSlot[ key ];
+        },
+
+
+        _4e_removeData : function(el, key) {
+            el = el[0] || el;
+            var expandoNumber = el._ke_expando,
+                dataSlot = expandoNumber && customData[ expandoNumber ],
+                retval = dataSlot && dataSlot[ key ];
+
+            if (typeof retval != 'undefined')
+                delete dataSlot[ key ];
+            if (S.isEmptyObject(dataSlot))
+                DOM._4e_clearData(el);
+
+            return retval || null;
+        },
+
+        _4e_clearData : function(el) {
+            el = el[0] || el;
+            var expandoNumber = el._ke_expando;
+            expandoNumber && delete customData[ expandoNumber ];
+        },
+        _4e_getUniqueId : function(el) {
+            el = el[0] || el;
+            return el._ke_expando || ( el._ke_expando = S.guid());
+        },
+
+        _4e_copyAttributes : function(el, dest, skipAttributes) {
+            el = el[0] || el;
+            var attributes = el.attributes;
+            skipAttributes = skipAttributes || {};
+
+            for (var n = 0; n < attributes.length; n++) {
+                var attribute = attributes[n];
+
+                // Lowercase attribute name hard rule is broken for
+                // some attribute on IE, e.g. CHECKED.
+                var attrName = attribute.nodeName.toLowerCase(),
+                    attrValue;
+
+                // We can set the type only once, so do it with the proper value, not copying it.
+                if (attrName in skipAttributes)
+                    continue;
+
+                if (attrName == 'checked' && ( attrValue = DOM.attr(el, attrName) ))
+                    dest.attr(attrName, attrValue);
+                // IE BUG: value attribute is never specified even if it exists.
+                else if (attribute.specified ||
+                    ( UA.ie && attribute.nodeValue && attrName == 'value' )) {
+                    attrValue = DOM.attr(el, attrName);
+                    if (attrValue === null)
+                        attrValue = attribute.nodeValue;
+                    dest.attr(attrName, attrValue);
+                }
+            }
+
+            // The style:
+            if (el.style.cssText !== '')
+                dest[0].style.cssText = el.style.cssText;
         }
     };
 
@@ -794,4 +899,5 @@ KISSY.add("editor-dom", function(S) {
     }
 
 
-});
+})
+    ;

@@ -2,9 +2,9 @@ KISSY.add("editor-plugin-format", function(S) {
     var KE = KISSYEDITOR,
         KEStyle = S.Style,
         Node = S.Node,
-        FORMAT_SELECTION_HTML = "<select><option value=''>请选择格式</option>",
+        FORMAT_SELECTION_HTML = "<select>",
         FORMATS = {
-            "普通":"p",
+            "请选择格式":"p",
             "标题1":"h1",
             "标题5":"h5"
         },FORMAT_STYLES = {},KEStyle = S.Style;
@@ -27,7 +27,7 @@ KISSY.add("editor-plugin-format", function(S) {
 
     Format.ATTRS = {
         v:{
-            value:""
+            value:"p"
         },
         editor:{}
     }
@@ -47,12 +47,7 @@ KISSY.add("editor-plugin-format", function(S) {
         _vChange:function(ev) {
             var editor = this.get("editor"),v = ev.newVal,pre = ev.preVal;
             editor.focus();
-            if (!v) {
-                v = pre;
-                FORMAT_STYLES[v].remove(editor.document);
-            } else {
-                FORMAT_STYLES[v].apply(editor.document);
-            }
+            FORMAT_STYLES[v].apply(editor.document);
             editor.fire("formatChange", this.get("v"));
         },
         _change:function() {
@@ -78,12 +73,7 @@ KISSY.add("editor-plugin-format", function(S) {
                     return;
                 }
             }
-
-            // If no styles match, just empty it.
-            if (currentValue != '') {
-                this._set("v", '');
-                this.el.val("");
-            }
+            
         }
     });
 

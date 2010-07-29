@@ -138,17 +138,14 @@ KISSY.add("editor", function(S) {
 
                     function blinkCursor(retry) {
                         tryThese(
-                            function()
-                            {
+                            function() {
                                 doc.designMode = 'on';
-                                setTimeout(function ()
-                                {
+                                setTimeout(function () {
                                     doc.designMode = 'off';
                                     doc.body.focus();
                                 }, 50);
                             },
-                            function()
-                            {
+                            function() {
                                 // The above call is known to fail when parent DOM
                                 // tree layout changes may break design mode. (#5782)
                                 // Refresh the 'contentEditable' is a cue to this.
@@ -225,8 +222,7 @@ KISSY.add("editor", function(S) {
                             var keyCode = evt.keyCode;
 
                             // Backspace OR Delete.
-                            if (keyCode in { 8 : 1, 46 : 1 })
-                            {
+                            if (keyCode in { 8 : 1, 46 : 1 }) {
                                 var sel = self.getSelection(),
                                     control = sel.getSelectedElement();
 
@@ -251,8 +247,7 @@ KISSY.add("editor", function(S) {
                         if (doc.compatMode == 'CSS1Compat') {
                             var pageUpDownKeys = { 33 : 1, 34 : 1 };
                             Event.on(doc, 'keydown', function(evt) {
-                                if (evt.keyCode in pageUpDownKeys)
-                                {
+                                if (evt.keyCode in pageUpDownKeys) {
                                     setTimeout(function () {
                                         self.getSelection().scrollIntoView();
                                     }, 0);
@@ -273,10 +268,8 @@ KISSY.add("editor", function(S) {
                          * fix the problem. :(
                          */
                         if (UA.ie) {
-                            setTimeout(function()
-                            {
-                                if (self.document)
-                                {
+                            setTimeout(function() {
+                                if (self.document) {
                                     var $body = self.document.body;
                                     $body.runtimeStyle.marginBottom = '0px';
                                     $body.runtimeStyle.marginBottom = '';
@@ -317,11 +310,13 @@ KISSY.add("editor", function(S) {
             var self = this,previousPath;
             setTimeout(function() {
                 var selection = self.getSelection();
-                var startElement = selection.getStartElement(),
-                    currentPath = new S.ElementPath(startElement);
+                if (!selection.isInvalid) {
+                    var startElement = selection.getStartElement(),
+                        currentPath = new S.ElementPath(startElement);
 
-                if (!previousPath || !previousPath.compare(currentPath)) {
-                    self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
+                    if (!previousPath || !previousPath.compare(currentPath)) {
+                        self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
+                    }
                 }
                 setTimeout(arguments.callee, 200);
             }, 200);

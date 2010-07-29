@@ -218,6 +218,7 @@ KISSY.add("editor-walker", function(S) {
 
         /**
          * Check all nodes at left, executing the evaluation fuction.
+         * 是不是 (不能后退了)
          * @returns {Boolean} "false" if the evaluator function returned
          *        "false" for any of the matched nodes. Otherwise "true".
          */

@@ -236,7 +236,7 @@ KISSY.add("editor-range", function(S) {
                     // If the offset points after the last node.
                     if (endOffset >= endNode[0].childNodes.length) {
                         // Let's create a temporary node and mark it for removal.
-                        endNode = new Node(endNode[0].appendChild(document.createTextNode("")));
+                        endNode = new Node(endNode[0].appendChild(this.document.createTextNode("")));
                         removeEndNode = true;
                     }
                     else
@@ -262,7 +262,7 @@ KISSY.add("editor-range", function(S) {
                 // sibling, so let's use the first one, but mark it for removal.
                 if (!startOffset) {
                     // Let's create a temporary node and mark it for removal.
-                    var t = new Node(document.createTextNode(""));
+                    var t = new Node(this.document.createTextNode(""));
                     DOM.insertBefore(t[0], startNode[0].firstChild);
                     startNode = t;
                     removeStartNode = true;
@@ -270,7 +270,7 @@ KISSY.add("editor-range", function(S) {
                 else if (startOffset >= startNode[0].childNodes.length) {
                     // Let's create a temporary node and mark it for removal.
                     //startNode = startNode[0].appendChild(this.document.createTextNode(''));
-                    var t = new Node(document.createTextNode(""));
+                    var t = new Node(this.document.createTextNode(""));
                     startNode[0].appendChild(t[0]);
                     startNode = t;
                     removeStartNode = true;
@@ -435,7 +435,6 @@ KISSY.add("editor-range", function(S) {
                 this.startContainer = this.endContainer;
                 this.startOffset = this.endOffset;
             }
-
             this.collapsed = true;
         },
 
