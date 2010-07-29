@@ -804,9 +804,7 @@ KISSY.add("editor-dom", function(S) {
         _4e_setData : function(el, key, value) {
             var expandoNumber = DOM._4e_getUniqueId(el),
                 dataSlot = customData[ expandoNumber ] || ( customData[ expandoNumber ] = {} );
-
             dataSlot[ key ] = value;
-
             return el;
         },
 
@@ -815,7 +813,6 @@ KISSY.add("editor-dom", function(S) {
             el = el[0] || el;
             var expandoNumber = el.getAttribute('_ke_expando'),
                 dataSlot = expandoNumber && customData[ expandoNumber ];
-
             return dataSlot && dataSlot[ key ];
         },
 
