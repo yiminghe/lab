@@ -1,6 +1,8 @@
 KISSY.app("KISSYEDITOR", KISSY.EventTarget);
 KISSY.add("editor", function(S) {
     var EventTarget = S.EventTarget,UA = S.UA,Node = S.Node,Event = S.Event,DOM = S.DOM;
+    var DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+        HTML5_DTD = '<!doctype html>';
 
     function Editor(textarea, toolBarDiv) {
         this.textarea = textarea[0] || textarea;
@@ -289,7 +291,7 @@ KISSY.add("editor", function(S) {
             };
 
 
-            var data = "<!doctype html>"
+            var data = HTML5_DTD
                 + "<html>"
                 + "<head>"
                 + "<title>kissy-editor</title>"
@@ -307,19 +309,33 @@ KISSY.add("editor", function(S) {
         },
 
         _monitor:function() {
-            var self = this,previousPath;
-            setTimeout(function() {
-                var selection = self.getSelection();
-                if (!selection.isInvalid) {
-                    var startElement = selection.getStartElement(),
-                        currentPath = new S.ElementPath(startElement);
-
-                    if (!previousPath || !previousPath.compare(currentPath)) {
-                        self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
-                    }
+            var self = this,previousPath,mid = null;
+            Event.on(DOM._4e_getWin(this.document), "focus", function() {
+                if (mid) {
+                    console.log("duplicate!");
+                    return;
                 }
-                setTimeout(arguments.callee, 200);
-            }, 200);
+                mid = setTimeout(function() {
+                    //console.log("monitor");
+                    var selection = self.getSelection();
+                    if (!selection.isInvalid) {
+                        var startElement = selection.getStartElement(),
+                            currentPath = new S.ElementPath(startElement);
+
+                        if (!previousPath || !previousPath.compare(currentPath)) {
+                            self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
+                        }
+                    }
+                    mid = setTimeout(arguments.callee, 200);
+                }, 200);
+            });
+
+            Event.on(DOM._4e_getWin(this.document), "blur", function() {
+                //console.log("monitor cancel");
+                if (mid) clearTimeout(mid);
+                mid = null;
+            });
+
         }
     });
     function tryThese() {

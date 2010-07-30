@@ -74,6 +74,15 @@ KISSY.add("editor-dom", function(S) {
             }
             return -1;
         },
+        _4e_first:function(el, evaluator) {
+            el = el[0] || el;
+            var first = el.firstChild,
+                retval = first && new Node(first);
+            if (retval && evaluator && !evaluator(retval))
+                retval = retval._4e_next(evaluator);
+
+            return retval;
+        },
 
         _4e_move : function(thisElement, target, toStart) {
             thisElement.remove();

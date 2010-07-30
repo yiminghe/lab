@@ -154,7 +154,7 @@ KISSY.add("editor-plugin-list", function(S) {
                 var currentNode = new Node(retval.firstChild);
                 while (currentNode && currentNode[0]) {
                     if (currentNode[0].nodeType == KEN.NODE_ELEMENT) {
-                        currentNode._4e_clearMarkers(database,true);
+                        currentNode._4e_clearMarkers(database, true);
                         //add by yiminghe:no need _ke_expando copied!
 
                     }
@@ -550,7 +550,7 @@ KISSY.add("editor-plugin-list", function(S) {
         }
     });
 
-
+    S.ListUtils = list;
     KE.on("instanceCreated", function(ev) {
         var editor = ev.editor;
         new List({
