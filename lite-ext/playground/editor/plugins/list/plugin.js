@@ -508,8 +508,8 @@ KISSY.add("editor-plugin-list", function(S) {
                 el = this.el,
                 self = this;
             //ie要等会才能获得焦点窗口的选择区域
+            editor.focus();
             setTimeout(function() {
-                editor.focus();
                 self.listCommand.state = el.get("state");
                 self.listCommand.exec(editor);
                 editor.fire(type + "Change");
