@@ -466,22 +466,28 @@ KISSY.add("editor-plugin-list", function(S) {
     };
 
 
-    var LIST_HTML = "<button></button>";
+    var TripleButton = S.TripleButton;
 
+    /**
+     * 用到了按钮三状态的两个状态：off:点击后格式化，on:点击后清除格式化
+     * @param cfg
+     */
     function List(cfg) {
         List.superclass.constructor.call(this, cfg);
+        var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv,
+            el = this.el;
         var self = this;
-        self.el = new Node(LIST_HTML);
+        self.el = new TripleButton({
+            text:this.get("type"),
+            container:toolBarDiv
+        });
         this.listCommand = new listCommand(this.get("type"));
         this.listCommand.state = this.get("status");
-        this._selectionChange({path:1});
+        //this._selectionChange({path:1});
         this._init();
     }
 
     List.ATTRS = {
-        status:{
-            value:"off"
-        },
         editor:{}
     };
 
@@ -491,42 +497,34 @@ KISSY.add("editor-plugin-list", function(S) {
             var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv,
                 el = this.el;
             var self = this;
-            toolBarDiv[0].appendChild(this.el[0]);
-
             el.on("click", this._change, this);
             editor.on("selectionChange", this._selectionChange, this);
-            this.on("afterStatusChange", this._statusChange, this);
         },
 
-        _statusChange:function(ev) {
-            var editor = this.get("editor"),
-                v = ev.newVal,
-                type = this.get("type"),
-                pre = ev.preVal;
-            editor.focus();
-            this.listCommand.state = pre;
-            this.listCommand.exec(editor);
-            this.listCommand.state = v;
-            this.el.html(type + "(" + this.listCommand.state + ")");
-            editor.fire(type + "Change", this.get("v"));
-        },
+
         _change:function() {
-            var editor = this.get("editor"),el = this.el,self = this;
-            editor.focus();
+            var editor = this.get("editor"),
+                type = this.get("type"),
+                el = this.el,
+                self = this;
             //ie要等会才能获得焦点窗口的选择区域
             setTimeout(function() {
-                self.set("status", self.get("status") == "off" ? "on" : "off");
+                editor.focus();
+                self.listCommand.state = el.get("state");
+                self.listCommand.exec(editor);
+                editor.fire(type + "Change");
             }, 10);
         },
 
         _selectionChange:function(ev) {
-            var editor = this.get("editor"),type = this.get("type")
-                , currentValue = this.get("v")
-                , elementPath = ev.path,
+            var editor = this.get("editor"),
+                type = this.get("type"),
+                currentValue = this.get("v"),
+                elementPath = ev.path,
                 element,
+                el = this.el,
                 blockLimit = elementPath.blockLimit,
                 elements = elementPath.elements;
-
 
             // Grouping should only happen under blockLimit.(#3940).
             if (elements)
@@ -536,8 +534,7 @@ KISSY.add("editor-plugin-list", function(S) {
                     //ul,ol一个生效后，另一个就失效
                     if (ind !== -1) {
                         if (listNodeNames_arr[ind] === type) {
-                            this._set("status", "on");
-                            this.el.html(type + "(on)");
+                            el.set("state", TripleButton.ON);
                             return;
                         } else {
                             break;
@@ -545,8 +542,7 @@ KISSY.add("editor-plugin-list", function(S) {
 
                     }
                 }
-            this._set("status", "off");
-            this.el.html(type + "(off)");
+            el.set("state", TripleButton.OFF);
         }
     });
 

@@ -213,19 +213,28 @@ KISSY.add("editor-plugin-indent", function(S) {
     });
 
 
-    var INDENT_HTML = "<button></button>";
-
+    var TripleButton = S.TripleButton;      
+   
+    /**
+     * 用到了按钮三状态的两个状态：off可点击，disabled:不可点击
+     * @param cfg
+     */
     function Indent(cfg) {
         Indent.superclass.constructor.call(this, cfg);
+       
+        var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv,
+            el = this.el;
+
         var self = this;
-        self.el = new Node(INDENT_HTML);
-        self.el.html(this.get("type"));
+        self.el = new TripleButton({
+            container:toolBarDiv,
+            text:this.get("type")
+        });
         this.indentCommand = new IndentCommand(this.get("type"));
         this._init();
     }
 
     Indent.ATTRS = {
-        status:{value:"on"},
         type:{},
         editor:{}
     };
@@ -236,28 +245,19 @@ KISSY.add("editor-plugin-indent", function(S) {
             var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv,
                 el = this.el;
             var self = this;
-            toolBarDiv[0].appendChild(this.el[0]);
-            el.on("click", this._change, this);
+            //off状态下触发捕获，注意没有on状态
+            el.on("offClick", this._change, this);
             if (this.get("type") == "outdent")
                 editor.on("selectionChange", this._selectionChange, this);
             else
-                el[0].disabled = false;
-            this.on("afterStatusChange", this._statusChange, this);
+                el.set("state", TripleButton.OFF);
         },
 
-        _statusChange:function(ev) {
-            var editor = this.get("editor"),
-                v = ev.newVal,
-                type = this.get("type"),
-                pre = ev.preVal;
-            if (v == "off") {
-                this.el[0].disabled = true;
-            } else {
-                this.el[0].disabled = false;
-            }
-        },
+
         _change:function() {
-            var editor = this.get("editor"),el = this.el,self = this;
+            var editor = this.get("editor"),
+                el = this.el,
+                self = this;
             editor.focus();
             //ie要等会才能获得焦点窗口的选择区域
             setTimeout(function() {
@@ -267,19 +267,18 @@ KISSY.add("editor-plugin-indent", function(S) {
 
         _selectionChange:function(ev) {
             var editor = this.get("editor"),type = this.get("type")
-                , currentValue = this.get("v")
                 , elementPath = ev.path,
                 blockLimit = elementPath.blockLimit,
-                elements = elementPath.elements;
+                el = this.el;
 
             if (elementPath.contains(listNodeNames)) {
-                this.set("status", "on");
+                el.set("state", TripleButton.OFF);
             } else {
                 var block = elementPath.block || blockLimit;
                 if (block && block._4e_style(this.indentCommand.indentCssProperty)) {
-                    this.set("status", "on");
+                    el.set("state", TripleButton.OFF);
                 } else {
-                    this.set("status", "off");
+                    el.set("state", TripleButton.DISABLED);
                 }
             }
         }

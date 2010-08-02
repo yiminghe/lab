@@ -1,0 +1,62 @@
+/**
+LoVe F HAte
+**/
+
+/**
+link
+**/
+.ke-triplebutton {
+    display: inline-block;
+    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+    *display: inline;
+    vertical-align: baseline;
+    padding: 2px 4px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+    height: 18px;
+    text-decoration: none;
+    border: 1px solid #A3D7FF;
+    margin: 2px;
+}
+
+.ke-triplebutton-on {
+    background-color: #A3D7FF;
+    opacity: 1;
+}
+
+.ke-triplebutton-disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+/**
+focus
+**/
+.ke-triplebutton:focus {
+}
+
+/**
+hover
+**/
+.ke-triplebutton-off:hover {
+    background-color: #A3D7FF;
+    opacity: 0.7;
+}
+
+.ke-triplebutton-on:hover {
+    background-color: #86caff;
+}
+
+.ke-triplebutton-disabled:hover {
+    background-color: white;
+    opacity: 0.3;
+}
+
+/**
+active
+**/
+.ke-triplebutton:active {
+    color: black;
+}
+
