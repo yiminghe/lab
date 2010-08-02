@@ -33,7 +33,7 @@ KISSYEDITOR.add("editor-plugin-image", function(KE) {
             var editor = this.get("editor");
             var url = window.prompt("«Î ‰»ÎÕº∆¨µÿ÷∑", "http://img02.taobaocdn.com/tps/i2/T1QXVsXnFjXXXXXXXX-167-63.png");
             if (!url) return;
-            var img = new Node("<img src='" + url + "'/>");
+            var img = new Node("<img src='" + url + "'/>", null, editor.document);
             editor.insertElement(img);
         }
     });

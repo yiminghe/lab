@@ -1,0 +1,34 @@
+.ke-color-a, .ke-color-remove {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 2px;
+    border: 1px solid transparent;
+}
+
+.ke-color-remove {
+    padding: 3px 0;
+    margin: 5px;
+}
+
+.ke-color-a:hover, .ke-color-remove:hover, .ke-color-selected {
+    background-color: #dff1ff;
+    border: 1px solid #316ac5;
+}
+
+.ke-color-a span {
+    display: block;
+    height: 10px;
+    width: 10px;
+}
+
+.ke-color-wrap {
+    position: absolute;
+    width: 164px;
+    height: 136px;
+    z-index: 10001;
+    -moz-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+    background-color: #FFFFFF;
+    border: 1px solid #8F8F73;
+}

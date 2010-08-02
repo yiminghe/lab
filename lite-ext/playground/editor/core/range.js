@@ -101,11 +101,11 @@ KISSYEDITOR.add("editor-range", function(KE) {
             var startNode = this.startContainer,
                 endNode = this.endContainer;
 
-            if (startNode.is && startNode.is('span')
-                && startNode.hasAttribute('_ke_bookmark'))
+            if (startNode && startNode._4e_name() == 'span'
+                && startNode.attr('_ke_bookmark'))
                 this.setStartAt(startNode, KER.POSITION_BEFORE_START);
-            if (endNode && endNode.is && endNode.is('span')
-                && endNode.hasAttribute('_ke_bookmark'))
+            if (endNode && endNode._4e_name() == 'span'
+                && endNode.attr('_ke_bookmark'))
                 this.setEndAt(endNode, KER.POSITION_AFTER_END);
         },
         /**
@@ -682,9 +682,11 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 this.setEnd(endContainer, endOffset);
             }
         },
+
         insertNode : function(node) {
             this.optimizeBookmark();
             this.trim(false, true);
+
             var startContainer = this.startContainer;
             var startOffset = this.startOffset;
 
@@ -692,9 +694,9 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
             if (nextNode) {
                 DOM.insertBefore(node[0] || node, nextNode);
-            }
-            else
+            } else
                 startContainer[0].appendChild(node[0] || node);
+
             // Check if we need to update the end boundary.
             if (node.parent()[0] === this.endContainer[0])
                 this.endOffset++;
@@ -702,6 +704,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // Expand the range to embrace the new node.
             this.setStartBefore(node);
         },
+
         moveToBookmark : function(bookmark) {
             // Created with createBookmark().
             {

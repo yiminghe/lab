@@ -354,8 +354,7 @@ KISSY.add("editor", function(S) {
 
             this.focus();
 
-            var
-                elementName = element._4e_name(),
+            var elementName = element._4e_name(),
                 xhtml_dtd = KE.XHTML_DTD,
                 KER = KE.RANGE,
                 KEN = KE.NODE,
@@ -400,7 +399,6 @@ KISSY.add("editor", function(S) {
 
                 // Insert the new node.
                 range.insertNode(clone);
-
                 // Save the last element reference so we can make the
                 // selection later.
                 if (!lastElement)
