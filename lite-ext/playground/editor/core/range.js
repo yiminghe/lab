@@ -1385,6 +1385,46 @@ KISSYEDITOR.add("editor-range", function(KE) {
             clone.insertAfter(toSplit);
             this.moveToPosition(toSplit, KER.POSITION_AFTER_END);
             return clone;
+        },
+        moveToElementEditablePosition : function(el, isMoveToEnd) {
+            var isEditable,xhtml_dtd = KE.XHTML_DTD;
+
+            // Empty elements are rejected.
+            if (xhtml_dtd.$empty[ el._4e_name() ])
+                return false;
+
+            while (el && el[0].nodeType == KEN.NODE_ELEMENT) {
+                isEditable = el._4e_isEditable();
+
+                // If an editable element is found, move inside it.
+                if (isEditable)
+                    this.moveToPosition(el, isMoveToEnd ?
+                        KER.POSITION_BEFORE_END :
+                        KER.POSITION_AFTER_START);
+                // Stop immediately if we've found a non editable inline element (e.g <img>).
+                else if (xhtml_dtd.$inline[ el._4e_name() ]) {
+                    this.moveToPosition(el, isMoveToEnd ?
+                        KER.POSITION_AFTER_END :
+                        KER.POSITION_BEFORE_START);
+                    return true;
+                }
+
+                // Non-editable non-inline elements are to be bypassed, getting the next one.
+                if (xhtml_dtd.$empty[ el._4e_name() ])
+                    el = el[ isMoveToEnd ? '_4e_previous' : '_4e_next' ](nonWhitespaceOrBookmarkEval);
+                else
+                    el = el[ isMoveToEnd ? '_4e_last' : '_4e_first' ](nonWhitespaceOrBookmarkEval);
+
+                // Stop immediately if we've found a text node.
+                if (el && el[0].nodeType == KEN.NODE_TEXT) {
+                    this.moveToPosition(el, isMoveToEnd ?
+                        KER.POSITION_AFTER_END :
+                        KER.POSITION_BEFORE_START);
+                    return true;
+                }
+            }
+
+            return isEditable;
         }
 
     });
@@ -1405,6 +1445,13 @@ KISSYEDITOR.add("editor-range", function(KE) {
         return c1 || c2 || c3;
     }
 
+    var whitespaceEval = new Walker.whitespaces(),
+        bookmarkEval = new Walker.bookmark();
+
+    function nonWhitespaceOrBookmarkEval(node) {
+        // Whitespaces and bookmark nodes are to be ignored.
+        return !whitespaceEval(node) && !bookmarkEval(node);
+    }
 
     function getCheckStartEndBlockEvalFunction(isStart) {
         var hadBr = false, bookmarkEvaluator = Walker.bookmark(true);

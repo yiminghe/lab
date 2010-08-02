@@ -1,6 +1,11 @@
 KISSY.app("KISSYEDITOR", KISSY.EventTarget);
 KISSY.add("editor", function(S) {
-    var EventTarget = S.EventTarget,UA = S.UA,Node = S.Node,Event = S.Event,DOM = S.DOM;
+    var EventTarget = S.EventTarget,
+        UA = S.UA,
+        Node = S.Node,
+        Event = S.Event,
+        KE = KISSYEDITOR,
+        DOM = S.DOM;
     var DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
         HTML5_DTD = '<!doctype html>';
 
@@ -343,8 +348,74 @@ KISSY.add("editor", function(S) {
                 if (mid) clearTimeout(mid);
                 mid = null;
             });
+        },
 
+        insertElement:function(element) {
+
+            this.focus();
+
+            var
+                elementName = element._4e_name(),
+                xhtml_dtd = KE.XHTML_DTD,
+                KER = KE.RANGE,
+                KEN = KE.NODE,
+                isBlock = xhtml_dtd.$block[ elementName ];
+
+            var selection = this.getSelection(),
+                ranges = selection.getRanges();
+
+
+            var range, clone, lastElement, bookmark;
+
+            for (var i = ranges.length - 1; i >= 0; i--) {
+                range = ranges[ i ];
+
+                // Remove the original contents.
+                range.deleteContents();
+
+                clone = !i && element || element._4e_clone(true);
+
+                // If we're inserting a block at dtd-violated position, split
+                // the parent blocks until we reach blockLimit.
+                var current, dtd;
+                if (isBlock) {
+                    while (( current = range.getCommonAncestor(false, true) )
+                        && ( dtd = xhtml_dtd[ current._4e_name() ] )
+                        && !( dtd && dtd [ elementName ] )) {
+                        // Split up inline elements.
+                        if (current._4e_name() in xhtml_dtd.span)
+                            range.splitElement(current);
+                        // If we're in an empty block which indicate a new paragraph,
+                        // simply replace it with the inserting block.(#3664)
+                        else if (range.checkStartOfBlock()
+                            && range.checkEndOfBlock()) {
+                            range.setStartBefore(current);
+                            range.collapse(true);
+                            current.remove();
+                        }
+                        else
+                            range.splitBlock();
+                    }
+                }
+
+                // Insert the new node.
+                range.insertNode(clone);
+
+                // Save the last element reference so we can make the
+                // selection later.
+                if (!lastElement)
+                    lastElement = clone;
+            }
+
+            range.moveToPosition(lastElement, KER.POSITION_AFTER_END);
+
+            var next = lastElement._4e_nextSourceNode(true);
+            if (next && next.type == KEN.NODE_ELEMENT)
+                range.moveToElementEditablePosition(next);
+
+            selection.selectRanges([ range ]);
         }
+
     });
     function tryThese() {
         var returnValue;

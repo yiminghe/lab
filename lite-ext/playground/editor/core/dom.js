@@ -747,15 +747,33 @@ KISSYEDITOR.add("editor-dom", function(KE) {
         },
         _4e_previous : function(el, evaluator) {
             var previous = el[0] || el, retval;
-            do
-            {
+            do {
                 previous = previous.previousSibling;
                 retval = previous && new Node(previous);
             }
             while (retval && evaluator && !evaluator(retval))
             return retval;
         },
+        _4e_first : function(el, evaluator) {
+            var first = el[0].firstChild,
+                retval = first && new Node(first);
+            if (retval && evaluator && !evaluator(retval))
+                retval = retval._4e_next(evaluator);
 
+            return retval;
+        },
+
+        /**
+         * @param {Function} evaluator Filtering the result node.
+         */
+        _4e_last : function(el, evaluator) {
+            var last = el[0].lastChild,
+                retval = last && new Node(last);
+            if (retval && evaluator && !evaluator(retval))
+                retval = retval._4e_previous(evaluator);
+
+            return retval;
+        },
         /**
          * Gets the node that follows this element in its parent's child list.
          * @param {Function} evaluator Filtering the result node.
@@ -885,6 +903,18 @@ KISSYEDITOR.add("editor-dom", function(KE) {
             // The style:
             if (el.style.cssText !== '')
                 dest[0].style.cssText = el.style.cssText;
+        },
+
+        _4e_isEditable : function(el) {
+            // Get the element name.
+            var name = DOM._4e_name(el),xhtml_dtd = KE.XHTML_DTD;
+
+            // Get the element DTD (defaults to span for unknown elements).
+            var dtd = !xhtml_dtd.$nonEditable[ name ]
+                && ( xhtml_dtd[ name ] || xhtml_dtd.span );
+
+            // In the DTD # == text node.
+            return ( dtd && dtd['#'] );
         }
     };
 
