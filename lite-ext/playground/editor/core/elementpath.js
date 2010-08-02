@@ -86,7 +86,7 @@ KISSYEDITOR.add("editor-elementpath", function(KE) {
                 return false;
 
             for (var i = 0; i < thisElements.length; i++) {
-                if (!thisElements[ i ][0] === otherElements[ i ][0])
+                if (thisElements[ i ][0] !== otherElements[ i ][0])
                     return false;
             }
 

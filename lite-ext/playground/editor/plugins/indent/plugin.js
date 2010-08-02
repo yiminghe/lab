@@ -1,3 +1,7 @@
+/**
+ * indent formatting,modified from ckeditor
+ * @modifier:yiminghe@gmail.com
+ */
 KISSYEDITOR.add("editor-plugin-indent", function(KE) {
     var listNodeNames = {ol:1,ul:1},
         S = KISSY,

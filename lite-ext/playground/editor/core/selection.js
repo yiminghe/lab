@@ -59,7 +59,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
     function KESelection(document) {
 
         this.document = document;
-        this.isLocked = false;
+
         this._ = {
             cache : {}
         };
@@ -451,10 +451,10 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                     // Check first any enclosed element, e.g. <ul>[<li><a href="#">item</a></li>]</ul>
                     for (var i = 2; i && !( ( enclosed = range.getEnclosedNode() )
                         && ( enclosed[0].nodeType == KEN.NODE_ELEMENT )
-                        && styleObjectElements[ enclosed.getName() ]
+                        && styleObjectElements[ enclosed._4e_name() ]
                         && ( selected = enclosed ) ); i--) {
                         // Then check any deep wrapped element, e.g. [<b><i><img /></i></b>]
-                        range.shrink(CKEDITOR.SHRINK_ELEMENT);
+                        range.shrink(KER.SHRINK_ELEMENT);
                     }
 
                     return  selected[0];
@@ -463,65 +463,13 @@ KISSYEDITOR.add("editor-selection", function(KE) {
             return cache.selectedElement = ( node ? new Node(node) : null );
         },
 
-        lock : function() {
-            // Call all cacheable function.
-            this.getRanges();
-            this.getStartElement();
-            this.getSelectedElement();
 
-            // The native selection is not available when locked.
-            this._.cache.nativeSel = {};
-
-            this.isLocked = true;
-        },
-
-        unlock : function(restore) {
-            var doc = this.document,
-                //!TODO save ?
-                lockedSelection = null;
-
-            if (lockedSelection) {
-                doc.setCustomData('cke_locked_selection', null);
-
-                if (restore) {
-                    var selectedElement = lockedSelection.getSelectedElement(),
-                        ranges = !selectedElement && lockedSelection.getRanges();
-
-                    this.isLocked = false;
-                    this.reset();
-
-                    doc.getBody().focus();
-
-                    if (selectedElement)
-                        this.selectElement(selectedElement);
-                    else
-                        this.selectRanges(ranges);
-                }
-            }
-
-            if (!lockedSelection || !restore) {
-                this.isLocked = false;
-                this.reset();
-            }
-        },
 
         reset : function() {
             this._.cache = {};
         },
 
         selectElement : function(element) {
-            if (this.isLocked) {
-                var range = new KERange(this.document);
-                range.setStartBefore(element);
-                range.setEndAfter(element);
-
-                this._.cache.selectedElement = element;
-                this._.cache.startElement = element;
-                this._.cache.ranges = [ range ];
-                this._.cache.type = CKEDITOR.SELECTION_ELEMENT;
-
-                return;
-            }
 
             if (UA.ie) {
                 this.getNative().empty();
@@ -555,15 +503,6 @@ KISSYEDITOR.add("editor-selection", function(KE) {
         },
 
         selectRanges : function(ranges) {
-            if (this.isLocked) {
-                this._.cache.selectedElement = null;
-                //!TODO
-                this._.cache.startElement = ranges[ 0 ].getTouchedStartNode();
-                this._.cache.ranges = ranges;
-                this._.cache.type = KES.SELECTION_TEXT;
-
-                return;
-            }
 
             if (UA.ie) {
                 // IE doesn't accept multiple ranges selection, so we just

@@ -1,3 +1,7 @@
+/**
+ * list formatting,modified from ckeditor
+ * @modifier:yiminghe@gmail.com
+ */
 KISSYEDITOR.add("editor-plugin-list", function(KE) {
     var listNodeNames = {"ol":1,"ul":1},
         listNodeNames_arr = ["ol","ul"],

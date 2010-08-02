@@ -1,3 +1,7 @@
+/**
+ * format formatting,modified from ckeditor
+ * @modifier:yiminghe@gmail.com
+ */
 KISSYEDITOR.add("editor-plugin-format", function(KE) {
     var S = KISSY,
         KEStyle = KE.Style,

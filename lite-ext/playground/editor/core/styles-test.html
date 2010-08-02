@@ -4,10 +4,11 @@
 <meta charset="gbk"/>
 <title>range Test</title>
 <link href="../ui/button.css" rel="stylesheet"/>
+<link href="../plugins/elementpath/plugin.css" rel="stylesheet"/>
 <script type="text/javascript"
         src="../../../base/javascript/ks-core.js?t=20100730151801" charset="utf-8"></script>
 <script type="text/javascript"
-        src="http://github.com/yiminghe/kissy-sandbox/raw/master/attribute/attribute.js"></script>
+        src="http://github.com/yiminghe/kissy-sandbox/raw/master/attribute/attribute.js?t=20100730151801"></script>
 <script type="text/javascript"
         src="editor.js?t=20100730151801"></script>
 <script type="text/javascript"
@@ -36,12 +37,14 @@
         src="../plugins/list/plugin.js?t=20100730151801"></script>
 <script type="text/javascript"
         src="../plugins/indent/plugin.js?t=20100730151801"></script>
+<script type="text/javascript"
+        src="../plugins/elementpath/plugin.js?t=20100730151801"></script>
 </head>
 <body>
 
 <h1>选择区域文字后 run </h1>
 
-<div id="tools"></div>
+<div id="tools" style="border:1px solid gray;height:30px;border-bottom:none;padding:0 5px;"></div>
 <div style="height:400px;border:1px solid green;">
     <textarea id="edit">
         <p>123 456 7890123 45678
@@ -58,7 +61,7 @@
             </li>
             <li>
                 我是列表2
-                <ul>
+                <ul id="test">
                     <li>
                         我是列表2.1
                     </li>
@@ -76,7 +79,7 @@
         </ul>
     </textarea>
 </div>
-<div id="status"></div>
+<div id="status" style="border:1px solid gray;height:17px;border-top:none;"></div>
 
 <h1>生成格式化html：</h1>
 <textarea id="re" style="margin:10px auto;border:1px solid green;width:80%;height:900px;" readonly></textarea>
@@ -87,7 +90,7 @@
 
     KISSY.ready(function(S) {
         var Node = S.Node,
-                editor = new S.Editor(S.one("#edit"), S.one("#tools"));
+                editor = new S.Editor(S.one("#edit"), S.one("#tools"), S.one("#status"));
         S.one("#re")._4e_unselectable();
 
         setInterval(function() {
@@ -96,6 +99,21 @@
         editor.on("dataReady", function() {
             S.one("#re").val(editor.getData());
         });
+
+
+        editor.on("dataReady", function() {
+            return;
+            var sel = editor.getSelection(),KE = KISSYEDITOR;
+            editor.focus();
+            sel.selectElement(new Node(editor.document.body));
+            // editor.focus();
+
+            var startElement = sel.getStartElement(),
+                    currentPath = new KE.ElementPath(startElement);
+            console.log(startElement);
+            console.log(currentPath);
+        });
+
 
     });
 

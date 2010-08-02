@@ -1453,6 +1453,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
     function whitespaces(isReject) {
         return function(node) {
+            node = node[0] || node;
             var isWhitespace = node && ( node.nodeType == KEN.NODE_TEXT )
                 && !S.trim(node.nodeValue);
             return isReject ^ isWhitespace;

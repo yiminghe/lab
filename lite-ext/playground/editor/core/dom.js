@@ -474,13 +474,13 @@ KISSYEDITOR.add("editor-dom", function(KE) {
             if (node[0] === el[0])
                 return el;
 
-            if (node._4e_contains && node._4e_contains(el))
+            if (node[0].nodeType != KEN.NODE_TEXT && node._4e_contains(el))
                 return node;
 
             var start = el[0].nodeType == KEN.NODE_TEXT ? el.parent() : el;
 
             do   {
-                if (start._4e_contains(node))
+                if (start[0].nodeType != KEN.NODE_TEXT && start._4e_contains(node))
                     return start;
             } while (( start = start.parent() ));
 

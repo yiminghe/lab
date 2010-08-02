@@ -4,9 +4,10 @@ KISSY.add("editor", function(S) {
     var DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
         HTML5_DTD = '<!doctype html>';
 
-    function Editor(textarea, toolBarDiv) {
+    function Editor(textarea, toolBarDiv, statusDiv) {
         this.textarea = textarea[0] || textarea;
         this.toolBarDiv = toolBarDiv;
+        this.statusDiv = statusDiv;
         this._init();
 
     }
@@ -20,9 +21,10 @@ KISSY.add("editor", function(S) {
         },
         focus:function() {
             var self = this;
-            setTimeout(function() {
-                DOM._4e_getWin(self.document).focus();
-            }, 10);
+            //setTimeout(function() {
+            DOM._4e_getWin(self.document).focus();
+            // self.document.body.focus();
+            //}, 10);
         },
         _init:function() {
             var iframe,
@@ -316,19 +318,19 @@ KISSY.add("editor", function(S) {
 
         _monitor:function() {
             var self = this,previousPath,mid = null,KE = KISSYEDITOR;
+            //return;
             Event.on(DOM._4e_getWin(this.document), "focus", function() {
                 if (mid) {
-                    console.log("duplicate!");
                     return;
                 }
                 mid = setTimeout(function() {
-                    //console.log("monitor");
+                    //console.log("monitor....");
                     var selection = self.getSelection();
                     if (!selection.isInvalid) {
                         var startElement = selection.getStartElement(),
                             currentPath = new KE.ElementPath(startElement);
-
                         if (!previousPath || !previousPath.compare(currentPath)) {
+                            previousPath = currentPath;
                             self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
                         }
                     }

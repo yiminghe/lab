@@ -1,3 +1,7 @@
+/**
+ * font formatting,modified from ckeditor
+ * @modifier:yiminghe@gmail.com
+ */
 KISSYEDITOR.add("editor-plugin-font", function(KE) {
     var S = KISSY,
         KEStyle = KE.Style,
