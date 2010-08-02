@@ -3,8 +3,9 @@
  * @author:yiminghe@gmail.com
  * @date:2010-08-02
  */
-KISSY.add("kissy-editor-button", function(S) {
-    var ON = "on",
+KISSYEDITOR.add("kissy-editor-button", function(KE) {
+    var S = KISSY,
+        ON = "on",
         OFF = "off",
         DISABLED = "disabled",
         Node = S.Node,
@@ -80,6 +81,6 @@ KISSY.add("kissy-editor-button", function(S) {
         }
     });
 
-    S.TripleButton = TripleButton;
+    KE.TripleButton = TripleButton;
 
 });

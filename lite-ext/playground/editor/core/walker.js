@@ -3,9 +3,11 @@
  * @refer:http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal#TreeWalker
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-walker", function(S) {
+KISSYEDITOR.add("editor-walker", function(KE) {
 
-    var KEN = KISSYEDITOR.NODE,Node = S.Node;
+    var S = KISSY,
+        KEN = KE.NODE,
+        Node = S.Node;
     // This function is to be called under a "walker" instance scope.
     function iterate(rtl, breakOnFalse) {
         // Return null if we have reached the end.
@@ -28,8 +30,7 @@ KISSY.add("editor-walker", function(S) {
             range.trim();
 
             // A collapsed range must return null at first call.
-            if (range.collapsed)
-            {
+            if (range.collapsed) {
                 this.end();
                 return null;
             }
@@ -42,9 +43,8 @@ KISSY.add("editor-walker", function(S) {
                 blockerLTR = new Node(limitLTR[0].childNodes[range.endOffset]);
             //从左到右保证在 range 区间内获取 nextSourceNode
             this._.guardLTR = function(node, movingOut) {
-                return
                 //从endContainer移出去，失败返回false
-                (
+                return (
                     ( !movingOut
                         ||
                         limitLTR[0] !== node[0] )
@@ -99,8 +99,7 @@ KISSY.add("editor-walker", function(S) {
             if (rtl) {
                 node = range.endContainer;
 
-                if (range.endOffset > 0)
-                {
+                if (range.endOffset > 0) {
                     node = new Node(node[0].childNodes[range.endOffset - 1]);
                     if (guard(node) === false)
                         node = null;
@@ -256,7 +255,7 @@ KISSY.add("editor-walker", function(S) {
 
     Walker.blockBoundary = function(customNodeNames) {
         return function(node, type) {
-            if(!node[0]) node=new Node(node);
+            if (!node[0]) node = new Node(node);
             return ! ( node[0].nodeType == KEN.NODE_ELEMENT
                 && node._4e_isBlockBoundary(customNodeNames) );
         };
@@ -328,5 +327,5 @@ KISSY.add("editor-walker", function(S) {
     };
 
 
-    S.Walker = Walker;
+    KE.Walker = Walker;
 });

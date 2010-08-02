@@ -2,9 +2,9 @@
  * modified from ckeditor,range implementation across browsers for kissy editor
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-range", function(S) {
-
-    KISSYEDITOR.RANGE = {
+KISSYEDITOR.add("editor-range", function(KE) {
+    var S = KISSY;
+    KE.RANGE = {
         POSITION_AFTER_START:1,// <element>^contents</element>		"^text"
         POSITION_BEFORE_END:2,// <element>contents^</element>		"text^"
         POSITION_BEFORE_START:3,// ^<element>contents</element>		^"text"
@@ -19,14 +19,14 @@ KISSY.add("editor-range", function(S) {
         SHRINK_TEXT:2
     };
 
-    var KEN = KISSYEDITOR.NODE,
-        KER = KISSYEDITOR.RANGE,
-        KEP = KISSYEDITOR.POSITION,
-        Walker = S.Walker,
+    var KEN = KE.NODE,
+        KER = KE.RANGE,
+        KEP = KE.POSITION,
+        Walker = KE.Walker,
         DOM = S.DOM,
         UA = S.UA,
-        dtd = KISSYEDITOR.XHTML_DTD,
-        ElementPath = S.ElementPath,
+        dtd = KE.XHTML_DTD,
+        ElementPath = KE.ElementPath,
         Node = S.Node,
         EMPTY = {area:1,base:1,br:1,col:1,hr:1,img:1,input:1,link:1,meta:1,param:1};
 
@@ -717,7 +717,7 @@ KISSY.add("editor-range", function(S) {
 
                 // Set the range end at the bookmark end node position, or simply
                 // collapse it if it is not available.
-                if (endNode&&endNode[0]) {
+                if (endNode && endNode[0]) {
                     this.setEndBefore(endNode);
                     endNode.remove();
                 }
@@ -1460,5 +1460,5 @@ KISSY.add("editor-range", function(S) {
     }
 
 
-    S.Range = KERange;
+    KE.Range = KERange;
 });

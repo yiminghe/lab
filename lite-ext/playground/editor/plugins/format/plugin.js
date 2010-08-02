@@ -1,13 +1,13 @@
-KISSY.add("editor-plugin-format", function(S) {
-    var KE = KISSYEDITOR,
-        KEStyle = S.Style,
+KISSYEDITOR.add("editor-plugin-format", function(KE) {
+    var S = KISSY,
+        KEStyle = KE.Style,
         Node = S.Node,
         FORMAT_SELECTION_HTML = "<select>",
         FORMATS = {
             "请选择格式":"p",
             "标题1":"h1",
             "标题5":"h5"
-        },FORMAT_STYLES = {},KEStyle = S.Style;
+        },FORMAT_STYLES = {},KEStyle = KE.Style;
 
     for (var p in FORMATS) {
         if (FORMATS[p]) {

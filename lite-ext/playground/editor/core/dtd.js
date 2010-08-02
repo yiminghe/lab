@@ -2,8 +2,7 @@
  * modified from ckeditor ,xhtml1.1 transitional dtd translation
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-dtd", function(KISSY) {
-
+KISSYEDITOR.add("editor-dtd", function() {
     /**
      * Holds and object representation of the HTML DTD to be used by the editor in
      * its internal operations.
@@ -25,8 +24,7 @@ KISSY.add("editor-dtd", function(KISSY) {
      * // Check if "p" is a block element.
      * alert( !!CKEDITOR.dtd.$block[ 'p' ] );  "true"
      */
-    KISSYEDITOR.XHTML_DTD = (function()
-    {
+    KISSYEDITOR.XHTML_DTD = (function() {
         var X = function(r) {
             var i = arguments.length - 1;
             while (i > 0) {

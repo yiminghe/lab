@@ -1,7 +1,7 @@
-KISSY.add("editor-plugin-indent", function(S) {
+KISSYEDITOR.add("editor-plugin-indent", function(KE) {
     var listNodeNames = {ol:1,ul:1},
-        KE = KISSYEDITOR,
-        Walker = S.Walker,
+        S = KISSY,
+        Walker = KE.Walker,
         DOM = S.DOM,
         Node = S.Node,
         UA = S.UA,
@@ -63,7 +63,7 @@ KISSY.add("editor-plugin-indent", function(S) {
             database = {};
 
         // Convert the list DOM tree into a one dimensional array.
-        var listArray = S.ListUtils.listToArray(listNode, database);
+        var listArray = KE.ListUtils.listToArray(listNode, database);
 
         // Apply indenting or outdenting on the array.
         var baseIndent = listArray[ lastItem._4e_getData('listarray_index') ].indent;
@@ -80,7 +80,7 @@ KISSY.add("editor-plugin-indent", function(S) {
 
         // Convert the array back to a DOM forest (yes we might have a few subtrees now).
         // And replace the old list with the new forest.
-        var newList = S.ListUtils.arrayToList(listArray, database, null, "p", 0);
+        var newList = KE.ListUtils.arrayToList(listArray, database, null, "p", 0);
 
         // Avoid nested <li> after outdent even they're visually same,
         // recording them for later refactoring.(#3982)
@@ -213,7 +213,7 @@ KISSY.add("editor-plugin-indent", function(S) {
     });
 
 
-    var TripleButton = S.TripleButton;      
+    var TripleButton = KE.TripleButton;      
    
     /**
      * 用到了按钮三状态的两个状态：off可点击，disabled:不可点击

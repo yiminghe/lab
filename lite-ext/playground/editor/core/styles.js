@@ -2,20 +2,20 @@
  * modified from ckeditor for kissy editor,use style to gen element and wrap range's elements
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-styles", function(S) {
+KISSYEDITOR.add("editor-styles", function(KE) {
 
-    var KE = KISSYEDITOR,
+    var S=KISSY,
         KEST = KE.STYLE = {},
         KER = KE.RANGE,
-        KESelection = S.Selection,
+        KESelection = KE.Selection,
         KEN = KE.NODE,
         KEP = KE.POSITION,
-        KERange = S.Range,
-        Walker = S.Walker,
+        KERange = KE.Range,
+        Walker = KE.Walker,
         Node = S.Node,
         UA = S.UA,
         DOM = S.DOM,
-        ElementPath = S.ElementPath;
+        ElementPath = KE.ElementPath;
     KEST.STYLE_BLOCK = 1;
     KEST.STYLE_INLINE = 2;
     KEST.STYLE_OBJECT = 3;
@@ -1059,5 +1059,5 @@ KISSY.add("editor-styles", function(S) {
         }
     }
 
-    S.Style = KEStyle;
+    KE.Style = KEStyle;
 });

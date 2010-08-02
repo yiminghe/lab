@@ -2,16 +2,19 @@
  * modified from ckeditor core plugin : selection
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-selection", function(S) {
-    var UA = S.UA,DOM = S.DOM,Node = S.Node;
-    KISSYEDITOR.SELECTION = {};
-    var KES = KISSYEDITOR.SELECTION,
-        KER = KISSYEDITOR.RANGE,
-        KEN = KISSYEDITOR.NODE,
+KISSYEDITOR.add("editor-selection", function(KE) {
+    var S = KISSY,
+        UA = S.UA,
+        DOM = S.DOM,
+        Node = S.Node;
+    KE.SELECTION = {};
+    var KES = KE.SELECTION,
+        KER = KE.RANGE,
+        KEN = KE.NODE,
         EventTarget = S.EventTarget,
-        Walker = S.Walker,
-        ElementPath = S.ElementPath,
-        KERange = S.Range;
+        Walker = KE.Walker,
+        ElementPath = KE.ElementPath,
+        KERange = KE.Range;
     /**
      * No selection.
      * @constant
@@ -496,8 +499,7 @@ KISSY.add("editor-selection", function(S) {
                 }
             }
 
-            if (!lockedSelection || !restore)
-            {
+            if (!lockedSelection || !restore) {
                 this.isLocked = false;
                 this.reset();
             }
@@ -658,7 +660,7 @@ KISSY.add("editor-selection", function(S) {
     });
 
 
-    S.Selection = KESelection;
+    KE.Selection = KESelection;
     var nonCells = { table:1,tbody:1,tr:1 };
     var notWhitespaces = Walker.whitespaces(true);
     var fillerTextRegex = /\ufeff|\u00a0/;

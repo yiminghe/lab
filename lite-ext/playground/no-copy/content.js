@@ -1,10 +1,11 @@
 /**
- * Just For Fun ,no copy no copy 
+ * Just For Fun ,no copy no copy
  * @author:yiminghe@gmail.com
  * @声明：我支持开放
  */
 KISSY.ready(function(S) {
-    var t = "textarea",
+    var KE = KISSYEDITOR,
+        t = "textarea",
         m = "禁止copy!",
         Event = S.Event,
         doc = document,
@@ -27,7 +28,7 @@ KISSY.ready(function(S) {
             //return;
 
             //保存原来的选择区域
-            var s = new S.Selection(doc),r = s.getRanges()[0];
+            var s = new KE.Selection(doc),r = s.getRanges()[0];
             //警告
             // clip.html("禁止copy！");
             clip[0].focus();

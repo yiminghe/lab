@@ -2,9 +2,9 @@
  * modified from ckeditor ,elementpath represents element's tree path from body
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-elementpath", function(S) {
+KISSYEDITOR.add("editor-elementpath", function(KE) {
 
-    var KE = KISSYEDITOR,
+    var S = KISSY,
         dtd = KE.XHTML_DTD,
         KEN = KE.NODE,
         UA = S.UA;
@@ -103,6 +103,6 @@ KISSY.add("editor-elementpath", function(S) {
         }
     };
 
-    S.ElementPath = ElementPath;
+    KE.ElementPath = ElementPath;
 
 });

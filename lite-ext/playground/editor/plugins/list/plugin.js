@@ -1,12 +1,12 @@
-KISSY.add("editor-plugin-list", function(S) {
+KISSYEDITOR.add("editor-plugin-list", function(KE) {
     var listNodeNames = {"ol":1,"ul":1},
         listNodeNames_arr = ["ol","ul"],
         emptyTextRegex = /^[\n\r\t ]*$/,
-        KE = KISSYEDITOR,
+        S = KISSY,
         KER = KE.RANGE,
         KEP = KE.POSITION,
-        ElementPath = S.ElementPath,
-        Walker = S.Walker,
+        ElementPath = KE.ElementPath,
+        Walker = KE.Walker,
         KEN = KE.NODE,
         UA = S.UA,
         Node = S.Node,
@@ -466,7 +466,7 @@ KISSY.add("editor-plugin-list", function(S) {
     };
 
 
-    var TripleButton = S.TripleButton;
+    var TripleButton = KE.TripleButton;
 
     /**
      * 用到了按钮三状态的两个状态：off:点击后格式化，on:点击后清除格式化
@@ -546,7 +546,7 @@ KISSY.add("editor-plugin-list", function(S) {
         }
     });
 
-    S.ListUtils = list;
+    KE.ListUtils = list;
     KE.on("instanceCreated", function(ev) {
         var editor = ev.editor;
         new List({

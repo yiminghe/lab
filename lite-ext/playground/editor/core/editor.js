@@ -16,7 +16,7 @@ KISSY.add("editor", function(S) {
             return this.document.body.innerHTML;
         },
         getSelection:function() {
-            return new S.Selection(this.document);
+            return new KISSYEDITOR.Selection(this.document);
         },
         focus:function() {
             var self = this;
@@ -25,7 +25,13 @@ KISSY.add("editor", function(S) {
             }, 10);
         },
         _init:function() {
-            var iframe,frameLoaded,self = this,KER = KISSYEDITOR.RANGE,KERange = S.Range,KES = KISSYEDITOR.SELECTION;
+            var iframe,
+                frameLoaded,
+                self = this,
+                KE = KISSYEDITOR,
+                KER = KE.RANGE,
+                KERange = KE.Range,
+                KES = KE.SELECTION;
             var createIFrame = function(data) {
                 if (iframe)
                     iframe.remove();
@@ -309,7 +315,7 @@ KISSY.add("editor", function(S) {
         },
 
         _monitor:function() {
-            var self = this,previousPath,mid = null;
+            var self = this,previousPath,mid = null,KE = KISSYEDITOR;
             Event.on(DOM._4e_getWin(this.document), "focus", function() {
                 if (mid) {
                     console.log("duplicate!");
@@ -320,7 +326,7 @@ KISSY.add("editor", function(S) {
                     var selection = self.getSelection();
                     if (!selection.isInvalid) {
                         var startElement = selection.getStartElement(),
-                            currentPath = new S.ElementPath(startElement);
+                            currentPath = new KE.ElementPath(startElement);
 
                         if (!previousPath || !previousPath.compare(currentPath)) {
                             self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });

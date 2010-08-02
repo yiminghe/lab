@@ -2,21 +2,22 @@
  * modified from ckeditor,dom utils for kissy editor
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-dom", function(S) {
+KISSYEDITOR.add("editor-dom", function(KE) {
 
-    var DOM = S.DOM,
+    var S = KISSY,
+        DOM = S.DOM,
         UA = S.UA,
         doc = document,
         Node = S.Node,
 
         REMOVE_EMPTY = {abbr:1,acronym:1,address:1,b:1,bdo:1,big:1,cite:1,code:1,del:1,dfn:1,em:1,font:1,i:1,ins:1,label:1,kbd:1,q:1,s:1,samp:1,small:1,span:1,strike:1,strong:1,sub:1,sup:1,tt:1,u:1,'var':1};
-    KISSYEDITOR.NODE = {
+    KE.NODE = {
         NODE_ELEMENT:1,
         NODE_TEXT:3,
         NODE_DOCUMENT_FRAGMENT:11
     };
-    KISSYEDITOR.POSITION = {};
-    var KEN = KISSYEDITOR.NODE,KEP = KISSYEDITOR.POSITION;
+    KE.POSITION = {};
+    var KEN = KE.NODE,KEP = KE.POSITION;
 
     KEP.POSITION_IDENTICAL = 0;
     KEP.POSITION_DISCONNECTED = 1;
@@ -632,7 +633,7 @@ KISSY.add("editor-dom", function(S) {
             return address;
         },
         _4e_breakParent : function(el, parent) {
-            var KERange = S.Range;
+            var KERange = KE.Range;
             var range = new KERange(el[0].ownerDocument);
 
             // We'll be extracting part of this element, so let's use our

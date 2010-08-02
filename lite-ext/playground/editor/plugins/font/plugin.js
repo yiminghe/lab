@@ -1,6 +1,6 @@
-KISSY.add("editor-plugin-font", function(S) {
-    var KE = KISSYEDITOR,
-        KEStyle = S.Style,
+KISSYEDITOR.add("editor-plugin-font", function(KE) {
+    var S = KISSY,
+        KEStyle = KE.Style,
         Node = S.Node,
         FONT_SIZES = ["30px","50px","70px"],
         FONT_STYLES = {},
@@ -106,5 +106,4 @@ KISSY.add("editor-plugin-font", function(S) {
 
     });
 
-})
-    ;
+});

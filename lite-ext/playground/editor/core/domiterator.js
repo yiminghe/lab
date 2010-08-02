@@ -2,11 +2,12 @@
  * modified from ckeditor ,dom iterator implementation using walker and nextSourceNode
  * @modifier:yiminghe@gmail.com(chengyu)
  */
-KISSY.add("editor-domiterator", function(S) {
-    var KE = KISSYEDITOR,Walker = S.Walker,
-        KERange = S.Range,KER = KE.RANGE,
+KISSYEDITOR.add("editor-domiterator", function(KE) {
+    var S = KISSY,
+        Walker = KE.Walker,
+        KERange = KE.Range,KER = KE.RANGE,
         KEN = KE.NODE,
-        ElementPath = S.ElementPath,
+        ElementPath = KE.ElementPath,
         Node = S.Node,
         DOM = S.DOM;
 
@@ -222,7 +223,7 @@ KISSY.add("editor-domiterator", function(S) {
                     checkLimits = { div : 1, th : 1, td : 1 };
                 block = startPath.block;
 
-                if ((!block||!block[0])
+                if ((!block || !block[0])
                     && !this.enforceRealBlocks
                     && checkLimits[ startBlockLimit._4e_name() ]
                     && range.checkStartOfBlock()
