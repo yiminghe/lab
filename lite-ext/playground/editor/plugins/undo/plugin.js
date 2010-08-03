@@ -219,13 +219,13 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
      * @param editor
      * @param text
      */
-    function RedoUI(editor, text) {
+    function RestoreUI(editor, text) {
         this.editor = editor;
         this.text = text;
         this._init();
     }
 
-    S.augment(RedoUI, {
+    S.augment(RestoreUI, {
         _init:function() {
             var self = this,editor = self.editor;
             self.el = new TripleButton({
@@ -284,11 +284,11 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
         /**
          * 撤销工具栏按钮
          */
-        new RedoUI(editor, "undo");
+        new RestoreUI(editor, "undo");
         /**
          * 重做工具栏按钮
          */
-        new RedoUI(editor, "redo");
+        new RestoreUI(editor, "redo");
     });
 
 
