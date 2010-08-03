@@ -14,7 +14,9 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
      */
     function Snapshot(editor) {
         var contents = editor.getData(),selection = contents && editor.getSelection();
+        //内容html
         this.contents = contents;
+        //选择区域书签标志
         this.bookmarks = selection && selection.createBookmarks2(true);
     }
 
@@ -255,7 +257,7 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
 
         updateUI:function(history, index) {
             if (this.text == "undo") {
-                if (index > 0) {
+                if (index > 0 && history.length > 0) {
                     this.el.set("state", TripleButton.OFF);
                 } else {
                     this.el.set("state", TripleButton.DISABLED);
