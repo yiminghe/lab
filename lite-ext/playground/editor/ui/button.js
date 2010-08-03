@@ -28,7 +28,7 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
         DISABLED_CLASS = "ke-triplebutton-disabled",
         BUTTON_HTML = "<a class='" +
             [BUTTON_CLASS,OFF_CLASS].join(" ")
-            + "' href='#' onclick='return false;'></a>";
+            + "' href='#'></a>";
 
     function TripleButton(cfg) {
         TripleButton.superclass.constructor.call(this, cfg);
@@ -69,6 +69,7 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
         _action:function(ev) {
             this.fire(this.get("state") + "Click", ev);
             this.fire("click", ev);
+            ev.preventDefault();
         },
         _on:function() {
             this.el[0].className = [BUTTON_CLASS,ON_CLASS].join(" ");

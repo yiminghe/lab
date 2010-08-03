@@ -121,13 +121,12 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             this.colorPanel.css("display", "none");
             document.body.appendChild(this.colorPanel[0]);
             this.colorPanel.on("click", this._selectColor, this);
-            Event.on(document, "click", function() {
-                self.colorPanel.css("display", "none");
-            });
-            Event.on(editor.document, "click", function() {
-                self.colorPanel.css("display", "none");
-            });
+            Event.on(document, "click", this._hidePanel, this);
+            Event.on(editor.document, "click", this._hidePanel, this);
 
+        },
+        _hidePanel:function() {
+            this.colorPanel.css("display", "none");
         },
         _selectColor:function(ev) {
             ev.halt();

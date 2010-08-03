@@ -39,8 +39,8 @@ KISSY.add("editor", function(S) {
         focus:function() {
             var self = this;
             //setTimeout(function() {
-            DOM._4e_getWin(self.document).focus();
-            // self.document.body.focus();
+            //DOM._4e_getWin(self.document).focus();
+            self.document.body.focus();
             //}, 10);
         },
         _init:function() {
@@ -138,7 +138,7 @@ KISSY.add("editor", function(S) {
                     if (UA.webkit) {
                         Event.on(doc, "mousedown", function(ev) {
                             var control = new Node(ev.target);
-                            console.log(control._4e_name());
+
                             if (S.inArray(control._4e_name(), ['img', 'hr', 'input', 'textarea', 'select'])) {
                                 self.getSelection().selectElement(control);
                             }
@@ -188,17 +188,14 @@ KISSY.add("editor", function(S) {
                     // Create an invisible element to grab focus.
                     if (UA.gecko || UA.ie || UA.opera) {
                         var focusGrabber;
-
                         focusGrabber = new Node(DOM.insertAfter(new Node(
                             // Use 'span' instead of anything else to fly under the screen-reader radar. (#5049)
                             '<span tabindex="-1" style="position:absolute; left:-10000" role="presentation"></span>')[0], self.textarea));
-
                         focusGrabber.on('focus', function() {
                             self.focus();
                         });
-
                         self.on('destroy', function() {
-                            focusGrabber.clearCustomData();
+
                         });
                     }
 
@@ -221,25 +218,26 @@ KISSY.add("editor", function(S) {
                         });
                     }
 
+                    /*
+                     加上这段，chrome有问题，iframe内滚动条问题
+                     Event.on(win, 'focus', function() {
+                     var doc = self.document;
 
-                    Event.on(win, 'focus', function() {
-                        var doc = self.document;
+                     if (UA.gecko)
+                     blinkCursor();
+                     else if (UA.opera)
+                     doc.body.focus();
+                     else if (UA.webkit) {
+                     // Selection will get lost after move focus
+                     // to document element, save it first.
+                     var sel = self.getSelection(),
+                     type = sel.getType(),
+                     range = ( type != KES.SELECTION_NONE ) && sel.getRanges()[ 0 ];
 
-                        if (UA.gecko)
-                            blinkCursor();
-                        else if (UA.opera)
-                            doc.body.focus();
-                        else if (UA.webkit) {
-                            // Selection will get lost after move focus
-                            // to document element, save it first.
-                            var sel = self.getSelection(),
-                                type = sel.getType(),
-                                range = ( type != KES.SELECTION_NONE ) && sel.getRanges()[ 0 ];
-
-                            doc.documentElement.focus();
-                            range && range.select();
-                        }
-                    });
+                     doc.documentElement.focus();
+                     range && range.select();
+                     }
+                     });*/
 
                     if (UA.ie) {
                         new Node(doc.documentElement).addClass(doc.compatMode);
