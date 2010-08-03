@@ -79,7 +79,11 @@ KISSYEDITOR.add("editor-plugin-format", function(KE) {
                     return;
                 }
             }
-            
+
+            //Ä¬ÈÏÎªÆÕÍ¨£¡
+            this._set("v", "p");
+            this.el.val("p");
+
         }
     });
 
