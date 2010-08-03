@@ -513,9 +513,11 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
                 self = this;
             //ie要等会才能获得焦点窗口的选择区域
             editor.focus();
+            editor.fire("save");
             setTimeout(function() {
                 self.listCommand.state = el.get("state");
                 self.listCommand.exec(editor);
+                editor.fire("save");
                 editor.fire(type + "Change");
             }, 10);
         },

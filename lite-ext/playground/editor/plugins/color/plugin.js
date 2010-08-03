@@ -138,6 +138,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
                 if (t._4e_name() == "a")
                     t = t.one("span");
                 var styles = this.get("styles");
+                editor.fire("save");
                 if (t._4e_style("background-color")) {
                     styles[normalColor(t._4e_style("background-color"))].apply(editor.document);
                 }
@@ -145,6 +146,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
                     styles["inherit"].remove(editor.document);
 
                 }
+                editor.fire("save");
                 editor.focus();
                 this.colorPanel.css("display", "none");
             }

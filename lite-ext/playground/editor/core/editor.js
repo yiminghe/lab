@@ -1,13 +1,22 @@
-KISSY.app("KISSYEDITOR", KISSY.EventTarget);
+/**
+ * modified from ckeditor,editor class for kissy editor
+ * @author:yiminghe@gmail.com
+ */
 KISSY.add("editor", function(S) {
     var EventTarget = S.EventTarget,
         UA = S.UA,
         Node = S.Node,
         Event = S.Event,
         KE = KISSYEDITOR,
+        tryThese = KE.Utils.tryThese,
         DOM = S.DOM;
     var DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
-        HTML5_DTD = '<!doctype html>';
+        HTML5_DTD = '<!doctype html>',
+        CSS = "ul,ol" +
+            "{" +
+            "	margin-left: 0px;" +
+            "	padding-left: 40px;" +
+            "}";
 
     function Editor(textarea, toolBarDiv, statusDiv) {
         this.textarea = textarea[0] || textarea;
@@ -18,6 +27,9 @@ KISSY.add("editor", function(S) {
     }
 
     S.augment(Editor, EventTarget, {
+        setData:function(data) {
+            this.document.body.innerHTML = data;
+        },
         getData:function() {
             return this.document.body.innerHTML;
         },
@@ -308,6 +320,9 @@ KISSY.add("editor", function(S) {
                 + "<html>"
                 + "<head>"
                 + "<title>kissy-editor</title>"
+                + "<style type='text/stylesheet'>"
+                + CSS
+                + "</style>"
                 + "</head>"
                 + "<body>"
                 + (this.textarea.value || "")
@@ -415,19 +430,6 @@ KISSY.add("editor", function(S) {
         }
 
     });
-    function tryThese() {
-        var returnValue;
-        for (var i = 0, length = arguments.length; i < length; i++) {
-            var lambda = arguments[i];
-            try {
-                returnValue = lambda();
-                break;
-            }
-            catch (e) {
-            }
-        }
-        return returnValue;
-    }
 
     S.Editor = Editor;
 

@@ -34,7 +34,9 @@ KISSYEDITOR.add("editor-plugin-image", function(KE) {
             var url = window.prompt("«Î ‰»ÎÕº∆¨µÿ÷∑", "http://img02.taobaocdn.com/tps/i2/T1QXVsXnFjXXXXXXXX-167-63.png");
             if (!url) return;
             var img = new Node("<img src='" + url + "'/>", null, editor.document);
+            editor.fire("save");
             editor.insertElement(img);
+            editor.fire("save");
         }
     });
 

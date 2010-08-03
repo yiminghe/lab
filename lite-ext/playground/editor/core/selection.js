@@ -6,6 +6,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
     var S = KISSY,
         UA = S.UA,
         DOM = S.DOM,
+        tryThese = KE.Utils.tryThese,
         Node = S.Node;
     KE.SELECTION = {};
     var KES = KE.SELECTION,
@@ -41,21 +42,6 @@ KISSYEDITOR.add("editor-selection", function(KE) {
      *     alert( 'An element is selected' );
      */
     KES.SELECTION_ELEMENT = 3;
-
-    function tryThese() {
-        var returnValue;
-        for (var i = 0, length = arguments.length; i < length; i++) {
-            var lambda = arguments[i];
-            try {
-                returnValue = lambda();
-                break;
-            }
-            catch (e) {
-            }
-        }
-        return returnValue;
-    }
-
     function KESelection(document) {
 
         this.document = document;
@@ -530,18 +516,23 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                         !startContainer[0].childNodes.length) {
                         startContainer[0].appendChild(this.document.createTextNode(""));
                     }
-
                     nativeRange.setStart(startContainer[0], range.startOffset);
                     nativeRange.setEnd(range.endContainer[0], range.endOffset);
-
                     // Select the range.
                     sel.addRange(nativeRange);
                 }
-
                 this.reset();
             }
         },
+        createBookmarks2 : function(normalized) {
+            var bookmarks = [],
+                ranges = this.getRanges();
 
+            for (var i = 0; i < ranges.length; i++)
+                bookmarks.push(ranges[i].createBookmark2(normalized));
+
+            return bookmarks;
+        },
         createBookmarks : function(serializable) {
             var retval = [],
                 ranges = this.getRanges(),

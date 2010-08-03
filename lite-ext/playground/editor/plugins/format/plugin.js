@@ -51,7 +51,9 @@ KISSYEDITOR.add("editor-plugin-format", function(KE) {
         _vChange:function(ev) {
             var editor = this.get("editor"),v = ev.newVal,pre = ev.preVal;
             editor.focus();
+            editor.fire("save");
             FORMAT_STYLES[v].apply(editor.document);
+            editor.fire("save");
             editor.fire("formatChange", this.get("v"));
         },
         _change:function() {

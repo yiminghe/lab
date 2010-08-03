@@ -24,6 +24,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
         KEP = KE.POSITION,
         Walker = KE.Walker,
         DOM = S.DOM,
+        getByAddress = KE.Utils.getByAddress,
         UA = S.UA,
         dtd = KE.XHTML_DTD,
         ElementPath = KE.ElementPath,
@@ -560,6 +561,79 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
             return container.childNodes[this.startOffset] || container;
         },
+        createBookmark2 : function(normalized) {
+            var startContainer = this.startContainer,
+                endContainer = this.endContainer;
+
+            var startOffset = this.startOffset,
+                endOffset = this.endOffset;
+
+            var child, previous;
+
+            // If there is no range then get out of here.
+            // It happens on initial load in Safari #962 and if the editor it's
+            // hidden also in Firefox
+            if (!startContainer || !endContainer)
+                return { start : 0, end : 0 };
+
+            if (normalized) {
+                // Find out if the start is pointing to a text node that will
+                // be normalized.
+                if (startContainer[0].nodeType == KEN.NODE_ELEMENT) {
+                    child = new Node(startContainer[0].childNodes[startOffset]);
+
+                    // In this case, move the start information to that text
+                    // node.
+                    if (child && child[0] && child[0].nodeType == KEN.NODE_TEXT
+                        && startOffset > 0 && child[0].previousSibling.nodeType == KEN.NODE_TEXT) {
+                        startContainer = child;
+                        startOffset = 0;
+                    }
+                }
+
+                // Normalize the start.
+                while (startContainer[0].nodeType == KEN.NODE_TEXT
+                    && ( previous = startContainer._4e_previous() )
+                    && previous[0].nodeType == KEN.NODE_TEXT) {
+                    startContainer = previous;
+                    startOffset += previous[0].nodeValue.length;
+                }
+
+                // Process the end only if not normalized.
+                if (!this.isCollapsed) {
+                    // Find out if the start is pointing to a text node that
+                    // will be normalized.
+                    if (endContainer[0].nodeType == KEN.NODE_ELEMENT) {
+                        child = new Node(endContainer[0].childNodes[endOffset]);
+
+                        // In this case, move the start information to that
+                        // text node.
+                        if (child && child[0] && child[0].nodeType == KEN.NODE_TEXT
+                            && endOffset > 0 && child[0].previousSibling.nodeType == KEN.NODE_TEXT) {
+                            endContainer = child;
+                            endOffset = 0;
+                        }
+                    }
+
+                    // Normalize the end.
+                    while (endContainer[0].nodeType == KEN.NODE_TEXT
+                        && ( previous = endContainer._4e_previous() )
+                        && previous[0].nodeType == KEN.NODE_TEXT) {
+                        endContainer = previous;
+                        endOffset += previous[0].nodeValue.length;
+                    }
+                }
+            }
+
+            return {
+                start        : startContainer._4e_address(normalized),
+                end            : this.isCollapsed ? null : endContainer._4e_address(normalized),
+                startOffset    : startOffset,
+                endOffset    : endOffset,
+                normalized    : normalized,
+                is2            : true        // It's a createBookmark2 bookmark.
+            };
+        },
         createBookmark : function(serializable) {
             var startNode, endNode;
             var baseId;
@@ -706,8 +780,26 @@ KISSYEDITOR.add("editor-range", function(KE) {
         },
 
         moveToBookmark : function(bookmark) {
-            // Created with createBookmark().
-            {
+            // Created with createBookmark2().
+            if (bookmark.is2) {
+                // Get the start information.
+                var startContainer = getByAddress(this.document, bookmark.start, bookmark.normalized),
+                    startOffset = bookmark.startOffset;
+
+                // Get the end information.
+                var endContainer = bookmark.end && getByAddress(this.document, bookmark.end, bookmark.normalized),
+                    endOffset = bookmark.endOffset;
+
+                // Set the start boundary.
+                this.setStart(startContainer, startOffset);
+
+                // Set the end boundary. If not available, collapse it.
+                if (endContainer)
+                    this.setEnd(endContainer, endOffset);
+                else
+                    this.collapse(true);
+            } else {
+                // Created with createBookmark().
                 var serializable = bookmark.serializable,
                     startNode = serializable ? S.one("#" + bookmark.startNode, this.document) : bookmark.startNode,
                     endNode = serializable ? S.one("#" + bookmark.endNode, this.document) : bookmark.endNode;

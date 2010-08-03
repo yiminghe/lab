@@ -84,12 +84,14 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
                 pre = ev.preVal,
                 styles = this.get("styles");
             editor.focus();
+            editor.fire("save");
             if (!v) {
                 v = pre;
                 styles[v].remove(editor.document);
             } else {
                 styles[v].apply(editor.document);
             }
+            editor.fire("save");
             //editor.fire("fontSizeChange", this.get("v"));
         },
 

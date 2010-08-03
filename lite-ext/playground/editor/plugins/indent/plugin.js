@@ -264,8 +264,10 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
                 self = this;
             editor.focus();
             //ie要等会才能获得焦点窗口的选择区域
+            editor.fire("save");
             setTimeout(function() {
                 self.indentCommand.exec(editor);
+                editor.fire("save");
             }, 10);
         },
 
