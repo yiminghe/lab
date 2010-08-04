@@ -10,7 +10,8 @@
 </head>
 <body>
 <!--firefox加上tabindex才可以
-tabindex=""
+tabindex="" //tab不起作用
+tabindex="1" //tab起作用
 
 或者更不靠谱的：
 contenteditable=""
@@ -26,7 +27,9 @@ contenteditable=""
 </div>
 
 
-<div style="position:absolute;width:100px;height:300px;left:150px;top:100px;border:1px solid red;" id="d2">
+<div
+       
+        style="position:absolute;width:100px;height:300px;left:150px;top:100px;border:1px solid red;" id="d2">
     <a class="ke-focus" href="#"></a>
     <p> 你可以点我然后ie就支持可以支持keydown了
     </p>
