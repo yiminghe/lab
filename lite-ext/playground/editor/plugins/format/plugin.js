@@ -8,9 +8,13 @@ KISSYEDITOR.add("editor-plugin-format", function(KE) {
         Node = S.Node,
         FORMAT_SELECTION_HTML = "<select>",
         FORMATS = {
-            "请选择格式":"p",
+            "请选择格式/清除":"p",
             "标题1":"h1",
-            "标题5":"h5"
+            "标题2":"h2",
+            "标题3":"h3",
+            "标题4":"h4",
+            "标题5":"h5",
+            "标题6":"h6"
         },FORMAT_STYLES = {},KEStyle = KE.Style;
 
     for (var p in FORMATS) {

@@ -2,94 +2,49 @@
 <html>
 <head>
 <meta charset="gbk"/>
-<title>range Test</title>
-<link href="../ui/button.css?t=20100730151801" rel="stylesheet"/>
-<link href="../plugins/elementpath/plugin.css?t=20100730151801" rel="stylesheet"/>
-<link href="../plugins/color/plugin.css?t=20100730151801" rel="stylesheet"/>
-<script type="text/javascript"
-        src="../../../base/javascript/ks-core.js?t=20100730151801" charset="utf-8"></script>
-<script type="text/javascript"
-        src="http://github.com/yiminghe/kissy-sandbox/raw/master/attribute/attribute.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/kissyeditor.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/utils.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/editor.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../ui/button.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/dtd.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/dom.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/elementpath.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/walker.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/range.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/domiterator.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/selection.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../core/styles.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../plugins/font/plugin.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../plugins/format/plugin.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../plugins/list/plugin.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../plugins/indent/plugin.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../plugins/elementpath/plugin.js?t=20100730151801"></script>
+<title>Simple Editor Test</title>
+<link href="../../../base/css/ks-base.css?t=20100804151801" rel="stylesheet"/>
+<link href="../ui/button.css?t=20100804151801" rel="stylesheet"/>
+<link href="../ui/overlay.css?t=20100804151801" rel="stylesheet"/>
+<link href="../ui/contextmenu.css?t=20100804151801" rel="stylesheet"/>
+<link href="../plugins/elementpath/plugin.css?t=20100804151801" rel="stylesheet"/>
+<link href="../plugins/color/plugin.css?t=20100804151801" rel="stylesheet"/>
+<link href="../plugins/table/plugin.css?t=20100804151801" rel="stylesheet"/>
 
-<script type="text/javascript"
-        src="../plugins/image/plugin.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../plugins/color/plugin.js?t=20100730151801"></script>
-<script type="text/javascript"
-        src="../plugins/undo/plugin.js?t=20100730151801"></script>
 </head>
 <body>
 
-<h1>选择区域文字后 run </h1>
+<h1>Simple Editor Demo</h1>
 
 <div id="tools" style="border:1px solid gray;height:30px;border-bottom:none;padding:0 5px;"></div>
 <div style="height:400px;border:1px solid green;">
     <textarea id="edit">
-        <p>123 456
-            <span style="background-color:red">7890123</span>
-            45678
-            <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif">
-            abcdef ghijk
-        </p>
-        <p>123 456 7890123 45678
-            <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif">
-            abcdef ghijk
-        </p>
+        <p>123 456 <span style="background-color: red;">7890123</span> 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>  <p>123 456 789012<br></p>
+        <table style="width: 200px;" border="1" cellpadding="1" cellspacing="1">
+            <tbody>
+            <tr>
+                <td><br></td>
+                <td><br></td>
+                <td><br></td>
+            </tr>
+            <tr>
+                <td><br></td>
+                <td><br></td>
+                <td><br></td>
+            </tr>
+            </tbody>
+        </table>
+        <p>3 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>
         <ul>
-            <li>
-                我是列表1
-            </li>
-            <li>
-                我是列表2
+            <li> 我是列表1</li>
+            <li> 我是列表2
                 <ul id="test">
-                    <li>
-                        我是列表2.1
-                    </li>
-                    <li>
-                        我是列表2.2
-                    </li>
-                    <li>
-                        我是列表2.3
-                    </li>
+                    <li> 我是列表2.1</li>
+                    <li> 我是列表2.2</li>
+                    <li> 我是列表2.3</li>
                 </ul>
             </li>
-            <li>
-                我是列表3
-            </li>
+            <li> 我是列表3</li>
         </ul>
     </textarea>
 </div>
@@ -99,7 +54,57 @@
 <textarea id="re" style="margin:10px auto;border:1px solid green;width:80%;height:900px;" readonly></textarea>
 
 <br>
+<script type="text/javascript"
+        src="../../../base/javascript/ks-core.js?t=20100804151801" charset="utf-8"></script>
+<script type="text/javascript"
+        src="http://github.com/yiminghe/kissy-sandbox/raw/master/attribute/attribute.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/kissyeditor.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/utils.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/editor.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../ui/button.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../ui/overlay.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../ui/contextmenu.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/dtd.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/dom.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/elementpath.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/walker.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/range.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/domiterator.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/selection.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../core/styles.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/font/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/format/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/list/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/indent/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/elementpath/plugin.js?t=20100804151801"></script>
 
+<script type="text/javascript"
+        src="../plugins/image/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/color/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/undo/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/table/plugin.js?t=20100804151801"></script>
 <script type="text/javascript">
 
     KISSY.ready(function(S) {

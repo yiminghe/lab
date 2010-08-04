@@ -3,8 +3,29 @@
  * @modifier:yiminghe@gmail.com
  */
 KISSYEDITOR.add("editor-utils", function(KE) {
-    var S = KISSY,Node = S.Node;
+    var S = KISSY,Node = S.Node,DOM = S.DOM;
     KE.Utils = {
+
+        getXY:function(x, y, srcDoc, destDoc) {
+            var currentWindow = srcDoc.defaultView || srcDoc.parentWindow,
+                currentDoc = srcDoc,
+                currentDocElem = currentDoc.documentElement;
+
+            //x,y相对于当前iframe文档,防止当前iframe有滚动条
+            x -= DOM.scrollLeft(currentWindow);
+            y -= DOM.scrollTop(currentWindow);
+            if (destDoc) {
+                var refWindow = destDoc.defaultView || destDoc.parentWindow;
+                if (currentWindow != refWindow && currentWindow.frameElement) {
+                    //note:when iframe is static ,still some mistake
+                    var iframePosition = DOM._4e_getOffset(currentWindow.frameElement, destDoc);
+                    x += iframePosition.left;
+                    y += iframePosition.top;
+                }
+            }
+            return {left:x,top:y};
+        },
+
         tryThese : function() {
 
             var returnValue;
@@ -18,7 +39,8 @@ KISSYEDITOR.add("editor-utils", function(KE) {
                 }
             }
             return returnValue;
-        },
+        }
+        ,
         arrayCompare: function(arrayA, arrayB) {
             if (!arrayA && !arrayB)
                 return true;
@@ -32,7 +54,8 @@ KISSYEDITOR.add("editor-utils", function(KE) {
             }
 
             return true;
-        },
+        }
+        ,
         getByAddress : function(doc, address, normalized) {
             var $ = doc.documentElement;
 
@@ -70,4 +93,5 @@ KISSYEDITOR.add("editor-utils", function(KE) {
     };
 
 
-});
+})
+    ;

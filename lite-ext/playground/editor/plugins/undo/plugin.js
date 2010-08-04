@@ -242,7 +242,7 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
             /**
              * 触发重做或撤销动作，都是restore，方向不同
              */
-            self.el.on("click", function() {
+            self.el.on("offClick", function() {
                 editor.fire("restore", {
                     d:RedoMap[self.text]
                 });

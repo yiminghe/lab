@@ -288,7 +288,7 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
                 var bookmarkGuard = Walker.bookmark(false, true);
 
                 var lastChild = new Node(block[0].lastChild);
-                if (lastChild && lastChild[0].nodeType == KEN.NODE_ELEMENT && lastChild._4e_name() == 'br') {
+                if (lastChild && lastChild[0] && lastChild[0].nodeType == KEN.NODE_ELEMENT && lastChild._4e_name() == 'br') {
                     // Take care not to remove the block expanding <br> in non-IE browsers.
                     if (UA.ie
                         || lastChild._4e_previous(bookmarkGuard)

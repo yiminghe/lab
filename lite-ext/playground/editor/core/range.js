@@ -1241,7 +1241,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // If the starting node is a text node, and non-empty before the offset,
             // then we're surely not at the start of block.
             if (startOffset && startContainer[0].nodeType == KEN.NODE_TEXT) {
-                var textBefore = S.trim(startContainer.substring(0, startOffset));
+                var textBefore = S.trim(startContainer[0].nodeValue.substring(0, startOffset));
                 if (textBefore.length)
                     return false;
             }
@@ -1473,7 +1473,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             var documentFragment = this.extractContents();
 
             // Duplicate the element after it.
-            var clone = toSplit.clone(false);
+            var clone = toSplit._4e_clone(false);
 
             // Place the extracted contents into the duplicated element.
             clone[0].appendChild(documentFragment);

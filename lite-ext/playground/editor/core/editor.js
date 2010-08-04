@@ -12,11 +12,19 @@ KISSY.add("editor", function(S) {
         DOM = S.DOM;
     var DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
         HTML5_DTD = '<!doctype html>',
-        CSS = "ul,ol" +
-            "{" +
-            "	margin-left: 0px;" +
-            "	padding-left: 40px;" +
-            "}";
+        CSS_FILE = "kissyeditor-iframe.css";
+    (function() {
+        var scripts = document.getElementsByTagName("script");
+        for (var i = 0; i < scripts.length; i++) {
+            var script = scripts[i];
+            if (script.src.indexOf("kissyeditor.js") != -1) {
+                var start = script.src.indexOf("kissyeditor.js");
+                var prefix = script.src.substring(0, start);
+                KE.BASE_URL = prefix;
+                break;
+            }
+        }
+    })();
 
     function Editor(textarea, toolBarDiv, statusDiv) {
         this.textarea = textarea[0] || textarea;
@@ -318,9 +326,9 @@ KISSY.add("editor", function(S) {
                 + "<html>"
                 + "<head>"
                 + "<title>kissy-editor</title>"
-                + "<style type='text/stylesheet'>"
-                + CSS
-                + "</style>"
+                + "<link href='"
+                + KE.BASE_URL + CSS_FILE
+                + "' rel='stylesheet'/>"
                 + "</head>"
                 + "<body>"
                 + (this.textarea.value || "")
@@ -430,5 +438,6 @@ KISSY.add("editor", function(S) {
     });
 
     S.Editor = Editor;
+
 
 });
