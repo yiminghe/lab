@@ -4,28 +4,27 @@
  */
 KISSYEDITOR.add("editor-styles", function(KE) {
 
-    var S=KISSY,
+    var S = KISSY,
         KEST = KE.STYLE = {},
         KER = KE.RANGE,
         KESelection = KE.Selection,
         KEN = KE.NODE,
         KEP = KE.POSITION,
         KERange = KE.Range,
-        Walker = KE.Walker,
+        //Walker = KE.Walker,
         Node = S.Node,
         UA = S.UA,
         DOM = S.DOM,
-        ElementPath = KE.ElementPath;
+        ElementPath = KE.ElementPath,
+        blockElements = { address:1,div:1,h1:1,h2:1,h3:1,h4:1,h5:1,h6:1,p:1,pre:1 },
+        objectElements = { a:1,embed:1,hr:1,img:1,li:1,object:1,ol:1,table:1,td:1,tr:1,th:1,ul:1,dl:1,dt:1,dd:1,form:1},
+        semicolonFixRegex = /\s*(?:;\s*|$)/,
+        varRegex = /#\((.+?)\)/g;
+
     KEST.STYLE_BLOCK = 1;
     KEST.STYLE_INLINE = 2;
     KEST.STYLE_OBJECT = 3;
 
-
-    var blockElements = { address:1,div:1,h1:1,h2:1,h3:1,h4:1,h5:1,h6:1,p:1,pre:1 };
-    var objectElements = { a:1,embed:1,hr:1,img:1,li:1,object:1,ol:1,table:1,td:1,tr:1,th:1,ul:1,dl:1,dt:1,dd:1,form:1};
-
-    var semicolonFixRegex = /\s*(?:;\s*|$)/;
-    var varRegex = /#\((.+?)\)/g;
 
     function replaceVariables(list, variablesValues) {
         for (var item in list) {
@@ -61,8 +60,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         // Apply the style to the ranges.
         //ie select 选中期间document得不到range
         document.body.focus();
-        var selection = new KESelection(document);
-        var ranges = selection.getRanges();
+        var selection = new KESelection(document),ranges = selection.getRanges();
         for (var i = 0; i < ranges.length; i++)
             func.call(self, ranges[ i ]);
         // Select the ranges again.
@@ -80,21 +78,23 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         },
 
         applyToRange : function(range) {
-            return ( this.applyToRange =
+            var self = this;
+            return ( self.applyToRange =
                 this.type == KEST.STYLE_INLINE ?
                     applyInlineStyle
-                    : this.type == KEST.STYLE_BLOCK ?
+                    : self.type == KEST.STYLE_BLOCK ?
                     applyBlockStyle
-                    : this.type == KEST.STYLE_OBJECT ?
+                    : self.type == KEST.STYLE_OBJECT ?
                     applyObjectStyle
-                    : null ).call(this, range);
+                    : null ).call(self, range);
         },
 
         removeFromRange : function(range) {
-            return ( this.removeFromRange =
-                this.type == KEST.STYLE_INLINE ?
+            var self = this;
+            return ( self.removeFromRange =
+                self.type == KEST.STYLE_INLINE ?
                     removeInlineStyle
-                    : null ).call(this, range);
+                    : null ).call(self, range);
         },
 
         applyToObject : function(element) {
@@ -241,11 +241,9 @@ KISSYEDITOR.add("editor-styles", function(KE) {
     };
 
     function getElement(style, targetDocument) {
-        var el;
-
-        var def = style._.definition;
-
-        var elementName = style.element;
+        var el,
+            //def = style._.definition,
+            elementName = style.element;
 
         // The "*" element name will always be a span for this function.
         if (elementName == '*')
@@ -258,9 +256,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
     }
 
     function setupElement(el, style) {
-        var def = style._.definition;
-        var attributes = def.attributes;
-        var styles = KEStyle.getStyleText(def);
+        var def = style._.definition,attributes = def.attributes,styles = KEStyle.getStyleText(def);
 
         // Assign all defined attributes.
         if (attributes) {
@@ -280,18 +276,14 @@ KISSYEDITOR.add("editor-styles", function(KE) {
     function applyBlockStyle(range) {
         // Serializible bookmarks is needed here since
         // elements may be merged.
-        var bookmark = range.createBookmark(true);
-
-        var iterator = range.createIterator();
+        var bookmark = range.createBookmark(true),iterator = range.createIterator();
         iterator.enforceRealBlocks = true;
 
         // make recognize <br /> tag as a separator in ENTER_BR mode (#5121)
         //if (this._.enterMode)
         iterator.enlargeBr = true;//( this._.enterMode != CKEDITOR.ENTER_BR );
 
-        var block;
-        var doc = range.document;
-        var previousPreBlock;
+        var block, doc = range.document;
         // Only one =
         while (( block = iterator.getNextParagraph() )) {
             var newBlock = getElement(this, doc);
@@ -356,7 +348,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         // Exclude the ones at header OR at tail,
         // and ignore bookmark content between them.
         var duoBrRegex = /(\S\s*)\n(?:\s|(<span[^>]+_ck_bookmark.*?\/span>))*\n(?!$)/gi,
-            blockName = preBlock._4e_name(),
+            //blockName = preBlock._4e_name(),
             splittedHtml = replace(preBlock._4e_outerHtml(),
                 duoBrRegex,
                 function(match, charBefore, bookmark) {
@@ -374,11 +366,8 @@ KISSYEDITOR.add("editor-styles", function(KE) {
     // for <pre> blocks to make sure content format is well preserved, and merging/splitting adjacent
     // when necessary.(#3188)
     function replaceBlock(block, newBlock) {
-        var newBlockIsPre = newBlock._4e_name == ('pre');
-        var blockIsPre = block._4e_name == ('pre');
-
-        var isToPre = newBlockIsPre && !blockIsPre;
-        var isFromPre = !newBlockIsPre && blockIsPre;
+        var newBlockIsPre = newBlock._4e_name == ('pre'),blockIsPre = block._4e_name == ('pre'),
+            isToPre = newBlockIsPre && !blockIsPre, isFromPre = !newBlockIsPre && blockIsPre;
 
         if (isToPre)
             newBlock = toPre(block, newBlock);
@@ -437,7 +426,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
             blockHtml = replace(blockHtml, /^[ \t]*\n/, '');
             blockHtml = replace(blockHtml, /\n$/, '');
             // 2. Convert spaces or tabs at the beginning or at the end to &nbsp;
-            blockHtml = replace(blockHtml, /^[ \t]+|[ \t]+$/g, function(match, offset, s) {
+            blockHtml = replace(blockHtml, /^[ \t]+|[ \t]+$/g, function(match, offset) {
                 if (match.length == 1)    // one space, preserve it
                     return '&nbsp;';
                 else if (!offset)        // beginning of block
@@ -474,15 +463,14 @@ KISSYEDITOR.add("editor-styles", function(KE) {
             return;
         }
 
-        var elementName = this.element;
-        var def = this._.definition;
-        var isUnknownElement;
+        var elementName = this.element, def = this._.definition,
+            isUnknownElement,
 
-        // Get the DTD definition for the element. Defaults to "span".
-        var dtd = KE.XHTML_DTD[ elementName ] || ( isUnknownElement = true,KE.XHTML_DTD.span );
+            // Get the DTD definition for the element. Defaults to "span".
+            dtd = KE.XHTML_DTD[ elementName ] || ( isUnknownElement = true,KE.XHTML_DTD.span ),
 
-        // Bookmark the range so we can re-select it after processing.
-        var bookmark = range.createBookmark();
+            // Bookmark the range so we can re-select it after processing.
+            bookmark = range.createBookmark();
 
         // Expand the range.
 
@@ -492,11 +480,8 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         // processing.
         var boundaryNodes = range.createBookmark(),
             firstNode = boundaryNodes.startNode,
-            lastNode = boundaryNodes.endNode;
-
-        var currentNode = firstNode;
-
-        var styleRange;
+            lastNode = boundaryNodes.endNode,currentNode = firstNode,
+            styleRange;
 
         while (currentNode && currentNode[0]) {
             var applyStyle = false;
@@ -506,8 +491,8 @@ KISSYEDITOR.add("editor-styles", function(KE) {
                 applyStyle = true;
             }
             else {
-                var nodeType = currentNode[0].nodeType;
-                var nodeName = nodeType == KEN.NODE_ELEMENT ? currentNode._4e_name() : null;
+                var nodeType = currentNode[0].nodeType,
+                    nodeName = nodeType == KEN.NODE_ELEMENT ? currentNode._4e_name() : null;
 
                 if (nodeName && currentNode.attr('_ke_bookmark')) {
                     currentNode = currentNode._4e_nextSourceNode(true);
@@ -546,8 +531,8 @@ KISSYEDITOR.add("editor-styles", function(KE) {
                         // Non element nodes, or empty elements can be added
                         // completely to the range.
                         if (nodeType == KEN.NODE_TEXT || ( nodeType == KEN.NODE_ELEMENT && !currentNode[0].childNodes.length )) {
-                            var includedNode = currentNode;
-                            var parentNode;
+                            var includedNode = currentNode,
+                                parentNode;
 
                             // This node is about to be included completelly, but,
                             // if this is the last node in its parent, we must also
@@ -583,10 +568,10 @@ KISSYEDITOR.add("editor-styles", function(KE) {
             // Apply the style if we have something to which apply it.
             if (applyStyle && styleRange && !styleRange.collapsed) {
                 // Build the style element, based on the style object definition.
-                var styleNode = getElement(this, document);
+                var styleNode = getElement(this, document),
 
-                // Get the element that holds the entire range.
-                var parent = styleRange.getCommonAncestor();
+                    // Get the element that holds the entire range.
+                    parent = styleRange.getCommonAncestor();
 
                 // Loop through the parents, removing the redundant attributes
                 // from the element to be applied.
@@ -599,7 +584,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
                         //bug notice add by yiminghe@gmail.com
                         //<span style="font-size:70px"><span style="font-size:30px">xcxx</span></span>
                         //下一次格式xxx为70px
-                        var exit = false;
+                        //var exit = false;
                         for (var styleName in def.styles) {
                             if (styleNode._4e_style(styleName) == parent._4e_style(styleName)) {
                                 styleNode._4e_style(styleName, "");
@@ -853,10 +838,10 @@ KISSYEDITOR.add("editor-styles", function(KE) {
 
         attribs = {};
 
-        var length = 0;
+        var length = 0,
 
-        // Loop through all defined attributes.
-        var styleAttribs = styleDefinition.attributes;
+            // Loop through all defined attributes.
+            styleAttribs = styleDefinition.attributes;
         if (styleAttribs) {
             for (var styleAtt in styleAttribs) {
                 length++;
@@ -884,7 +869,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
      * Get the the collection used to compare the elements and attributes,
      * defined in this style overrides, with other element. All information in
      * it is lowercased.
-     * @param {KEStyle} style
+     * @param  style
      */
     function getOverrides(style) {
         if (style._.overrides)
@@ -979,12 +964,11 @@ KISSYEDITOR.add("editor-styles", function(KE) {
 
     // Removes a style from inside an element.
     function removeFromInsideElement(style, element) {
-        var def = style._.definition,
-            attribs = def.attributes,
-            styles = def.styles,
-            overrides = getOverrides(style);
-
-        var innerElements = element.all(style.element);
+        var //def = style._.definition,
+            //attribs = def.attributes,
+            //styles = def.styles,
+            overrides = getOverrides(style),
+            innerElements = element.all(style.element);
 
         for (var i = innerElements.length; --i >= 0;)
             removeFromElement(style, new Node(innerElements[i]));
@@ -1043,8 +1027,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         if (!element._4e_hasAttributes()) {
             // Removing elements may open points where merging is possible,
             // so let's cache the first and last nodes for later checking.
-            var firstChild = element[0].firstChild;
-            var lastChild = element[0].lastChild;
+            var firstChild = element[0].firstChild,lastChild = element[0].lastChild;
 
             element._4e_remove(true);
 

@@ -73,7 +73,7 @@ KISSYEDITOR.add("editor-elementpath", function(KE) {
     ElementPath.prototype = {
         /**
          * Compares this element path with another one.
-         * @param {CKEDITOR.dom.elementPath} otherPath The elementPath object to be
+         * @param otherPath The elementPath object to be
          * compared with this one.
          * @returns {Boolean} "true" if the paths are equal, containing the same
          * number of elements and the same elements in the same order.

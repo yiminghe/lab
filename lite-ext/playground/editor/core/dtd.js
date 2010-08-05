@@ -139,7 +139,7 @@ KISSYEDITOR.add("editor-dtd", function() {
             html: U,
             head: T,
             style: N,
-            script: N,
+            //script: N,
             body: P,
             base: {},
             link: {},

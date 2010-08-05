@@ -32,18 +32,19 @@ KISSYEDITOR.add("editor-range", function(KE) {
         EMPTY = {area:1,base:1,br:1,col:1,hr:1,img:1,input:1,link:1,meta:1,param:1};
 
     function KERange(document) {
-        this.startContainer = null;
-        this.startOffset = null;
-        this.endContainer = null;
-        this.endOffset = null;
-        this.collapsed = true;
-        this.document = document;
+        var self = this;
+        self.startContainer = null;
+        self.startOffset = null;
+        self.endContainer = null;
+        self.endOffset = null;
+        self.collapsed = true;
+        self.document = document;
     }
 
     KERange.prototype.toString = function() {
-        var s = [];
-        s.push((this.startContainer[0].id || this.startContainer[0].nodeName) + ":" + this.startOffset);
-        s.push((this.endContainer[0].id || this.endContainer[0].nodeName) + ":" + this.endOffset);
+        var s = [],self = this;
+        s.push((self.startContainer[0].id || self.startContainer[0].nodeName) + ":" + self.startOffset);
+        s.push((self.endContainer[0].id || self.endContainer[0].nodeName) + ":" + self.endOffset);
         return s.join("<br/>");
     };
     S.augment(KERange, {
@@ -63,24 +64,23 @@ KISSYEDITOR.add("editor-range", function(KE) {
          * offset is set to zero, or after the last char in the node.
          */
         optimize : function() {
-            var container = this.startContainer;
-            var offset = this.startOffset;
+            var self = this,container = self.startContainer,offset = self.startOffset;
 
             if (container[0].nodeType != KEN.NODE_ELEMENT) {
                 if (!offset)
-                    this.setStartBefore(container);
+                    self.setStartBefore(container);
                 else if (offset >= container[0].nodeValue.length)
-                    this.setStartAfter(container);
+                    self.setStartAfter(container);
             }
 
-            container = this.endContainer;
-            offset = this.endOffset;
+            container = self.endContainer;
+            offset = self.endOffset;
 
             if (container[0].nodeType != KEN.NODE_ELEMENT) {
                 if (!offset)
-                    this.setEndBefore(container);
+                    self.setEndBefore(container);
                 else if (offset >= container[0].nodeValue.length)
-                    this.setEndAfter(container);
+                    self.setEndAfter(container);
             }
         },
         setStartAfter : function(node) {
@@ -111,7 +111,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
         },
         /**
          * Sets the start position of a Range.
-         * @param {CKEDITOR.dom.node} startNode The node to start the range.
+         * @param {Node} startNode The node to start the range.
          * @param {Number} startOffset An integer greater than or equal to zero
          *        representing the offset for the start of the range from the start
          *        of startNode.
@@ -123,24 +123,25 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // ignore it for now.
 
             // Fixing invalid range start inside dtd empty elements.
+            var self = this;
             if (startNode[0].nodeType == KEN.NODE_ELEMENT
                 && EMPTY[ startNode._4e_name() ])
                 startNode = startNode.parent(),startOffset = startNode._4e_index();
 
-            this.startContainer = startNode;
-            this.startOffset = startOffset;
+            self.startContainer = startNode;
+            self.startOffset = startOffset;
 
-            if (!this.endContainer) {
-                this.endContainer = startNode;
-                this.endOffset = startOffset;
+            if (!self.endContainer) {
+                self.endContainer = startNode;
+                self.endOffset = startOffset;
             }
 
-            this.updateCollapsed();
+            self.updateCollapsed();
         },
 
         /**
          * Sets the end position of a Range.
-         * @param {CKEDITOR.dom.node} endNode The node to end the range.
+         * @param {Node} endNode The node to end the range.
          * @param {Number} endOffset An integer greater than or equal to zero
          *        representing the offset for the end of the range from the start
          *        of endNode.
@@ -152,80 +153,79 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // it for now.
 
             // Fixing invalid range end inside dtd empty elements.
+            var self = this;
             if (endNode[0].nodeType == KEN.NODE_ELEMENT
                 && EMPTY[ endNode._4e_name() ])
                 endNode = endNode.parent(),endOffset = endNode._4e_index() + 1;
 
-            this.endContainer = endNode;
-            this.endOffset = endOffset;
+            self.endContainer = endNode;
+            self.endOffset = endOffset;
 
-            if (!this.startContainer) {
-                this.startContainer = endNode;
-                this.startOffset = endOffset;
+            if (!self.startContainer) {
+                self.startContainer = endNode;
+                self.startOffset = endOffset;
             }
 
-            this.updateCollapsed();
+            self.updateCollapsed();
         },
         setStartAt : function(node, position) {
+            var self = this;
             switch (position) {
                 case KER.POSITION_AFTER_START :
-                    this.setStart(node, 0);
+                    self.setStart(node, 0);
                     break;
 
                 case KER.POSITION_BEFORE_END :
                     if (node[0].nodeType == KEN.NODE_TEXT)
-                        this.setStart(node, node[0].nodeValue.length);
+                        self.setStart(node, node[0].nodeValue.length);
                     else
-                        this.setStart(node, node[0].childNodes.length);
+                        self.setStart(node, node[0].childNodes.length);
                     break;
 
                 case KER.POSITION_BEFORE_START :
-                    this.setStartBefore(node);
+                    self.setStartBefore(node);
                     break;
 
                 case KER.POSITION_AFTER_END :
-                    this.setStartAfter(node);
+                    self.setStartAfter(node);
             }
 
-            this.updateCollapsed();
+            self.updateCollapsed();
         },
 
         setEndAt : function(node, position) {
+            var self = this;
             switch (position) {
                 case KER.POSITION_AFTER_START :
-                    this.setEnd(node, 0);
+                    self.setEnd(node, 0);
                     break;
 
                 case KER.POSITION_BEFORE_END :
                     if (node[0].nodeType == KEN.NODE_TEXT)
-                        this.setEnd(node, node[0].nodeValue.length);
+                        self.setEnd(node, node[0].nodeValue.length);
                     else
-                        this.setEnd(node, node[0].childNodes.length);
+                        self.setEnd(node, node[0].childNodes.length);
                     break;
 
                 case KER.POSITION_BEFORE_START :
-                    this.setEndBefore(node);
+                    self.setEndBefore(node);
                     break;
 
                 case KER.POSITION_AFTER_END :
-                    this.setEndAfter(node);
+                    self.setEndAfter(node);
             }
 
-            this.updateCollapsed();
+            self.updateCollapsed();
         },
         execContentsAction:    function(action, docFrag) {
-
-            this.optimizeBookmark();
-
-            var startNode = this.startContainer;
-            var endNode = this.endContainer;
-
-            var startOffset = this.startOffset;
-            var endOffset = this.endOffset;
-
-            var removeStartNode;
-            var removeEndNode;
-
+            var self = this,
+                startNode = self.startContainer, endNode = self.endContainer,
+                startOffset = self.startOffset,
+                endOffset = self.endOffset,
+                removeStartNode,
+                t,
+                removeEndNode;
+            self.optimizeBookmark();
             // For text containers, we must simply split the node and point to the
             // second part. The removal will be handled by the rest of the code .
             if (endNode[0].nodeType == KEN.NODE_TEXT)
@@ -263,7 +263,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 // sibling, so let's use the first one, but mark it for removal.
                 if (!startOffset) {
                     // Let's create a temporary node and mark it for removal.
-                    var t = new Node(this.document.createTextNode(""));
+                    t = new Node(this.document.createTextNode(""));
                     DOM.insertBefore(t[0], startNode[0].firstChild);
                     startNode = t;
                     removeStartNode = true;
@@ -271,7 +271,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 else if (startOffset >= startNode[0].childNodes.length) {
                     // Let's create a temporary node and mark it for removal.
                     //startNode = startNode[0].appendChild(this.document.createTextNode(''));
-                    var t = new Node(this.document.createTextNode(""));
+                    t = new Node(this.document.createTextNode(""));
                     startNode[0].appendChild(t[0]);
                     startNode = t;
                     removeStartNode = true;
@@ -388,13 +388,13 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
                 // No changes in the DOM should be done, so fix the split text (if any).
 
-                var startTextNode = this.startContainer[0];
+                var startTextNode = self.startContainer[0];
                 if (startTextNode.nodeType == KEN.NODE_TEXT) {
                     startTextNode.data += startTextNode.nextSibling.data;
                     startTextNode.parentNode.removeChild(startTextNode.nextSibling);
                 }
 
-                var endTextNode = this.endContainer[0];
+                var endTextNode = self.endContainer[0];
                 if (endTextNode.nodeType == KEN.NODE_TEXT && endTextNode.nextSibling) {
                     endTextNode.data += endTextNode.nextSibling.data;
                     endTextNode.parentNode.removeChild(endTextNode.nextSibling);
@@ -413,11 +413,11 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     if (removeStartNode && topEnd[0].parentNode == startNode[0].parentNode)
                         endIndex--;
 
-                    this.setStart(topEnd.parent(), endIndex);
+                    self.setStart(topEnd.parent(), endIndex);
                 }
 
                 // Collapse it to the start.
-                this.collapse(true);
+                self.collapse(true);
             }
 
             // Cleanup any marked node.
@@ -429,24 +429,25 @@ KISSYEDITOR.add("editor-range", function(KE) {
         },
 
         collapse : function(toStart) {
+            var self = this;
             if (toStart) {
-                this.endContainer = this.startContainer;
-                this.endOffset = this.startOffset;
+                self.endContainer = self.startContainer;
+                self.endOffset = self.startOffset;
             } else {
-                this.startContainer = this.endContainer;
-                this.startOffset = this.endOffset;
+                self.startContainer = self.endContainer;
+                self.startOffset = self.endOffset;
             }
-            this.collapsed = true;
+            self.collapsed = true;
         },
 
         clone : function() {
-            var clone = new KERange(this.document);
+            var clone = new KERange(this.document),self = this;
 
-            clone.startContainer = this.startContainer;
-            clone.startOffset = this.startOffset;
-            clone.endContainer = this.endContainer;
-            clone.endOffset = this.endOffset;
-            clone.collapsed = this.collapsed;
+            clone.startContainer = self.startContainer;
+            clone.startOffset = self.startOffset;
+            clone.endContainer = self.endContainer;
+            clone.endOffset = self.endOffset;
+            clone.collapsed = self.collapsed;
 
             return clone;
         },
@@ -474,16 +475,15 @@ KISSYEDITOR.add("editor-range", function(KE) {
         },
         shrink : function(mode, selectContents) {
             // Unable to shrink a collapsed range.
-            if (!this.collapsed) {
+            var self = this;
+            if (!self.collapsed) {
                 mode = mode || KER.SHRINK_TEXT;
 
-                var walkerRange = this.clone();
-
-                var startContainer = this.startContainer,
-                    endContainer = this.endContainer,
-                    startOffset = this.startOffset,
-                    endOffset = this.endOffset,
-                    collapsed = this.collapsed;
+                var walkerRange = self.clone(),startContainer = self.startContainer,
+                    endContainer = self.endContainer,
+                    startOffset = self.startOffset,
+                    endOffset = self.endOffset;
+                //collapsed = self.collapsed;
 
                 // Whether the start/end boundary is moveable.
                 var moveStart = 1,
@@ -541,13 +541,13 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
                 if (moveStart) {
                     var textStart = walker[ mode == KER.SHRINK_ELEMENT ? 'lastForward' : 'next']();
-                    textStart && this.setStartAt(textStart, selectContents ? KER.POSITION_AFTER_START : KER.POSITION_BEFORE_START);
+                    textStart && self.setStartAt(textStart, selectContents ? KER.POSITION_AFTER_START : KER.POSITION_BEFORE_START);
                 }
 
                 if (moveEnd) {
                     walker.reset();
                     var textEnd = walker[ mode == KER.SHRINK_ELEMENT ? 'lastBackward' : 'previous']();
-                    textEnd && this.setEndAt(textEnd, selectContents ? KER.POSITION_BEFORE_END : KER.POSITION_AFTER_END);
+                    textEnd && self.setEndAt(textEnd, selectContents ? KER.POSITION_BEFORE_END : KER.POSITION_AFTER_END);
                 }
 
                 return !!( moveStart || moveEnd );
@@ -562,13 +562,11 @@ KISSYEDITOR.add("editor-range", function(KE) {
             return container.childNodes[this.startOffset] || container;
         },
         createBookmark2 : function(normalized) {
-            var startContainer = this.startContainer,
-                endContainer = this.endContainer;
-
-            var startOffset = this.startOffset,
-                endOffset = this.endOffset;
-
-            var child, previous;
+            var self = this,startContainer = self.startContainer,
+                endContainer = self.endContainer,
+                startOffset = self.startOffset,
+                endOffset = self.endOffset,
+                child, previous;
 
             // If there is no range then get out of here.
             // It happens on initial load in Safari #962 and if the editor it's
@@ -600,7 +598,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 }
 
                 // Process the end only if not normalized.
-                if (!this.isCollapsed) {
+                if (!self.isCollapsed) {
                     // Find out if the start is pointing to a text node that
                     // will be normalized.
                     if (endContainer[0].nodeType == KEN.NODE_ELEMENT) {
@@ -627,7 +625,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
             return {
                 start        : startContainer._4e_address(normalized),
-                end            : this.isCollapsed ? null : endContainer._4e_address(normalized),
+                end            : self.isCollapsed ? null : endContainer._4e_address(normalized),
                 startOffset    : startOffset,
                 endOffset    : endOffset,
                 normalized    : normalized,
@@ -635,10 +633,10 @@ KISSYEDITOR.add("editor-range", function(KE) {
             };
         },
         createBookmark : function(serializable) {
-            var startNode, endNode;
-            var baseId;
-            var clone;
-            startNode = new Node("<span></span>", null, this.document);
+            var startNode, endNode,
+                baseId,
+                clone,self = this;
+            startNode = new Node("<span></span>", null, self.document);
             startNode.attr('_ke_bookmark', 1);
             startNode.css('display', 'none');
 
@@ -652,29 +650,29 @@ KISSYEDITOR.add("editor-range", function(KE) {
             }
 
             // If collapsed, the endNode will not be created.
-            if (!this.collapsed) {
+            if (!self.collapsed) {
                 endNode = startNode._4e_clone();
                 endNode.html('&nbsp;');
 
                 if (serializable)
                     endNode.attr('id', baseId + 'E');
 
-                clone = this.clone();
+                clone = self.clone();
                 clone.collapse();
                 clone.insertNode(endNode);
             }
 
-            clone = this.clone();
-            clone.collapse(true);
+            clone = self.clone();
+            clone.collapse(self);
             clone.insertNode(startNode);
 
             // Update the range position.
             if (endNode) {
-                this.setStartAfter(startNode);
-                this.setEndBefore(endNode);
+                self.setStartAfter(startNode);
+                self.setEndBefore(endNode);
             }
             else
-                this.moveToPosition(startNode, KER.POSITION_AFTER_END);
+                self.moveToPosition(startNode, KER.POSITION_AFTER_END);
 
             return {
                 startNode : serializable ? baseId + 'S' : startNode,
@@ -683,13 +681,14 @@ KISSYEDITOR.add("editor-range", function(KE) {
             };
         },
         moveToPosition : function(node, position) {
-            this.setStartAt(node, position);
-            this.collapse(true);
+            var self = this;
+            self.setStartAt(node, position);
+            self.collapse(true);
         },
         trim : function(ignoreStart, ignoreEnd) {
-            var startContainer = this.startContainer,
-                startOffset = this.startOffset,
-                collapsed = this.collapsed;
+            var self = this,startContainer = self.startContainer,
+                startOffset = self.startOffset,
+                collapsed = self.collapsed;
             if (( !ignoreStart || collapsed )
                 && startContainer[0] && startContainer[0].nodeType == KEN.NODE_TEXT) {
                 // If the offset is zero, we just insert the new node before
@@ -713,22 +712,21 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     startContainer = startContainer.parent();
 
                     // Check all necessity of updating the end boundary.
-                    if (this.startContainer[0] == this.endContainer[0])
-                        this.setEnd(nextText, this.endOffset - this.startOffset);
-                    else if (startContainer[0] == this.endContainer[0])
-                        this.endOffset += 1;
+                    if (self.startContainer[0] == self.endContainer[0])
+                        self.setEnd(nextText, self.endOffset - self.startOffset);
+                    else if (startContainer[0] == self.endContainer[0])
+                        self.endOffset += 1;
                 }
 
-                this.setStart(startContainer, startOffset);
+                self.setStart(startContainer, startOffset);
 
                 if (collapsed) {
-                    this.collapse(true);
+                    self.collapse(true);
                     return;
                 }
             }
 
-            var endContainer = this.endContainer;
-            var endOffset = this.endOffset;
+            var endContainer = self.endContainer,endOffset = self.endOffset;
 
             if (!( ignoreEnd || collapsed )
                 && endContainer[0] && endContainer[0].nodeType == KEN.NODE_TEXT) {
@@ -740,7 +738,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 }
                 // If the offset is at the end, we'll insert it after the text
                 // node.
-                else if (endOffset >= endContainer.nodeValue.length()) {
+                else if (endOffset >= endContainer.nodeValue.length) {
                     endOffset = endContainer._4e_index() + 1;
                     endContainer = endContainer.parent();
                 }
@@ -753,18 +751,18 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     endContainer = endContainer.parent();
                 }
 
-                this.setEnd(endContainer, endOffset);
+                self.setEnd(endContainer, endOffset);
             }
         },
 
         insertNode : function(node) {
-            this.optimizeBookmark();
-            this.trim(false, true);
+            var self = this,
+                startContainer = self.startContainer,
+                startOffset = self.startOffset,
+                nextNode = startContainer[0].childNodes[startOffset];
+            self.optimizeBookmark();
+            self.trim(false, true);
 
-            var startContainer = this.startContainer;
-            var startOffset = this.startOffset;
-
-            var nextNode = startContainer[0].childNodes[startOffset];
 
             if (nextNode) {
                 DOM.insertBefore(node[0] || node, nextNode);
@@ -772,40 +770,39 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 startContainer[0].appendChild(node[0] || node);
 
             // Check if we need to update the end boundary.
-            if (node.parent()[0] === this.endContainer[0])
-                this.endOffset++;
+            if (node.parent()[0] === self.endContainer[0])
+                self.endOffset++;
 
             // Expand the range to embrace the new node.
-            this.setStartBefore(node);
+            self.setStartBefore(node);
         },
 
         moveToBookmark : function(bookmark) {
             // Created with createBookmark2().
+            var self = this;
             if (bookmark.is2) {
                 // Get the start information.
-                var startContainer = getByAddress(this.document, bookmark.start, bookmark.normalized),
-                    startOffset = bookmark.startOffset;
-
-                // Get the end information.
-                var endContainer = bookmark.end && getByAddress(this.document, bookmark.end, bookmark.normalized),
+                var startContainer = getByAddress(self.document, bookmark.start, bookmark.normalized),
+                    startOffset = bookmark.startOffset,
+                    endContainer = bookmark.end && getByAddress(self.document, bookmark.end, bookmark.normalized),
                     endOffset = bookmark.endOffset;
 
                 // Set the start boundary.
-                this.setStart(startContainer, startOffset);
+                self.setStart(startContainer, startOffset);
 
                 // Set the end boundary. If not available, collapse it.
                 if (endContainer)
-                    this.setEnd(endContainer, endOffset);
+                    self.setEnd(endContainer, endOffset);
                 else
-                    this.collapse(true);
+                    self.collapse(true);
             } else {
                 // Created with createBookmark().
                 var serializable = bookmark.serializable,
-                    startNode = serializable ? S.one("#" + bookmark.startNode, this.document) : bookmark.startNode,
-                    endNode = serializable ? S.one("#" + bookmark.endNode, this.document) : bookmark.endNode;
+                    startNode = serializable ? S.one("#" + bookmark.startNode, self.document) : bookmark.startNode,
+                    endNode = serializable ? S.one("#" + bookmark.endNode, self.document) : bookmark.endNode;
 
                 // Set the range start at the bookmark start node position.
-                this.setStartBefore(startNode);
+                self.setStartBefore(startNode);
 
                 // Remove it, because it may interfere in the setEndBefore call.
                 startNode.remove();
@@ -813,23 +810,23 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 // Set the range end at the bookmark end node position, or simply
                 // collapse it if it is not available.
                 if (endNode && endNode[0]) {
-                    this.setEndBefore(endNode);
+                    self.setEndBefore(endNode);
                     endNode.remove();
                 }
                 else
-                    this.collapse(true);
+                    self.collapse(true);
             }
         },
         getCommonAncestor : function(includeSelf, ignoreTextNode) {
-            var start = this.startContainer,
-                end = this.endContainer,
+            var self = this,start = self.startContainer,
+                end = self.endContainer,
                 ancestor;
 
             if (start[0] === end[0]) {
                 if (includeSelf
                     && start[0].nodeType == KEN.NODE_ELEMENT
-                    && this.startOffset == this.endOffset - 1)
-                    ancestor = new Node(start[0].childNodes[this.startOffset]);
+                    && self.startOffset == self.endOffset - 1)
+                    ancestor = new Node(start[0].childNodes[self.startOffset]);
                 else
                     ancestor = start;
             }
@@ -840,35 +837,30 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 ? ancestor.parent() : ancestor;
         },
         enlarge : function(unit) {
+            var self = this;
             switch (unit) {
                 case KER.ENLARGE_ELEMENT :
 
-                    if (this.collapsed)
+                    if (self.collapsed)
                         return;
 
                     // Get the common ancestor.
-                    var commonAncestor = this.getCommonAncestor();
+                    var commonAncestor = self.getCommonAncestor(), body = new Node(self.document.body),
+                        // For each boundary
+                        //		a. Depending on its position, find out the first node to be checked (a sibling) or, if not available, to be enlarge.
+                        //		b. Go ahead checking siblings and enlarging the boundary as much as possible until the common ancestor is not reached. After reaching the common ancestor, just save the enlargeable node to be used later.
 
-                    var body = new Node(this.document.body);
+                        startTop, endTop,
+                        enlargeable, sibling, commonReached,
 
-                    // For each boundary
-                    //		a. Depending on its position, find out the first node to be checked (a sibling) or, if not available, to be enlarge.
-                    //		b. Go ahead checking siblings and enlarging the boundary as much as possible until the common ancestor is not reached. After reaching the common ancestor, just save the enlargeable node to be used later.
+                        // Indicates that the node can be added only if whitespace
+                        // is available before it.
+                        needsWhiteSpace = false, isWhiteSpace, siblingText,
 
-                    var startTop, endTop;
+                        // Process the start boundary.
 
-                    var enlargeable, sibling, commonReached;
-
-                    // Indicates that the node can be added only if whitespace
-                    // is available before it.
-                    var needsWhiteSpace = false;
-                    var isWhiteSpace;
-                    var siblingText;
-
-                    // Process the start boundary.
-
-                    var container = this.startContainer;
-                    var offset = this.startOffset;
+                        container = self.startContainer,
+                        offset = self.startOffset;
 
                     if (container[0].nodeType == KEN.NODE_TEXT) {
                         if (offset) {
@@ -1021,8 +1013,8 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     // makes it difficult to reuse the code here. So, fixes to
                     // the above code are likely to be replicated here.
 
-                    container = this.endContainer;
-                    offset = this.endOffset;
+                    container = self.endContainer;
+                    offset = self.endOffset;
 
                     // Reset the common variables.
                     enlargeable = sibling = null;
@@ -1119,7 +1111,8 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
                             if (isWhiteSpace) {
                                 if (needsWhiteSpace) {
-                                    if (commonReached)                                        endTop = enlargeable;
+                                    if (commonReached)
+                                        endTop = enlargeable;
                                     else
                                         this.setEndAfter(enlargeable);
                                 }
@@ -1159,12 +1152,12 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 case KER.ENLARGE_LIST_ITEM_CONTENTS:
 
                     // Enlarging the start boundary.
-                    var walkerRange = new KERange(this.document);
+                    var walkerRange = new KERange(self.document);
 
-                    body = new Node(this.document.body);
+                    body = new Node(self.document.body);
 
                     walkerRange.setStartAt(body, KER.POSITION_AFTER_START);
-                    walkerRange.setEnd(this.startContainer, this.startOffset);
+                    walkerRange.setEnd(self.startContainer, self.startOffset);
 
                     var walker = new Walker(walkerRange),
                         blockBoundary,  // The node on which the enlarging should stop.
@@ -1198,13 +1191,13 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     this.setStartAt(
                         blockBoundary,
                         blockBoundary._4e_name() != 'br' &&
-                            ( !enlargeable && this.checkStartOfBlock()
+                            ( !enlargeable && self.checkStartOfBlock()
                                 || enlargeable && blockBoundary._4e_contains(enlargeable) ) ?
                             KER.POSITION_AFTER_START :
                             KER.POSITION_AFTER_END);
 
                     // Enlarging the end boundary.
-                    walkerRange = this.clone();
+                    walkerRange = self.clone();
                     walkerRange.collapse();
                     walkerRange.setEndAt(body, KER.POSITION_BEFORE_END);
                     walker = new Walker(walkerRange);
@@ -1224,19 +1217,19 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     // the document position of it with 'enlargeable' node.
                     this.setEndAt(
                         blockBoundary,
-                        ( !enlargeable && this.checkEndOfBlock()
+                        ( !enlargeable && self.checkEndOfBlock()
                             || enlargeable && blockBoundary._4e_contains(enlargeable) ) ?
                             KER.POSITION_BEFORE_END :
                             KER.POSITION_BEFORE_START);
                     // We must include the <br> at the end of range if there's
                     // one and we're expanding list item contents
                     if (tailBr)
-                        this.setEndAfter(tailBr);
+                        self.setEndAfter(tailBr);
             }
         },
         checkStartOfBlock : function() {
-            var startContainer = this.startContainer,
-                startOffset = this.startOffset;
+            var self = this,startContainer = self.startContainer,
+                startOffset = self.startOffset;
 
             // If the starting node is a text node, and non-empty before the offset,
             // then we're surely not at the start of block.
@@ -1249,14 +1242,14 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // Antecipate the trim() call here, so the walker will not make
             // changes to the DOM, which would not get reflected into this
             // range otherwise.
-            this.trim();
+            self.trim();
 
             // We need to grab the block element holding the start boundary, so
             // let's use an element path for it.
-            var path = new ElementPath(this.startContainer);
+            var path = new ElementPath(self.startContainer);
 
             // Creates a range starting at the block start until the range start.
-            var walkerRange = this.clone();
+            var walkerRange = self.clone();
             walkerRange.collapse(true);
             walkerRange.setStartAt(path.block || path.blockLimit, KER.POSITION_AFTER_START);
 
@@ -1267,8 +1260,8 @@ KISSYEDITOR.add("editor-range", function(KE) {
         },
 
         checkEndOfBlock : function() {
-            var endContainer = this.endContainer,
-                endOffset = this.endOffset;
+            var self = this,endContainer = self.endContainer,
+                endOffset = self.endOffset;
 
             // If the ending node is a text node, and non-empty after the offset,
             // then we're surely not at the end of block.
@@ -1281,14 +1274,14 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // Antecipate the trim() call here, so the walker will not make
             // changes to the DOM, which would not get reflected into this
             // range otherwise.
-            this.trim();
+            self.trim();
 
             // We need to grab the block element holding the start boundary, so
             // let's use an element path for it.
-            var path = new ElementPath(this.endContainer);
+            var path = new ElementPath(self.endContainer);
 
             // Creates a range starting at the block start until the range start.
-            var walkerRange = this.clone();
+            var walkerRange = self.clone();
             walkerRange.collapse(false);
             walkerRange.setEndAt(path.block || path.blockLimit, KER.POSITION_BEFORE_END);
 
@@ -1311,7 +1304,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
         /**
          * Check whether current range is on the inner edge of the specified element.
          * @param {Number} checkType ( CKEDITOR.START | CKEDITOR.END ) The checking side.
-         * @param {CKEDITOR.dom.element} element The target element to check.
+         * @param {Node} element The target element to check.
          */
         checkBoundaryOfElement : function(element, checkType) {
             var walkerRange = this.clone();
@@ -1322,18 +1315,18 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     KER.POSITION_AFTER_START
                     : KER.POSITION_BEFORE_END);
 
-            var walker = new Walker(walkerRange),
-                retval = false;
+            var walker = new Walker(walkerRange);
+
             walker.evaluator = elementBoundaryEval;
             return walker[ checkType == KER.START ?
                 'checkBackward' : 'checkForward' ]();
         },
 
         getBoundaryNodes : function() {
-            var startNode = this.startContainer,
-                endNode = this.endContainer,
-                startOffset = this.startOffset,
-                endOffset = this.endOffset,
+            var self = this,startNode = self.startContainer,
+                endNode = self.endContainer,
+                startOffset = self.startOffset,
+                endOffset = self.endOffset,
                 childCount;
 
             if (startNode[0].nodeType == KEN.NODE_ELEMENT) {
@@ -1381,35 +1374,32 @@ KISSYEDITOR.add("editor-range", function(KE) {
             return { startNode : startNode, endNode : endNode };
         },
         fixBlock : function(isStart, blockTag) {
-            var bookmark = this.createBookmark(),
-                fixedBlock = new Node(this.document.createElement(blockTag));
+            var self = this,bookmark = self.createBookmark(),
+                fixedBlock = new Node(self.document.createElement(blockTag));
 
-            this.collapse(isStart);
+            self.collapse(isStart);
 
-            this.enlarge(KER.ENLARGE_BLOCK_CONTENTS);
-            fixedBlock[0].appendChild(this.extractContents());
+            self.enlarge(KER.ENLARGE_BLOCK_CONTENTS);
+            fixedBlock[0].appendChild(self.extractContents());
             fixedBlock.trim();
 
             if (!UA.ie)
                 fixedBlock._4e_appendBogus();
 
-            this.insertNode(fixedBlock);
+            self.insertNode(fixedBlock);
 
-            this.moveToBookmark(bookmark);
+            self.moveToBookmark(bookmark);
 
             return fixedBlock;
         },
         splitBlock : function(blockTag) {
-            var startPath = new ElementPath(this.startContainer),
-                endPath = new ElementPath(this.endContainer);
-
-            var startBlockLimit = startPath.blockLimit,
-                endBlockLimit = endPath.blockLimit;
-
-            var startBlock = startPath.block,
-                endBlock = endPath.block;
-
-            var elementPath = null;
+            var self = this,startPath = new ElementPath(self.startContainer),
+                endPath = new ElementPath(self.endContainer),
+                startBlockLimit = startPath.blockLimit,
+                endBlockLimit = endPath.blockLimit,
+                startBlock = startPath.block,
+                endBlock = endPath.block,
+                elementPath = null;
             // Do nothing if the boundaries are in different block limits.
             if (startBlockLimit[0] !== endBlockLimit[0])
                 return null;
@@ -1417,35 +1407,35 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // Get or fix current blocks.
             if (blockTag != 'br') {
                 if (!startBlock) {
-                    startBlock = this.fixBlock(true, blockTag);
-                    endBlock = new ElementPath(this.endContainer).block;
+                    startBlock = self.fixBlock(true, blockTag);
+                    endBlock = new ElementPath(self.endContainer).block;
                 }
 
                 if (!endBlock)
-                    endBlock = this.fixBlock(false, blockTag);
+                    endBlock = self.fixBlock(false, blockTag);
             }
 
             // Get the range position.
-            var isStartOfBlock = startBlock && this.checkStartOfBlock(),
-                isEndOfBlock = endBlock && this.checkEndOfBlock();
+            var isStartOfBlock = startBlock && self.checkStartOfBlock(),
+                isEndOfBlock = endBlock && self.checkEndOfBlock();
 
             // Delete the current contents.
             // TODO: Why is 2.x doing CheckIsEmpty()?
-            this.deleteContents();
+            self.deleteContents();
 
             if (startBlock && startBlock[0] == endBlock[0]) {
                 if (isEndOfBlock) {
-                    elementPath = new ElementPath(this.startContainer);
-                    this.moveToPosition(endBlock, KER.POSITION_AFTER_END);
+                    elementPath = new ElementPath(self.startContainer);
+                    self.moveToPosition(endBlock, KER.POSITION_AFTER_END);
                     endBlock = null;
                 }
                 else if (isStartOfBlock) {
-                    elementPath = new ElementPath(this.startContainer);
-                    this.moveToPosition(startBlock, KER.POSITION_BEFORE_START);
+                    elementPath = new ElementPath(self.startContainer);
+                    self.moveToPosition(startBlock, KER.POSITION_BEFORE_START);
                     startBlock = null;
                 }
                 else {
-                    endBlock = this.splitElement(startBlock);
+                    endBlock = self.splitElement(startBlock);
 
                     // In Gecko, the last child node must be a bogus <br>.
                     // Note: bogus <br> added under <ul> or <ol> would cause
@@ -1464,25 +1454,26 @@ KISSYEDITOR.add("editor-range", function(KE) {
             };
         },
         splitElement : function(toSplit) {
-            if (!this.collapsed)
+            var self = this;
+            if (!self.collapsed)
                 return null;
 
             // Extract the contents of the block from the selection point to the end
             // of its contents.
-            this.setEndAt(toSplit, KER.POSITION_BEFORE_END);
-            var documentFragment = this.extractContents();
+            self.setEndAt(toSplit, KER.POSITION_BEFORE_END);
+            var documentFragment = self.extractContents(),
 
-            // Duplicate the element after it.
-            var clone = toSplit._4e_clone(false);
+                // Duplicate the element after it.
+                clone = toSplit._4e_clone(false);
 
             // Place the extracted contents into the duplicated element.
             clone[0].appendChild(documentFragment);
             clone.insertAfter(toSplit);
-            this.moveToPosition(toSplit, KER.POSITION_AFTER_END);
+            self.moveToPosition(toSplit, KER.POSITION_AFTER_END);
             return clone;
         },
         moveToElementEditablePosition : function(el, isMoveToEnd) {
-            var isEditable,xhtml_dtd = KE.XHTML_DTD;
+            var self = this,isEditable,xhtml_dtd = KE.XHTML_DTD;
 
             // Empty elements are rejected.
             if (xhtml_dtd.$empty[ el._4e_name() ])
@@ -1493,12 +1484,12 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
                 // If an editable element is found, move inside it.
                 if (isEditable)
-                    this.moveToPosition(el, isMoveToEnd ?
+                    self.moveToPosition(el, isMoveToEnd ?
                         KER.POSITION_BEFORE_END :
                         KER.POSITION_AFTER_START);
                 // Stop immediately if we've found a non editable inline element (e.g <img>).
                 else if (xhtml_dtd.$inline[ el._4e_name() ]) {
-                    this.moveToPosition(el, isMoveToEnd ?
+                    self.moveToPosition(el, isMoveToEnd ?
                         KER.POSITION_AFTER_END :
                         KER.POSITION_BEFORE_START);
                     return true;
@@ -1512,7 +1503,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
                 // Stop immediately if we've found a text node.
                 if (el && el[0].nodeType == KEN.NODE_TEXT) {
-                    this.moveToPosition(el, isMoveToEnd ?
+                    self.moveToPosition(el, isMoveToEnd ?
                         KER.POSITION_AFTER_END :
                         KER.POSITION_BEFORE_START);
                     return true;

@@ -9,8 +9,8 @@ KISSY.add("editor", function(S) {
         Event = S.Event,
         KE = KISSYEDITOR,
         tryThese = KE.Utils.tryThese,
-        DOM = S.DOM;
-    var DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+        DOM = S.DOM,
+        DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
         HTML5_DTD = '<!doctype html>',
         CSS_FILE = "kissyeditor-iframe.css";
     (function() {
@@ -19,19 +19,19 @@ KISSY.add("editor", function(S) {
             var script = scripts[i];
             if (script.src.indexOf("kissyeditor.js") != -1) {
                 var start = script.src.indexOf("kissyeditor.js");
-                var prefix = script.src.substring(0, start);
-                KE.BASE_URL = prefix;
+                //var prefix = script.src.substring(0, start);
+                KE.BASE_URL = script.src.substring(0, start);
                 break;
             }
         }
     })();
 
     function Editor(textarea, toolBarDiv, statusDiv) {
-        this.textarea = textarea[0] || textarea;
-        this.toolBarDiv = toolBarDiv;
-        this.statusDiv = statusDiv;
-        this._init();
-
+        var self = this;
+        self.textarea = textarea[0] || textarea;
+        self.toolBarDiv = toolBarDiv;
+        self.statusDiv = statusDiv;
+        self._init();
     }
 
     S.augment(Editor, EventTarget, {
@@ -58,268 +58,260 @@ KISSY.add("editor", function(S) {
                 KE = KISSYEDITOR,
                 KER = KE.RANGE,
                 KERange = KE.Range,
-                KES = KE.SELECTION;
-            var createIFrame = function(data) {
-                if (iframe)
-                    iframe.remove();
-                var srcScript =
-                    'document.open();' +
-                        'document.close();';
+                KES = KE.SELECTION,
+                createIFrame = function(data) {
+                    if (iframe)
+                        iframe.remove();
+                    var srcScript =
+                        'document.open();' +
+                            'document.close();';
 
-                iframe = new Node('<iframe' +
-                    ' style="width:100%;height:100%"' +
-                    ' frameBorder="0"' +
-                    ' title="' + "kissy-editor" + '"' +
-                    // With IE, the custom domain has to be taken care at first,
-                    // for other browers, the 'src' attribute should be left empty to
-                    // trigger iframe's 'load' event.
-                    ' src="' + ( UA.ie ? 'javascript:void(function(){' + encodeURIComponent(srcScript) + '}())' : '' ) + '"' +
-                    ' tabIndex="' + ( UA.webkit ? -1 : self.textarea.tabIndex ) + '"' +
-                    ' allowTransparency="true"' +
-                    '></iframe>');
+                    iframe = new Node('<iframe' +
+                        ' style="width:100%;height:100%"' +
+                        ' frameBorder="0"' +
+                        ' title="' + "kissy-editor" + '"' +
+                        // With IE, the custom domain has to be taken care at first,
+                        // for other browsers, the 'src' attribute should be left empty to
+                        // trigger iframe's 'load' event.
+                        ' src="' + ( UA.ie ? 'javascript:void(function(){' + encodeURIComponent(srcScript) + '}())' : '' ) + '"' +
+                        ' tabIndex="' + ( UA.webkit ? -1 : self.textarea.tabIndex ) + '"' +
+                        ' allowTransparency="true"' +
+                        '></iframe>');
 
-                // With FF, it's better to load the data on iframe.load. (#3894,#4058)
-                iframe.on('load', function(ev) {
-                    frameLoaded = 1;
-                    iframe.detach();
-                    var win = this[0].contentWindow,doc = win.document;
-                    // Don't leave any history log in IE. (#5657)
-                    doc.open("text/html", "replace");
-                    doc.write(data);
-                    doc.close();
-                    var body = doc.body;
+                    // With FF, it's better to load the data on iframe.load. (#3894,#4058)
+                    iframe.on('load', function() {
+                        frameLoaded = 1;
+                        iframe.detach();
+                        var win = iframe[0].contentWindow,doc = win.document;
+                        // Don't leave any history log in IE. (#5657)
+                        doc.open("text/html", "replace");
+                        doc.write(data);
+                        doc.close();
+                        var body = doc.body;
 
-                    if (UA.ie) {
-                        // Don't display the focus border.
-                        body.hideFocus = true;
-
-                        // Disable and re-enable the body to avoid IE from
-                        // taking the editing focus at startup. (#141 / #523)
-                        body.disabled = true;
-                        body.contentEditable = true;
-                        body.removeAttribute('disabled');
-                    } else {
-                        // Avoid opening design mode in a frame window thread,
-                        // which will cause host page scrolling.(#4397)
-                        setTimeout(function() {
-                            // Prefer 'contentEditable' instead of 'designMode'. (#3593)
-                            if (UA.gecko || UA.opera) {
-                                body.contentEditable = true;
-                            }
-                            else if (UA.webkit)
-                                body.parentNode.contentEditable = true;
-                            else
-                                doc.designMode = 'on';
-                        }, 0);
-                    }
-
-                    // Gecko need a key event to 'wake up' the editing
-                    // ability when document is empty.(#3864)
-                    if (UA.gecko && !body.childNodes.length) {
-                        setTimeout(function() {
-                            // Simulating keyboard character input by dispatching a keydown of white-space text.
-                            var keyEventSimulate = doc.createEvent("KeyEvents");
-                            keyEventSimulate.initKeyEvent('keypress', true, true, win, false,
-                                false, false, false, 0, 32);
-                            doc.dispatchEvent(keyEventSimulate);
-                            // Restore the original document status by placing the cursor before a bogus br created (#5021).
-                            body.appendChild(new Node("<br _moz_editor_bogus_node='true' _moz_dirty=''/>")[0]);
-                            var nativeRange = new KERange(doc);
-                            nativeRange.setStartAt(new Node(body), KER.POSITION_AFTER_START);
-                            nativeRange.select();
-                        }, 0);
-                    }
-
-                    // IE, Opera and Safari may not support it and throw
-                    // errors.
-                    try {
-                        doc.execCommand('enableObjectResizing', false, true);
-                    } catch(e) {
-                    }
-                    try {
-                        doc.execCommand('enableInlineTableEditing', false, true);
-                    } catch(e) {
-                    }
-                    self.document = doc;
-                    // Gecko/Webkit need some help when selecting control type elements. (#3448)
-                    //if (!( UA.ie || UA.opera)) {
-                    if (UA.webkit) {
-                        Event.on(doc, "mousedown", function(ev) {
-                            var control = new Node(ev.target);
-
-                            if (S.inArray(control._4e_name(), ['img', 'hr', 'input', 'textarea', 'select'])) {
-                                self.getSelection().selectElement(control);
-                            }
-                        });
-                    }
-
-                    // Webkit: avoid from editing form control elements content.
-                    if (UA.webkit) {
-                        Event.on(doc, "click", function(ev) {
-                            var control = new Node(ev.target);
-                            if (S.inArray(control._4e_name(), ['input', 'select'])) {
-                                ev.preventDefault();
-                            }
-                        });
-                        // Prevent from editig textfield/textarea value.
-                        Event.on(doc, "mouseup", function(ev) {
-                            var control = new Node(ev.target);
-                            if (S.inArray(control._4e_name(), ['input', 'textarea'])) {
-                                ev.preventDefault();
-                            }
-                        });
-
-                    }
-
-                    function blinkCursor(retry) {
-                        tryThese(
-                            function() {
-                                doc.designMode = 'on';
-                                setTimeout(function () {
-                                    doc.designMode = 'off';
-                                    doc.body.focus();
-                                }, 50);
-                            },
-                            function() {
-                                // The above call is known to fail when parent DOM
-                                // tree layout changes may break design mode. (#5782)
-                                // Refresh the 'contentEditable' is a cue to this.
-                                doc.designMode = 'off';
-                                var body = new Node(doc.body);
-                                body.attr('contentEditable', false);
-                                body.attr('contentEditable', true);
-                                // Try it again once..
-                                !retry && blinkCursor(1);
-                            });
-                    }
-
-                    // Create an invisible element to grab focus.
-                    if (UA.gecko || UA.ie || UA.opera) {
-                        var focusGrabber;
-                        focusGrabber = new Node(DOM.insertAfter(new Node(
-                            // Use 'span' instead of anything else to fly under the screen-reader radar. (#5049)
-                            '<span tabindex="-1" style="position:absolute; left:-10000" role="presentation"></span>')[0], self.textarea));
-                        focusGrabber.on('focus', function() {
-                            self.focus();
-                        });
-                        self.on('destroy', function() {
-
-                        });
-                    }
-
-                    // IE standard compliant in editing frame doesn't focus the editor when
-                    // clicking outside actual content, manually apply the focus. (#1659)
-                    if (UA.ie
-                        && doc.compatMode == 'CSS1Compat'
-                        || UA.gecko
-                        || UA.opera) {
-                        var htmlElement = new Node(doc.documentElement);
-                        htmlElement.on('mousedown', function(evt) {
-                            // Setting focus directly on editor doesn't work, we
-                            // have to use here a temporary element to 'redirect'
-                            // the focus.
-                            if (evt.target === htmlElement[0]) {
-                                if (UA.gecko)
-                                    blinkCursor();
-                                focusGrabber[0].focus();
-                            }
-                        });
-                    }
-
-                    /*
-                     加上这段，chrome有问题，iframe内滚动条问题
-                     Event.on(win, 'focus', function() {
-                     var doc = self.document;
-
-                     if (UA.gecko)
-                     blinkCursor();
-                     else if (UA.opera)
-                     doc.body.focus();
-                     else if (UA.webkit) {
-                     // Selection will get lost after move focus
-                     // to document element, save it first.
-                     var sel = self.getSelection(),
-                     type = sel.getType(),
-                     range = ( type != KES.SELECTION_NONE ) && sel.getRanges()[ 0 ];
-
-                     doc.documentElement.focus();
-                     range && range.select();
-                     }
-                     });*/
-
-                    if (UA.ie) {
-                        new Node(doc.documentElement).addClass(doc.compatMode);
-                        // Override keystrokes which should have deletion behavior
-                        //  on control types in IE . (#4047)
-                        Event.on(doc, 'keydown', function(evt) {
-                            var keyCode = evt.keyCode;
-
-                            // Backspace OR Delete.
-                            if (keyCode in { 8 : 1, 46 : 1 }) {
-                                var sel = self.getSelection(),
-                                    control = sel.getSelectedElement();
-
-                                if (control) {
-                                    // Make undo snapshot.
-                                    //editor.fire('saveSnapshot');
-                                    // Delete any element that 'hasLayout' (e.g. hr,table) in IE8 will
-                                    // break up the selection, safely manage it here. (#4795)
-                                    var bookmark = sel.getRanges()[ 0 ].createBookmark();
-                                    // Remove the control manually.
-                                    control.remove();
-                                    sel.selectBookmarks([ bookmark ]);
-                                    //editor.fire('saveSnapshot');
-
-                                    evt.preventDefault();
-                                }
-                            }
-                        });
-
-                        // PageUp/PageDown scrolling is broken in document
-                        // with standard doctype, manually fix it. (#4736)
-                        if (doc.compatMode == 'CSS1Compat') {
-                            var pageUpDownKeys = { 33 : 1, 34 : 1 };
-                            Event.on(doc, 'keydown', function(evt) {
-                                if (evt.keyCode in pageUpDownKeys) {
-                                    setTimeout(function () {
-                                        self.getSelection().scrollIntoView();
-                                    }, 0);
-                                }
-                            });
-                        }
-                    }
-
-                    // Adds the document body as a context menu target.
-
-                    setTimeout(function() {
-                        /*
-                         * IE BUG: IE might have rendered the iframe with invisible contents.
-                         * (#3623). Push some inconsequential CSS style changes to force IE to
-                         * refresh it.
-                         *
-                         * Also, for some unknown reasons, short timeouts (e.g. 100ms) do not
-                         * fix the problem. :(
-                         */
                         if (UA.ie) {
+                            // Don't display the focus border.
+                            body.hideFocus = true;
+
+                            // Disable and re-enable the body to avoid IE from
+                            // taking the editing focus at startup. (#141 / #523)
+                            body.disabled = true;
+                            body.contentEditable = true;
+                            body.removeAttribute('disabled');
+                        } else {
+                            // Avoid opening design mode in a frame window thread,
+                            // which will cause host page scrolling.(#4397)
                             setTimeout(function() {
-                                if (self.document) {
-                                    var $body = self.document.body;
-                                    $body.runtimeStyle.marginBottom = '0px';
-                                    $body.runtimeStyle.marginBottom = '';
+                                // Prefer 'contentEditable' instead of 'designMode'. (#3593)
+                                if (UA.gecko || UA.opera) {
+                                    body.contentEditable = true;
                                 }
-                            }, 1000);
+                                else if (UA.webkit)
+                                    body.parentNode.contentEditable = true;
+                                else
+                                    doc.designMode = 'on';
+                            }, 0);
                         }
-                    },
-                        0);
 
+                        // Gecko need a key event to 'wake up' the editing
+                        // ability when document is empty.(#3864)
+                        if (UA.gecko && !body.childNodes.length) {
+                            setTimeout(function() {
+                                // Simulating keyboard character input by dispatching a keydown of white-space text.
+                                var keyEventSimulate = doc.createEvent("KeyEvents");
+                                keyEventSimulate.initKeyEvent('keypress', true, true, win, false,
+                                    false, false, false, 0, 32);
+                                doc.dispatchEvent(keyEventSimulate);
+                                // Restore the original document status by placing the cursor before a bogus br created (#5021).
+                                body.appendChild(new Node("<br _moz_editor_bogus_node='true' _moz_dirty=''/>")[0]);
+                                var nativeRange = new KERange(doc);
+                                nativeRange.setStartAt(new Node(body), KER.POSITION_AFTER_START);
+                                nativeRange.select();
+                            }, 0);
+                        }
 
-                    setTimeout(function() {
-                        self.fire("dataReady");
-                    }, 10);
-                });
-                self.textarea.style.display = "none";
-                DOM.insertAfter(iframe[0], self.textarea);
-            };
+                        // IE, Opera and Safari may not support it and throw
+                        // errors.
+                        try {
+                            doc.execCommand('enableObjectResizing', false, true);
+                        } catch(e) {
+                        }
+                        try {
+                            doc.execCommand('enableInlineTableEditing', false, true);
+                        } catch(e) {
+                        }
+                        self.document = doc;
+                        // Gecko/Webkit need some help when selecting control type elements. (#3448)
+                        //if (!( UA.ie || UA.opera)) {
+                        if (UA.webkit) {
+                            Event.on(doc, "mousedown", function(ev) {
+                                var control = new Node(ev.target);
+                                if (S.inArray(control._4e_name(), ['img', 'hr', 'input', 'textarea', 'select'])) {
+                                    self.getSelection().selectElement(control);
+                                }
+                            });
+                        }
+
+                        // Webkit: avoid from editing form control elements content.
+                        if (UA.webkit) {
+                            Event.on(doc, "click", function(ev) {
+                                var control = new Node(ev.target);
+                                if (S.inArray(control._4e_name(), ['input', 'select'])) {
+                                    ev.preventDefault();
+                                }
+                            });
+                            // Prevent from editig textfield/textarea value.
+                            Event.on(doc, "mouseup", function(ev) {
+                                var control = new Node(ev.target);
+                                if (S.inArray(control._4e_name(), ['input', 'textarea'])) {
+                                    ev.preventDefault();
+                                }
+                            });
+                        }
+
+                        function blinkCursor(retry) {
+                            tryThese(
+                                function() {
+                                    doc.designMode = 'on';
+                                    setTimeout(function () {
+                                        doc.designMode = 'off';
+                                        doc.body.focus();
+                                    }, 50);
+                                },
+                                function() {
+                                    // The above call is known to fail when parent DOM
+                                    // tree layout changes may break design mode. (#5782)
+                                    // Refresh the 'contentEditable' is a cue to this.
+                                    doc.designMode = 'off';
+                                    var body = new Node(doc.body);
+                                    body.attr('contentEditable', false);
+                                    body.attr('contentEditable', true);
+                                    // Try it again once..
+                                    !retry && blinkCursor(1);
+                                });
+                        }
+
+                        // Create an invisible element to grab focus.
+                        if (UA.gecko || UA.ie || UA.opera) {
+                            var focusGrabber;
+                            focusGrabber = new Node(DOM.insertAfter(new Node(
+                                // Use 'span' instead of anything else to fly under the screen-reader radar. (#5049)
+                                '<span tabindex="-1" style="position:absolute; left:-10000" role="presentation"></span>')[0], self.textarea));
+                            focusGrabber.on('focus', function() {
+                                self.focus();
+                            });
+                            self.on('destroy', function() {
+                            });
+                        }
+
+                        // IE standard compliant in editing frame doesn't focus the editor when
+                        // clicking outside actual content, manually apply the focus. (#1659)
+                        if (UA.ie
+                            && doc.compatMode == 'CSS1Compat'
+                            || UA.gecko
+                            || UA.opera) {
+                            var htmlElement = new Node(doc.documentElement);
+                            htmlElement.on('mousedown', function(evt) {
+                                // Setting focus directly on editor doesn't work, we
+                                // have to use here a temporary element to 'redirect'
+                                // the focus.
+                                if (evt.target === htmlElement[0]) {
+                                    if (UA.gecko)
+                                        blinkCursor();
+                                    focusGrabber[0].focus();
+                                }
+                            });
+                        }
+
+                        /*
+                         加上这段，chrome有问题，iframe内滚动条问题
+                         Event.on(win, 'focus', function() {
+                         var doc = self.document;
+
+                         if (UA.gecko)
+                         blinkCursor();
+                         else if (UA.opera)
+                         doc.body.focus();
+                         else if (UA.webkit) {
+                         // Selection will get lost after move focus
+                         // to document element, save it first.
+                         var sel = self.getSelection(),
+                         type = sel.getType(),
+                         range = ( type != KES.SELECTION_NONE ) && sel.getRanges()[ 0 ];
+
+                         doc.documentElement.focus();
+                         range && range.select();
+                         }
+                         });*/
+
+                        if (UA.ie) {
+                            new Node(doc.documentElement).addClass(doc.compatMode);
+                            // Override keystrokes which should have deletion behavior
+                            //  on control types in IE . (#4047)
+                            Event.on(doc, 'keydown', function(evt) {
+                                var keyCode = evt.keyCode;
+                                // Backspace OR Delete.
+                                if (keyCode in { 8 : 1, 46 : 1 }) {
+                                    var sel = self.getSelection(),
+                                        control = sel.getSelectedElement();
+                                    if (control) {
+                                        // Make undo snapshot.
+                                        //editor.fire('saveSnapshot');
+                                        // Delete any element that 'hasLayout' (e.g. hr,table) in IE8 will
+                                        // break up the selection, safely manage it here. (#4795)
+                                        var bookmark = sel.getRanges()[ 0 ].createBookmark();
+                                        // Remove the control manually.
+                                        control.remove();
+                                        sel.selectBookmarks([ bookmark ]);
+                                        //editor.fire('saveSnapshot');
+                                        evt.preventDefault();
+                                    }
+                                }
+                            });
+
+                            // PageUp/PageDown scrolling is broken in document
+                            // with standard doctype, manually fix it. (#4736)
+                            if (doc.compatMode == 'CSS1Compat') {
+                                var pageUpDownKeys = { 33 : 1, 34 : 1 };
+                                Event.on(doc, 'keydown', function(evt) {
+                                    if (evt.keyCode in pageUpDownKeys) {
+                                        setTimeout(function () {
+                                            self.getSelection().scrollIntoView();
+                                        }, 0);
+                                    }
+                                });
+                            }
+                        }
+
+                        // Adds the document body as a context menu target.
+
+                        setTimeout(function() {
+                            /*
+                             * IE BUG: IE might have rendered the iframe with invisible contents.
+                             * (#3623). Push some inconsequential CSS style changes to force IE to
+                             * refresh it.
+                             *
+                             * Also, for some unknown reasons, short timeouts (e.g. 100ms) do not
+                             * fix the problem. :(
+                             */
+                            if (UA.ie) {
+                                setTimeout(function() {
+                                    if (self.document) {
+                                        var $body = self.document.body;
+                                        $body.runtimeStyle.marginBottom = '0px';
+                                        $body.runtimeStyle.marginBottom = '';
+                                    }
+                                }, 1000);
+                            }
+                        }, 0);
+
+                        setTimeout(function() {
+                            self.fire("dataReady");
+                        }, 10);
+                    });
+                    self.textarea.style.display = "none";
+                    DOM.insertAfter(iframe[0], self.textarea);
+                };
 
 
             var data = HTML5_DTD
@@ -331,7 +323,7 @@ KISSY.add("editor", function(S) {
                 + "' rel='stylesheet'/>"
                 + "</head>"
                 + "<body>"
-                + (this.textarea.value || "")
+                + (self.textarea.value || "")
                 + "</body>"
                 + "<html>";
 
@@ -343,10 +335,12 @@ KISSY.add("editor", function(S) {
         },
 
         _monitor:function() {
-            var self = this,mid = null,KE = KISSYEDITOR;
-            this.previousPath = null;
+            var self = this,
+                mid = null,
+                KE = KISSYEDITOR;
+            self.previousPath = null;
             //return;
-            Event.on(DOM._4e_getWin(this.document), "focus", function() {
+            Event.on(DOM._4e_getWin(self.document), "focus", function() {
                 if (mid) {
                     return;
                 }
@@ -365,7 +359,7 @@ KISSY.add("editor", function(S) {
                 }, 200);
             });
 
-            Event.on(DOM._4e_getWin(this.document), "blur", function() {
+            Event.on(DOM._4e_getWin(self.document), "blur", function() {
                 //console.log("monitor cancel");
                 if (mid) clearTimeout(mid);
                 mid = null;
@@ -379,32 +373,28 @@ KISSY.add("editor", function(S) {
         },
 
         insertElement:function(element) {
-
-            this.focus();
-
-            var elementName = element._4e_name(),
+            var self = this,
+                elementName = element._4e_name(),
                 xhtml_dtd = KE.XHTML_DTD,
                 KER = KE.RANGE,
                 KEN = KE.NODE,
-                isBlock = xhtml_dtd.$block[ elementName ];
+                isBlock = xhtml_dtd.$block[ elementName ],
+                selection = self.getSelection(),
+                ranges = selection.getRanges(),
+                range,
+                clone,
+                lastElement,
+                current, dtd;
 
-            var selection = this.getSelection(),
-                ranges = selection.getRanges();
-
-
-            var range, clone, lastElement, bookmark;
+            self.focus();
 
             for (var i = ranges.length - 1; i >= 0; i--) {
                 range = ranges[ i ];
-
                 // Remove the original contents.
                 range.deleteContents();
-
                 clone = !i && element || element._4e_clone(true);
-
                 // If we're inserting a block at dtd-violated position, split
                 // the parent blocks until we reach blockLimit.
-                var current, dtd;
                 if (isBlock) {
                     while (( current = range.getCommonAncestor(false, true) )
                         && ( dtd = xhtml_dtd[ current._4e_name() ] )
@@ -441,7 +431,6 @@ KISSY.add("editor", function(S) {
 
             selection.selectRanges([ range ]);
         }
-
     });
 
     S.Editor = Editor;

@@ -7,9 +7,7 @@ KISSYEDITOR.add("editor-utils", function(KE) {
     KE.Utils = {
 
         getXY:function(x, y, srcDoc, destDoc) {
-            var currentWindow = srcDoc.defaultView || srcDoc.parentWindow,
-                currentDoc = srcDoc,
-                currentDocElem = currentDoc.documentElement;
+            var currentWindow = srcDoc.defaultView || srcDoc.parentWindow;
 
             //x,y相对于当前iframe文档,防止当前iframe有滚动条
             x -= DOM.scrollLeft(currentWindow);

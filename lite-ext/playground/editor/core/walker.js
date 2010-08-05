@@ -10,20 +10,21 @@ KISSYEDITOR.add("editor-walker", function(KE) {
         Node = S.Node;
     // This function is to be called under a "walker" instance scope.
     function iterate(rtl, breakOnFalse) {
+        var self = this;
         // Return null if we have reached the end.
         if (this._.end)
             return null;
 
         var node,
-            range = this.range,
+            range = self.range,
             guard,
-            userGuard = this.guard,
-            type = this.type,
+            userGuard = self.guard,
+            type = self.type,
             getSourceNodeFn = ( rtl ? '_4e_previousSourceNode' : '_4e_nextSourceNode' );
 
         // This is the first call. Initialize it.
-        if (!this._.start) {
-            this._.start = 1;
+        if (!self._.start) {
+            self._.start = 1;
 
             // Trim text nodes and optmize the range boundaries. DOM changes
             // may happen at this point.
@@ -31,13 +32,13 @@ KISSYEDITOR.add("editor-walker", function(KE) {
 
             // A collapsed range must return null at first call.
             if (range.collapsed) {
-                this.end();
+                self.end();
                 return null;
             }
         }
 
         // Create the LTR guard function, if necessary.
-        if (!rtl && !this._.guardLTR) {
+        if (!rtl && !self._.guardLTR) {
             // Gets the node that stops the walker when going LTR.
             var limitLTR = range.endContainer,
                 blockerLTR = new Node(limitLTR[0].childNodes[range.endOffset]);
@@ -59,12 +60,12 @@ KISSYEDITOR.add("editor-walker", function(KE) {
         }
 
         // Create the RTL guard function, if necessary.
-        if (rtl && !this._.guardRTL) {
+        if (rtl && !self._.guardRTL) {
             // Gets the node that stops the walker when going LTR.
             var limitRTL = range.startContainer,
                 blockerRTL = ( range.startOffset > 0 ) && new Node(limitRTL[0].childNodes[range.startOffset - 1]);
 
-            this._.guardRTL = function(node, movingOut) {
+            self._.guardRTL = function(node, movingOut) {
 
                 return (
                     node
@@ -76,7 +77,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
         }
 
         // Define which guard function to use.
-        var stopGuard = rtl ? this._.guardRTL : this._.guardLTR;
+        var stopGuard = rtl ? self._.guardRTL : self._.guardLTR;
 
         // Make the user defined guard function participate in the process,
         // otherwise simply use the boundary guard.
@@ -91,7 +92,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
         else
             guard = stopGuard;
 
-        if (this.current)
+        if (self.current)
             node = this.current[ getSourceNodeFn ](false, type, guard);
         else {
             // Get the first node to be returned.
@@ -122,21 +123,21 @@ KISSYEDITOR.add("editor-walker", function(KE) {
             }
         }
 
-        while (node && node[0] && !this._.end) {
-            this.current = node;
+        while (node && node[0] && !self._.end) {
+            self.current = node;
 
-            if (!this.evaluator || this.evaluator(node) !== false) {
+            if (!this.evaluator || self.evaluator(node) !== false) {
                 if (!breakOnFalse)
                     return node;
             }
-            else if (breakOnFalse && this.evaluator)
+            else if (breakOnFalse && self.evaluator)
                 return false;
 
             node = node[ getSourceNodeFn ](false, type, guard);
         }
 
-        this.end();
-        return this.current = null;
+        self.end();
+        return self.current = null;
     }
 
     function iterateToLast(rtl) {
@@ -190,7 +191,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
 
         /**
          * Retrieves the next node (at right).
-         * @returns {CKEDITOR.dom.node} The next node or null if no more
+         * @returns {Node} The next node or null if no more
          *        nodes are available.
          */
         next : function() {
@@ -199,7 +200,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
 
         /**
          * Retrieves the previous node (at left).
-         * @returns {CKEDITOR.dom.node} The previous node or null if no more
+         * @returns {Node} The previous node or null if no more
          *        nodes are available.
          */
         previous : function() {
@@ -228,7 +229,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
         /**
          * Executes a full walk forward (to the right), until no more nodes
          * are available, returning the last valid node.
-         * @returns {CKEDITOR.dom.node} The last node at the right or null
+         * @returns {Node} The last node at the right or null
          *        if no valid nodes are available.
          */
         lastForward : function() {
@@ -238,7 +239,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
         /**
          * Executes a full walk backwards (to the left), until no more nodes
          * are available, returning the last valid node.
-         * @returns {CKEDITOR.dom.node} The last node at the left or null
+         * @returns {Node} The last node at the left or null
          *        if no valid nodes are available.
          */
         lastBackward : function() {
@@ -254,7 +255,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
 
 
     Walker.blockBoundary = function(customNodeNames) {
-        return function(node, type) {
+        return function(node) {
             if (!node[0]) node = new Node(node);
             return ! ( node[0].nodeType == KEN.NODE_ELEMENT
                 && node._4e_isBlockBoundary(customNodeNames) );
@@ -267,34 +268,34 @@ KISSYEDITOR.add("editor-walker", function(KE) {
     /**
      * Whether the node is a bookmark node's inner text node.
      */
-    Walker.bookmarkContents = function(node) {
-    },
+    //Walker.bookmarkContents = function(node) {
+    // },
 
-        /**
-         * Whether the to-be-evaluated node is a bookmark node OR bookmark node
-         * inner contents.
-         * @param {Boolean} contentOnly Whether only test againt the text content of
-         * bookmark node instead of the element itself(default).
-         * @param {Boolean} isReject Whether should return 'false' for the bookmark
-         * node instead of 'true'(default).
-         */
-        Walker.bookmark = function(contentOnly, isReject) {
-            function isBookmarkNode(node) {
-                return ( node && node[0]
-                    && node._4e_name() == 'span'
-                    && node.attr('_ke_bookmark') );
-            }
+    /**
+     * Whether the to-be-evaluated node is a bookmark node OR bookmark node
+     * inner contents.
+     * @param {Boolean} contentOnly Whether only test againt the text content of
+     * bookmark node instead of the element itself(default).
+     * @param {Boolean} isReject Whether should return 'false' for the bookmark
+     * node instead of 'true'(default).
+     */
+    Walker.bookmark = function(contentOnly, isReject) {
+        function isBookmarkNode(node) {
+            return ( node && node[0]
+                && node._4e_name() == 'span'
+                && node.attr('_ke_bookmark') );
+        }
 
-            return function(node) {
-                var isBookmark, parent;
-                // Is bookmark inner text node?
-                isBookmark = ( node && node[0] && node[0].nodeType == KEN.NODE_TEXT && ( parent = node.parent() )
-                    && isBookmarkNode(parent) );
-                // Is bookmark node?
-                isBookmark = contentOnly ? isBookmark : isBookmark || isBookmarkNode(node);
-                return isReject ^ isBookmark;
-            };
+        return function(node) {
+            var isBookmark, parent;
+            // Is bookmark inner text node?
+            isBookmark = ( node && node[0] && node[0].nodeType == KEN.NODE_TEXT && ( parent = node.parent() )
+                && isBookmarkNode(parent) );
+            // Is bookmark node?
+            isBookmark = contentOnly ? isBookmark : isBookmark || isBookmarkNode(node);
+            return isReject ^ isBookmark;
         };
+    };
 
     /**
      * Whether the node is a text node containing only whitespaces characters.
@@ -314,7 +315,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
      * @param isReject
      */
     Walker.invisible = function(isReject) {
-        var whitespace = CKEDITOR.dom.walker.whitespaces();
+        var whitespace = Walker.whitespaces();
         return function(node) {
             // Nodes that take no spaces in wysiwyg:
             // 1. White-spaces but not including NBSP;

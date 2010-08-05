@@ -146,6 +146,6 @@ p, fieldset, table, pre {
 }
 
 ul, ol {
-    margin-left: 0px;
+    margin-left: 0;
     padding-left: 40px;
 }

@@ -3,18 +3,18 @@
  * @modifier:yiminghe@gmail.com(chengyu)
  */
 KISSYEDITOR.add("editor-selection", function(KE) {
+    KE.SELECTION = {};
     var S = KISSY,
         UA = S.UA,
         DOM = S.DOM,
         tryThese = KE.Utils.tryThese,
-        Node = S.Node;
-    KE.SELECTION = {};
-    var KES = KE.SELECTION,
+        Node = S.Node,
+        KES = KE.SELECTION,
         KER = KE.RANGE,
         KEN = KE.NODE,
-        EventTarget = S.EventTarget,
+        //EventTarget = S.EventTarget,
         Walker = KE.Walker,
-        ElementPath = KE.ElementPath,
+        //ElementPath = KE.ElementPath,
         KERange = KE.Range;
     /**
      * No selection.
@@ -43,10 +43,9 @@ KISSYEDITOR.add("editor-selection", function(KE) {
      */
     KES.SELECTION_ELEMENT = 3;
     function KESelection(document) {
-
-        this.document = document;
-
-        this._ = {
+        var self = this;
+        self.document = document;
+        self._ = {
             cache : {}
         };
 
@@ -55,18 +54,18 @@ KISSYEDITOR.add("editor-selection", function(KE) {
          * editor document. Return null if that's the case.
          */
         if (UA.ie) {
-            var range = this.getNative().createRange();
+            var range = self.getNative().createRange();
             if (!range
-                || ( range.item && range.item(0).ownerDocument != this.document )
-                || ( range.parentElement && range.parentElement().ownerDocument != this.document )) {
-                this.isInvalid = true;
+                || ( range.item && range.item(0).ownerDocument != document )
+                || ( range.parentElement && range.parentElement().ownerDocument != document )) {
+                self.isInvalid = true;
             }
         }
     }
 
     var styleObjectElements = {
         img:1,hr:1,li:1,table:1,tr:1,td:1,th:1,embed:1,object:1,ol:1,ul:1,
-        a:1, input:1, form:1, select:1, textarea:1, button:1, fieldset:1, th:1, thead:1, tfoot:1
+        a:1, input:1, form:1, select:1, textarea:1, button:1, fieldset:1, thead:1, tfoot:1
     };
 
     S.augment(KESelection, {
@@ -93,18 +92,18 @@ KISSYEDITOR.add("editor-selection", function(KE) {
          * Gets the type of the current selection. The following values are
          * available:
          * <ul>
-         *        <li>{@link CKEDITOR.SELECTION_NONE} (1): No selection.</li>
-         *        <li>{@link CKEDITOR.SELECTION_TEXT} (2): Text is selected or
+         *        <li> SELECTION_NONE (1): No selection.</li>
+         *        <li> SELECTION_TEXT (2): Text is selected or
          *            collapsed selection.</li>
-         *        <li>{@link CKEDITOR.SELECTION_ELEMENT} (3): A element
+         *        <li> SELECTION_ELEMENT (3): A element
          *            selection.</li>
          * </ul>
          * @function
          * @returns {Number} One of the following constant values:
-         *        {@link CKEDITOR.SELECTION_NONE}, {@link CKEDITOR.SELECTION_TEXT} or
-         *        {@link CKEDITOR.SELECTION_ELEMENT}.
+         *         SELECTION_NONE,  SELECTION_TEXT or
+         *         SELECTION_ELEMENT.
          * @example
-         * if ( editor.getSelection().<b>getType()</b> == CKEDITOR.SELECTION_TEXT )
+         * if ( editor.getSelection().<b>getType()</b> == SELECTION_TEXT )
          *     alert( 'Text is selected' );
          */
         getType :
@@ -144,9 +143,8 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                     if (cache.type)
                         return cache.type;
 
-                    var type = KES.SELECTION_TEXT;
-
-                    var sel = this.getNative();
+                    var type = KES.SELECTION_TEXT,
+                        sel = this.getNative();
 
                     if (!sel)
                         type = KES.SELECTION_NONE;
@@ -159,7 +157,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
 
                         if (startContainer == range.endContainer
                             && startContainer.nodeType == KEN.NODE_ELEMENT
-                            && ( range.endOffset - range.startOffset ) == 1
+                            && ( range.endOffset - range.startOffset ) === 1
                             && styleObjectElements[ startContainer.childNodes[ range.startOffset ].nodeName.toLowerCase() ]) {
                             type = KES.SELECTION_ELEMENT;
                         }
@@ -179,12 +177,8 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                         range.collapse(start);
 
                         // Gets the element that encloses the range entirely.
-                        var parent = range.parentElement();
-                        //console.log("ie get range :");
-                        //console.log("parent:" + parent.innerHTML);
-                        var siblings = parent.childNodes;
-
-                        var testRange;
+                        var parent = range.parentElement(), siblings = parent.childNodes,
+                            testRange;
 
                         for (var i = 0; i < siblings.length; i++) {
                             var child = siblings[ i ];
@@ -312,15 +306,13 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                     // tranform the native ranges in CKEDITOR.dom.range
                     // instances.
 
-                    var ranges = [];
-                    var sel = this.getNative();
+                    var ranges = [], sel = this.getNative();
 
                     if (!sel)
                         return [];
 
                     for (var i = 0; i < sel.rangeCount; i++) {
-                        var nativeRange = sel.getRangeAt(i);
-                        var range = new KERange(this.document);
+                        var nativeRange = sel.getRangeAt(i), range = new KERange(this.document);
 
                         range.setStart(new Node(nativeRange.startContainer), nativeRange.startOffset);
                         range.setEnd(new Node(nativeRange.endContainer), nativeRange.endOffset);
@@ -332,7 +324,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
 
         /**
          * Gets the DOM element in which the selection starts.
-         * @returns {CKEDITOR.dom.element} The element at the beginning of the
+         * @returns {Node} The element at the beginning of the
          *        selection.
          * @example
          * var element = editor.getSelection().<b>getStartElement()</b>;
@@ -408,9 +400,9 @@ KISSYEDITOR.add("editor-selection", function(KE) {
 
         /**
          * Gets the current selected element.
-         * @returns {CKEDITOR.dom.element} The selected element. Null if no
+         * @returns {Node} The selected element. Null if no
          *        selection is available or the selection type is not
-         *        {@link CKEDITOR.SELECTION_ELEMENT}.
+         *       SELECTION_ELEMENT.
          * @example
          * var element = editor.getSelection().<b>getSelectedElement()</b>;
          * alert( element.getName() );
@@ -420,9 +412,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
             if (cache.selectedElement !== undefined)
                 return cache.selectedElement;
 
-            var self = this;
-
-            var node = tryThese(
+            var self = this, node = tryThese(
                 // Is it native IE control type selection?
                 function() {
                     return self.getNative().createRange().item(0);
@@ -456,7 +446,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
         },
 
         selectElement : function(element) {
-
+            var range;
             if (UA.ie) {
                 this.getNative().empty();
                 try {
@@ -503,9 +493,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                 sel.removeAllRanges();
 
                 for (var i = 0; i < ranges.length; i++) {
-                    var range = ranges[ i ];
-                    var nativeRange = this.document.createRange();
-                    var startContainer = range.startContainer;
+                    var range = ranges[ i ], nativeRange = this.document.createRange(),startContainer = range.startContainer;
 
                     // In FF2, if we have a collapsed range, inside an empty
                     // element, we must add something to it otherwise the caret
@@ -591,29 +579,24 @@ KISSYEDITOR.add("editor-selection", function(KE) {
 
 
     KE.Selection = KESelection;
-    var nonCells = { table:1,tbody:1,tr:1 };
-    var notWhitespaces = Walker.whitespaces(true);
-    var fillerTextRegex = /\ufeff|\u00a0/;
+    var nonCells = { table:1,tbody:1,tr:1 }, notWhitespaces = Walker.whitespaces(true), fillerTextRegex = /\ufeff|\u00a0/;
     KERange.prototype.select = UA.ie ?
         // V2
         function(forceExpand) {
-            var collapsed = this.collapsed;
-            var isStartMarkerAlone;
-            var dummySpan;
+            var self = this,
+                collapsed = self.collapsed,isStartMarkerAlone,dummySpan;
 
             // IE doesn't support selecting the entire table row/cell, move the selection into cells, e.g.
             // <table><tbody><tr>[<td>cell</b></td>... => <table><tbody><tr><td>[cell</td>...
-            if (this.startContainer[0].nodeType == KEN.NODE_ELEMENT && this.startContainer._4e_name() in nonCells
-                || this.endContainer[0].nodeType == KEN.NODE_ELEMENT && this.endContainer._4e_name() in nonCells) {
-                this.shrink(KEN.NODE_ELEMENT, true);
+            if (self.startContainer[0].nodeType == KEN.NODE_ELEMENT && self.startContainer._4e_name() in nonCells
+                || self.endContainer[0].nodeType == KEN.NODE_ELEMENT && self.endContainer._4e_name() in nonCells) {
+                self.shrink(KEN.NODE_ELEMENT, true);
             }
 
-            var bookmark = this.createBookmark();
+            var bookmark = self.createBookmark(),
 
-            // Create marker tags for the start and end boundaries.
-            var startNode = bookmark.startNode;
-
-            var endNode;
+                // Create marker tags for the start and end boundaries.
+                startNode = bookmark.startNode,endNode;
             if (!collapsed)
                 endNode = bookmark.endNode;
 
@@ -628,7 +611,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
 
             if (endNode) {
                 // Create a tool range for the end.
-                var ieRangeEnd = this.document.body.createTextRange();
+                var ieRangeEnd = self.document.body.createTextRange();
 
                 // Position the tool range at the end.
                 ieRangeEnd.moveToElementText(endNode[0]);
@@ -656,7 +639,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                 // inline elements, like <b></b> (#253).
                 // It is also needed when placing the selection right after an inline
                 // element to avoid the selection moving inside of it.
-                dummySpan = this.document.createElement('span');
+                dummySpan = self.document.createElement('span');
                 dummySpan.innerHTML = '&#65279;';	// Zero Width No-Break Space (U+FEFF). See #1359.
                 dummySpan = new Node(dummySpan);
 
@@ -667,12 +650,12 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                     // instead to have any char, which will be later deleted using the
                     // selection.
                     // \ufeff = Zero Width No-Break Space (U+FEFF). (#1359)
-                    DOM.insertBefore(this.document.createTextNode('\ufeff'), startNode[0]);
+                    DOM.insertBefore(self.document.createTextNode('\ufeff'), startNode[0]);
                 }
             }
 
             // Remove the markers (reset the position, because of the changes in the DOM tree).
-            this.setStartBefore(startNode);
+            self.setStartBefore(startNode);
             startNode.remove();
 
             if (collapsed) {
@@ -681,46 +664,45 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                     ieRange.moveStart('character', -1);
                     ieRange.select();
                     // Remove our temporary stuff.
-                    this.document.selection.clear();
+                    self.document.selection.clear();
                 } else
                     ieRange.select();
                 this.moveToPosition(dummySpan, KER.POSITION_BEFORE_START);
                 dummySpan.remove();
             }
             else {
-                this.setEndBefore(endNode);
+                self.setEndBefore(endNode);
                 endNode.remove();
                 ieRange.select();
             }
 
             // this.document.fire('selectionchange');
         } : function() {
-        var startContainer = this.startContainer;
+        var self = this,startContainer = self.startContainer;
 
         // If we have a collapsed range, inside an empty element, we must add
         // something to it, otherwise the caret will not be visible.
-        if (this.collapsed && startContainer[0].nodeType == KEN.NODE_ELEMENT && !startContainer[0].childNodes.length)
-            startContainer[0].appendChild(this.document.createTextNode(""));
+        if (self.collapsed && startContainer[0].nodeType == KEN.NODE_ELEMENT && !startContainer[0].childNodes.length)
+            startContainer[0].appendChild(self.document.createTextNode(""));
 
-        var nativeRange = this.document.createRange();
-        nativeRange.setStart(startContainer[0], this.startOffset);
+        var nativeRange = self.document.createRange();
+        nativeRange.setStart(startContainer[0], self.startOffset);
 
         try {
-            nativeRange.setEnd(this.endContainer[0], this.endOffset);
-        }
-        catch (e) {
+            nativeRange.setEnd(self.endContainer[0], self.endOffset);
+        } catch (e) {
             // There is a bug in Firefox implementation (it would be too easy
             // otherwise). The new start can't be after the end (W3C says it can).
             // So, let's create a new range and collapse it to the desired point.
             if (e.toString().indexOf('NS_ERROR_ILLEGAL_VALUE') >= 0) {
-                this.collapse(true);
-                nativeRange.setEnd(this.endContainer[0], this.endOffset);
+                self.collapse(true);
+                nativeRange.setEnd(self.endContainer[0], self.endOffset);
             }
             else
                 throw( e );
         }
 
-        var selection = getSelection(this.document).getNative();
+        var selection = getSelection(self.document).getNative();
         selection.removeAllRanges();
         selection.addRange(nativeRange);
     };
