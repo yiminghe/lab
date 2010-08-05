@@ -84,5 +84,7 @@
 .ke-focus {
     width: 0;
     height: 0;
+    font-size:0;
+    overflow:hidden;
     outline: none;
 }

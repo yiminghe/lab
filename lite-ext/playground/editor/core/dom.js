@@ -868,7 +868,11 @@ KISSYEDITOR.add("editor-dom", function(KE) {
         },
         _4e_getUniqueId : function(el) {
             el = el[0] || el;
-            return el.getAttribute('_ke_expando') || ( el.setAttribute('_ke_expando', S.guid()));
+            var id = el.getAttribute('_ke_expando');
+            if (id) return id;
+            id = S.guid();
+            el.setAttribute('_ke_expando', id);
+            return id;
         },
 
         _4e_copyAttributes : function(el, dest, skipAttributes) {

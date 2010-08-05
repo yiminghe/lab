@@ -217,15 +217,15 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
     });
 
 
-    var TripleButton = KE.TripleButton;      
-   
+    var TripleButton = KE.TripleButton;
+
     /**
      * 用到了按钮三状态的两个状态：off可点击，disabled:不可点击
      * @param cfg
      */
     function Indent(cfg) {
         Indent.superclass.constructor.call(this, cfg);
-       
+
         var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv,
             el = this.el;
 
@@ -268,6 +268,7 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
             setTimeout(function() {
                 self.indentCommand.exec(editor);
                 editor.fire("save");
+                editor.notifySelectionChange();
             }, 10);
         },
 

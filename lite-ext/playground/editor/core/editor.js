@@ -343,7 +343,8 @@ KISSY.add("editor", function(S) {
         },
 
         _monitor:function() {
-            var self = this,previousPath,mid = null,KE = KISSYEDITOR;
+            var self = this,mid = null,KE = KISSYEDITOR;
+            this.previousPath = null;
             //return;
             Event.on(DOM._4e_getWin(this.document), "focus", function() {
                 if (mid) {
@@ -355,8 +356,8 @@ KISSY.add("editor", function(S) {
                     if (!selection.isInvalid) {
                         var startElement = selection.getStartElement(),
                             currentPath = new KE.ElementPath(startElement);
-                        if (!previousPath || !previousPath.compare(currentPath)) {
-                            previousPath = currentPath;
+                        if (!self.previousPath || !self.previousPath.compare(currentPath)) {
+                            self.previousPath = currentPath;
                             self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
                         }
                     }
@@ -369,6 +370,12 @@ KISSY.add("editor", function(S) {
                 if (mid) clearTimeout(mid);
                 mid = null;
             });
+        },
+        /**
+         * 强制通知插件更新状态，防止插件修改编辑器内容，自己反而得不到通知
+         */
+        notifySelectionChange:function() {
+            this.previousPath = null;
         },
 
         insertElement:function(element) {

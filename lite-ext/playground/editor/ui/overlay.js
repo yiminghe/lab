@@ -73,7 +73,7 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
                 //焦点管理，显示时用a获得焦点
                 el[0].appendChild(new Node("<a href='#' class='ke-focus' " +
                     "style='" +
-                    "width:0;height:0;outline:none;'" +
+                    "width:0;height:0;outline:none;font-size:0;'" +
                     "></a>")[0]);
                 return;
             }
@@ -147,7 +147,7 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
             "loading ...." +
             "</div>");
         loading.appendTo(document.body);
-        Overlay.loading = new Overlay({el:loading});
+        Overlay.loading = new Overlay({el:loading,mask:true});
     });
 
     KE.SimpleOverlay = Overlay;

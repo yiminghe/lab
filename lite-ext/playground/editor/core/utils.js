@@ -89,9 +89,13 @@ KISSYEDITOR.add("editor-utils", function(KE) {
             }
 
             return $ ? new Node($) : null;
+        },
+
+        clearAllMarkers:function(database) {
+            for (var i in database)
+                database[i]._4e_clearMarkers(database, true);
         }
     };
 
 
-})
-    ;
+});

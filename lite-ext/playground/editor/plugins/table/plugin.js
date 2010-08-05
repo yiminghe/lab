@@ -5,103 +5,117 @@
 KISSYEDITOR.add("editor-plugin-table", function(KE) {
     var S = KISSY,
         Node = S.Node,
-        DOM = S.DOM,
+        //DOM = S.DOM,
+        Walker = KE.Walker,
         UA = S.UA,
+        undefined = undefined,
+        KEN = KE.NODE,
         TripleButton = KE.TripleButton,
-        Overlay = KE.SimpleOverlay;
+        Overlay = KE.SimpleOverlay,
+        IN_SIZE = 8,
+        TABLE_HTML = "<table class='ke-table-config'>" +
+            "<tr>" +
+            "<td>" +
+            "<label>行数： <input value='2' class='ke-table-rows ke-table-create-only' size='" + IN_SIZE + "'/></label>" +
+            "</td>" +
+            "<td>" +
+            "<label>宽度： <input value='200' class='ke-table-width' size='" + IN_SIZE + "'/></label> " +
+            "<select class='ke-table-width-unit'>" +
+            "<option value='px'>像素</option>" +
+            "<option value='%'>百分比</option>" +
+            "</select>" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>" +
+            "<label>列数： <input class='ke-table-cols ke-table-create-only' value='3' size='" + IN_SIZE + "'/></label>" +
+            "</td>" +
+            "<td>" +
+            "<label>高度： <input value='200' class='ke-table-height' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>" +
+            "<label>标题格： <select class='ke-table-head ke-table-create-only'>" +
+            "<option value=''>无</option>" +
+            "<option value='1'>有</option>" +
+            "</select>" +
+            "</td>" +
+            "<td>" +
+            "<label>间距： <input value='1' class='ke-table-cellspacing' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>" +
+            "<label>对齐： <select class='ke-table-align'>" +
+            "<option value=''>无</option>" +
+            "<option value='left'>左对齐</option>" +
+            "<option value='right'>右对齐</option>" +
+            "<option value='center'>中间对齐</option>" +
+            "</select>" +
+            "</label>" + "</td>" +
+            "<td>" +
+            "<label>边距： <input value='1' class='ke-table-cellpadding' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>" +
 
-
-    var IN_SIZE = 8,TABLE_HTML = "<table class='ke-table-config'>" +
-        "<tr>" +
-        "<td>" +
-        "<label>行数： <input value='2' class='ke-table-rows' size='" + IN_SIZE + "'/></label>" +
-        "</td>" +
-        "<td>" +
-        "<label>宽度： <input value='200' class='ke-table-width' size='" + IN_SIZE + "'/></label> " +
-        "<select class='ke-table-width-unit'>" +
-        "<option value='px'>像素</option>" +
-        "<option value='%'>百分比</option>" +
-        "</select>" +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td>" +
-        "<label>列数： <input class='ke-table-cols' value='3' size='" + IN_SIZE + "'/></label>" +
-        "</td>" +
-        "<td>" +
-        "<label>高度： <input value='200' class='ke-table-height' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td>" +
-        "<label>标题格： <select class='ke-table-head'>" +
-        "<option value=''>无</option>" +
-        "<option value='1'>有</option>" +
-        "</select>" +
-        "</td>" +
-        "<td>" +
-        "<label>间距： <input value='1' class='ke-table-cellspacing' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td>" +
-        "<label>对齐： <select class='ke-table-align'>" +
-        "<option value=''>无</option>" +
-        "<option value='left'>左对齐</option>" +
-        "<option value='right'>右对齐</option>" +
-        "<option value='center'>中间对齐</option>" +
-        "</select>" +
-        "</label>" + "</td>" +
-        "<td>" +
-        "<label>边距： <input value='1' class='ke-table-cellpadding' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td>" +
-
-        "</td>" +
-        "<td>" +
-        "<label>边框： <input value='1' class='ke-table-border' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td colspan='2'>" +
-        "<label>" +
-        "标题：<input class='ke-table-caption' size='50'>" +
-        "</label>" +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td>" +
-        "<button class='ke-table-ok'>确定</button>"
-    "</td>" +
-        "<td>" +
-    "<button class='ke-table-close'>关闭</button>"
-    "</td>" +
-        "</tr>" +
-    "</table>";
+            "</td>" +
+            "<td>" +
+            "<label>边框： <input value='1' class='ke-table-border' size='" + IN_SIZE + "'/></label> &nbsp;像素</select>" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td colspan='2'>" +
+            "<label>" +
+            "标题：<input class='ke-table-caption' size='50'>" +
+            "</label>" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td colspan='2' style='text-align:center'>" +
+            "<button class='ke-table-ok'>确定</button>" +
+            "</td>" +
+            "</tr>" +
+            "</table>",
+        ContextMenu = KE.ContextMenu,
+        tableTags = ["tr","th","td","tbody","table"],trim = S.trim;
 
     function TableUI(editor) {
-        this.editor = editor;
-        this.selectedTable = null;
-        this._init();
+        var self = this;
+        self.editor = editor;
+        self.selectedTable = null;
+        editor._toolbars = editor._toolbars || {};
+        editor._toolbars["table"] = self;
+        self._init();
     }
 
-    var ContextMenu = KE.ContextMenu,tableTags = ["tr","th","td","tbody","table"];
+
+    function valid(str) {
+        return trim(str).length != 0;
+    }
+
     S.augment(TableUI, {
         _init:function() {
-            var self = this,editor = self.editor,toolBarDiv = editor.toolBarDiv;
+            var self = this,
+                editor = self.editor,
+                toolBarDiv = editor.toolBarDiv,
+                myContexts = {};
             self.el = new TripleButton({
                 text:"table",
                 container:toolBarDiv
             });
             var el = self.el;
             el.on("offClick", self._tableShow, self);
-            var myContexts = {};
+
             for (var f in contextMenu) {
                 (function(f) {
                     myContexts[f] = function() {
+                        editor.fire("save");
+                        editor.focus();
                         contextMenu[f](editor);
+                        editor.fire("save");
                     }
                 })(f);
             }
@@ -112,12 +126,14 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
             });
         },
         _tableInit:function() {
-            var self = this;
-            var d = new Overlay({
-                width:"350px",
-                mask:true,
-                title:"编辑表格"
-            });
+            var self = this,
+                editor = self.editor,
+                d = new Overlay({
+                    width:"350px",
+                    mask:true,
+                    title:"编辑表格"
+                }),
+                body=d.body;
             d.body.html(TABLE_HTML);
 
             d.twidth = d.body.one(".ke-table-width");
@@ -134,12 +150,67 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
             d.tclose = d.body.one(".ke-table-close");
             d.twidthunit = d.body.one(".ke-table-width-unit");
             self.tableDialog = d;
-            if (!this.selectedTable)
-                d.tok.on("click", this._genTable, this);
+            d.tok.on("click", self._tableOk, self);
+            d.on("hide", function() {
+                //清空
+                self.selectedTable = null;
+                editor.focus();
+            });
+        },
+        _tableOk:function() {
+            var self = this;
+            if (!self.selectedTable) {
+                self._genTable();
+            } else {
+                self._modifyTable();
+            }
+        },
+        _modifyTable:function() {
+            var self = this,
+                d = self.tableDialog,
+                selectedTable = self.selectedTable,
+                caption = selectedTable.one("caption");
+
+            if (valid(d.talign.val()))
+                selectedTable.attr("align", trim(d.talign.val()));
+
+            if (valid(d.tcellspacing.val()))
+                selectedTable.attr("cellspacing", trim(d.tcellspacing.val()));
+
+            if (valid(d.tcellpadding.val()))
+                selectedTable.attr("cellpadding", trim(d.tcellpadding.val()));
+
+            if (valid(d.tborder.val()))
+                selectedTable.attr("border", trim(d.tborder.val()));
+
+            if (valid(d.twidth.val()))
+                selectedTable.css("width", trim(d.twidth.val()));
+
+            if (valid(d.theight.val()))
+                selectedTable.css("height", trim(d.theight.val()));
+
+            if (valid(d.tcaption.val())) {
+
+                if (caption && caption[0])
+                    caption.html(trim(d.tcaption.val()));
+                else
+                    new Node("<caption><span>" + trim(d.tcaption.val()) + "</span></caption>")
+                        .insertBefore(selectedTable[0].firstChild);
+            } else if (caption) {
+                caption._4e_remove();
+            }
+            d.hide();
         },
         _genTable:function() {
-            var self = this, d = self.tableDialog;
-            var html = "<table ";
+            var self = this,
+                d = self.tableDialog,
+                html = "<table ",
+                i,
+                cols = parseInt(d.tcols.val()),
+                rows = parseInt(d.trows.val()),
+                cellpad = UA.ie ? "" : "<br/>",
+                editor = self.editor;
+
             if (S.trim(d.talign.val()).length != 0)
                 html += "align='" + S.trim(d.talign.val()) + "' ";
             if (S.trim(d.tcellspacing.val()).length != 0)
@@ -162,11 +233,10 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
             if (S.trim(d.tcaption.val())) {
                 html += "<caption><span>" + S.trim(d.tcaption.val()) + "</span></caption>";
             }
-            var cols = parseInt(d.tcols.val()),rows = parseInt(d.trows.val()),cellpad = UA.ie ? "" : "<br/>";
             if (d.thead.val()) {
                 html += "<thead>";
                 html += "<tr>";
-                for (var i = 0; i < cols; i++)
+                for (i = 0; i < cols; i++)
                     html += "<th>" + cellpad + "</th>";
                 html += "</tr>";
                 html += "</thead>";
@@ -175,15 +245,15 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
             html += "<tbody>";
             for (var r = 0; r < rows; r++) {
                 html += "<tr>";
-                for (var i = 0; i < cols; i++) {
+                for (i = 0; i < cols; i++) {
                     html += "<td>" + cellpad + "</td>";
                 }
                 html += "</tr>";
             }
             html += "</tbody>";
             html += "</table>";
-            var editor = this.editor;
-            var table = new Node(html, null, editor.documen);
+
+            var table = new Node(html, null, editor.document);
             editor.fire("save");
             editor.insertElement(table);
             editor.fire("save");
@@ -195,6 +265,11 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
             if (!self.tableDialog) {
                 self._tableInit();
             }
+            if (self.selectedTable) {
+                self.tableDialog.body.all(".ke-table-create-only").attr("disabled", "disabled");
+            } else {
+                self.tableDialog.body.all(".ke-table-create-only").removeAttr("disabled");
+            }
             self.tableDialog.show();
         }
     });
@@ -205,11 +280,10 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
     function getSelectedCells(selection) {
         // Walker will try to split text nodes, which will make the current selection
         // invalid. So save bookmarks before doing anything.
-        var bookmarks = selection.createBookmarks();
-
-        var ranges = selection.getRanges();
-        var retval = [];
-        var database = {};
+        var bookmarks = selection.createBookmarks(),
+            ranges = selection.getRanges(),
+            retval = [],
+            database = {};
 
         function moveOutOfCellGuard(node) {
             // Apply to the first cell only.
@@ -218,9 +292,9 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
             // If we are exiting from the first </td>, then the td should definitely be
             // included.
-            if (node.type == CKEDITOR.NODE_ELEMENT && cellNodeRegex.test(node.getName())
-                && !node.getCustomData('selected_cell')) {
-                CKEDITOR.dom.element.setMarker(database, node, 'selected_cell', true);
+            if (node[0].nodeType == KEN.NODE_ELEMENT && cellNodeRegex.test(node._4e_name())
+                && !node._4e_getData('selected_cell')) {
+                node._4e_setMarker(database, 'selected_cell', true);
                 retval.push(node);
             }
         }
@@ -230,14 +304,13 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
             if (range.collapsed) {
                 // Walker does not handle collapsed ranges yet - fall back to old API.
-                var startNode = range.getCommonAncestor();
-                var nearestCell = startNode.getAscendant('td', true) || startNode.getAscendant('th', true);
+                var startNode = range.getCommonAncestor(),
+                    nearestCell = startNode._4e_ascendant('td', true) || startNode._4e_ascendant('th', true);
                 if (nearestCell)
                     retval.push(nearestCell);
-            }
-            else {
-                var walker = new CKEDITOR.dom.walker(range);
-                var node;
+            } else {
+                var walker = new Walker(range),
+                    node;
                 walker.guard = moveOutOfCellGuard;
 
                 while (( node = walker.next() )) {
@@ -248,56 +321,21 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                     // So we have to take care to include a td we've entered only when we've
                     // walked into its children.
 
-                    var parent = node.getParent();
-                    if (parent && cellNodeRegex.test(parent.getName()) && !parent.getCustomData('selected_cell')) {
-                        CKEDITOR.dom.element.setMarker(database, parent, 'selected_cell', true);
+                    var parent = node.parent();
+                    if (parent && cellNodeRegex.test(parent._4e_name()) && !parent._4e_getData('selected_cell')) {
+                        parent._4e_setMarker(database, 'selected_cell', true);
                         retval.push(parent);
                     }
                 }
             }
         }
 
-        CKEDITOR.dom.element.clearAllMarkers(database);
+        KE.Utils.clearAllMarkers(database);
 
         // Restore selection position.
         selection.selectBookmarks(bookmarks);
 
         return retval;
-    }
-
-    function getFocusElementAfterDelCells(cellsToDelete) {
-        var i = 0,
-            last = cellsToDelete.length - 1,
-            database = {},
-            cell,focusedCell,
-            tr;
-
-        while (( cell = cellsToDelete[ i++ ] ))
-            CKEDITOR.dom.element.setMarker(database, cell, 'delete_cell', true);
-
-        // 1.first we check left or right side focusable cell row by row;
-        i = 0;
-        while (( cell = cellsToDelete[ i++ ] )) {
-            if (( focusedCell = cell.getPrevious() ) && !focusedCell.getCustomData('delete_cell')
-                || ( focusedCell = cell.getNext()     ) && !focusedCell.getCustomData('delete_cell')) {
-                CKEDITOR.dom.element.clearAllMarkers(database);
-                return focusedCell;
-            }
-        }
-
-        CKEDITOR.dom.element.clearAllMarkers(database);
-
-        // 2. then we check the toppest row (outside the selection area square) focusable cell
-        tr = cellsToDelete[ 0 ].getParent();
-        if (( tr = tr.getPrevious() ))
-            return tr.getLast();
-
-        // 3. last we check the lowerest  row focusable cell
-        tr = cellsToDelete[ last ].getParent();
-        if (( tr = tr.getNext() ))
-            return tr.getChild(0);
-
-        return null;
     }
 
     function clearRow($tr) {
@@ -308,30 +346,30 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
         for (var i = 0; i < $cells.length; i++) {
             $cells[ i ].innerHTML = '';
 
-            if (!CKEDITOR.env.ie)
-                ( new CKEDITOR.dom.element($cells[ i ]) ).appendBogus();
+            if (!UA.ie)
+                ( new Node($cells[ i ]) )._4e_appendBogus();
         }
     }
 
     function insertRow(selection, insertBefore) {
         // Get the row where the selection is placed in.
-        var row = selection.getStartElement().getAscendant('tr');
+        var row = selection.getStartElement()._4e_ascendant('tr');
         if (!row)
             return;
 
         // Create a clone of the row.
-        var newRow = row.clone(true);
+        var newRow = row._4e_clone(true);
 
         // Insert the new row before of it.
         newRow.insertBefore(row);
 
         // Clean one of the rows to produce the illusion of inserting an empty row
         // before or after.
-        clearRow(insertBefore ? newRow.$ : row.$);
+        clearRow(insertBefore ? newRow[0] : row[0]);
     }
 
     function deleteRows(selectionOrRow) {
-        if (selectionOrRow instanceof CKEDITOR.dom.selection) {
+        if (selectionOrRow instanceof KE.Selection) {
             var cells = getSelectedCells(selectionOrRow),
                 cellsCount = cells.length,
                 rowsToDelete = [],
@@ -341,26 +379,26 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
             // Queue up the rows - it's possible and likely that we have duplicates.
             for (var i = 0; i < cellsCount; i++) {
-                var row = cells[ i ].getParent(),
-                    rowIndex = row.$.rowIndex;
+                var row = cells[ i ].parent(),
+                    rowIndex = row[0].rowIndex;
 
                 !i && ( previousRowIndex = rowIndex - 1 );
                 rowsToDelete[ rowIndex ] = row;
                 i == cellsCount - 1 && ( nextRowIndex = rowIndex + 1 );
             }
 
-            var table = row.getAscendant('table'),
-                rows = table.$.rows,
+            var table = row._4e_ascendant('table'),
+                rows = table[0].rows,
                 rowCount = rows.length;
 
             // Where to put the cursor after rows been deleted?
             // 1. Into next sibling row if any;
             // 2. Into previous sibling row if any;
             // 3. Into table's parent element if it's the very last row.
-            cursorPosition = new CKEDITOR.dom.element(
-                nextRowIndex < rowCount && table.$.rows[ nextRowIndex ] ||
-                    previousRowIndex > 0 && table.$.rows[ previousRowIndex ] ||
-                    table.$.parentNode);
+            cursorPosition = new Node(
+                nextRowIndex < rowCount && table[0].rows[ nextRowIndex ] ||
+                    previousRowIndex > 0 && table[0].rows[ previousRowIndex ] ||
+                    table[0].parentNode);
 
             for (i = rowsToDelete.length; i >= 0; i--) {
                 if (rowsToDelete[ i ])
@@ -369,13 +407,13 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
             return cursorPosition;
         }
-        else if (selectionOrRow instanceof CKEDITOR.dom.element) {
-            table = selectionOrRow.getAscendant('table');
+        else if (selectionOrRow instanceof Node) {
+            table = selectionOrRow._4e_ascendant('table');
 
-            if (table.$.rows.length == 1)
-                table.remove();
+            if (table[0].rows.length == 1)
+                table._4e_remove();
             else
-                selectionOrRow.remove();
+                selectionOrRow._4e_remove();
         }
 
         return 0;
@@ -383,31 +421,25 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
     function insertColumn(selection, insertBefore) {
         // Get the cell where the selection is placed in.
-        var startElement = selection.getStartElement();
-        var cell = startElement.getAscendant('td', true) || startElement.getAscendant('th', true);
-
+        var startElement = selection.getStartElement(),
+            cell = startElement._4e_ascendant('td', true) || startElement._4e_ascendant('th', true);
         if (!cell)
             return;
-
         // Get the cell's table.
-        var table = cell.getAscendant('table');
-        var cellIndex = cell.$.cellIndex;
-
+        var table = cell._4e_ascendant('table'),
+            cellIndex = cell[0].cellIndex;
         // Loop through all rows available in the table.
-        for (var i = 0; i < table.$.rows.length; i++) {
-            var $row = table.$.rows[ i ];
-
+        for (var i = 0; i < table[0].rows.length; i++) {
+            var $row = table[0].rows[ i ];
             // If the row doesn't have enough cells, ignore it.
             if ($row.cells.length < ( cellIndex + 1 ))
                 continue;
+            cell = new Node($row.cells[ cellIndex ].cloneNode(false));
 
-            cell = new CKEDITOR.dom.element($row.cells[ cellIndex ].cloneNode(false));
-
-            if (!CKEDITOR.env.ie)
-                cell.appendBogus();
-
+            if (!UA.ie)
+                cell._4e_appendBogus();
             // Get back the currently selected cell.
-            var baseCell = new CKEDITOR.dom.element($row.cells[ cellIndex ]);
+            var baseCell = new Node($row.cells[ cellIndex ]);
             if (insertBefore)
                 cell.insertBefore(baseCell);
             else
@@ -417,13 +449,13 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
     function getFocusElementAfterDelCols(cells) {
         var cellIndexList = [],
-            table = cells[ 0 ] && cells[ 0 ].getAscendant('table'),
-            i, length,
-            targetIndex, targetCell;
+            table = cells[ 0 ] && cells[ 0 ]._4e_ascendant('table'),
+            i,length,
+            targetIndex,targetCell;
 
         // get the cellIndex list of delete cells
         for (i = 0,length = cells.length; i < length; i++)
-            cellIndexList.push(cells[i].$.cellIndex);
+            cellIndexList.push(cells[i][0].cellIndex);
 
         // get the focusable column index
         cellIndexList.sort();
@@ -439,67 +471,87 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 : ( cellIndexList[ cellIndexList.length - 1 ] + 1 );
 
         // scan row by row to get the target cell
-        var rows = table.$.rows;
+        var rows = table[0].rows;
         for (i = 0,length = rows.length; i < length; i++) {
             targetCell = rows[ i ].cells[ targetIndex ];
             if (targetCell)
                 break;
         }
 
-        return targetCell ? new CKEDITOR.dom.element(targetCell) : table.getPrevious();
+        return targetCell ? new Node(targetCell) : table.previous();
     }
 
     function deleteColumns(selectionOrCell) {
-        if (selectionOrCell instanceof CKEDITOR.dom.selection) {
+        if (selectionOrCell instanceof KE.Selection) {
             var colsToDelete = getSelectedCells(selectionOrCell),
                 elementToFocus = getFocusElementAfterDelCols(colsToDelete);
 
             for (var i = colsToDelete.length - 1; i >= 0; i--) {
+                //某一列已经删除？？这一列的cell再做？ !table判断处理
                 if (colsToDelete[ i ])
-                    deleteColumns(colsToDelete[ i ]);
+                    deleteColumns(colsToDelete[i]);
             }
 
             return elementToFocus;
         }
-        else if (selectionOrCell instanceof CKEDITOR.dom.element) {
+        else if (selectionOrCell instanceof Node) {
             // Get the cell's table.
-            var table = selectionOrCell.getAscendant('table');
+            var table = selectionOrCell._4e_ascendant('table');
+
+            //该单元格所属的列已经被删除了
             if (!table)
                 return null;
 
             // Get the cell index.
-            var cellIndex = selectionOrCell.$.cellIndex;
+            var cellIndex = selectionOrCell[0].cellIndex;
 
             /*
              * Loop through all rows from down to up, coz it's possible that some rows
              * will be deleted.
              */
-            for (i = table.$.rows.length - 1; i >= 0; i--) {
+            for (i = table[0].rows.length - 1; i >= 0; i--) {
                 // Get the row.
-                var row = new CKEDITOR.dom.element(table.$.rows[ i ]);
+                var row = new Node(table[0].rows[ i ]);
 
                 // If the cell to be removed is the first one and the row has just one cell.
-                if (!cellIndex && row.$.cells.length == 1) {
+                if (!cellIndex && row[0].cells.length == 1) {
                     deleteRows(row);
                     continue;
                 }
 
                 // Else, just delete the cell.
-                if (row.$.cells[ cellIndex ])
-                    row.$.removeChild(row.$.cells[ cellIndex ]);
+                if (row[0].cells[ cellIndex ])
+                    row[0].removeChild(row[0].cells[ cellIndex ]);
             }
         }
 
         return null;
     }
 
+    function placeCursorInCell(cell, placeAtEnd) {
+        var range = new KE.Range(cell[0].ownerDocument);
+        if (!range['moveToElementEditablePosition'](cell, placeAtEnd ? true : undefined)) {
+            range.selectNodeContents(cell);
+            range.collapse(placeAtEnd ? false : true);
+        }
+        range.select(true);
+    }
 
-    var contextMenu =
-    {
+    var contextMenu = {
+        "表格属性" : function(editor) {
+            var selection = editor.getSelection(),
+                startElement = selection && selection.getStartElement(),
+                table = startElement && startElement._4e_ascendant('table', true);
+            if (!table)
+                return;
+            var tableUI = editor._toolbars["table"];
+            tableUI.selectedTable = table;
+            tableUI._tableShow();
+        },
         "删除表格" : function(editor) {
-            var selection = editor.getSelection();
-            var startElement = selection && selection.getStartElement();
-            var table = startElement && startElement._4e_ascendant('table', true);
+            var selection = editor.getSelection(),
+                startElement = selection && selection.getStartElement(),
+                table = startElement && startElement._4e_ascendant('table', true);
 
             if (!table)
                 return;
@@ -518,40 +570,41 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 table._4e_remove();
         },
 
-        'rowDelete': function(editor) {
+        '删除行': function(editor) {
             var selection = editor.getSelection();
-            placeCursorInCell(deleteRows(selection));
+            placeCursorInCell(deleteRows(selection), undefined);
+
         },
 
+        '删除列' : function(editor) {
+            var selection = editor.getSelection(),
+                element = deleteColumns(selection);
+            element && placeCursorInCell(element, true);
+        },
 
-        'rowInsertBefore': function(editor) {
+        '在上方插入行': function(editor) {
             var selection = editor.getSelection();
             insertRow(selection, true);
         },
 
 
-        'rowInsertAfter' : function(editor) {
+        '在下方插入行' : function(editor) {
             var selection = editor.getSelection();
-            insertRow(selection);
+            insertRow(selection, undefined);
         },
 
 
-        'columnDelete' : function(editor) {
-            var selection = editor.getSelection();
-            var element = deleteColumns(selection);
-            element && placeCursorInCell(element, true);
-        },
 
 
-        'columnInsertBefore' : function(editor) {
+        '在左侧插入列' : function(editor) {
             var selection = editor.getSelection();
             insertColumn(selection, true);
         },
 
 
-        'columnInsertAfter' : function(editor) {
+        '在右侧插入列' : function(editor) {
             var selection = editor.getSelection();
-            insertColumn(selection);
+            insertColumn(selection, undefined);
         }};
 
 

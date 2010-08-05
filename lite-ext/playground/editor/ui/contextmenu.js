@@ -39,7 +39,7 @@ KISSYEDITOR.add("kissy-editor-contextmenu", function(KE) {
             doc.ke_contextmenu = 1;
             Event.on(doc, "mousedown", ContextMenu.hide);
             Event.on(doc, "contextmenu", function(ev) {
-                ContextMenu.hide();
+                ContextMenu.hide.call(this);
                 var t = new Node(ev.target),o = t;
                 while (true) {
                     var name = t._4e_name(),stop = false;
@@ -59,13 +59,15 @@ KISSYEDITOR.add("kissy-editor-contextmenu", function(KE) {
                     t = t.parent();
                 }
             });
-
         }
+        return cm;
     };
     ContextMenu.hide = function() {
+        var doc=this;
         for (var i = 0; i < global_tags.length; i++) {
-            var instance = global_tags[i].instance;
-            instance.hide();
+            var instance = global_tags[i].instance,doc2 = global_tags[i].doc;
+            if (doc === doc2)
+                instance.hide();
         }
     };
 

@@ -26,7 +26,7 @@ link
 
 .ke-triplebutton-disabled {
     opacity: 0.3;
-    filter:alpha(opacity=30);
+    filter: alpha(opacity = 30);
     cursor: default;
 }
 
@@ -39,10 +39,14 @@ focus
 /**
 hover
 **/
+.ke-triplebutton:hover {
+    text-decoration: none;
+}
+
 .ke-triplebutton-off:hover {
     background-color: #A3D7FF;
     opacity: 0.7;
-    filter:alpha(opacity=70);
+    filter: alpha(opacity = 70);
 }
 
 .ke-triplebutton-on:hover {
@@ -51,7 +55,7 @@ hover
 
 .ke-triplebutton-disabled:hover {
     background-color: white;
-    filter:alpha(opacity=30);
+    filter: alpha(opacity = 30);
 }
 
 /**

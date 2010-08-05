@@ -222,7 +222,7 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
             if (contents.length == 1 && contents[0][0] === groupObj.root[0]) {
                 var divBlock = new Node(doc.createElement('div'));
                 contents[0][0].nodeType != KEN.NODE_TEXT && contents[0]._4e_moveChildren(divBlock);
-                contents[0][0].appendChild(divBlock);
+                contents[0][0].appendChild(divBlock[0]);
                 contents[0] = divBlock;
             }
 
@@ -271,7 +271,7 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
                 if (!UA.ie)
                     listItem._4e_appendBogus();
             }
-            if (insertAnchor && insertAnchor[0])
+            if (insertAnchor[0])
                 DOM.insertBefore(listNode[0], insertAnchor[0]);
             else
                 commonParent[0].appendChild(listNode[0]);
@@ -461,8 +461,7 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
             }
 
             // Clean up, restore selection and update toolbar button states.
-            for (var i in database)
-                database[i]._4e_clearMarkers(database, true);
+            KE.Utils.clearAllMarkers(database);
 
             selection.selectBookmarks(bookmarks);
             editor.focus();

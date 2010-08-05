@@ -553,9 +553,9 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                         rangeEnd = dirtyRange.endContainer;
 
                     rangeStart[0] === bookmarkStart.parent()[0] && dirtyRange.startOffset++;
-                    rangeStart[0] === bookmarkEnd.getParent()[0] && dirtyRange.startOffset++;
-                    rangeEnd[0] === bookmarkStart.getParent()[0] && dirtyRange.endOffset++;
-                    rangeEnd[0] === bookmarkEnd.getParent()[0] && dirtyRange.endOffset++;
+                    rangeStart[0] === bookmarkEnd.parent()[0] && dirtyRange.startOffset++;
+                    rangeEnd[0] === bookmarkStart.parent()[0] && dirtyRange.endOffset++;
+                    rangeEnd[0] === bookmarkEnd.parent()[0] && dirtyRange.endOffset++;
                 }
             }
 

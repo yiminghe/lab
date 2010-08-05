@@ -25,7 +25,7 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
         this._ || ( this._ = {} );
     }
 
-    var beginWhitespaceRegex = /^[\r\n\t ]+$/,
+    var beginWhitespaceRegex = /^[\r\n\t ]*$/,///^[\r\n\t ]+$/,//+:*??≤ª∆•≈‰ø’¥Æ
         isBookmark = Walker.bookmark();
 
     S.augment(Iterator, {
@@ -275,11 +275,11 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
 
             if (removePreviousBr) {
                 var previousSibling = new Node(block[0].previousSibling);
-                if (previousSibling && previousSibling.nodeType == KEN.NODE_ELEMENT) {
+                if (previousSibling[0] && previousSibling[0].nodeType == KEN.NODE_ELEMENT) {
                     if (previousSibling._4e_name() == 'br')
-                        previousSibling.remove();
+                        previousSibling._4e_remove();
                     else if (previousSibling[0].lastChild && previousSibling[0].lastChild.nodeName.toLowerCase() == 'br')
-                        DOM.remove(previousSibling[0].lastChild);
+                        DOM._4e_remove(previousSibling[0].lastChild);
                 }
             }
 
@@ -288,12 +288,12 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
                 var bookmarkGuard = Walker.bookmark(false, true);
 
                 var lastChild = new Node(block[0].lastChild);
-                if (lastChild && lastChild[0] && lastChild[0].nodeType == KEN.NODE_ELEMENT && lastChild._4e_name() == 'br') {
+                if (lastChild[0] && lastChild[0].nodeType == KEN.NODE_ELEMENT && lastChild._4e_name() == 'br') {
                     // Take care not to remove the block expanding <br> in non-IE browsers.
                     if (UA.ie
                         || lastChild._4e_previous(bookmarkGuard)
                         || lastChild._4e_next(bookmarkGuard))
-                        lastChild.remove();
+                        lastChild._4e_remove();
                 }
             }
 
