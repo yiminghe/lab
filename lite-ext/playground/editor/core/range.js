@@ -756,8 +756,10 @@ KISSYEDITOR.add("editor-range", function(KE) {
         },
 
         insertNode : function(node) {
-            var self = this,
-                startContainer = self.startContainer,
+            var self = this;
+            self.optimizeBookmark();
+            self.trim(false, true);
+            var startContainer = self.startContainer,
                 startOffset = self.startOffset,
                 nextNode = startContainer[0].childNodes[startOffset];
             self.optimizeBookmark();
