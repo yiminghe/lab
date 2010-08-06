@@ -27,7 +27,6 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
     }
     HTML += "</div>";
 
-    HTML += "<p style='text-align:right;margin:10px;'><button class='ke-tpl-ok'>确定</button></p>";
 
     function TplUI(editor) {
         this.editor = editor;
@@ -40,7 +39,7 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
                 container:editor.toolBarDiv,
                 text:"template",
                 title:"模板"
-            }),ui = new Overlay({mask:true});
+            }),ui = new Overlay({mask:true,title:"内容模板"});
             ui.body.html(HTML);
             var list = ui.body.all(".ke-tpl-list");
 
@@ -59,7 +58,7 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
             var lhtml = ui.body._4e_first(function(n) {
                 return n[0].nodeType == KEN.NODE_ELEMENT;
             });
-            lhtml.on( "mouseleave", function(ev) {
+            lhtml.on("mouseleave", function(ev) {
                 console.log(1);
                 list.removeClass("ke-tpl-hover");
             });
@@ -70,8 +69,9 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
                     return n.hasClass("ke-tpl-list");
                 }, true);
                 if (t) {
-                    list.removeClass("ke-tpl-selected");
-                    t.addClass("ke-tpl-selected");
+                    var index = t._4e_index();
+                    if (index != -1)editor.insertHtml(templates[index].html);
+                    ui.hide();
                 }
             });
 
@@ -80,12 +80,7 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
                 ui.show();
             });
 
-            ui.body.one(".ke-tpl-ok").on("click", function() {
-                editor.focus();
-                var t = ui.body.one(".ke-tpl-selected"),index = t._4e_index();
-                if (index != -1)editor.insertHtml(templates[index].html);
-                ui.hide();
-            });
+
         }
     });
 
