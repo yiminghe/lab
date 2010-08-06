@@ -373,6 +373,7 @@ KISSY.add("editor", function(S) {
         },
 
         insertElement:function(element) {
+
             var self = this,
                 elementName = element._4e_name(),
                 xhtml_dtd = KE.XHTML_DTD,
@@ -387,7 +388,7 @@ KISSY.add("editor", function(S) {
                 current, dtd;
 
             self.focus();
-
+            self.fire("save");
             for (var i = ranges.length - 1; i >= 0; i--) {
                 range = ranges[ i ];
                 // Remove the original contents.
@@ -430,6 +431,32 @@ KISSY.add("editor", function(S) {
                 range.moveToElementEditablePosition(next);
 
             selection.selectRanges([ range ]);
+
+            setTimeout(function() {
+                self.fire("save");
+            }, 10);
+        },
+        insertHtml:function(data) {
+            var self = this;
+            self.focus();
+            self.fire("save");
+            var selection = self.getSelection();
+
+            //if (selection.dataProcessor)
+            //    data = selection.dataProcessor.toHtml(data);
+
+            if (UA.ie) {
+                var $sel = selection.getNative();
+                if ($sel.type == 'Control')
+                    $sel.clear();
+                $sel.createRange().pasteHTML(data);
+            }
+            else
+                self.document.execCommand('inserthtml', false, data);
+
+            setTimeout(function() {
+                self.fire("save");
+            }, 10);
         }
     });
 

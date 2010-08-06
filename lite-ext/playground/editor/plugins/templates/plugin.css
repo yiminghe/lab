@@ -1,0 +1,17 @@
+.ke-tpl {
+    border: 2px solid #EEEEEE;
+    width: 95%;
+    margin: 10px auto;
+}
+
+.ke-tpl-list {
+    border: 1px solid #EEEEEE;
+    margin: 5px;
+    padding: 7px;
+    zoom: 1;
+}
+
+.ke-tpl-hover, .ke-tpl-selected {
+    background-color: #FFFACD;
+    border: 1px solid #FF9933;
+}

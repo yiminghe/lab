@@ -233,7 +233,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
 
                             el.unselectable = 'on';
 
-                            while (( e = element.all[ i++ ] )) {
+                            while (( e = el.all[ i++ ] )) {
                                 switch (e.tagName.toLowerCase()) {
                                     case 'iframe' :
                                     case 'textarea' :
@@ -494,9 +494,15 @@ KISSYEDITOR.add("editor-dom", function(KE) {
 
                 if (!includeSelf)
                     $ = $.parentNode;
+                if (name && !S.isFunction(name)) {
+                    var n = name;
+                    name = function(node) {
+                        return node._4e_name() == n;
+                    };
+                }
 
                 while ($) {
-                    if ($.nodeName && $.nodeName.toLowerCase() == name)
+                    if (!name || name(new Node($)) === true)
                         return new Node($);
 
                     $ = $.parentNode;

@@ -114,6 +114,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv;
             var el = self.el = new TripleButton({
                 container:toolBarDiv,
+                title:this.get("title"),
                 text:this.get("text")
             });
             el.on("offClick", this._showColors, this);
@@ -164,12 +165,14 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
         new ColorSupport({
             editor:editor,
             styles:BACK_STYLES,
+            title:"背景颜色",
             text:"bgcolor"
         });
 
         new ColorSupport({
             editor:editor,
             styles:FORE_STYLES,
+            title:"文本颜色",
             text:"color"
         });
     });

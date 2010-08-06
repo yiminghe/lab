@@ -55,6 +55,7 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
 
             this.el = new Node(BUTTON_HTML);
             this.el.html(this.get("text"));
+            if (this.get("title")) this.el.attr("title", this.get("title"));
             var container = this.get("container")[0] || this.get("container");
             container.appendChild(this.el[0]);
             this.el.on("click", this._action, this);

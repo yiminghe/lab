@@ -85,7 +85,8 @@ KISSYEDITOR.add("editor-styles", function(KE) {
                     : self.type == KEST.STYLE_BLOCK ?
                     applyBlockStyle
                     : self.type == KEST.STYLE_OBJECT ?
-                    applyObjectStyle
+                    null
+                    //applyObjectStyle
                     : null ).call(self, range);
         },
 

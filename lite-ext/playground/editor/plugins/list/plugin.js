@@ -482,6 +482,7 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
         var self = this;
         self.el = new TripleButton({
             text:this.get("type"),
+            title:this.get("title"),
             container:toolBarDiv
         });
         this.listCommand = new listCommand(this.get("type"));
@@ -556,10 +557,12 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
         var editor = ev.editor;
         new List({
             editor:editor,
+            title:"项目列表",
             type:"ul"
         });
         new List({
             editor:editor,
+            title:"编号列表",
             type:"ol"
         });
     });

@@ -104,6 +104,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 myContexts = {};
             self.el = new TripleButton({
                 text:"table",
+                title:"表格",
                 container:toolBarDiv
             });
             var el = self.el;
@@ -133,7 +134,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                     mask:true,
                     title:"编辑表格"
                 }),
-                body=d.body;
+                body = d.body;
             d.body.html(TABLE_HTML);
 
             d.twidth = d.body.one(".ke-table-width");
@@ -184,7 +185,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 selectedTable.attr("border", trim(d.tborder.val()));
 
             if (valid(d.twidth.val()))
-                selectedTable.css("width", trim(d.twidth.val()));
+                selectedTable.css("width", trim(d.twidth.val()) + d.twidthunit.val());
 
             if (valid(d.theight.val()))
                 selectedTable.css("height", trim(d.theight.val()));
@@ -225,7 +226,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                     html += "width:" + S.trim(d.twidth.val()) + d.twidthunit.val() + ";"
                 }
                 if (S.trim(d.theight.val()).length != 0) {
-                    html += "height:" + S.trim(d.theight.val()) + ";"
+                    html += "height:" + S.trim(d.theight.val()) + "px;"
                 }
                 html += "' "
             }
@@ -254,11 +255,45 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
             html += "</table>";
 
             var table = new Node(html, null, editor.document);
-            editor.fire("save");
             editor.insertElement(table);
-            editor.fire("save");
             d.hide();
 
+        },
+        _fillTableDialog:function() {
+            var self = this,
+                d = self.tableDialog,
+                selectedTable = self.selectedTable,
+                caption = selectedTable.one("caption");
+
+
+            d.talign.val(selectedTable.attr("align") || "");
+
+
+            d.tcellspacing.val(selectedTable.attr("cellspacing") || "");
+
+
+            d.tcellpadding.val(selectedTable.attr("cellpadding") || "");
+
+
+            d.tborder.val(selectedTable.attr("border") | "");
+            var w = selectedTable._4e_style("width") || "";
+
+            d.twidth.val(w.replace(/px|%/i, ""));
+            if (w.indexOf("%") != -1) d.twidthunit.val("%");
+            else d.twidthunit.val("px");
+
+            d.theight.val((selectedTable._4e_style("height") || "").replace(/px|%/i, ""));
+            var c = "";
+            if (caption) {
+                c = caption.text();
+            }
+            d.tcaption.val(c);
+
+            d.trows.val(selectedTable.one("tbody").children().length);
+            d.tcols.val(selectedTable.one("tr").children().length);
+            d.thead.val(selectedTable._4e_first(function(n) {
+                return n._4e_name() == "thead";
+            }) ? '1' : '');
         },
         _tableShow:    function() {
             var self = this;
@@ -266,6 +301,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 self._tableInit();
             }
             if (self.selectedTable) {
+                self._fillTableDialog();
                 self.tableDialog.body.all(".ke-table-create-only").attr("disabled", "disabled");
             } else {
                 self.tableDialog.body.all(".ke-table-create-only").removeAttr("disabled");
