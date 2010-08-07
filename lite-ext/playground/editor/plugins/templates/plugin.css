@@ -8,10 +8,12 @@
     border: 1px solid #EEEEEE;
     margin: 5px;
     padding: 7px;
-    zoom: 1;
+    display: block;
+    text-decoration: none;
 }
 
-.ke-tpl-hover, .ke-tpl-selected {
+.ke-tpl-list:hover, .ke-tpl-selected {
     background-color: #FFFACD;
+    text-decoration: none;
     border: 1px solid #FF9933;
 }

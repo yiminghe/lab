@@ -2,6 +2,7 @@
     background-color: #000000;
     left: 0;
     top: 0;
+    border: none;
     position: absolute;
     z-index: 999;
 }
@@ -20,7 +21,7 @@
 
 .ke-dialog {
     position: absolute;
-    z-index: 10000;
+    z-index: 10001;
     background-color: white;
     border: 2px solid #61b623;
 }
@@ -84,7 +85,7 @@
 .ke-focus {
     width: 0;
     height: 0;
-    font-size:0;
-    overflow:hidden;
+    font-size: 0;
+    overflow: hidden;
     outline: none;
 }

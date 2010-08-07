@@ -13,8 +13,9 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
         var self = this;
         Overlay.superclass.constructor.apply(this, arguments);
         this._init();
-        var body = new Node(document.body);
+
         if (S.UA.ie === 6) {
+            var body = new Node(document.body);
             var iframe = new Node("<iframe class='ke-dialog-iframe'></iframe>");
             body[0].appendChild(iframe[0]);
             this.on("show", function() {
@@ -38,17 +39,20 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
         if (this.get("mask")) {
             this.on("show", function() {
                 mask.css({"left":"0px","top":"0px"});
+                if (S.UA.ie == 6)mask_iframe.css({"left":"0px","top":"0px"});
             }, this);
             this.on("hide", function() {
                 mask.css({"left":"-9999px",top:"-9999px"});
+                if (S.UA.ie == 6)mask_iframe.css({"left":"-9999px",top:"-9999px"});
             }, this);
         }
+        this.hide();
     }
 
     Overlay.ATTRS = {
         title:{value:""},
         width:{value:"450px"},
-        visible:{value:false},
+        visible:{value:true},
         mask:{value:false}
     };
 
@@ -60,8 +64,9 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
             this.on("afterVisibleChange", function(ev) {
                 var v = ev.newVal;
                 if (v) {
-                    if (typeof v == "boolean")this.center();
-                    else el.offset(v);
+                    if (typeof v == "boolean") {
+                        this.center();
+                    } else el.offset(v);
                     this.fire("show");
                 } else {
                     el.css({"left":"-9999px",top:"-9999px"});
@@ -120,21 +125,21 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
                 left: bl + "px",
                 top: bt + "px"
             });
-
-
         }
         ,show:function(v) {
             var el = this.get("el");
             this.set("visible", v || true);
-            window.focus();
             el.one(".ke-focus")[0].focus();
         }
         ,hide:function() {
+            var el = this.get("el");
             this.set("visible", false);
+            el.one(".ke-focus")[0].blur();
         }
     });
 
-    var mask = new Node("<div class=\"ke-mask\">&nbsp;</div>");
+    var mask = new Node("<div class=\"ke-mask\">&nbsp;</div>"),
+        mask_iframe;
     S.ready(function() {
         mask.css({"left":"-9999px",top:"-9999px"});
         mask.css({
@@ -142,7 +147,18 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
             "height": S.DOM.docHeight() + "px",
             "opacity": 0.4
         });
+
         mask.appendTo(document.body);
+        if (S.UA.ie == 6) {
+            mask_iframe = new Node("<iframe class='ke-mask'></iframe>");
+            mask_iframe.css({"left":"-9999px",top:"-9999px"});
+            mask_iframe.css({
+                "width": "100%",
+                "height": S.DOM.docHeight() + "px",
+                "opacity": 0.4
+            });
+            mask_iframe.appendTo(document.body);
+        }
         var loading = new Node("<div class='ke-loading'>" +
             "loading ...." +
             "</div>");

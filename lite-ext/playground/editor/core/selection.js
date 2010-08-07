@@ -7,6 +7,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
     var S = KISSY,
         UA = S.UA,
         DOM = S.DOM,
+        Event = S.Event,
         tryThese = KE.Utils.tryThese,
         Node = S.Node,
         KES = KE.SELECTION,
@@ -712,4 +713,144 @@ KISSYEDITOR.add("editor-selection", function(KE) {
         var sel = new KESelection(doc);
         return ( !sel || sel.isInvalid ) ? null : sel;
     }
+
+
+    KE.on("instanceCreated", function(ev) {
+        var editor = ev.editor;
+
+        var doc = editor.document,
+            body = new Node(doc.body);
+
+        if (UA.ie) {
+            //wokao,ie 焦点管理不行啊
+            // Other browsers don't loose the selection if the
+            // editor document loose the focus. In IE, we don't
+            // have support for it, so we reproduce it here, other
+            // than firing the selection change event.
+
+            var savedRange,
+                saveEnabled;
+
+            // "onfocusin" is fired before "onfocus". It makes it
+            // possible to restore the selection before click
+            // events get executed.
+            body.on('focusin', function(evt) {
+                // If there are elements with layout they fire this event but
+                // it must be ignored to allow edit its contents #4682
+                if (evt.target.nodeName.toUpperCase() != 'BODY')
+                    return;
+
+                // If we have saved a range, restore it at this
+                // point.
+                if (savedRange) {
+                    // Well not break because of this.
+                    try {
+                        savedRange.select();
+                    }
+                    catch (e) {
+                    }
+
+                    savedRange = null;
+                }
+            });
+
+            body.on('focus', function() {
+                // Enable selections to be saved.
+                saveEnabled = true;
+                saveSelection();
+            });
+
+            body.on('beforedeactivate', function(evt) {
+                // Ignore this event if it's caused by focus switch between
+                // internal editable control type elements, e.g. layouted paragraph. (#4682)
+                if (evt.relatedTarget)
+                    return;
+
+                // Disable selections from being saved.
+                saveEnabled = false;
+            });
+
+            // IE before version 8 will leave cursor blinking inside the document after
+            // editor blurred unless we clean up the selection. (#4716)
+            if (UA.ie < 8) {
+                Event.on(DOM._4e_getWin(doc), 'blur', function(evt) {
+                    doc.selection.empty();
+                });
+            }
+
+            // IE fires the "selectionchange" event when clicking
+            // inside a selection. We don't want to capture that.
+            body.on('mousedown', disableSave);
+            body.on('mouseup', function() {
+                saveEnabled = true;
+                setTimeout(function() {
+                    saveSelection(true);
+                },
+                    0);
+            });
+
+            body.on('keydown', disableSave);
+            body.on('keyup', function() {
+                saveEnabled = true;
+                saveSelection();
+            });
+
+
+            // IE is the only to provide the "selectionchange"
+            // event.
+            Event.on(doc, 'selectionchange', saveSelection);
+
+            function disableSave() {
+                saveEnabled = false;
+            }
+
+            function saveSelection(testIt) {
+                if (saveEnabled) {
+                    var doc = editor.document,
+                        sel = editor.getSelection(),
+                        nativeSel = sel && sel.getNative();
+
+                    // There is a very specific case, when clicking
+                    // inside a text selection. In that case, the
+                    // selection collapses at the clicking point,
+                    // but the selection object remains in an
+                    // unknown state, making createRange return a
+                    // range at the very start of the document. In
+                    // such situation we have to test the range, to
+                    // be sure it's valid.
+                    if (testIt && nativeSel && nativeSel.type == 'None') {
+                        // The "InsertImage" command can be used to
+                        // test whether the selection is good or not.
+                        // If not, it's enough to give some time to
+                        // IE to put things in order for us.
+                        if (!doc.queryCommandEnabled('InsertImage')) {
+                            setTimeout(function() {
+                                saveSelection(true);
+                            }, 50);
+                            return;
+                        }
+                    }
+
+                    // Avoid saving selection from within text input. (#5747)
+                    var parentTag;
+                    if (nativeSel && nativeSel.type == 'Text'
+                        && ( parentTag = nativeSel.createRange().parentElement().nodeName.toLowerCase() )
+                        && parentTag in { input: 1, textarea : 1 }) {
+                        return;
+                    }
+                    savedRange = nativeSel && sel.getRanges()[ 0 ];
+                    editor._monitor();
+                }
+            }
+
+
+        } else {
+            // In other browsers, we make the selection change
+            // check based on other events, like clicks or keys
+            // press.
+            Event.on(doc, 'mouseup', editor._monitor, editor);
+            Event.on(doc, 'keyup', editor._monitor, editor);
+        }
+
+    });
 });

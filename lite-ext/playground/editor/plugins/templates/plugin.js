@@ -23,7 +23,7 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
 
     for (var i = 0; i < templates.length; i++) {
         var t = templates[i];
-        HTML += "<div class='ke-tpl-list'>" + t.demo + "</div>";
+        HTML += "<a href='javascript:void(0)' class='ke-tpl-list' tabIndex='-1'>" + t.demo + "</a>";
     }
     HTML += "</div>";
 
@@ -39,40 +39,20 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
                 container:editor.toolBarDiv,
                 text:"template",
                 title:"模板"
-            }),ui = new Overlay({mask:true,title:"内容模板"});
+            }),ui = new Overlay({mask:false,title:"内容模板"});
             ui.body.html(HTML);
             var list = ui.body.all(".ke-tpl-list");
-
-            ui.body.on("mouseover", function(ev) {
+            ui.on("hide",function(){
+               editor.focus();
+            });
+            list.on("click", function(ev) {
+                ev.halt();
                 var t = new Node(ev.target);
-                //alert(t._4e_name());
-                t = t._4e_ascendant(function(n) {
-                    return n.hasClass("ke-tpl-list");
-                }, true);
-                //alert(t);
-                if (t) {
-                    list.removeClass("ke-tpl-hover");
-                    t.addClass("ke-tpl-hover");
+                var index = t._4e_index();
+                if (index != -1) {
+                    editor.insertHtml(templates[index].html);
                 }
-            });
-            var lhtml = ui.body._4e_first(function(n) {
-                return n[0].nodeType == KEN.NODE_ELEMENT;
-            });
-            lhtml.on("mouseleave", function(ev) {
-                console.log(1);
-                list.removeClass("ke-tpl-hover");
-            });
-
-            ui.body.on("click", function(ev) {
-                var t = new Node(ev.target);
-                t = t._4e_ascendant(function(n) {
-                    return n.hasClass("ke-tpl-list");
-                }, true);
-                if (t) {
-                    var index = t._4e_index();
-                    if (index != -1)editor.insertHtml(templates[index].html);
-                    ui.hide();
-                }
+                ui.hide();
             });
 
             self.ui = ui;

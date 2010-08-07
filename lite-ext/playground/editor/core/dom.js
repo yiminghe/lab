@@ -66,7 +66,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                 return (elem && ('scrollTo' in elem) && elem["document"]) ?
                     elem :
                     elem && elem.nodeType === 9 ?
-                        elem.parentWindow || elem.defaultView :
+                        elem.defaultView || elem.parentWindow :
                         false;
             },
             _4e_index:function(el) {

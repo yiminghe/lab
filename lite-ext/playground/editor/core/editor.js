@@ -47,8 +47,11 @@ KISSY.add("editor", function(S) {
         focus:function() {
             var self = this;
             //setTimeout(function() {
-            //DOM._4e_getWin(self.document).focus();
+            //var win = DOM._4e_getWin(self.document);
+            //win.parent && win.parent.blur();
+            //win.focus();
             self.document.body.focus();
+            self.notifySelectionChange();
             //}, 10);
         },
         _init:function() {
@@ -335,47 +338,35 @@ KISSY.add("editor", function(S) {
         },
 
         _monitor:function() {
-            var self = this,
-                mid = null,
-                KE = KISSYEDITOR;
-            self.previousPath = null;
-            //return;
-            Event.on(DOM._4e_getWin(self.document), "focus", function() {
-                if (mid) {
-                    return;
-                }
-                mid = setTimeout(function() {
-                    //console.log("monitor....");
-                    var selection = self.getSelection();
-                    if (!selection.isInvalid) {
-                        var startElement = selection.getStartElement(),
-                            currentPath = new KE.ElementPath(startElement);
-                        if (!self.previousPath || !self.previousPath.compare(currentPath)) {
-                            self.previousPath = currentPath;
-                            self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
-                        }
+            var self = this;
+            if (self._monitorId) {
+                clearTimeout(self._monitorId);
+            }
+            self._monitorId = setTimeout(function() {
+                var selection = self.getSelection();
+                if (selection && !selection.isInvalid) {
+                    var startElement = selection.getStartElement(),
+                        currentPath = new KE.ElementPath(startElement);
+                    if (!self.previousPath || !self.previousPath.compare(currentPath)) {
+                        self.previousPath = currentPath;
+                        self.fire("selectionChange", { selection : self, path : currentPath, element : startElement });
                     }
-                    mid = setTimeout(arguments.callee, 200);
-                }, 200);
-            });
-
-            Event.on(DOM._4e_getWin(self.document), "blur", function() {
-                //console.log("monitor cancel");
-                if (mid) clearTimeout(mid);
-                mid = null;
-            });
+                }
+            }, 200);
         },
         /**
          * 强制通知插件更新状态，防止插件修改编辑器内容，自己反而得不到通知
          */
         notifySelectionChange:function() {
             this.previousPath = null;
+            this._monitor();
         },
 
         insertElement:function(element) {
+            var self = this;
+            self.focus();
 
-            var self = this,
-                elementName = element._4e_name(),
+            var elementName = element._4e_name(),
                 xhtml_dtd = KE.XHTML_DTD,
                 KER = KE.RANGE,
                 KEN = KE.NODE,
@@ -387,7 +378,6 @@ KISSY.add("editor", function(S) {
                 lastElement,
                 current, dtd;
 
-            self.focus();
             self.fire("save");
             for (var i = ranges.length - 1; i >= 0; i--) {
                 range = ranges[ i ];
@@ -431,7 +421,7 @@ KISSY.add("editor", function(S) {
                 range.moveToElementEditablePosition(next);
 
             selection.selectRanges([ range ]);
-
+            self.focus();
             setTimeout(function() {
                 self.fire("save");
             }, 10);
@@ -453,7 +443,7 @@ KISSY.add("editor", function(S) {
             }
             else
                 self.document.execCommand('inserthtml', false, data);
-
+            self.focus();
             setTimeout(function() {
                 self.fire("save");
             }, 10);
