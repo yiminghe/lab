@@ -61,7 +61,6 @@ KISSYEDITOR.add("editor-plugin-justify", function(KE) {
             var self = this,
                 el = self.el,
                 path = ev.path,elements = path.elements,block = path.block || path.blockLimit;
-
             var align = block.css("text-align").replace(alignRemoveRegex, "");
             if (align == self.v || (!align && self.v == default_align)) {
                 el.set("state", TripleButton.ON);

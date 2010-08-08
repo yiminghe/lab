@@ -7,12 +7,14 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
         Node = S.Node,
         Event = S.Event,
         KEN = KE.NODE,
+        UA = S.UA,
+        DOM = S.DOM,
         TripleButton = KE.TripleButton,
         Overlay = KE.SimpleOverlay,
         templates = [
             {
                 demo:"模板1效果演示html"  ,
-                html:"<div style='border:1px solid red'>模板1效果演示html</div>"
+                html:"<div style='border:1px solid red'>模板1效果演示html</div><p>fine?</p>"
             },
             {
                 demo:"模板2效果演示html",
@@ -42,8 +44,8 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
             }),ui = new Overlay({mask:false,title:"内容模板"});
             ui.body.html(HTML);
             var list = ui.body.all(".ke-tpl-list");
-            ui.on("hide",function(){
-               editor.focus();
+            ui.on("hide", function() {
+                editor.focus();
             });
             list.on("click", function(ev) {
                 ev.halt();

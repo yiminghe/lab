@@ -47,9 +47,11 @@ KISSY.add("editor", function(S) {
         focus:function() {
             var self = this;
             //setTimeout(function() {
-            //var win = DOM._4e_getWin(self.document);
+            var win = DOM._4e_getWin(self.document);
             //win.parent && win.parent.blur();
-            //win.focus();
+            //yiminghe note:webkit need win.focus
+            win.focus();
+            //ie and firefox need body focus
             self.document.body.focus();
             self.notifySelectionChange();
             //}, 10);
@@ -332,7 +334,6 @@ KISSY.add("editor", function(S) {
 
             createIFrame(data);
             self.on("dataReady", function() {
-                self._monitor();
                 KISSYEDITOR.fire("instanceCreated", {editor:self});
             });
         },
@@ -419,7 +420,6 @@ KISSY.add("editor", function(S) {
             var next = lastElement._4e_nextSourceNode(true);
             if (next && next.type == KEN.NODE_ELEMENT)
                 range.moveToElementEditablePosition(next);
-
             selection.selectRanges([ range ]);
             self.focus();
             setTimeout(function() {
@@ -427,6 +427,19 @@ KISSY.add("editor", function(S) {
             }, 10);
         },
         insertHtml:function(data) {
+            /**
+             * webkit insert html 有问题！会把标签去掉，算了直接用insertElement
+             */
+            if (UA.webkit) {
+                var nodes = DOM.create(data, null, this.document);
+                if (nodes.nodeType == 11) nodes = S.makeArray(nodes.childNodes);
+                else nodes = [nodes];
+                for (var i = 0; i < nodes.length; i++)
+                    this.insertElement(new Node(nodes[i]));
+                return;
+            }
+
+
             var self = this;
             self.focus();
             self.fire("save");
@@ -441,8 +454,9 @@ KISSY.add("editor", function(S) {
                     $sel.clear();
                 $sel.createRange().pasteHTML(data);
             }
-            else
+            else {
                 self.document.execCommand('inserthtml', false, data);
+            }
             self.focus();
             setTimeout(function() {
                 self.fire("save");
