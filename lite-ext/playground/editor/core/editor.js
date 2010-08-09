@@ -34,11 +34,11 @@ KISSY.add("editor", function(S) {
             editorWrap = new Node("<div class='ke-editor-wrap'></div>"),
             wrap = new Node("<div class='ke-textarea-wrap'></div>");
         self.toolBarDiv = new Node("<div class='ke-editor-tools'></div>");
-        editorWrap.css("width", textarea.css("width"));
-        wrap.css("height", textarea.css("height"));
+        textarea.css("width") && editorWrap.css("width", textarea.css("width"));
+        textarea.css("height") && wrap.css("height", textarea.css("height"));
+        textarea[0].parentNode.insertBefore(editorWrap[0], textarea[0]);
         editorWrap[0].appendChild(self.toolBarDiv[0]);
         editorWrap[0].appendChild(wrap[0]);
-        document.body.insertBefore(editorWrap[0], textarea[0]);
         wrap[0].appendChild(textarea[0]);
         self.textarea = textarea;
         self._init();
@@ -53,7 +53,8 @@ KISSY.add("editor", function(S) {
             self.iframe.css(DISPLAY, "");
             self.textarea.css(DISPLAY, NONE);
             self.toolBarDiv.children().css(DISPLAY, "");
-            self.focus();
+            self.statusDiv && self.statusDiv.css(DISPLAY, "");
+            //self.focus();
         },
 
         _showSource:    function() {
@@ -61,6 +62,7 @@ KISSY.add("editor", function(S) {
             self.textarea.css(DISPLAY, "");
             self.iframe.css(DISPLAY, NONE);
             self.toolBarDiv.children().css(DISPLAY, NONE);
+            self.statusDiv && self.statusDiv.css(DISPLAY, NONE);
             self.textarea[0].focus();
         },
         getData:function() {
