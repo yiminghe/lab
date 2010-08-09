@@ -1,8 +1,12 @@
 <textarea style="width:90%;height:300px;" id='t'></textarea>
 <br/>
 <button id='run'>变为小写</button>
+<button id='run2'>变为大写</button>
 <script>
-document.getElementById("run").onclick=function(){
-document.getElementById("t").value=document.getElementById("t").value.toLowerCase();
-}
+    document.getElementById("run").onclick = function() {
+        document.getElementById("t").value = document.getElementById("t").value.toLowerCase();
+    };
+    document.getElementById("run2").onclick = function() {
+        document.getElementById("t").value = document.getElementById("t").value.toUpperCase();
+    };
 </script>
