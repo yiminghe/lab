@@ -8,8 +8,7 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
         ON = "on",
         OFF = "off",
         DISABLED = "disabled",
-        Node = S.Node,
-        DOM = S.DOM;
+        Node = S.Node;
     if (false && !S.TripleButton) {
         var seed = "";
         var styleSheet = document.createElement("style");
@@ -63,7 +62,7 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
         },
 
         _stateChange:function(ev) {
-            var n = ev.newVal,pre = ev.preVal;
+            var n = ev.newVal;
             this["_" + n]();
         },
 

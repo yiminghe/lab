@@ -5,7 +5,6 @@
 KISSYEDITOR.add("editor-utils", function(KE) {
     var S = KISSY,Node = S.Node,DOM = S.DOM;
     KE.Utils = {
-
         getXY:function(x, y, srcDoc, destDoc) {
             var currentWindow = srcDoc.defaultView || srcDoc.parentWindow;
 
@@ -92,6 +91,27 @@ KISSYEDITOR.add("editor-utils", function(KE) {
         clearAllMarkers:function(database) {
             for (var i in database)
                 database[i]._4e_clearMarkers(database, true);
+        },
+        htmlEncodeAttr : function(text) {
+            return text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/, '&gt;');
+        },
+        ltrim:function(str) {
+            return str.replace(/^\s+/, "");
+        },
+
+        rtrim:function(str) {
+            return str.replace(/\s+$/, "");
+        },
+        trim:function(str) {
+            return this.ltrim(this.rtrim(str));
+        },
+        mix:function() {
+            var r = {};
+            for (var i = 0; i < arguments.length; i++) {
+                var ob = arguments[i];
+                r = S.mix(r, ob);
+            }
+            return r;
         }
     };
 

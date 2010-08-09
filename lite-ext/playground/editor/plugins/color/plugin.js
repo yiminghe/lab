@@ -125,8 +125,11 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             Event.on(editor.document, "click", this._hidePanel, this);
 
         },
-        _hidePanel:function() {
-            this.colorPanel.css("display", "none");
+        _hidePanel:function(ev) {
+            var t = ev.target;
+            //多窗口管理
+            if (t !== this.el.el[0])
+                this.colorPanel.css("display", "none");
         },
         _selectColor:function(ev) {
             ev.halt();
@@ -151,7 +154,6 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             }
         },
         _showColors:function(ev) {
-            ev.halt();
             this.colorPanel.css("display", "");
             var xy = this.el.el.offset();
             xy.top += this.el.el.height() + 5;

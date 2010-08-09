@@ -1,0 +1,15 @@
+.ke-textarea-wrap {
+    border: 1px solid green;
+}
+
+.ke-editor-tools {
+    border: 1px solid gray;
+    border-bottom: none;
+    padding: 0 5px;
+}
+
+.ke-editor-status {
+    border: 1px solid gray;
+    border-top: none;
+    height: 17px;
+}

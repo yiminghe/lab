@@ -41,7 +41,7 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
                 container:editor.toolBarDiv,
                 text:"template",
                 title:"模板"
-            }),ui = new Overlay({mask:false,title:"内容模板"});
+            }),ui = new Overlay({mask:true,title:"内容模板"});
             ui.body.html(HTML);
             var list = ui.body.all(".ke-tpl-list");
             ui.on("hide", function() {

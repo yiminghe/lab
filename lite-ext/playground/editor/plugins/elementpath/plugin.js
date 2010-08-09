@@ -14,7 +14,9 @@ KISSYEDITOR.add("editor-plugin-elementpaths", function(KE) {
 
     S.augment(ElementPaths, {
         _init:function() {
-            var cfg = this.cfg,editor = cfg.editor,statusDiv = editor.statusDiv;
+            var cfg = this.cfg,editor = cfg.editor,textarea = editor.textarea[0];
+            editor.statusDiv = new Node("<div class='ke-editor-status'></div>");
+            textarea.parentNode.parentNode.appendChild(editor.statusDiv[0]);
             editor.on("selectionChange", this._selectionChange, this);
         },
         _selectionChange:function(ev) {

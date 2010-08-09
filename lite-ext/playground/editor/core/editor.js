@@ -8,6 +8,8 @@ KISSY.add("editor", function(S) {
         Node = S.Node,
         Event = S.Event,
         KE = KISSYEDITOR,
+        DISPLAY = "display",
+        NONE = "none",
         tryThese = KE.Utils.tryThese,
         DOM = S.DOM,
         DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
@@ -26,11 +28,19 @@ KISSY.add("editor", function(S) {
         }
     })();
 
-    function Editor(textarea, toolBarDiv, statusDiv) {
-        var self = this;
-        self.textarea = textarea[0] || textarea;
-        self.toolBarDiv = toolBarDiv;
-        self.statusDiv = statusDiv;
+    function Editor(textarea) {
+        if (!textarea[0]) textarea = new Node(textarea);
+        var self = this,
+            editorWrap = new Node("<div class='ke-editor-wrap'></div>"),
+            wrap = new Node("<div class='ke-textarea-wrap'></div>");
+        self.toolBarDiv = new Node("<div class='ke-editor-tools'></div>");
+        editorWrap.css("width", textarea.css("width"));
+        wrap.css("height", textarea.css("height"));
+        editorWrap[0].appendChild(self.toolBarDiv[0]);
+        editorWrap[0].appendChild(wrap[0]);
+        document.body.insertBefore(editorWrap[0], textarea[0]);
+        wrap[0].appendChild(textarea[0]);
+        self.textarea = textarea;
         self._init();
     }
 
@@ -38,32 +48,47 @@ KISSY.add("editor", function(S) {
         setData:function(data) {
             this.document.body.innerHTML = data;
         },
-        getData:function() {
-            return this.document.body.innerHTML;
-        },
-        getSelection:function() {
-            return new KISSYEDITOR.Selection(this.document);
-        },
-        focus:function() {
+        _hideSource:function() {
             var self = this;
-            //setTimeout(function() {
-            var win = DOM._4e_getWin(self.document);
+            self.iframe.css(DISPLAY, "");
+            self.textarea.css(DISPLAY, NONE);
+            self.toolBarDiv.children().css(DISPLAY, "");
+            self.focus();
+        },
+
+        _showSource:    function() {
+            var self = this;
+            self.textarea.css(DISPLAY, "");
+            self.iframe.css(DISPLAY, NONE);
+            self.toolBarDiv.children().css(DISPLAY, NONE);
+            self.textarea[0].focus();
+        },
+        getData:function() {
+            if (KE.HtmlDataProcessor)
+                return KE.HtmlDataProcessor.toDataFormat(this.document.body.innerHTML, "p");
+            return this.document.body.innerHTML;
+        } ,
+        getSelection:function() {
+            return new KE.Selection(this.document);
+        } ,
+        focus:function() {
+            var self = this,
+                win = DOM._4e_getWin(self.document);
             //win.parent && win.parent.blur();
             //yiminghe note:webkit need win.focus
-            win.focus();
+            win && win.focus();
             //ie and firefox need body focus
-            self.document.body.focus();
+            self.document && self.document.body.focus();
             self.notifySelectionChange();
-            //}, 10);
-        },
+        } ,
         _init:function() {
             var iframe,
                 frameLoaded,
                 self = this,
-                KE = KISSYEDITOR,
                 KER = KE.RANGE,
                 KERange = KE.Range,
                 KES = KE.SELECTION,
+                textarea = self.textarea[0],
                 createIFrame = function(data) {
                     if (iframe)
                         iframe.remove();
@@ -79,7 +104,7 @@ KISSY.add("editor", function(S) {
                         // for other browsers, the 'src' attribute should be left empty to
                         // trigger iframe's 'load' event.
                         ' src="' + ( UA.ie ? 'javascript:void(function(){' + encodeURIComponent(srcScript) + '}())' : '' ) + '"' +
-                        ' tabIndex="' + ( UA.webkit ? -1 : self.textarea.tabIndex ) + '"' +
+                        ' tabIndex="' + ( UA.webkit ? -1 : textarea.tabIndex ) + '"' +
                         ' allowTransparency="true"' +
                         '></iframe>');
 
@@ -201,7 +226,7 @@ KISSY.add("editor", function(S) {
                             var focusGrabber;
                             focusGrabber = new Node(DOM.insertAfter(new Node(
                                 // Use 'span' instead of anything else to fly under the screen-reader radar. (#5049)
-                                '<span tabindex="-1" style="position:absolute; left:-10000" role="presentation"></span>')[0], self.textarea));
+                                '<span tabindex="-1" style="position:absolute; left:-10000" role="presentation"></span>')[0], textarea));
                             focusGrabber.on('focus', function() {
                                 self.focus();
                             });
@@ -228,26 +253,27 @@ KISSY.add("editor", function(S) {
                             });
                         }
 
-                        /*
-                         加上这段，chrome有问题，iframe内滚动条问题
-                         Event.on(win, 'focus', function() {
-                         var doc = self.document;
 
-                         if (UA.gecko)
-                         blinkCursor();
-                         else if (UA.opera)
-                         doc.body.focus();
-                         else if (UA.webkit) {
-                         // Selection will get lost after move focus
-                         // to document element, save it first.
-                         var sel = self.getSelection(),
-                         type = sel.getType(),
-                         range = ( type != KES.SELECTION_NONE ) && sel.getRanges()[ 0 ];
+                        Event.on(win, 'focus', function() {
+                            var doc = self.document;
 
-                         doc.documentElement.focus();
-                         range && range.select();
-                         }
-                         });*/
+                            if (UA.gecko)
+                                blinkCursor();
+                            else if (UA.opera)
+                                doc.body.focus();
+                            else if (false && UA.webkit) {
+                                /*
+                                 加上这段，chrome有问题，iframe内滚动条问题*/
+                                // Selection will get lost after move focus
+                                // to document element, save it first.
+                                var sel = self.getSelection(),
+                                    type = sel.getType(),
+                                    range = ( type != KES.SELECTION_NONE ) && sel.getRanges()[ 0 ];
+
+                                doc.documentElement.focus();
+                                range && range.select();
+                            }
+                        });
 
                         if (UA.ie) {
                             new Node(doc.documentElement).addClass(doc.compatMode);
@@ -314,8 +340,9 @@ KISSY.add("editor", function(S) {
                             self.fire("dataReady");
                         }, 10);
                     });
-                    self.textarea.style.display = "none";
-                    DOM.insertAfter(iframe[0], self.textarea);
+
+                    DOM.insertAfter(iframe[0], textarea);
+                    self.textarea.css(DISPLAY, NONE);
                 };
 
 
@@ -328,15 +355,16 @@ KISSY.add("editor", function(S) {
                 + "' rel='stylesheet'/>"
                 + "</head>"
                 + "<body>"
-                + (self.textarea.value || "")
+                + (textarea.value || "")
                 + "</body>"
                 + "<html>";
 
             createIFrame(data);
+            self.iframe = iframe;
             self.on("dataReady", function() {
-                KISSYEDITOR.fire("instanceCreated", {editor:self});
+                KE.fire("instanceCreated", {editor:self});
             });
-        },
+        } ,
 
         _monitor:function() {
             var self = this;
@@ -354,14 +382,16 @@ KISSY.add("editor", function(S) {
                     }
                 }
             }, 200);
-        },
+        }
+        ,
         /**
          * 强制通知插件更新状态，防止插件修改编辑器内容，自己反而得不到通知
          */
         notifySelectionChange:function() {
             this.previousPath = null;
             this._monitor();
-        },
+        }
+        ,
 
         insertElement:function(element) {
             var self = this;
@@ -425,7 +455,8 @@ KISSY.add("editor", function(S) {
             setTimeout(function() {
                 self.fire("save");
             }, 10);
-        },
+        }
+        ,
         insertHtml:function(data) {
             /**
              * webkit insert html 有问题！会把标签去掉，算了直接用insertElement
@@ -467,4 +498,5 @@ KISSY.add("editor", function(S) {
     S.Editor = Editor;
 
 
-});
+})
+    ;

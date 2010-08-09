@@ -9,6 +9,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
         UA = S.UA,
         doc = document,
         Node = S.Node,
+        Utils = KE.Utils,
         GET_BOUNDING_CLIENT_RECT = 'getBoundingClientRect',
         REMOVE_EMPTY = {abbr:1,acronym:1,address:1,b:1,bdo:1,big:1,cite:1,code:1,del:1,dfn:1,em:1,font:1,i:1,ins:1,label:1,kbd:1,q:1,s:1,samp:1,small:1,span:1,strike:1,strong:1,sub:1,sup:1,tt:1,u:1,'var':1};
     KE.NODE = {
@@ -690,7 +691,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                 var child;
                 while (( child = el.firstChild )) {
                     if (child.nodeType == KEN.NODE_TEXT) {
-                        var trimmed = ltrim(child.nodeValue),
+                        var trimmed = Utils.ltrim(child.nodeValue),
                             originalLength = child.nodeValue.length;
 
                         if (!trimmed) {
@@ -712,7 +713,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                 var child;
                 while (( child = el.lastChild )) {
                     if (child.type == KEN.NODE_TEXT) {
-                        var trimmed = rtrim(child.nodeValue),
+                        var trimmed = Utils.rtrim(child.nodeValue),
                             originalLength = child.nodeValue.length;
 
                         if (!trimmed) {
@@ -913,13 +914,6 @@ KISSYEDITOR.add("editor-dom", function(KE) {
             }
         };
 
-    function ltrim(str) {
-        return str.replace(/^\s+/, "");
-    }
-
-    function rtrim(str) {
-        return str.replace(/\s+$/, "");
-    }
 
     function normalizeStyle(styleName) {
         return styleName.replace(/-(\w)/g, function(m, g1) {
