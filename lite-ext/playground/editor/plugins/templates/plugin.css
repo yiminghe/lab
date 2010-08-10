@@ -10,6 +10,7 @@
     padding: 7px;
     display: block;
     text-decoration: none;
+    zoom:1;
 }
 
 .ke-tpl-list:hover, .ke-tpl-selected {

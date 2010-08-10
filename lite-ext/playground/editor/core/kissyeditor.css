@@ -1,3 +1,7 @@
+.ke-editor-wrap {
+    background: white;
+}
+
 .ke-textarea-wrap {
     border: 1px solid green;
 }

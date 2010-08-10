@@ -1,8 +1,8 @@
 /*
- Copyright 2010, KISSY UI Library v1.1.0
- MIT Licensed
- build time: Aug 2 23:52
- */
+Copyright 2010, KISSY UI Library v1.1.2dev
+MIT Licensed
+build time: ${build.time}
+*/
 /**
  * @module kissy
  * @author lifesinger@gmail.com
@@ -64,7 +64,7 @@
          * The version of the library.
          * @type {String}
          */
-        version: '1.1.0',
+        version: '1.1.2dev',
 
         /**
          * Initializes KISSY object.
@@ -158,7 +158,7 @@
                 doc.addEventListener(eventType, domReady, false);
 
                 // A fallback to window.onload, that will always work
-                win.addEventListener('load', fire, false);
+			    win.addEventListener('load', fire, false);
             }
             // IE event model is used
             else {
@@ -185,7 +185,6 @@
                             setTimeout(readyScroll, 1);
                         }
                     }
-
                     readyScroll();
                 }
             }
@@ -437,10 +436,10 @@
  *
  */
 /**
- * @module  kissy-lang
+ * @module  lang
  * @author  lifesinger@gmail.com
  */
-KISSY.add('kissy-lang', function(S, undefined) {
+KISSY.add('lang', function(S, undefined) {
 
     var win = window, doc = document, loc = location,
         AP = Array.prototype,
@@ -450,7 +449,7 @@ KISSY.add('kissy-lang', function(S, undefined) {
         encode = encodeURIComponent,
         decode = decodeURIComponent,
         HAS_OWN_PROPERTY = 'hasOwnProperty',
-        SEP = '&',
+        EMPTY = '', SEP = '&',
         REG_TRIM = /^\s+|\s+$/g,
         REG_ARR_KEY = /^(\w+)\[\]$/,
         REG_NOT_WHITE = /\S/;
@@ -526,11 +525,24 @@ KISSY.add('kissy-lang', function(S, undefined) {
          */
         trim: trim ?
             function(str) {
-                return (str == undefined) ? '' : trim.call(str);
+                return (str == undefined) ? EMPTY : trim.call(str);
             } :
             function(str) {
-                return (str == undefined) ? '' : str.toString().replace(REG_TRIM, '');
+                return (str == undefined) ? EMPTY : str.toString().replace(REG_TRIM, EMPTY);
             },
+
+        /**
+         * Substitutes keywords in a string using an object/array.
+         * Removes undefined keywords and ignores escaped keywords.
+         */
+        substitute: function(str, o, regexp) {
+            if(!S.isString(str) || !S.isPlainObject(o)) return str;
+
+            return str.replace(regexp || /\\?\{([^{}]+)\}/g, function(match, name) {
+                if (match.charAt(0) === '\\') return match.slice(1);
+                return (o[name] !== undefined) ? o[name] : EMPTY;
+            });
+        },
 
         /**
          * Executes the supplied function on each item in the array.
@@ -631,7 +643,7 @@ KISSY.add('kissy-lang', function(S, undefined) {
          */
         param: function(o, sep) {
             // 非 plain object, 直接返回空
-            if (!S.isPlainObject(o)) return '';
+            if (!S.isPlainObject(o)) return EMPTY;
             sep = sep || SEP;
 
             var buf = [], key, val;
@@ -641,20 +653,20 @@ KISSY.add('kissy-lang', function(S, undefined) {
 
                 // val 为有效的非数组值
                 if (isValidParamValue(val)) {
-                    buf.push(key, '=', encode(val + ''), sep);
+                    buf.push(key, '=', encode(val + EMPTY), sep);
                 }
                 // val 为非空数组
                 else if (S.isArray(val) && val.length) {
                     for (var i = 0, len = val.length; i < len; ++i) {
                         if (isValidParamValue(val[i])) {
-                            buf.push(key, '[]=', encode(val[i] + ''), sep);
+                            buf.push(key, '[]=', encode(val[i] + EMPTY), sep);
                         }
                     }
                 }
                 // 其它情况：包括空数组、不是数组的 object（包括 Function, RegExp, Date etc.），直接丢弃
             }
             buf.pop();
-            return buf.join('');
+            return buf.join(EMPTY);
         },
 
         /**
@@ -680,9 +692,9 @@ KISSY.add('kissy-lang', function(S, undefined) {
 
                 // pair[1] 可能包含 gbk 编码的中文，而 decodeURIComponent 仅能处理 utf-8 编码的中文，否则报错
                 try {
-                    val = decode(pair[1] || '');
+                    val = decode(pair[1] || EMPTY);
                 } catch (ex) {
-                    val = pair[1] || '';
+                    val = pair[1] || EMPTY;
                 }
 
                 if ((m = key.match(REG_ARR_KEY)) && m[1]) {
@@ -823,10 +835,10 @@ KISSY.add('kissy-lang', function(S, undefined) {
  *
  */
 /**
- * @module  kissy-ua
+ * @module  ua
  * @author  lifesinger@gmail.com
  */
-KISSY.add('kissy-ua', function(S) {
+KISSY.add('ua', function(S) {
 
     var ua = navigator.userAgent,
         m,
@@ -881,13 +893,13 @@ KISSY.add('kissy-ua', function(S) {
                 o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
             }
 
-            // NOT WebKit or Opera
+        // NOT WebKit or Opera
         } else {
             // MSIE
             if ((m = ua.match(/MSIE\s([^;]*)/)) && m[1]) {
                 o.ie = numberify(m[1]);
 
-                // NOT WebKit, Opera or IE
+            // NOT WebKit, Opera or IE
             } else {
                 // Gecko
                 if ((m = ua.match(/Gecko/))) {
@@ -905,6 +917,7 @@ KISSY.add('kissy-ua', function(S) {
         }
     }
 
+    o._numberify = numberify;
     S.UA = o;
 });
 
@@ -921,14 +934,13 @@ KISSY.add('kissy-ua', function(S) {
  *
  * TODO:
  *  - test mobile
- *  - 是否需要加入 maxthon 等国内浏览器嗅探？
  *
  */
 /*
- Copyright 2010, KISSY UI Library v1.1.1dev
- MIT Licensed
- build time: ${build.time}
- */
+Copyright 2010, KISSY UI Library v1.1.2dev
+MIT Licensed
+build time: ${build.time}
+*/
 /**
  * @module  dom
  * @author  lifesinger@gmail.com
@@ -937,36 +949,36 @@ KISSY.add('dom', function(S) {
 
     var NODE_TYPE = 'nodeType',
 
-        DOM = {
+    DOM = {
 
-            /**
-             * 是不是 element/text node
-             */
-            _isSupportedNode: function(elem) {
-                return DOM._isElementNode(elem) || DOM._isTextNode(elem);
-            },
+        /**
+         * 是不是 element/text node
+         */
+        _isSupportedNode: function(elem) {
+            return DOM._isElementNode(elem) || DOM._isTextNode(elem);
+        },
 
-            /**
-             * 是不是 element node
-             */
-            _isElementNode: function(elem) {
-                return elem && elem[NODE_TYPE] === 1;
-            },
+        /**
+         * 是不是 element node
+         */
+        _isElementNode: function(elem) {
+            return elem && elem[NODE_TYPE] === 1;
+        },
 
-            /**
-             * 是不是 text node
-             */
-            _isTextNode: function(elem) {
-                return elem && elem[NODE_TYPE] === 3;
-            },
+        /**
+         * 是不是 text node
+         */
+        _isTextNode: function(elem) {
+            return elem && elem[NODE_TYPE] === 3;
+        },
 
-            /**
-             * 是不是 KISSY.Node
-             */
-            _isKSNode: function(elem) {
-                return elem && S.Node && elem[NODE_TYPE] === S.Node.TYPE;
-            }
-        };
+        /**
+         * 是不是 KISSY.Node
+         */
+        _isKSNode: function(elem) {
+            return elem && S.Node && elem[NODE_TYPE] === S.Node.TYPE;
+        }
+    };
 
     S.DOM = DOM;
 });
@@ -1032,7 +1044,7 @@ KISSY.add('selector', function(S, undefined) {
                         // 处理 #id.cls
                         else {
                             t = getElementById(id, context);
-                            if (t && DOM.hasClass(t, cls)) {
+                            if(t && DOM.hasClass(t, cls)) {
                                 ret = [t];
                             }
                         }
@@ -1044,7 +1056,7 @@ KISSY.add('selector', function(S, undefined) {
                 }
             }
             // 采用外部选择器
-            else if (S.ExternalSelector) {
+            else if(S.ExternalSelector) {
                 return S.ExternalSelector(selector, context);
             }
             // 依旧不支持，抛异常
@@ -1053,7 +1065,7 @@ KISSY.add('selector', function(S, undefined) {
             }
         }
         // 传入的 selector 是 KISSY.Node/NodeList. 始终返回原生 DOM Node
-        else if (selector && (selector[GET_DOM_NODE] || selector[GET_DOM_NODES])) {
+        else if(selector && (selector[GET_DOM_NODE] || selector[GET_DOM_NODES])) {
             ret = selector[GET_DOM_NODE] ? [selector[GET_DOM_NODE]()] : selector[GET_DOM_NODES]();
         }
         // 传入的 selector 是 Node
@@ -1067,7 +1079,7 @@ KISSY.add('selector', function(S, undefined) {
         // 传入的 selector 是其它值时，返回空数组
 
         // 将 NodeList 转换为普通数组
-        if (ret.item) {
+        if(ret.item) {
             ret = S.makeArray(ret);
         }
 
@@ -1095,7 +1107,7 @@ KISSY.add('selector', function(S, undefined) {
 
     // query #id
     function getElementById(id, context) {
-        if (context.nodeType !== 9) {
+        if(context.nodeType !== 9) {
             context = context.ownerDocument;
         }
         return context.getElementById(id);
@@ -1105,7 +1117,6 @@ KISSY.add('selector', function(S, undefined) {
     function getElementsByTagName(tag, context) {
         return context.getElementsByTagName(tag);
     }
-
     (function() {
         // Check to see if the browser returns only elements
         // when doing getElementsByTagName('*')
@@ -1151,7 +1162,6 @@ KISSY.add('selector', function(S, undefined) {
         }
         return ret;
     }
-
     if (!doc.getElementsByClassName) {
         // 降级使用 querySelectorAll
         if (doc.querySelectorAll) {
@@ -1270,7 +1280,7 @@ KISSY.add('selector', function(S, undefined) {
  *
  * 2010.06
  *  - 增加 filter 和 test 方法
- *
+ * 
  * 2010.07
  *  - 取消对 , 分组的支持，group 直接用 Sizzle
  *
@@ -1441,11 +1451,12 @@ KISSY.add('dom-attr', function(S, undefined) {
         SELECT = 'select',
         EMPTY = '',
         CHECKED = 'checked',
+        STYLE = 'style',
 
         DOM = S.DOM,
         isElementNode = DOM._isElementNode,
         isTextNode = DOM._isTextNode,
-
+        
         RE_SPECIAL_ATTRS = /href|src|style/,
         RE_NORMALIZED_ATTRS = /href|src|colspan|rowspan/,
         RE_RETURN = /\r/g,
@@ -1515,8 +1526,8 @@ KISSY.add('dom-attr', function(S, undefined) {
                     }
                     // 在标准浏览器下，用 getAttribute 获取 style 值
                     // IE7- 下，需要用 cssText 来获取
-                    else if (name === 'style') {
-                        ret = el.style.cssText;
+                    else if (name === STYLE) {
+                        ret = el[STYLE].cssText;
                     }
                 }
 
@@ -1531,12 +1542,13 @@ KISSY.add('dom-attr', function(S, undefined) {
                     return;
                 }
 
-                if (oldIE && name === 'style') {
-                    el.style.cssText = val;
+                // 不需要加 oldIE 判断，否则 IE8 的 IE7 兼容模式有问题
+                if (name === STYLE) {
+                    el[STYLE].cssText = val;
                 }
                 else {
                     // checked 属性值，需要通过直接设置才能生效
-                    if (name === CHECKED) {
+                    if(name === CHECKED) {
                         el[name] = !!val;
                     }
                     // convert the value to a string (all browsers do this but IE)
@@ -1930,7 +1942,7 @@ KISSY.add('dom-style-ie', function(S, undefined) {
         PX = 'px',
         CUSTOM_STYLES = DOM._CUSTOM_STYLES,
         RE_NUMPX = /^-?\d+(?:px)?$/i,
-        RE_NUM = /^-?\d/,
+	    RE_NUM = /^-?\d/,
         RE_WH = /^width|height$/;
 
     // use alpha filter for IE opacity
@@ -1984,7 +1996,7 @@ KISSY.add('dom-style-ie', function(S, undefined) {
             // 当 width/height 设置为百分比时，通过 pixelLeft 方式转换的 width/height 值
             // 在 ie 下不对，需要直接用 offset 方式
             // borderWidth 等值也有问题，但考虑到 borderWidth 设为百分比的概率很小，这里就不考虑了
-            if (RE_WH.test(name)) {
+            if(RE_WH.test(name)) {
                 ret = DOM[name](elem) + PX;
             }
             // From the awesome hack by Dean Edwards
@@ -1993,16 +2005,16 @@ KISSY.add('dom-style-ie', function(S, undefined) {
             // but a number that has a weird ending, we need to convert it to pixels
             else if ((!RE_NUMPX.test(ret) && RE_NUM.test(ret))) {
                 // Remember the original values
-                var left = style[LEFT], rsLeft = elem[RUNTIME_STYLE][LEFT];
+				var left = style[LEFT], rsLeft = elem[RUNTIME_STYLE][LEFT];
 
-                // Put in the new values to get a computed value out
-                elem[RUNTIME_STYLE][LEFT] = elem[CURRENT_STYLE][LEFT];
-                style[LEFT] = name === 'fontSize' ? '1em' : (ret || 0);
-                ret = style['pixelLeft'] + PX;
+				// Put in the new values to get a computed value out
+				elem[RUNTIME_STYLE][LEFT] = elem[CURRENT_STYLE][LEFT];
+				style[LEFT] = name === 'fontSize' ? '1em' : (ret || 0);
+				ret = style['pixelLeft'] + PX;
 
-                // Revert the changed values
-                style[LEFT] = left;
-                elem[RUNTIME_STYLE][LEFT] = rsLeft;
+				// Revert the changed values
+				style[LEFT] = left;
+				elem[RUNTIME_STYLE][LEFT] = rsLeft;
             }
 
             return ret;
@@ -2015,7 +2027,7 @@ KISSY.add('dom-style-ie', function(S, undefined) {
  */
 KISSY.add('dom-offset', function(S, undefined) {
 
-    var DOM = S.DOM,
+    var DOM = S.DOM, UA = S.UA,
         win = window, doc = document,
         isElementNode = DOM._isElementNode,
         isStrict = doc.compatMode === 'CSS1Compat',
@@ -2061,64 +2073,71 @@ KISSY.add('dom-offset', function(S, undefined) {
             hscroll = hscroll === undefined ? true : !!hscroll;
             top = top === undefined ? true : !!top;
 
-            // use native for scrollIntoView(elem, top)
-            if (!isElementNode(container)) {
+            // default current window,use native for scrollIntoView(elem, top)
+            if (!container || container === win) {
                 // 注意：
                 // 1. Opera 不支持 top 参数
                 // 2. 当 container 已经在视窗中时，也会重新定位
                 return elem.scrollIntoView(top);
             }
-
-            var elemOffset = DOM.offset(elem),
-                containerOffset = DOM.offset(container),
-
-                // elem 相对 container 视窗的坐标
+            //document 归一化到 window
+            if (container.nodeType && container.nodeType == 9) {
+                container = getWin(container);
+            }
+            //support iframe's win    
+            var notWin = !('scrollTo' in container && container[DOCUMENT]),
+                elemOffset = DOM.offset(elem),
+                cl = notWin ? container.scrollLeft : DOM.scrollLeft(container),
+                ct = notWin ? container.scrollTop : DOM.scrollTop(container),
+                //import! viewport should has
+                containerOffset = notWin ? DOM.offset(container) : {left:cl,top:ct},
                 diff = {
-                    left: elemOffset[LEFT] - containerOffset[LEFT],
-                    top: elemOffset[TOP] - containerOffset[TOP]
+                    left:elemOffset.left - containerOffset.left  ,
+                    top:elemOffset.top - containerOffset.top
                 },
-
-                // container 视窗的高宽
-                ch = container.clientHeight,
-                cw = container.clientWidth,
-
-                // container 视窗相对 container 元素的坐标
-                cl = DOM[SCROLL_LEFT](container),
-                ct = DOM[SCROLL_TOP](container),
-                cr = cl + cw,
-                cb = ct + ch,
-
-                // elem 的高宽
                 eh = elem.offsetHeight,
                 ew = elem.offsetWidth,
-
-                // elem 相对 container 元素的坐标
-                // 注：diff.left 含 border, cl 也含 border, 因此要减去一个
-                l = diff.left + cl - (PARSEINT(DOM.css(container, 'borderLeftWidth')) || 0),
-                t = diff.top + ct - (PARSEINT(DOM.css(container, 'borderTopWidth')) || 0),
-                r = l + ew,
-                b = t + eh;
-
-            // 根据情况将 elem 定位到 container 视窗中
-            // 1. 当 eh > ch 时，优先显示 elem 的顶部，对用户来说，这样更合理
-            // 2. 当 t < ct 时，elem 在 container 视窗上方，优先顶部对齐
-            // 3. 当 b > cb 时，elem 在 container 视窗下方，优先底部对齐
-            // 4. 其它情况下，elem 已经在 container 视窗中，无需任何操作
-            if (eh > ch || t < ct || top) {
-                container[SCROLL_TOP] = t;
+                //left
+                l = diff.left + cl,
+                //top
+                t = diff.top + ct,
+                b = t + elem.offsetHeight,
+                r = l + elem.offsetWidth,
+                ch = notWin ? container.clientHeight : DOM.viewportHeight(container),
+                cw = notWin ? container.clientWidth : DOM.viewportWidth(container),
+                //container视窗下doc高度下限
+                cb = ct + ch,
+                //container视窗下doc右边限
+                cr = cl + cw;
+            //used if container is window
+            var wl = 0,wt = 0;
+            if (eh > ch || top) {
+                if (notWin)
+                    container.scrollTop = t;
+                else
+                    wt = t;
+            } else {
+                if (notWin)
+                    container.scrollTop = t - (ch - eh);
+                else
+                    wt = t - (ch - eh);
             }
-            else if (b > cb) {
-                container[SCROLL_TOP] = b - ch;
+
+            if (ew > cw || l < cl) {
+                if (notWin)
+                    container.scrollLeft = l;
+                else
+                    wl = l;
+            } else if (r > cr) {
+                if (notWin)
+                    container.scrollLeft = l;
+                else
+                    wl = l;
+            }
+            if (!notWin && (wl || wt)) {
+                container.scrollTo(wl, wt);
             }
 
-            // 水平方向与上面同理
-            if (hscroll) {
-                if (ew > cw || l < cl || top) {
-                    container[SCROLL_LEFT] = l;
-                } else if (r > cr) {
-                    container[SCROLL_LEFT] = r - cw;
-                }
-            }
         }
     });
 
@@ -2173,8 +2192,14 @@ KISSY.add('dom-offset', function(S, undefined) {
             // 但测试发现，这样反而会导致当 html 和 body 有边距/边框样式时，获取的值不正确
             // 此外，ie6 会忽略 html 的 margin 值，幸运地是没有谁会去设置 html 的 margin
 
-            x = box[LEFT] + DOM[SCROLL_LEFT](w);
-            y = box[TOP] + DOM[SCROLL_TOP](w);
+            x = box[LEFT];
+            y = box[TOP];
+
+            // iphone/ipad/itouch 下的 Safari 获取 getBoundingClientRect 时，已经加入 scrollTop
+            if (UA.mobile !== 'Apple') {
+                x += DOM[SCROLL_LEFT](w);
+                y += DOM[SCROLL_TOP](w);
+            }
         }
 
         return { left: x, top: y };
@@ -2280,7 +2305,7 @@ KISSY.add('dom-traversal', function(S, undefined) {
                     }
                 }
             }
-
+            
             return ret;
         }
     });
@@ -2290,11 +2315,11 @@ KISSY.add('dom-traversal', function(S, undefined) {
     // direction 可为 parentNode, nextSibling, previousSibling
     function nth(elem, filter, direction, extraFilter) {
         if (!(elem = S.get(elem))) return null;
-        if (filter === undefined) filter = 1; // 默认取 1
+        if(filter === undefined) filter = 1; // 默认取 1
         var ret = null, fi, flen;
 
-        if (S.isNumber(filter) && filter >= 0) {
-            if (filter === 0) return elem;
+        if(S.isNumber(filter) && filter >= 0) {
+            if(filter === 0) return elem;
             fi = 0;
             flen = filter;
             filter = function() {
@@ -2302,7 +2327,7 @@ KISSY.add('dom-traversal', function(S, undefined) {
             };
         }
 
-        while ((elem = elem[direction])) {
+        while((elem = elem[direction])) {
             if (isElementNode(elem) && (!filter || DOM.test(elem, filter)) && (!extraFilter || extraFilter(elem))) {
                 ret = elem;
                 break;
@@ -2318,7 +2343,7 @@ KISSY.add('dom-traversal', function(S, undefined) {
         if (elem && parent) parentNode = elem.parentNode;
 
         if (parentNode) {
-            for (j = 0,next = parentNode.firstChild; next; next = next.nextSibling) {
+            for (j = 0, next = parentNode.firstChild; next; next = next.nextSibling) {
                 if (isElementNode(next) && next !== elem && (!filter || DOM.test(next, filter))) {
                     ret[j++] = next;
                 }
@@ -2664,17 +2689,28 @@ KISSY.add('dom-insertion', function(S) {
  *
  */
 /*
- Copyright 2010, KISSY UI Library v1.1.1dev
- MIT Licensed
- build time: ${build.time}
- */
+Copyright 2010, KISSY UI Library v1.1.2dev
+MIT Licensed
+build time: ${build.time}
+*/
 /**
  * @module  event
  * @author  lifesinger@gmail.com
  */
 KISSY.add('event', function(S, undefined) {
+    // elem 为 window 时，直接返回
+    // elem 为 document 时，返回关联的 window
+    // 其它值，返回 false
+    function getWin(elem) {
+        return (elem && ('scrollTo' in elem) && elem["document"]) ?
+            elem :
+            elem && elem.nodeType === 9 ?
+                elem.defaultView || elem.parentWindow :
+                false;
+    }
 
-    var win = window, doc = document,
+    var doc = document,
+        win = window,
         simpleAdd = doc.addEventListener ?
             function(el, type, fn, capture) {
                 if (el.addEventListener) {
@@ -2720,9 +2756,9 @@ KISSY.add('event', function(S, undefined) {
          */
         add: function(target, type, fn, scope /* optional */) {
             if (batch('add', target, type, fn, scope)) return;
-
-            var id = getID(target),
-                special, events, eventHandle;
+            scope = scope || getWin(target) || win;
+            var id = getID(target), isNativeEventTarget,
+                special, events, eventHandle, fixedType, capture;
 
             // 不是有效的 target 或 参数不对
             if (id === -1 || !type || !S.isFunction(fn)) return;
@@ -2739,7 +2775,9 @@ KISSY.add('event', function(S, undefined) {
             // 没有添加过该类型事件
             events = cache[id].events;
             if (!events[type]) {
-                special = ((target._addEvent || !target.isCustomEventTarget) && Event.special[type]) || { }; // special 仅针对 element
+                isNativeEventTarget = !target.isCustomEventTarget;
+                special = ((isNativeEventTarget || target._supportSpecialEvent) && Event.special[type]) || { };
+
                 eventHandle = function(event, eventData) {
                     if (!event || !event.fixed) {
                         event = new S.EventObject(target, event, type);
@@ -2750,8 +2788,7 @@ KISSY.add('event', function(S, undefined) {
                     if (special.setup) {
                         special.setup(event);
                     }
-
-                    return (special.handle || Event._handle)(target, event, events[type].listeners, scope);
+                    return (special.handle || Event._handle)(target, event, events[type].listeners);
                 };
 
                 events[type] = {
@@ -2759,11 +2796,12 @@ KISSY.add('event', function(S, undefined) {
                     listeners: []
                 };
 
-                if (!target.isCustomEventTarget) {
-                    simpleAdd(target, special.fix || type, eventHandle, special.capture);
-                }
-                else if (target._addEvent) { // such as Node
-                    target._addEvent(special.fix || type, eventHandle);
+                fixedType = special.fix || type;
+                capture = special['capture'];
+                if (isNativeEventTarget) {
+                    simpleAdd(target, fixedType, eventHandle, capture);
+                } else if (target._addEvent) { // such as Node
+                    target._addEvent(fixedType, eventHandle, capture);
                 }
             }
 
@@ -2774,12 +2812,13 @@ KISSY.add('event', function(S, undefined) {
         /**
          * Detach an event or set of events from an element.
          */
-        remove: function(target, type /* optional */, fn /* optional */) {
-            if (batch('remove', target, type, fn)) return;
+        remove: function(target, type /* optional */, fn /* optional */, scope) {
+            scope = scope || getWin(target) || win;
+            if (batch('remove', target, type, fn, scope)) return;
 
             var id = getID(target),
                 events, eventsType, listeners,
-                i, len, c, t;
+                i, j, len, c, t;
 
             if (id === -1) return; // 不是有效的 target
             if (!id || !(c = cache[id])) return; // 无 cache
@@ -2791,14 +2830,14 @@ KISSY.add('event', function(S, undefined) {
                 len = listeners.length;
 
                 // 移除 fn
-                if (S.isFunction(fn) && len && S.inArray(fn, listeners)) {
-                    t = [];
-                    for (i = 0; i < len; ++i) {
-                        if (fn !== listeners[i]) {
-                            t.push(listeners[i]);
+                if (S.isFunction(fn) && len) {
+                    for (i = 0,j = 0,t = []; i < len; ++i) {
+                        if (fn !== listeners[i].fn
+                            || scope !== listeners[i].scope) {
+                            t[j++] = listeners[i];
                         }
                     }
-                    listeners = t;
+                    eventsType.listeners = t;
                     len = t.length;
                 }
 
@@ -2914,24 +2953,6 @@ KISSY.add('event', function(S, undefined) {
     }
 
     S.Event = Event;
-
-    // Prevent memory leaks in IE
-    // Window isn't included so as not to unbind existing unload events
-    // More info: http://isaacschlueter.com/2006/10/msie-memory-leaks/
-    if (win.attachEvent && !win.addEventListener) {
-        win.attachEvent('onunload', function() {
-            var id, target;
-            for (id in cache) {
-                if ((target = cache[id].target)) {
-                    // try/catch is to handle iframes being unloaded
-                    try {
-                        Event.remove(target);
-                    } catch(ex) {
-                    }
-                }
-            }
-        });
-    }
 });
 
 /**
@@ -2971,6 +2992,8 @@ KISSY.add('event-object', function(S, undefined) {
             self.target = currentTarget;
         }
 
+        // bug fix: in _fix() method, ie maybe reset currentTarget to undefined.
+        self.currentTarget = currentTarget;
         self.fixed = true;
     }
 
@@ -2980,9 +3003,8 @@ KISSY.add('event-object', function(S, undefined) {
             var self = this,
                 originalEvent = self.originalEvent,
                 l = props.length, prop,
-                ownerDoc = self.currentTarget.nodeType === 9
-                    ? self.currentTarget :
-                    self.currentTarget.ownerDocument || doc; // support iframe
+                ct = self.currentTarget,
+                ownerDoc = (ct.nodeType === 9) ? ct : (ct.ownerDocument || doc); // support iframe
 
             // clone properties of the original event object
             while (l) {
@@ -3137,17 +3159,21 @@ KISSY.add('event-target', function(S, undefined) {
                 events = cache.events || { },
                 t = events[type];
 
-            if (t && S.isFunction(t.handle)) {
+            if(t && S.isFunction(t.handle)) {
                 return t.handle(undefined, eventData);
             }
+
+            return this; // chain
         },
 
         on: function(type, fn, scope) {
             Event.add(this, type, fn, scope);
+            return this; // chain
         },
 
         detach: function(type, fn) {
             Event.remove(this, type, fn);
+            return this; // chain
         }
     };
 });
@@ -3246,10 +3272,10 @@ KISSY.add('event-focusin', function(S) {
  *  - webkit 和 opera 已支持 DOMFocusIn/DOMFocusOut 事件，但上面的写法已经能达到预期效果，暂时不考虑原生支持。
  */
 /*
- Copyright 2010, KISSY UI Library v1.1.0
- MIT Licensed
- build time: Aug 2 23:52
- */
+Copyright 2010, KISSY UI Library v1.1.2dev
+MIT Licensed
+build time: ${build.time}
+*/
 /**
  * @module  node
  * @author  lifesinger@gmail.com
@@ -3279,7 +3305,7 @@ KISSY.add('node', function(S) {
         if (DOM._isSupportedNode(html)) {
             domNode = html;
         }
-        else if (typeof html === 'string') {
+        else if (S.isString(html)) {
             domNode = DOM.create(html, props, ownerDocument);
         }
 
@@ -3347,7 +3373,7 @@ KISSY.add('nodelist', function(S) {
          */
         item: function(index) {
             var ret = null;
-            if (DOM._isElementNode(this[index])) {
+            if(DOM._isElementNode(this[index])) {
                 ret = new S.Node(this[index]);
             }
             return ret;
@@ -3541,25 +3567,25 @@ KISSY.add('node-attach', function(S, undefined) {
 
     // event-target
     S.each([NP, NLP], function(P) {
-        S.mix(P, S.EventTarget);
-        P._addEvent = function(type, handle) {
+        S.mix(P, S.EventTarget, { _supportSpecialEvent: true });
+        P._addEvent = function(type, handle, capture) {
             for (var i = 0, len = this.length; i < len; i++) {
-                Event._simpleAdd(this[i], type, handle);
+                Event._simpleAdd(this[i], type, handle, capture);
             }
         };
-        P._removeEvent = function(type, handle) {
+        P._removeEvent = function(type, handle, capture) {
             for (var i = 0, len = this.length; i < len; i++) {
-                Event._simpleRemove(this[i], type, handle);
+                Event._simpleRemove(this[i], type, handle, capture);
             }
         };
         delete P.fire;
     });
 });
 /*
- Copyright 2010, KISSY UI Library v1.1.0
- MIT Licensed
- build time: Aug 2 23:52
- */
+Copyright 2010, KISSY UI Library v1.1.0
+MIT Licensed
+build time: Aug 5 16:06
+*/
 /**
  * @module  ajax
  * @author  lifesinger@gmail.com
@@ -3599,7 +3625,7 @@ KISSY.add('ajax', function(S) {
                 fn(node, callback);
             }
 
-            head.appendChild(node);
+            head.insertBefore(node, head.firstChild);
         }
     });
 });
@@ -3612,10 +3638,10 @@ KISSY.add('ajax', function(S) {
  *         野心过大，KISSY 借鉴 ExtJS, 部分方法借鉴 jQuery.
  */
 /*
- Copyright 2010, KISSY UI Library v1.1.0
- MIT Licensed
- build time: Aug 2 23:52
- */
+Copyright 2010, KISSY UI Library v1.1.0
+MIT Licensed
+build time: Aug 5 16:06
+*/
 /**
  * @module  cookie
  * @author  lifesinger@gmail.com

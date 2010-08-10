@@ -152,7 +152,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                 return true;
             },
             _4e_moveChildren : function(thisElement, target, toStart) {
-                var $ = thisElement[0];
+                var $ = thisElement[0] || thisElement;
                 target = target[0] || target;
                 if ($ == target)
                     return;

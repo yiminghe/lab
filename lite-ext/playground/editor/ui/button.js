@@ -45,25 +45,32 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
     TripleButton.ATTRS = {
         state: {value:OFF},
         container:{},
-        text:{}
+        text:{},
+        cls:{}
     };
 
 
     S.extend(TripleButton, S.Base, {
         _init:function() {
-
-            this.el = new Node(BUTTON_HTML);
-            this.el.html(this.get("text"));
-            if (this.get("title")) this.el.attr("title", this.get("title"));
-            var container = this.get("container")[0] || this.get("container");
-            container.appendChild(this.el[0]);
-            this.el.on("click", this._action, this);
-            this.on("afterStateChange", this._stateChange, this);
+            var self = this,container = self.get("container")[0] || self.get("container");
+            self.el = new Node(BUTTON_HTML);
+            self.el._4e_unselectable();
+            self._attachCls();
+            self.el.html(this.get("text"));
+            if (self.get("title")) self.el.attr("title", self.get("title"));
+            container.appendChild(self.el[0]);
+            self.el.on("click", self._action, self);
+            self.on("afterStateChange", self._stateChange, self);
+        },
+        _attachCls:function() {
+            var cls = this.get("cls");
+            if (cls) this.el.addClass(cls);
         },
 
         _stateChange:function(ev) {
             var n = ev.newVal;
             this["_" + n]();
+            this._attachCls();
         },
 
         _action:function(ev) {

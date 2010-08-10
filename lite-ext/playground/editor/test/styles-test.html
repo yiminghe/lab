@@ -18,7 +18,9 @@
 <h1>Simple Editor Demo (支持表格右键)</h1>
 
 <div style="width:90%;margin:0 auto;">
+
     <textarea id="edit" style="width:100%;height:400px;border:none;border:1px solid none;margin:0 auto;">
+        <script>alert(1);</script>
         <p>123 456 <span style="background-color: red;">7890123</span> 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>  <p>123 456 789012<br></p>
         <table style="width: 200px;" border="1" cellpadding="1" cellspacing="1">
             <tbody>
@@ -49,6 +51,41 @@
     </textarea>
 </div>
 
+<button id="t">parse</button>
+
+<div style="width:90%;margin:0 auto;">
+
+    <textarea id="edit2" style="width:100%;height:400px;border:none;border:1px solid none;margin:0 auto;">
+        <script>alert(1);</script>
+        <p>123 456 <span style="background-color: red;">7890123</span> 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>  <p>123 456 789012<br></p>
+        <table style="width: 200px;" border="1" cellpadding="1" cellspacing="1">
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3 <span>3.1</span> 3.2 <span>3.3</span></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>3 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>
+        <ul>
+            <li> 我是列表1</li>
+            <li> 我是列表2
+                <ul id="test">
+                    <li> 我是列表2.1</li>
+                    <li> 我是列表2.2</li>
+                    <li> 我是列表2.3</li>
+                </ul>
+            </li>
+            <li> 我是列表3</li>
+        </ul>
+    </textarea>
+</div>
 <script type="text/javascript"
         src="../../../base/javascript/ks-core.js?t=20100804151801" charset="utf-8"></script>
 <script type="text/javascript"
@@ -102,6 +139,9 @@
 <script type="text/javascript"
         src="../plugins/sourcearea/plugin.js?t=20100804151801"></script>
 <script type="text/javascript"
+        src="../plugins/preview/plugin.js?t=20100804151801"></script>
+
+<script type="text/javascript"
         src="../plugins/font/plugin.js?t=20100804151801"></script>
 <script type="text/javascript"
         src="../plugins/format/plugin.js?t=20100804151801"></script>
@@ -124,15 +164,26 @@
         src="../plugins/justify/plugin.js?t=20100804151801"></script>
 <script type="text/javascript"
         src="../plugins/templates/plugin.js?t=20100804151801"></script>
+<script type="text/javascript"
+        src="../plugins/maximize/plugin.js"></script>
+
 <script type="text/javascript">
 
     KISSY.ready(function(S) {
         //return;
         var KE = KISSYEDITOR,Node = S.Node,
-                editor = new S.Editor(S.one("#edit"));
-        //htmlparser nb
-        //var t = KE.HtmlDataProcessor.toDataFormat("<img src='xx'><span>5<div>6</div>7</span><ul><ul><li>xxx</ul><li>1<li>2<ul>");
-        //console.log(t);
+                editor = new S.Editor(S.one("#edit")),
+                editor2 = new S.Editor(S.one("#edit2"));
+
+        S.one("#t").on("click", function() {
+            //htmlparser nb
+            var t = KE.HtmlDataProcessor.toDataFormat(
+                //"<img src='xx'><span>5<div>6</div>7</span>"+
+                    "<script>alert(1);<" + "/script>"
+                //+"<ul style='color:red;'><ul><li>xxx</ul><li>1<li>2<ul>"
+                    );
+            console.log(t);
+        });
 
     });
 

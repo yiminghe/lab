@@ -10,6 +10,8 @@ KISSY.add("editor", function(S) {
         KE = KISSYEDITOR,
         DISPLAY = "display",
         NONE = "none",
+        VISIBILITY = "visibility",
+        HIDDEN = "hidden",
         tryThese = KE.Utils.tryThese,
         DOM = S.DOM,
         DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
@@ -28,6 +30,23 @@ KISSY.add("editor", function(S) {
         }
     })();
 
+    function prepareIframeHtml() {
+        var data = HTML5_DTD
+            + "<html>"
+            + "<head>"
+            + "<title>kissy-editor</title>"
+            + "<link href='"
+            + KE.BASE_URL + CSS_FILE
+            + "' rel='stylesheet'/>"
+            + "</head>"
+            + "<body>"
+            //使用 setData 加强安全性
+            // + (textarea.value || "")
+            + "</body>"
+            + "<html>";
+        return data;
+    }
+
     function Editor(textarea) {
         if (!textarea[0]) textarea = new Node(textarea);
         var self = this,
@@ -35,25 +54,37 @@ KISSY.add("editor", function(S) {
             wrap = new Node("<div class='ke-textarea-wrap'></div>");
         self.toolBarDiv = new Node("<div class='ke-editor-tools'></div>");
         textarea.css("width") && editorWrap.css("width", textarea.css("width"));
-        textarea.css("height") && wrap.css("height", textarea.css("height"));
         textarea[0].parentNode.insertBefore(editorWrap[0], textarea[0]);
         editorWrap[0].appendChild(self.toolBarDiv[0]);
         editorWrap[0].appendChild(wrap[0]);
         wrap[0].appendChild(textarea[0]);
         self.textarea = textarea;
+        self.editorWrap = editorWrap;
+        self.wrap = wrap;
         self._init();
+        textarea.css("height") && self.iframe.css("height", textarea.css("height"));
     }
 
     S.augment(Editor, EventTarget, {
+        getData:function() {
+            if (KE.HtmlDataProcessor)
+                return KE.HtmlDataProcessor.toDataFormat(this.document.body.innerHTML, "p");
+            return this.document.body.innerHTML;
+        } ,
         setData:function(data) {
+            if (KE.HtmlDataProcessor)
+                data = KE.HtmlDataProcessor.toDataFormat(data, "p");
             this.document.body.innerHTML = data;
+        },
+        sync:function() {
+            this.textarea.val(this.getData());
         },
         _hideSource:function() {
             var self = this;
             self.iframe.css(DISPLAY, "");
             self.textarea.css(DISPLAY, NONE);
-            self.toolBarDiv.children().css(DISPLAY, "");
-            self.statusDiv && self.statusDiv.css(DISPLAY, "");
+            self.toolBarDiv.children().css(VISIBILITY, "");
+            self.statusDiv && self.statusDiv.css(VISIBILITY, "");
             //self.focus();
         },
 
@@ -61,17 +92,16 @@ KISSY.add("editor", function(S) {
             var self = this;
             self.textarea.css(DISPLAY, "");
             self.iframe.css(DISPLAY, NONE);
-            self.toolBarDiv.children().css(DISPLAY, NONE);
-            self.statusDiv && self.statusDiv.css(DISPLAY, NONE);
+            self.toolBarDiv.children().css(VISIBILITY, HIDDEN);
+            self.toolBarDiv.all(".ke-tool-editor-source").css(VISIBILITY, "");
+            self.statusDiv && self.statusDiv.css(VISIBILITY, HIDDEN);
             self.textarea[0].focus();
         },
-        getData:function() {
-            if (KE.HtmlDataProcessor)
-                return KE.HtmlDataProcessor.toDataFormat(this.document.body.innerHTML, "p");
-            return this.document.body.innerHTML;
-        } ,
+        _prepareIframeHtml:prepareIframeHtml,
+
         getSelection:function() {
-            return new KE.Selection(this.document);
+            var sel = new KE.Selection(this.document);
+            return ( !sel || sel.isInvalid ) ? null : sel;
         } ,
         focus:function() {
             var self = this,
@@ -259,6 +289,11 @@ KISSY.add("editor", function(S) {
                         Event.on(win, 'focus', function() {
                             var doc = self.document;
 
+                            /**
+                             * yiminghe特别注意：firefox光标丢失bug
+                             * blink后光标出现在最后，这就需要实现保存range
+                             * focus后再恢复range
+                             */
                             if (UA.gecko)
                                 blinkCursor();
                             else if (UA.opera)
@@ -275,6 +310,7 @@ KISSY.add("editor", function(S) {
                                 doc.documentElement.focus();
                                 range && range.select();
                             }
+
                         });
 
                         if (UA.ie) {
@@ -289,14 +325,14 @@ KISSY.add("editor", function(S) {
                                         control = sel.getSelectedElement();
                                     if (control) {
                                         // Make undo snapshot.
-                                        //editor.fire('saveSnapshot');
+                                        editor.fire('save');
                                         // Delete any element that 'hasLayout' (e.g. hr,table) in IE8 will
                                         // break up the selection, safely manage it here. (#4795)
                                         var bookmark = sel.getRanges()[ 0 ].createBookmark();
                                         // Remove the control manually.
                                         control.remove();
                                         sel.selectBookmarks([ bookmark ]);
-                                        //editor.fire('saveSnapshot');
+                                        editor.fire('save');
                                         evt.preventDefault();
                                     }
                                 }
@@ -347,23 +383,10 @@ KISSY.add("editor", function(S) {
                     self.textarea.css(DISPLAY, NONE);
                 };
 
-
-            var data = HTML5_DTD
-                + "<html>"
-                + "<head>"
-                + "<title>kissy-editor</title>"
-                + "<link href='"
-                + KE.BASE_URL + CSS_FILE
-                + "' rel='stylesheet'/>"
-                + "</head>"
-                + "<body>"
-                + (textarea.value || "")
-                + "</body>"
-                + "<html>";
-
-            createIFrame(data);
+            createIFrame(prepareIframeHtml());
             self.iframe = iframe;
             self.on("dataReady", function() {
+                self.setData(textarea.value || "");
                 KE.fire("instanceCreated", {editor:self});
             });
         } ,

@@ -53,6 +53,12 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
      * var fragment = Fragment.fromHtml( '<b>Sample</b> Text' );
      * alert( fragment.children[0].name );  "b"
      * alert( fragment.children[1].value );  " Text"
+     * 特例：
+     * 自动加p，自动处理标签嵌套规则
+     * "<img src='xx'><span>5<div>6</div>7</span>"
+     * ="<p><img><span>5</span></p><div><span>6</span></div><p><span>7</span></p>"
+     * 自动处理ul嵌套，以及li ie不闭合
+     * "<ul><ul><li>xxx</ul><li>1<li>2<ul>");
      */
     Fragment.fromHtml = function(fragmentHtml, fixForBody) {
         var parser = new KE.HtmlParser(),
@@ -150,12 +156,20 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
 
             target.add(element);
 
+            //<ul><ul></ul></ul> -> <ul><li><ul></ul></li></ul>
+            //跳过隐形添加的li直接到ul
             if (element.returnPoint) {
                 currentNode = element.returnPoint;
                 delete element.returnPoint;
             }
         }
 
+        /**
+         * 遇到标签开始建立节点和父亲关联 ==  node.parent=parent
+         * @param tagName
+         * @param attributes
+         * @param selfClosing
+         */
         parser.onTagOpen = function(tagName, attributes, selfClosing) {
             var element = new KE.HtmlParser.Element(tagName, attributes);
 
@@ -202,8 +216,9 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
 
                     // Establish the list item if it's not existed.
                     if (!( lastChild && lastChild.name in listItems ))
+                    //直接添加到父亲
                         addElement(( lastChild = new KE.HtmlParser.Element('li') ), currentNode);
-
+                    //以后直接跳到父亲不用再向父亲添加
                     returnPoint = currentNode,addPoint = lastChild;
                 }
                 // If the element name is the same as the current element name,
@@ -211,6 +226,7 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
                 // parent. This situation usually happens with <p>, <li>, <dt> and
                 // <dd>, specially in IE. Do not enter in this if block in this case.
                 else if (tagName == currentName) {
+                    //直接把上一个<p>,<li>结束掉，不要再等待</p>,</li>执行此项操作了
                     addElement(currentNode, currentNode.parent);
                 }
                 else {
@@ -221,7 +237,7 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
                     else {
                         //拆分，闭合掉
                         addElement(currentNode, currentNode.parent, true);
-
+                        //li,p等现在就闭合，以后都不用再管了
                         if (!optionalClose[ currentName ]) {
                             // The current element is an inline element, which
                             // cannot hold the new one. Put it in the pending list,
@@ -237,6 +253,7 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
                     currentNode = addPoint;
                 // Try adding it to the return point, or the parent element.
                 else
+                //前面都调用 addElement 将当前节点闭合了，只能往 parent 添加了
                     currentNode = currentNode.returnPoint || currentNode.parent;
 
                 if (reApply) {
@@ -252,12 +269,17 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
             element.returnPoint = returnPoint;
             returnPoint = 0;
 
+            //自闭合的，不等结束标签，立即加到父亲
             if (element.isEmpty)
                 addElement(element);
             else
                 currentNode = element;
         };
 
+        /**
+         * 遇到标签结束，将open生成的节点添加到dom树中 == 父亲接纳自己 node.parent.add(node)
+         * @param tagName
+         */
         parser.onTagClose = function(tagName) {
             // Check if there is any pending tag to be closed.
             for (var i = pendingInline.length - 1; i >= 0; i--) {
@@ -357,6 +379,8 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
         sendPendingBRs();
 
         // Close all pending nodes.
+        //<p>xxxxxxxxxxxxx
+        //到最后也灭有结束标签
         while (currentNode.type) {
             var parent = currentNode.parent,
                 node = currentNode;
@@ -416,8 +440,8 @@ KISSYEDITOR.add("editor-htmlparser-fragment", function(KE) {
          * Writes the fragment HTML to a CKEDITOR.htmlWriter.
          * @param {KE.HtmlWriter} writer The writer to which write the HTML.
          * @example
-         * var writer = new CKEDITOR.htmlWriter();
-         * var fragment = CKEDITOR.htmlParser.fragment.fromHtml( '&lt;P&gt;&lt;B&gt;Example' );
+         * var writer = new HtmlWriter();
+         * var fragment = Fragment.fromHtml( '&lt;P&gt;&lt;B&gt;Example' );
          * fragment.writeHtml( writer )
          * alert( writer.getHtml() );  "&lt;p&gt;&lt;b&gt;Example&lt;/b&gt;&lt;/p&gt;"
          */
