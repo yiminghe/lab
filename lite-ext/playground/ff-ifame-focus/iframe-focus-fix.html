@@ -13,7 +13,7 @@
 <script src="../../base/javascript/ks-core.js"></script>
 <script>
     KISSY.ready(function(S) {
-        var UA = S.UA,iframe = new S.Node("<iframe></iframe>");
+        var UA = S.UA,Event = S.Event,iframe = new S.Node("<iframe></iframe>");
         // iframe.attr("src", "data.html");
 
 
@@ -36,15 +36,24 @@
             }, 0);
             var a = S.one("#run");
             a.on("click", function(ev) {
-                save();
+                focus && save();
                 iframe.css({
                     position:"absolute",
                     top:"100px"
                 });
 
-                show();
+                focus && show();
                 ev.halt();
             });
+
+            var focus = false;
+            Event.on(win, "focus", function() {
+                focus = true;
+            });
+            Event.on(win, "blur", function() {
+                focus = false;
+            });
+
 
             /**
              * @author:yiminghe@gmail.com

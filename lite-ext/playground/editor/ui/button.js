@@ -27,7 +27,14 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
         DISABLED_CLASS = "ke-triplebutton-disabled",
         BUTTON_HTML = "<a class='" +
             [BUTTON_CLASS,OFF_CLASS].join(" ")
-            + "' href='#'></a>";
+            + "' href='#'" +
+            "" +
+            //' tabindex="-1"' +
+            //' hidefocus="true"' +
+            ' role="button"' +
+            //' onblur="this.style.cssText = this.style.cssText;"' +
+            //' onfocus="event&&event.preventBubble();return false;"' +
+            "></a>";
 
     function TripleButton(cfg) {
         TripleButton.superclass.constructor.call(this, cfg);

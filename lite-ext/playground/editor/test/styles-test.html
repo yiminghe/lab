@@ -171,9 +171,9 @@
 
     KISSY.ready(function(S) {
         //return;
-        var KE = KISSYEDITOR,Node = S.Node,
-                editor = new S.Editor(S.one("#edit")),
-                editor2 = new S.Editor(S.one("#edit2"));
+        var KE = KISSYEDITOR,Node = S.Node;
+        window.editor = new S.Editor(S.one("#edit"));
+        window.editor2 = new S.Editor(S.one("#edit2"));
 
         S.one("#t").on("click", function() {
             //htmlparser nb
@@ -184,6 +184,8 @@
                     );
             console.log(t);
         });
+
+       
 
     });
 

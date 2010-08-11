@@ -1,6 +1,7 @@
 /**
  * maximize editor
  * @author:yiminghe@gmail.com
+ * @note:firefox 焦点完全完蛋了，这里全是针对firefox
  */
 KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
     var S = KISSY,
@@ -27,7 +28,6 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
             });
 
             self.el.on("offClick", self.maximize, self);
-
             self.el.on("onClick", self.restore, self);
         },
         restore:function() {
@@ -35,6 +35,7 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
                 editor = self.editor;
             Event.remove(window, "resize", self._maximize, self);
             //editor.focus();
+            //console.log(editor.iframeFocus);
 
             this._saveEditorStatus();
             editor.iframe.css({
@@ -64,7 +65,7 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
             setTimeout(function() {
                 //editor.focus();
                 self._restoreEditorStatus();
-            }, 0);
+            }, 30);
         },
 
         _saveSate:function() {
@@ -80,26 +81,50 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
             self.scrollTop = DOM.scrollTop();
             window.scrollTo(0, 0);
         },
-
+        //firefox修正，iframe layout变化时，range丢了
         _saveEditorStatus:function() {
+            if (!UA.gecko) return;
             var self = this,
                 editor = self.editor;
             var sel = editor.getSelection();
-            //firefox 光标丢失bug,focus后位置丢失，所以这里保存下
+            //firefox 光标丢失bug,位置丢失，所以这里保存下
             self.savedRanges = sel && sel.getRanges();
         },
 
         _restoreEditorStatus:function() {
             var self = this,
                 editor = self.editor;
+
             var sel = editor.getSelection();
-            self.savedRanges && sel && sel.selectRanges(self.savedRanges);
+            //firefox焦点bug
+            if (UA.gecko) {
+                //原来是聚焦，现在刷新designmode
+                if (editor.iframeFocus) {
+                    editor.focus();
+                }
+            }
+            //firefox 有焦点时才重新聚焦
+            if (UA.gecko)self.savedRanges && sel && sel.selectRanges(self.savedRanges);
+
             if (sel) {
                 var element = sel.getStartElement();
                 //使用原生不行的，会使主窗口滚动
                 //element[0] && element[0].scrollIntoView(true);
                 element && element[0] && element.scrollIntoView(editor.document, false);
+
             }
+
+            //firefox焦点bug
+            if (UA.gecko) {
+                //原来不聚焦
+                if (!editor.iframeFocus) {
+                    //刷新designmode
+                    editor.focus();
+                    //光标拖出
+                    editor.blur();
+                }
+            }
+
         },
         _maximize:function() {
             var self = this,
@@ -161,10 +186,15 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
             }
             Event.on(window, "resize", self._maximize, self);
             this.el.set("state", TripleButton.ON);
-            //editor.focus();
-            this._restoreEditorStatus();
+            //if (editor.iframeFocus)
+
+            setTimeout(function() {
+                self._restoreEditorStatus();
+            }, 30);
+
         }
     });
+
 
     KE.on("instanceCreated", function(ev) {
         var editor = ev.editor;

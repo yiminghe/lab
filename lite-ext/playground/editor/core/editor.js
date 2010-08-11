@@ -50,7 +50,10 @@ KISSY.add("editor", function(S) {
     function Editor(textarea) {
         if (!textarea[0]) textarea = new Node(textarea);
         var self = this,
-            editorWrap = new Node("<div class='ke-editor-wrap'></div>"),
+            editorWrap = new Node("<div class='ke-editor-wrap'" +
+                //!!编辑器内焦点不失去
+                " onmousedown='return false;'" +
+                "></div>"),
             wrap = new Node("<div class='ke-textarea-wrap'></div>");
         self.toolBarDiv = new Node("<div class='ke-editor-tools'></div>");
         textarea.css("width") && editorWrap.css("width", textarea.css("width"));
@@ -63,6 +66,7 @@ KISSY.add("editor", function(S) {
         self.wrap = wrap;
         self._init();
         textarea.css("height") && self.iframe.css("height", textarea.css("height"));
+        self.toolBarDiv._4e_unselectable();
     }
 
     S.augment(Editor, EventTarget, {
@@ -106,13 +110,22 @@ KISSY.add("editor", function(S) {
         focus:function() {
             var self = this,
                 win = DOM._4e_getWin(self.document);
-            //win.parent && win.parent.blur();
+            UA.webkit && win && win.parent && win.parent.focus();
+            //win && win.blur();
+            //yiminghe note:firefox need this ,暂时使得iframe先失去焦点，触发blinkCursor补丁
+            if (UA.gecko)editor.blur();
             //yiminghe note:webkit need win.focus
+
             win && win.focus();
             //ie and firefox need body focus
             self.document && self.document.body.focus();
             self.notifySelectionChange();
         } ,
+        blur:function() {
+            this.toolBarDiv.children().each(function(el) {
+                el[0].focus();
+            });
+        },
         _init:function() {
             var iframe,
                 frameLoaded,
@@ -288,7 +301,6 @@ KISSY.add("editor", function(S) {
 
                         Event.on(win, 'focus', function() {
                             var doc = self.document;
-
                             /**
                              * yiminghe特别注意：firefox光标丢失bug
                              * blink后光标出现在最后，这就需要实现保存range
@@ -310,7 +322,10 @@ KISSY.add("editor", function(S) {
                                 doc.documentElement.focus();
                                 range && range.select();
                             }
-
+                            self.iframeFocus = true;
+                        });
+                        Event.on(win, "blur", function() {
+                            self.iframeFocus = false;
                         });
 
                         if (UA.ie) {
