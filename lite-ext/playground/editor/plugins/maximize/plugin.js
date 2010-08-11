@@ -9,7 +9,9 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
         Node = S.Node,
         Event = S.Event,
         TripleButton = KE.TripleButton,
-        DOM = S.DOM,iframe = new Node("<iframe style='position:absolute;top:-9999px;left:-9999px;' frameborder='0'></iframe>");
+        DOM = S.DOM,
+        iframe = new Node("<iframe style='position:absolute;top:-9999px;left:-9999px;' frameborder='0'>" +
+            "</iframe>");
     S.ready(function() {
         document.body.appendChild(iframe[0]);
     });
@@ -24,6 +26,7 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
             var self = this,editor = self.editor;
             self.el = new TripleButton({
                 container:editor.toolBarDiv,
+                cls:"ke-tool-editor-source",
                 text:"maximize"
             });
 
@@ -83,9 +86,9 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
         },
         //firefox修正，iframe layout变化时，range丢了
         _saveEditorStatus:function() {
-            if (!UA.gecko) return;
             var self = this,
                 editor = self.editor;
+            if (!UA.gecko || !editor.iframeFocus) return;
             var sel = editor.getSelection();
             //firefox 光标丢失bug,位置丢失，所以这里保存下
             self.savedRanges = sel && sel.getRanges();
@@ -94,34 +97,38 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
         _restoreEditorStatus:function() {
             var self = this,
                 editor = self.editor;
+            var sel;
 
-            var sel = editor.getSelection();
             //firefox焦点bug
-            if (UA.gecko) {
+            if (UA.gecko && editor.iframeFocus) {
+
                 //原来是聚焦，现在刷新designmode
-                if (editor.iframeFocus) {
-                    editor.focus();
+                sel = editor.getSelection();
+                editor.focus();
+                if (self.savedRanges && sel) {
+                    sel.selectRanges(self.savedRanges);
                 }
+
             }
             //firefox 有焦点时才重新聚焦
-            if (UA.gecko)self.savedRanges && sel && sel.selectRanges(self.savedRanges);
 
-            if (sel) {
+
+            if (editor.iframeFocus && sel) {
                 var element = sel.getStartElement();
                 //使用原生不行的，会使主窗口滚动
                 //element[0] && element[0].scrollIntoView(true);
                 element && element[0] && element.scrollIntoView(editor.document, false);
-
             }
 
             //firefox焦点bug
             if (UA.gecko) {
                 //原来不聚焦
                 if (!editor.iframeFocus) {
+                    //移到核心mousedown判断
                     //刷新designmode
-                    editor.focus();
+                    //editor.focus();
                     //光标拖出
-                    editor.blur();
+                    //editor.blur();
                 }
             }
 

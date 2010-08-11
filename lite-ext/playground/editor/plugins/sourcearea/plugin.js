@@ -20,6 +20,11 @@ KISSYEDITOR.add("editor-plugin-sourcearea", function(KE) {
             });
             self.el.on("offClick", self._show, self);
             self.el.on("onClick", self._hide, self);
+
+            //不被父容器阻止默认，可点击
+            editor.textarea.on("mousedown", function(ev) {
+                ev.stopPropagation();
+            });
         },
         _show:function() {
             var self = this,

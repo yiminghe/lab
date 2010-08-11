@@ -52,7 +52,9 @@ KISSY.add("editor", function(S) {
         var self = this,
             editorWrap = new Node("<div class='ke-editor-wrap'" +
                 //!!编辑器内焦点不失去
-                " onmousedown='return false;'" +
+                " onmousedown='" +
+                //"console.log(\"trapped\");" +
+                "return false;'" +
                 "></div>"),
             wrap = new Node("<div class='ke-textarea-wrap'></div>");
         self.toolBarDiv = new Node("<div class='ke-editor-tools'></div>");
@@ -89,7 +91,8 @@ KISSY.add("editor", function(S) {
             self.textarea.css(DISPLAY, NONE);
             self.toolBarDiv.children().css(VISIBILITY, "");
             self.statusDiv && self.statusDiv.css(VISIBILITY, "");
-            //self.focus();
+            //firefox 光标激活，也不要使用focus，切换过来不要有光标
+            //self.blur();
         },
 
         _showSource:    function() {
@@ -99,7 +102,8 @@ KISSY.add("editor", function(S) {
             self.toolBarDiv.children().css(VISIBILITY, HIDDEN);
             self.toolBarDiv.all(".ke-tool-editor-source").css(VISIBILITY, "");
             self.statusDiv && self.statusDiv.css(VISIBILITY, HIDDEN);
-            self.textarea[0].focus();
+            //编辑器区强制失去焦点
+            self.blur();
         },
         _prepareIframeHtml:prepareIframeHtml,
 
@@ -112,8 +116,8 @@ KISSY.add("editor", function(S) {
                 win = DOM._4e_getWin(self.document);
             UA.webkit && win && win.parent && win.parent.focus();
             //win && win.blur();
-            //yiminghe note:firefox need this ,暂时使得iframe先失去焦点，触发blinkCursor补丁
-            if (UA.gecko)editor.blur();
+            //yiminghe note:firefox need this ,暂时使得iframe先失去焦点，触发 blinkCursor 补丁
+            if (UA.gecko)self.blur();
             //yiminghe note:webkit need win.focus
 
             win && win.focus();
@@ -121,10 +125,14 @@ KISSY.add("editor", function(S) {
             self.document && self.document.body.focus();
             self.notifySelectionChange();
         } ,
-        blur:function() {
-            this.toolBarDiv.children().each(function(el) {
-                el[0].focus();
-            });
+        blur:function(emu) {
+            //只是标志一下？
+            if (!emu)
+                this.toolBarDiv.children().each(function(el) {
+                    el[0].focus();
+                });
+            //firefox 焦点相关，强制 mousedown 刷新光标
+            this.iframeFocus = false;
         },
         _init:function() {
             var iframe,
@@ -250,7 +258,13 @@ KISSY.add("editor", function(S) {
                                     doc.designMode = 'on';
                                     setTimeout(function () {
                                         doc.designMode = 'off';
+                                        //console.log("path1");
                                         doc.body.focus();
+                                        // Try it again once..
+                                        if (!arguments.callee.retry) {
+                                            arguments.callee.retry = true;
+                                            //arguments.callee();
+                                        }
                                     }, 50);
                                 },
                                 function() {
@@ -263,6 +277,7 @@ KISSY.add("editor", function(S) {
                                     body.attr('contentEditable', true);
                                     // Try it again once..
                                     !retry && blinkCursor(1);
+                                    //console.log("path2");
                                 });
                         }
 
@@ -300,6 +315,7 @@ KISSY.add("editor", function(S) {
 
 
                         Event.on(win, 'focus', function() {
+                            //console.log(" i am  focus");
                             var doc = self.document;
                             /**
                              * yiminghe特别注意：firefox光标丢失bug
@@ -324,6 +340,21 @@ KISSY.add("editor", function(S) {
                             }
                             self.iframeFocus = true;
                         });
+
+
+                        if (UA.gecko) {
+                            /**
+                             * firefox 焦点丢失后，再点编辑器区域焦点会移不过来，要点两下
+                             */
+
+                            Event.on(self.document, "mousedown", function() {
+                                if (!self.iframeFocus) {
+                                    //console.log("i am fixed");
+                                    blinkCursor();
+                                }
+                            });
+                        }
+
                         Event.on(win, "blur", function() {
                             self.iframeFocus = false;
                         });
@@ -398,8 +429,20 @@ KISSY.add("editor", function(S) {
                     self.textarea.css(DISPLAY, NONE);
                 };
 
+            /**
+             * 源码编辑内的点击不要阻止了
+
+             self.textarea.on("mousedown", function(ev) {
+             //使浏览器通知iframe
+             self.focus();
+             self.blur();
+             ev.stopPropagation();
+             });
+             */
             createIFrame(prepareIframeHtml());
             self.iframe = iframe;
+
+
             self.on("dataReady", function() {
                 self.setData(textarea.value || "");
                 KE.fire("instanceCreated", {editor:self});
