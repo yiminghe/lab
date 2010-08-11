@@ -16,6 +16,7 @@ KISSYEDITOR.add("editor-plugin-preview", function(KE) {
             self.el = new TripleButton({
                 container:editor.toolBarDiv,
                 cls:"ke-tool-editor-source",
+                title:"‘§¿¿",
                 text:"preview"
             });
             self.el.on("offClick", this._show, this);

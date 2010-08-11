@@ -5,7 +5,9 @@
 KISSYEDITOR.add("editor-plugin-htmldataprocessor", function(KE) {
     var S = KISSY,
         UA = S.UA,
-        HtmlParser = KE.HtmlParser,htmlFilter = new HtmlParser.Filter();
+        HtmlParser = KE.HtmlParser,
+        htmlFilter = new HtmlParser.Filter(),
+        dataFilter = new HtmlParser.Filter();
     var defaultHtmlFilterRules = {
         elementNames : [
             // Remove script,iframe style,link,meta
@@ -54,15 +56,31 @@ KISSYEDITOR.add("editor-plugin-htmldataprocessor", function(KE) {
             return value.toLowerCase();
         };
     }
+
     htmlFilter.addRules(defaultHtmlFilterRules);
+    dataFilter.addRules(defaultHtmlFilterRules);
 
     KE.HtmlDataProcessor = {
+        htmlFilter:htmlFilter,
+        dataFilter:dataFilter,
+        //编辑器html到外部html
+        toHtml:function(html, fixForBody) {
+            fixForBody = fixForBody || "p";
+            // Now use our parser to make further fixes to the structure, as
+            // well as apply the filter.
+            var writer = new HtmlParser.HtmlWriter(),
+                fragment = HtmlParser.Fragment.fromHtml(html, fixForBody);
+            fragment.writeHtml(writer, htmlFilter);
+            var data = writer.getHtml(true);
+            return data;
+        },
+        //外部html进入编辑器
         toDataFormat : function(html, fixForBody) {
             fixForBody = fixForBody || "p";
             var writer = new HtmlParser.HtmlWriter(),
                 fragment = HtmlParser.Fragment.fromHtml(html, fixForBody);
             writer.reset();
-            fragment.writeHtml(writer, htmlFilter);
+            fragment.writeHtml(writer, dataFilter);
             return writer.getHtml(true);
         }
     };

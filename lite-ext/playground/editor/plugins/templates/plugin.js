@@ -41,7 +41,14 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
                 container:editor.toolBarDiv,
                 text:"template",
                 title:"模板"
-            }),ui = new Overlay({mask:true,title:"内容模板"});
+            });
+            el.on("click", self._show, self);
+            KE.Utils.lazyRun(this, "_prepare", "_real");
+        },
+        _prepare:function() {
+            var self = this;
+            this._initDialogOk = true;
+            var ui = new Overlay({mask:true,title:"内容模板"});
             ui.body.html(HTML);
             var list = ui.body.all(".ke-tpl-list");
             ui.on("hide", function() {
@@ -56,13 +63,15 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
                 }
                 ui.hide();
             });
-
             self.ui = ui;
-            el.on("click", function() {
-                ui.show();
-            });
-
-
+        },
+        _real:function() {
+            var self = this;
+            self.ui.show();
+        },
+        _show:function() {
+            var self = this;
+            self._prepare();
         }
     });
 

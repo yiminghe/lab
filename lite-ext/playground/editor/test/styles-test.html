@@ -21,7 +21,9 @@
 
     <textarea id="edit" style="width:100%;height:400px;border:none;border:1px solid none;margin:0 auto;">
         <script>alert(1);</script>
-        <p>123 456 <span style="background-color: red;">7890123</span> 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>  <p>123 456 789012<br></p>
+
+        <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
+
         <table style="width: 200px;" border="1" cellpadding="1" cellspacing="1">
             <tbody>
             <tr>
@@ -36,11 +38,15 @@
             </tr>
             </tbody>
         </table>
-        <p>3 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>
+
+        <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
+
+        <embed src="http://player.youku.com/player.php/sid/XMTk2ODAzNjg0/v.swf" quality="high" width="480" style="height:400px;border:1px solid red;" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>
+
         <ul>
             <li> 我是列表1</li>
             <li> 我是列表2
-                <ul id="test">
+                <ul>
                     <li> 我是列表2.1</li>
                     <li> 我是列表2.2</li>
                     <li> 我是列表2.3</li>
@@ -57,7 +63,9 @@
 
     <textarea id="edit2" style="width:100%;height:400px;border:none;border:1px solid none;margin:0 auto;">
         <script>alert(1);</script>
-        <p>123 456 <span style="background-color: red;">7890123</span> 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>  <p>123 456 789012<br></p>
+
+        <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
+
         <table style="width: 200px;" border="1" cellpadding="1" cellspacing="1">
             <tbody>
             <tr>
@@ -72,11 +80,15 @@
             </tr>
             </tbody>
         </table>
-        <p>3 45678 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> abcdef ghijk </p>
+
+        <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
+
+        <embed src="http://player.youku.com/player.php/sid/XMTk2ODAzNjg0/v.swf" quality="high" width="480" height="400" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>
+
         <ul>
             <li> 我是列表1</li>
             <li> 我是列表2
-                <ul id="test">
+                <ul>
                     <li> 我是列表2.1</li>
                     <li> 我是列表2.2</li>
                     <li> 我是列表2.3</li>
@@ -166,7 +178,10 @@
         src="../plugins/templates/plugin.js?t=20100804151801"></script>
 <script type="text/javascript"
         src="../plugins/maximize/plugin.js"></script>
-
+<script type="text/javascript"
+        src="../plugins/fakeobjects/plugin.js"></script>
+<script type="text/javascript"
+        src="../plugins/flash/plugin.js"></script>
 <script type="text/javascript">
 
     KISSY.ready(function(S) {
@@ -185,7 +200,6 @@
             console.log(t);
         });
 
-       
 
     });
 

@@ -10,28 +10,34 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
         Event = S.Event,
         TripleButton = KE.TripleButton,
         DOM = S.DOM,
-        iframe = new Node("<iframe style='position:absolute;top:-9999px;left:-9999px;' frameborder='0'>" +
-            "</iframe>");
-    S.ready(function() {
-        document.body.appendChild(iframe[0]);
-    });
+        iframe;
+
 
     function Maximize(editor) {
+
         this.editor = editor;
         this._init();
     }
 
+    Maximize.init = function() {
+        iframe = new Node("<iframe style='position:absolute;top:-9999px;left:-9999px;' frameborder='0'>" +
+            "</iframe>");
+        document.body.appendChild(iframe[0]);
+        Maximize.init = null;
+    };
     S.augment(Maximize, {
         _init:function() {
             var self = this,editor = self.editor;
             self.el = new TripleButton({
                 container:editor.toolBarDiv,
                 cls:"ke-tool-editor-source",
+                title:"х╚фа",
                 text:"maximize"
             });
 
             self.el.on("offClick", self.maximize, self);
             self.el.on("onClick", self.restore, self);
+            KE.Utils.lazyRun(this, "_prepare", "_real");
         },
         restore:function() {
             var self = this,
@@ -180,7 +186,7 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
                 height:(viewportHeight - toolHeight - 4) + "px"
             });
         },
-        maximize:function() {
+        _real:function() {
             var self = this,
                 editor = self.editor;
             //editor.focus();
@@ -198,7 +204,12 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
             setTimeout(function() {
                 self._restoreEditorStatus();
             }, 30);
-
+        },
+        _prepare:function() {
+            Maximize.init && Maximize.init();
+        },
+        maximize:function() {
+            this._prepare();
         }
     });
 

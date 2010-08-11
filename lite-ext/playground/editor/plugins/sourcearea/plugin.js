@@ -16,6 +16,7 @@ KISSYEDITOR.add("editor-plugin-sourcearea", function(KE) {
             self.el = new TripleButton({
                 container:editor.toolBarDiv,
                 cls:"ke-tool-editor-source",
+                title:"ิดย๋",
                 text:"source"
             });
             self.el.on("offClick", self._show, self);

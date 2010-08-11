@@ -8,45 +8,49 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
     var S = KISSY,Node = S.Node,
         DOM = S.DOM;
 
-
+    /**
+     * !TODO 有空改做重写方式
+     * Overlay.create,初始化后重写掉
+     */
     function Overlay() {
+
+        Overlay.init && Overlay.init();
+
         var self = this;
-        Overlay.superclass.constructor.apply(this, arguments);
-        this._init();
+        Overlay.superclass.constructor.apply(self, arguments);
+        self._init();
 
         if (S.UA.ie === 6) {
-            var body = new Node(document.body);
-            var iframe = new Node("<iframe class='ke-dialog-iframe'></iframe>");
-            body[0].appendChild(iframe[0]);
-            this.on("show", function() {
-                var el = this.get("el");
+
+            self.on("show", function() {
+                var el = self.get("el");
                 var bw = parseInt(el.css("width")),
                     bh = el[0].offsetHeight;
-                iframe.css({
+                d_iframe.css({
                     width: bw + "px",
                     height: bh + "px"
                 });
-                iframe.offset(self.get("el").offset());
+                d_iframe.offset(self.get("el").offset());
 
-            }, this);
-            this.on("hide", function() {
-                iframe.offset({
+            });
+            self.on("hide", function() {
+                d_iframe.offset({
                     left:-999,
                     top:-999
                 });
-            }, this);
+            });
         }
-        if (this.get("mask")) {
-            this.on("show", function() {
+        if (self.get("mask")) {
+            self.on("show", function() {
                 mask.css({"left":"0px","top":"0px"});
                 if (S.UA.ie == 6)mask_iframe.css({"left":"0px","top":"0px"});
-            }, this);
-            this.on("hide", function() {
+            });
+            self.on("hide", function() {
                 mask.css({"left":"-9999px",top:"-9999px"});
                 if (S.UA.ie == 6)mask_iframe.css({"left":"-9999px",top:"-9999px"});
-            }, this);
+            });
         }
-        this.hide();
+        self.hide();
     }
 
     Overlay.ATTRS = {
@@ -59,20 +63,20 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
     S.extend(Overlay, S.Base, {
         _init:function() {
             //just manage container
-            var el = this.get("el");
+            var self = this,el = self.get("el");
 
-            this.on("afterVisibleChange", function(ev) {
+            self.on("afterVisibleChange", function(ev) {
                 var v = ev.newVal;
                 if (v) {
                     if (typeof v == "boolean") {
-                        this.center();
+                        self.center();
                     } else el.offset(v);
-                    this.fire("show");
+                    self.fire("show");
                 } else {
                     el.css({"left":"-9999px",top:"-9999px"});
-                    this.fire("hide");
+                    self.fire("hide");
                 }
-            }, this);
+            });
 
             if (el) {
                 //焦点管理，显示时用a获得焦点
@@ -84,11 +88,11 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
             }
 
             //also gen html
-            var el = new Node("<div class='ke-dialog' style='width:" +
-                this.get("width") +
+            el = new Node("<div class='ke-dialog' style='width:" +
+                self.get("width") +
                 "'><div class='ke-hd clearfix'>" +
                 "<div class='ke-hd-title'><h1>" +
-                this.get("title") +
+                self.get("title") +
                 "</h1></div>"
                 + "<div class='ke-hd-x'><a class='ke-close' href='#'>X</a></div>"
                 + "</div>" +
@@ -98,20 +102,21 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
                 "</div>" +
                 "</div>");
             document.body.appendChild(el[0]);
-            this.set("el", el);
-            this.body = el.one(".ke-bd");
-            this._close = el.one(".ke-close");
-            this._title = el.one(".ke-hd-title").one("h1");
-            this.on("titleChange", function(ev) {
-                this._title.html(ev.newVal);
-            }, this);
-            this.on("widthChange", function(ev) {
-                this.el.css("width", ev.newVal);
-            }, this);
-            this._close.on("click", function(ev) {
+            self.set("el", el);
+            self.el = el;
+            self.body = el.one(".ke-bd");
+            self._close = el.one(".ke-close");
+            self._title = el.one(".ke-hd-title").one("h1");
+            self.on("titleChange", function(ev) {
+                self._title.html(ev.newVal);
+            });
+            self.on("widthChange", function(ev) {
+                self.el.css("width", ev.newVal);
+            });
+            self._close.on("click", function(ev) {
                 ev.preventDefault();
-                this.hide();
-            }, this);
+                self.hide();
+            });
         },
         center:function() {
             var el = this.get("el");
@@ -138,9 +143,12 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
         }
     });
 
-    var mask = new Node("<div class=\"ke-mask\">&nbsp;</div>"),
-        mask_iframe;
-    S.ready(function() {
+    var mask ,loading, mask_iframe,d_iframe;
+
+    Overlay.init = function() {
+        d_iframe = new Node("<iframe class='ke-dialog-iframe'></iframe>");
+        document.body.appendChild(d_iframe[0]);
+        mask = new Node("<div class=\"ke-mask\">&nbsp;</div>");
         mask.css({"left":"-9999px",top:"-9999px"});
         mask.css({
             "width": "100%",
@@ -159,12 +167,13 @@ KISSYEDITOR.add("kissy-editor-overlay", function(KE) {
             });
             mask_iframe.appendTo(document.body);
         }
-        var loading = new Node("<div class='ke-loading'>" +
+        loading = new Node("<div class='ke-loading'>" +
             "loading ...." +
             "</div>");
         loading.appendTo(document.body);
+        Overlay.init = null;
         Overlay.loading = new Overlay({el:loading,mask:true});
-    });
-
+    };
     KE.SimpleOverlay = Overlay;
+
 });

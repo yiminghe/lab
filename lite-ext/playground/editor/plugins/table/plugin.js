@@ -125,6 +125,9 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 width:"120px",
                 funcs:myContexts
             });
+
+            KE.Utils.lazyRun(this, "_prepareTableShow", "_realTableShow");
+
         },
         _tableInit:function() {
             var self = this,
@@ -150,6 +153,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
             d.tok = d.body.one(".ke-table-ok");
             d.tclose = d.body.one(".ke-table-close");
             d.twidthunit = d.body.one(".ke-table-width-unit");
+            //console.log(d.twidthunit);
             self.tableDialog = d;
             d.tok.on("click", self._tableOk, self);
             d.on("hide", function() {
@@ -230,6 +234,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 }
                 html += "' "
             }
+           
             html += ">";
             if (S.trim(d.tcaption.val())) {
                 html += "<caption><span>" + S.trim(d.tcaption.val()) + "</span></caption>";
@@ -295,11 +300,9 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 return n._4e_name() == "thead";
             }) ? '1' : '');
         },
-        _tableShow:    function() {
+        _realTableShow:function() {
             var self = this;
-            if (!self.tableDialog) {
-                self._tableInit();
-            }
+
             if (self.selectedTable) {
                 self._fillTableDialog();
                 self.tableDialog.body.all(".ke-table-create-only").attr("disabled", "disabled");
@@ -307,6 +310,16 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 self.tableDialog.body.all(".ke-table-create-only").removeAttr("disabled");
             }
             self.tableDialog.show();
+            //console.log("do!");
+        },
+        _prepareTableShow:function() {
+            var self = this;
+            self._tableInit();
+            //console.log("prepare!");
+        },
+        _tableShow:    function() {
+            var self = this;
+            self._prepareTableShow();
         }
     });
 
@@ -649,4 +662,5 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
         new TableUI(editor);
     });
-});
+})
+    ;

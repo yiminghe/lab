@@ -74,7 +74,7 @@ KISSY.add("editor", function(S) {
     S.augment(Editor, EventTarget, {
         getData:function() {
             if (KE.HtmlDataProcessor)
-                return KE.HtmlDataProcessor.toDataFormat(this.document.body.innerHTML, "p");
+                return KE.HtmlDataProcessor.toHtml(this.document.body.innerHTML, "p");
             return this.document.body.innerHTML;
         } ,
         setData:function(data) {
@@ -579,7 +579,4 @@ KISSY.add("editor", function(S) {
     });
 
     S.Editor = Editor;
-
-
-})
-    ;
+});

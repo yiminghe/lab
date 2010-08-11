@@ -90,8 +90,8 @@ KISSYEDITOR.add("editor-dom", function(KE) {
 
             _4e_move : function(thisElement, target, toStart) {
                 thisElement.remove();
-                thisElement = thisElement[0];
-                target = target[0] || target;
+                thisElement = normalElDom(thisElement);
+                target = normalElDom(target);
                 if (toStart) {
                     target.insertBefore(thisElement, target.firstChild);
                 }
@@ -101,7 +101,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
             },
 
             _4e_name:function(thisElement) {
-                thisElement = thisElement[0] || thisElement;
+                thisElement = normalElDom(thisElement);
                 return thisElement.nodeName.toLowerCase();
             },
             _4e_isIdentical : function(thisElement, otherElement) {
@@ -136,7 +136,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                 return true;
             },
             _4e_isEmptyInlineRemoveable : function(thisElement) {
-                var children = (thisElement[0] || thisElement).childNodes;
+                var children = normalElDom(thisElement).childNodes;
                 for (var i = 0, count = children.length; i < count; i++) {
                     var child = children[i],
                         nodeType = child.nodeType;
@@ -152,7 +152,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                 return true;
             },
             _4e_moveChildren : function(thisElement, target, toStart) {
-                var $ = thisElement[0] || thisElement;
+                var $ = normalElDom(thisElement);
                 target = target[0] || target;
                 if ($ == target)
                     return;

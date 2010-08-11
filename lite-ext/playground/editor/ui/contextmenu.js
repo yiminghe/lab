@@ -15,7 +15,7 @@ KISSYEDITOR.add("kissy-editor-contextmenu", function(KE) {
      */
     function ContextMenu(config) {
         this.cfg = S.clone(config);
-        this._init();
+        KE.Utils.lazyRun(this, "_prepareShow", "_realShow");
     }
 
     var global_tags = [];
@@ -35,7 +35,6 @@ KISSYEDITOR.add("kissy-editor-contextmenu", function(KE) {
         });
 
         if (!doc.ke_contextmenu) {
-
             doc.ke_contextmenu = 1;
             Event.on(doc, "mousedown", ContextMenu.hide);
             Event.on(doc, "contextmenu", function(ev) {
@@ -63,7 +62,7 @@ KISSYEDITOR.add("kissy-editor-contextmenu", function(KE) {
         return cm;
     };
     ContextMenu.hide = function() {
-        var doc=this;
+        var doc = this;
         for (var i = 0; i < global_tags.length; i++) {
             var instance = global_tags[i].instance,doc2 = global_tags[i].doc;
             if (doc === doc2)
@@ -100,15 +99,21 @@ KISSYEDITOR.add("kissy-editor-contextmenu", function(KE) {
         },
 
         hide : function(offset) {
-            var self = this;
-            self.el.hide();
+            this.el && this.el.hide();
+        },
+        _realShow:function(offset) {
+            this.el.show(offset);
+            //console.log("_realShow");
+        },
+        _prepareShow:function(offset) {
+            this._init();
+            //console.log("_prepareShow");
         },
         show:function(offset) {
-
-            var self = this;
-            self.el.show(offset);
+            this._prepareShow(offset);
         }
     });
+
 
     KE.ContextMenu = ContextMenu;
 });

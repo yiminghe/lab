@@ -110,20 +110,16 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
 
     S.extend(ColorSupport, S.Base, {
         _init:function() {
-            var self = this;
-            var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv;
-            var el = self.el = new TripleButton({
-                container:toolBarDiv,
-                text:this.get("text")
-            });
+            var self = this,
+                editor = this.get("editor"),
+                toolBarDiv = editor.toolBarDiv,
+                el = self.el = new TripleButton({
+                    container:toolBarDiv,
+                    title:this.get("title"),
+                    text:this.get("text")
+                });
             el.on("offClick", this._showColors, this);
-            this.colorPanel = new Node(html);
-            this.colorPanel.css("display", "none");
-            document.body.appendChild(this.colorPanel[0]);
-            this.colorPanel.on("click", this._selectColor, this);
-            Event.on(document, "click", this._hidePanel, this);
-            Event.on(editor.document, "click", this._hidePanel, this);
-
+            KE.Utils.lazyRun(this, "_prepare", "_real");
         },
         _hidePanel:function(ev) {
             var t = ev.target;
@@ -132,6 +128,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
                 this.colorPanel.css("display", "none");
         },
         _selectColor:function(ev) {
+
             ev.halt();
             var editor = this.get("editor");
             var t = ev.target;
@@ -153,11 +150,31 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
                 this.colorPanel.css("display", "none");
             }
         },
-        _showColors:function(ev) {
+        _realShowColors:function(ev) {
             this.colorPanel.css("display", "");
             var xy = this.el.el.offset();
             xy.top += this.el.el.height() + 5;
             this.colorPanel.offset(xy);
+        },
+        _prepare:function(ev) {
+            var self = this;
+            this.colorPanel = new Node(html);
+            this.colorPanel.css("display", "none");
+            document.body.appendChild(this.colorPanel[0]);
+            this.colorPanel.on("click", this._selectColor, this);
+            Event.on(document, "click", this._hidePanel, this);
+            Event.on(editor.document, "click", this._hidePanel, this);
+        },
+        _real:function(ev) {
+            this.colorPanel.css("display", "");
+            var xy = this.el.el.offset();
+            xy.top += this.el.el.height() + 5;
+            this.colorPanel.offset(xy);
+
+        },
+        _showColors:function(ev) {
+            var self = this;
+            self._prepare(ev);
         }
     });
 
@@ -166,12 +183,14 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
         new ColorSupport({
             editor:editor,
             styles:BACK_STYLES,
+            title:"背景颜色",
             text:"bgcolor"
         });
 
         new ColorSupport({
             editor:editor,
             styles:FORE_STYLES,
+            title:"文本颜色",
             text:"color"
         });
     });

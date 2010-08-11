@@ -149,3 +149,12 @@ ul, ol {
     margin-left: 0;
     padding-left: 40px;
 }
+
+img.ke_flash {
+    background-image: url("placeholder.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: 1px solid #A9A9A9;
+    height: 80px;
+    width: 80px;
+}
