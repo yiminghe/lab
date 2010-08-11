@@ -42,7 +42,7 @@
                     top:"100px"
                 });
 
-                focus && show();
+                show();
                 ev.halt();
             });
 
@@ -73,20 +73,25 @@
                     //激活光标
                     body.contentEditable = false;
                     body.contentEditable = true;
-                    a[0].focus();
-                    win.focus();
-                    body.focus();
 
+                    if (focus) {
+                        a[0].focus();
+                        win.focus();
+                        body.focus();
 
-                    //范围回复
-                    var sel = win.getSelection();
-                    sel.removeAllRanges();
-                    sel.addRange(savedRange);
+                        //范围回复
+                        var sel = win.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(savedRange);
 
+                    }
 
                 }
             }
-        });
+        }
+
+                )
+                ;
         iframe.appendTo(S.one("#test"));
     });
 </script>
