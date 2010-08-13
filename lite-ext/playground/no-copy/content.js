@@ -14,15 +14,26 @@ KISSY.ready(function(S) {
         Node = S.Node,
         clip = new Node(body.appendChild(DOM.create('<' + t + ' style="position:absolute;left:-9999px;">' + m + '</' + t + '>')))
 
+    /*
+    使用copy就不用阻止右键了
     Event.on(document, "contextmenu", function(ev) {
         ev.halt();
     });
-    Event.on(document, "keydown", function(ev) {
-        var keyCode = ev.keyCode;
+    */
+
+    Event.on(document.body,
+        //对编辑栏菜单无效
+        //"keydown",
+
+        //该做监听copy事件
+        "copy",
+
+        function(ev) {
+       // var keyCode = ev.keyCode;
 
         //mac and win
         //捕获复制快捷键
-        if (keyCode === 67 && (ev.ctrlKey || ev.metaKey)) {
+        //if (keyCode === 67 && (ev.ctrlKey || ev.metaKey)) {
             //没有警告信息这个就够了
             //ev.halt();
             //return;
@@ -37,7 +48,7 @@ KISSY.ready(function(S) {
             setTimeout(function() {
                 r.select();
             }, 0);
-        }
+        //}
     });
     body.appendChild(document.createTextNode("我是内容，你可以copy我看看！"));
 });
