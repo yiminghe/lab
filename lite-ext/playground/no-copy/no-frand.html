@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="gbk"/>
+<meta charset="utf-8"/>
 <title>no-fraud</title>
 </head>
 <body>
 
-<h1>Ñ¡ÖĞÏÂÃæ¿òÖĞµÄÎÄ×Ö</h1>
+<h1>é€‰ä¸­ä¸‹é¢æ¡†ä¸­çš„æ–‡å­—</h1>
 <div id="wrapper" style=" padding:20px;background-color:#fff; border:1px solid green;">
     http://www.tao<span style="display:none;">123</span>bao.com
 </div>
 <textarea rows="1" cols="1" style="position:absolute;left:-9999px;top:-9999px;z-index:-999" id="hack">hacked</textarea>
-<button id="activate">¿ªÆô·ÀµöÓã</button>
+<button id="activate">å¼€å¯é˜²é’“é±¼</button>
 
 <script>
     var hack = document.getElementById('hack');
@@ -58,10 +58,10 @@
         div.appendChild(frag);
         return div;
     }
-    alert("Äã¿ÉÒÔ¸´ÖÆÍøÖ·ÊÔÊÔ");
+    alert("ä½ å¯ä»¥å¤åˆ¶ç½‘å€è¯•è¯•");
     document.getElementById("activate").onclick = function() {
         document.getElementById("activate").onclick = null;
-        alert("¿ªÆôÁË·ÀµöÓã£¬Äã¿ÉÒÔÔÙ¸´ÖÆÍøÖ·ÊÔÊÔ");
+        alert("å¼€å¯äº†é˜²é’“é±¼ï¼Œä½ å¯ä»¥å†å¤åˆ¶ç½‘å€è¯•è¯•");
         document.getElementById("wrapper").oncopy = function(e) {
             var evt = e || window.event,
                     userSelection, selectedDom,savedRange;
