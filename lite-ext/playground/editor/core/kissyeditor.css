@@ -2,6 +2,12 @@
     background: white;
 }
 
+.ke-wrap-table {
+    border-collapse: collapse;
+    border: none;
+    width: 100%;
+}
+
 .ke-textarea-wrap {
     border: 1px solid green;
 }
@@ -16,4 +22,29 @@
     border: 1px solid gray;
     border-top: none;
     height: 17px;
+}
+
+.ke-popup-wrap {
+    -moz-border-radius: 3px 3px 3px 3px;
+    background-color: #FFFFFF;
+    border: 1px solid #8F8F73;
+    position: absolute;
+    z-index: 10001;
+}
+
+.ke-bubbleview-bubble {
+    background-color: #E0ECFF;
+    border: 1px solid #99C0FF;
+    cursor: default;
+    font: 12px sans-serif;
+    margin: 2px;
+    padding: 4px;
+    position: absolute;
+    z-index: 998;
+}
+
+.ke-bubbleview-link, .ke-bubbleview-url {
+    color: #000099;
+    cursor: pointer;
+    text-decoration: underline;
 }

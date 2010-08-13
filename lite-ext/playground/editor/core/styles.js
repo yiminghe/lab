@@ -17,7 +17,10 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         DOM = S.DOM,
         ElementPath = KE.ElementPath,
         blockElements = { address:1,div:1,h1:1,h2:1,h3:1,h4:1,h5:1,h6:1,p:1,pre:1 },
-        objectElements = { a:1,embed:1,hr:1,img:1,li:1,object:1,ol:1,table:1,td:1,tr:1,th:1,ul:1,dl:1,dt:1,dd:1,form:1},
+        objectElements = {
+            //why? a should be same to inline? 但是不能互相嵌套
+            //a:1,
+            embed:1,hr:1,img:1,li:1,object:1,ol:1,table:1,td:1,tr:1,th:1,ul:1,dl:1,dt:1,dd:1,form:1},
         semicolonFixRegex = /\s*(?:;\s*|$)/,
         varRegex = /#\((.+?)\)/g;
 
@@ -86,6 +89,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
                     applyBlockStyle
                     : self.type == KEST.STYLE_OBJECT ?
                     null
+                    //yiminghe note:no need!
                     //applyObjectStyle
                     : null ).call(self, range);
         },
@@ -937,10 +941,10 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         for (var attName in attributes) {
             // The 'class' element value must match (#1318).
             if (( attName == 'class' || style._.definition.fullMatch )
-                && element.getAttribute(attName) != normalizeProperty(attName, attributes[ attName ]))
+                && element.attr(attName) != normalizeProperty(attName, attributes[ attName ]))
                 continue;
-            removeEmpty = element.hasAttribute(attName);
-            element.removeAttribute(attName);
+            removeEmpty = removeEmpty || !!element._4e_hasAttribute(attName);
+            element.removeAttr(attName);
         }
 
         for (var styleName in styles) {

@@ -14,9 +14,10 @@ KISSYEDITOR.add("editor-plugin-elementpaths", function(KE) {
 
     S.augment(ElementPaths, {
         _init:function() {
-            var cfg = this.cfg,editor = cfg.editor,textarea = editor.textarea[0];
-            editor.statusDiv = new Node("<div class='ke-editor-status'></div>");
-            textarea.parentNode.parentNode.appendChild(editor.statusDiv[0]);
+            var cfg = this.cfg,
+                editor = cfg.editor,
+                textarea = editor.textarea[0];
+            editor.statusDiv.css("display", "");
             editor.on("selectionChange", this._selectionChange, this);
         },
         _selectionChange:function(ev) {
@@ -36,7 +37,10 @@ KISSYEDITOR.add("editor-plugin-elementpaths", function(KE) {
             for (var i = 0, element; i < elements.length; i++) {
                 element = elements[i];
 
-                var a = new Node("<a href='#' class='elementpath'>" + element._4e_name() + "</a>");
+                var a = new Node("<a href='#' class='elementpath'>" +
+                    //¿¼ÂÇ fake objects 
+                    (element.attr("_ke_real_element_type") || element._4e_name())
+                    + "</a>");
                 this._cache.push(a);
                 (function(element) {
                     a.on("click", function(ev2) {

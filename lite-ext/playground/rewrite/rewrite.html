@@ -95,6 +95,39 @@
             obj[before] = obj[after];
         }
     };
+    function Mask() {
+    }
+    function Dialog_v5() {
+
+    }
+
+    Dialog_v5.prototype = {
+        prototype:  Dialog_v5,
+        show:function() {
+            if (!Dialog_v5.mask) {
+                Dialog_v5.mask = new Mask();
+            }
+            //use mask
+        }
+    };
+
+    function Dialog_v6() {
+
+    }
+
+    Dialog_v6.prototype = {
+        prototype:  Dialog_v6,
+        _prepare:function(){
+            Dialog_v6.mask=new Mask();
+        },
+        _real:function(){
+            //use mask
+        },
+        show:function() {
+            this._prepare();
+        }
+    };
+    lazyRun(Dialog_v6.prototype,"_prepare","_real");
 
 
 </script>

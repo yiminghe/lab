@@ -67,7 +67,6 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
         },
         _prepareShow:function() {
             var self = this;
-            this._initDialogOk = true;
             self.d = new Overlay({
                 title:"±à¼­flash",
                 width:"350px",
@@ -109,7 +108,6 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
                 'type="application/x-shockwave-flash">' +
                 '</embed>' +
                 '</object>');
-
             var substitute = editor.createFakeElement(real, 'ke_flash', 'flash', true);
             editor.insertElement(substitute);
             self.d.hide();

@@ -1513,8 +1513,14 @@ KISSYEDITOR.add("editor-range", function(KE) {
             }
 
             return isEditable;
-        }
+        },
 
+        selectNodeContents : function(node) {
+            this.setStart(node, 0);
+            this.setEnd(node, node[0].nodeType == KEN.NODE_TEXT ?
+                node[0].nodeValue.length :
+                node[0].childNodes.length);
+        }
     });
     var inlineChildReqElements = { abbr:1,acronym:1,b:1,bdo:1,big:1,cite:1,code:1,del:1,dfn:1,em:1,font:1,i:1,ins:1,label:1,kbd:1,q:1,samp:1,small:1,span:1,strike:1,strong:1,sub:1,sup:1,tt:1,u:1,'var':1 };
 
@@ -1523,12 +1529,12 @@ KISSYEDITOR.add("editor-range", function(KE) {
     function elementBoundaryEval(node) {
         // Reject any text node unless it's being bookmark
         // OR it's spaces. (#3883)
-        //如果不是文本节点并且是空的就是边界了
+        //如果不是文本节点并且是空的，可以继续取下一个判断边界
         var c1 = node[0].nodeType != KEN.NODE_TEXT
             && node._4e_name() in dtd.$removeEmpty,
-            //文本为空也是边界
+            //文本为空，可以继续取下一个判断边界
             c2 = !S.trim(node[0].nodeValue),
-            //恩，进去了书签还是边界了
+            //恩，进去了书签，可以继续取下一个判断边界
             c3 = !!node.parent().attr('_ke_bookmark');
         return c1 || c2 || c3;
     }

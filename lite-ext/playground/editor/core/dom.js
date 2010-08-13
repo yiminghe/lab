@@ -501,8 +501,8 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                         return node._4e_name() == n;
                     };
                 }
-
-                while ($) {
+                //到document就完了
+                while ($ && $.nodeType != 9) {
                     if (!name || name(new Node($)) === true)
                         return new Node($);
 

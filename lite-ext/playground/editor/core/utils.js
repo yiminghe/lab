@@ -7,7 +7,7 @@ KISSYEDITOR.add("editor-utils", function(KE) {
     KE.Utils = {
         /**
          * ¿¡∂Ë“ªœ¬
-         * @param cls
+         * @param obj
          * @param before
          * @param after
          */
@@ -15,11 +15,11 @@ KISSYEDITOR.add("editor-utils", function(KE) {
             var b = obj[before],a = obj[after];
             obj[before] = function() {
                 b.apply(this, arguments);
-                a.apply(this, arguments);
                 obj[before] = obj[after];
-            }
-
+                return a.apply(this, arguments);
+            };
         },
+        
 
         getXY:function(x, y, srcDoc, destDoc) {
             var currentWindow = srcDoc.defaultView || srcDoc.parentWindow;

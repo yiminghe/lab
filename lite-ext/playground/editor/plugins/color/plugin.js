@@ -6,6 +6,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
     var S = KISSY,
         Node = S.Node,
         Event = S.Event,
+        Overlay = KE.SimpleOverlay,
         KEStyle = KE.Style,
         DOM = S.DOM;
     var colorButton_colors =
@@ -27,7 +28,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
         styles        : { 'background-color' : '#(color)' }
     };
 
-    var html = "<div class='ke-color-wrap'>" +
+    var html = "<div class='ke-popup-wrap ke-color-wrap'>" +
         "<a class='ke-color-remove' href=\"javascript:void('清除');\"><span>清除</span></a>" +
         "<table>";
     var BACK_STYLES = {},FORE_STYLES = {};
@@ -113,11 +114,12 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             var self = this,
                 editor = this.get("editor"),
                 toolBarDiv = editor.toolBarDiv,
-                el = self.el = new TripleButton({
+                el = new TripleButton({
                     container:toolBarDiv,
                     title:this.get("title"),
                     text:this.get("text")
                 });
+
             el.on("offClick", this._showColors, this);
             KE.Utils.lazyRun(this, "_prepare", "_real");
         },
@@ -125,10 +127,9 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             var t = ev.target;
             //多窗口管理
             if (t !== this.el.el[0])
-                this.colorPanel.css("display", "none");
+                this.colorWin.hide();
         },
         _selectColor:function(ev) {
-
             ev.halt();
             var editor = this.get("editor");
             var t = ev.target;
@@ -147,30 +148,25 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
                 }
                 editor.fire("save");
                 editor.focus();
-                this.colorPanel.css("display", "none");
+                this.colorWin.hide();
             }
-        },
-        _realShowColors:function(ev) {
-            this.colorPanel.css("display", "");
-            var xy = this.el.el.offset();
-            xy.top += this.el.el.height() + 5;
-            this.colorPanel.offset(xy);
         },
         _prepare:function(ev) {
             var self = this;
             this.colorPanel = new Node(html);
-            this.colorPanel.css("display", "none");
+            this.colorWin = Overlay.create({
+                el:this.colorPanel,
+                mask:false
+            });
             document.body.appendChild(this.colorPanel[0]);
             this.colorPanel.on("click", this._selectColor, this);
             Event.on(document, "click", this._hidePanel, this);
             Event.on(editor.document, "click", this._hidePanel, this);
         },
         _real:function(ev) {
-            this.colorPanel.css("display", "");
             var xy = this.el.el.offset();
             xy.top += this.el.el.height() + 5;
-            this.colorPanel.offset(xy);
-
+            this.colorWin.show(xy);
         },
         _showColors:function(ev) {
             var self = this;

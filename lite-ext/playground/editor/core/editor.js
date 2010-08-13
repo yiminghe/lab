@@ -12,11 +12,13 @@ KISSY.add("editor", function(S) {
         NONE = "none",
         VISIBILITY = "visibility",
         HIDDEN = "hidden",
+        focusManager = KE.focusManager,
         tryThese = KE.Utils.tryThese,
         DOM = S.DOM,
         DTD = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
         HTML5_DTD = '<!doctype html>',
         CSS_FILE = "kissyeditor-iframe.css";
+
     (function() {
         var scripts = document.getElementsByTagName("script");
         for (var i = 0; i < scripts.length; i++) {
@@ -30,8 +32,9 @@ KISSY.add("editor", function(S) {
         }
     })();
 
+
     function prepareIframeHtml() {
-        var data = HTML5_DTD
+        return HTML5_DTD
             + "<html>"
             + "<head>"
             + "<title>kissy-editor</title>"
@@ -44,14 +47,15 @@ KISSY.add("editor", function(S) {
             // + (textarea.value || "")
             + "</body>"
             + "<html>";
-        return data;
     }
+
+    var INSTANCE_ID = 1;
 
     function Editor(textarea) {
         if (!textarea[0]) textarea = new Node(textarea);
         var self = this,
             editorWrap = new Node("<div class='ke-editor-wrap'" +
-                //!!编辑器内焦点不失去
+                //!!编辑器内焦点不失去,firefox?
                 " onmousedown='" +
                 //"console.log(\"trapped\");" +
                 "return false;'" +
@@ -68,7 +72,14 @@ KISSY.add("editor", function(S) {
         self.wrap = wrap;
         self._init();
         textarea.css("height") && self.iframe.css("height", textarea.css("height"));
+        //ie 点击按钮不丢失焦点
         self.toolBarDiv._4e_unselectable();
+        self._UUID = INSTANCE_ID++;
+        self.statusDiv = new Node("<div class='ke-editor-status'" +
+            "style='display:none'" +
+            " ></div>");
+        textarea[0].parentNode.parentNode.appendChild(self.statusDiv[0]);
+        //fixTableForIe6(editorWrap, self.toolBarDiv, wrap, self.statusDiv);
     }
 
     S.augment(Editor, EventTarget, {
@@ -122,17 +133,24 @@ KISSY.add("editor", function(S) {
 
             win && win.focus();
             //ie and firefox need body focus
-            self.document && self.document.body.focus();
+            //self.document && self.document.body.focus();
             self.notifySelectionChange();
         } ,
-        blur:function(emu) {
-            //只是标志一下？
-            if (!emu)
-                this.toolBarDiv.children().each(function(el) {
-                    el[0].focus();
-                });
+        blur:function() {
+            /*
+             工具栏有焦点，iframe也有焦点？？
+             this.toolBarDiv.children().each(function(el) {
+             el[0].focus();
+             });
+             */
+            var self = this,
+                win = DOM._4e_getWin(self.document);
+            win.blur();
+            self.document && self.document.body.blur();
+            //self.notifySelectionChange();
+
             //firefox 焦点相关，强制 mousedown 刷新光标
-            this.iframeFocus = false;
+            //this.iframeFocus = false;
         },
         _init:function() {
             var iframe,
@@ -150,8 +168,10 @@ KISSY.add("editor", function(S) {
                             'document.close();';
 
                     iframe = new Node('<iframe' +
-                        ' style="width:100%;height:100%"' +
-                        ' frameBorder="0"' +
+                        ' style="width:100%;height:100%;border:none;"' +
+                        ' width="100%"' +
+                        ' height="100%"' +
+                        ' frameborder="0"' +
                         ' title="' + "kissy-editor" + '"' +
                         // With IE, the custom domain has to be taken care at first,
                         // for other browsers, the 'src' attribute should be left empty to
@@ -206,7 +226,10 @@ KISSY.add("editor", function(S) {
                                     false, false, false, 0, 32);
                                 doc.dispatchEvent(keyEventSimulate);
                                 // Restore the original document status by placing the cursor before a bogus br created (#5021).
-                                body.appendChild(new Node("<br _moz_editor_bogus_node='true' _moz_dirty=''/>")[0]);
+                                body.appendChild(new Node("<br " +
+                                    "_moz" + "_editor_bogus_node='true'" +
+                                    " _moz" + "_dirty=''" +
+                                    "/>")[0]);
                                 var nativeRange = new KERange(doc);
                                 nativeRange.setStartAt(new Node(body), KER.POSITION_AFTER_START);
                                 nativeRange.select();
@@ -286,7 +309,11 @@ KISSY.add("editor", function(S) {
                             var focusGrabber;
                             focusGrabber = new Node(DOM.insertAfter(new Node(
                                 // Use 'span' instead of anything else to fly under the screen-reader radar. (#5049)
-                                '<span tabindex="-1" style="position:absolute; left:-10000" role="presentation"></span>')[0], textarea));
+                                '<span ' +
+                                    //'tabindex="-1" ' +
+                                    'style="position:absolute; left:-10000"' +
+                                    //' role="presentation"' +
+                                    '></span>')[0], textarea));
                             focusGrabber.on('focus', function() {
                                 self.focus();
                             });
@@ -307,7 +334,7 @@ KISSY.add("editor", function(S) {
                                 // the focus.
                                 if (evt.target === htmlElement[0]) {
                                     if (UA.gecko)
-                                        blinkCursor();
+                                        blinkCursor(false);
                                     focusGrabber[0].focus();
                                 }
                             });
@@ -315,15 +342,16 @@ KISSY.add("editor", function(S) {
 
 
                         Event.on(win, 'focus', function() {
-                            //console.log(" i am  focus");
+                            //console.log(" i am  focus inner");
                             var doc = self.document;
+
                             /**
                              * yiminghe特别注意：firefox光标丢失bug
                              * blink后光标出现在最后，这就需要实现保存range
                              * focus后再恢复range
                              */
                             if (UA.gecko)
-                                blinkCursor();
+                                blinkCursor(false);
                             else if (UA.opera)
                                 doc.body.focus();
                             else if (false && UA.webkit) {
@@ -338,7 +366,8 @@ KISSY.add("editor", function(S) {
                                 doc.documentElement.focus();
                                 range && range.select();
                             }
-                            self.iframeFocus = true;
+                            // focus 后强制刷新自己状态
+                            self.notifySelectionChange();
                         });
 
 
@@ -350,14 +379,10 @@ KISSY.add("editor", function(S) {
                             Event.on(self.document, "mousedown", function() {
                                 if (!self.iframeFocus) {
                                     //console.log("i am fixed");
-                                    blinkCursor();
+                                    blinkCursor(false);
                                 }
                             });
                         }
-
-                        Event.on(win, "blur", function() {
-                            self.iframeFocus = false;
-                        });
 
                         if (UA.ie) {
                             new Node(doc.documentElement).addClass(doc.compatMode);
@@ -371,14 +396,14 @@ KISSY.add("editor", function(S) {
                                         control = sel.getSelectedElement();
                                     if (control) {
                                         // Make undo snapshot.
-                                        editor.fire('save');
+                                        self.fire('save');
                                         // Delete any element that 'hasLayout' (e.g. hr,table) in IE8 will
                                         // break up the selection, safely manage it here. (#4795)
                                         var bookmark = sel.getRanges()[ 0 ].createBookmark();
                                         // Remove the control manually.
                                         control.remove();
                                         sel.selectBookmarks([ bookmark ]);
-                                        editor.fire('save');
+                                        self.fire('save');
                                         evt.preventDefault();
                                     }
                                 }
@@ -423,6 +448,9 @@ KISSY.add("editor", function(S) {
                         setTimeout(function() {
                             self.fire("dataReady");
                         }, 10);
+                        //注意：必须放在这个位置，等iframe加载好再开始运行
+                        //加入焦点管理，和其他实例联系起来
+                        focusManager.add(self);
                     });
 
                     DOM.insertAfter(iframe[0], textarea);
@@ -441,7 +469,6 @@ KISSY.add("editor", function(S) {
              */
             createIFrame(prepareIframeHtml());
             self.iframe = iframe;
-
 
             self.on("dataReady", function() {
                 self.setData(textarea.value || "");
@@ -473,8 +500,7 @@ KISSY.add("editor", function(S) {
         notifySelectionChange:function() {
             this.previousPath = null;
             this._monitor();
-        }
-        ,
+        },
 
         insertElement:function(element) {
             var self = this;
@@ -538,8 +564,8 @@ KISSY.add("editor", function(S) {
             setTimeout(function() {
                 self.fire("save");
             }, 10);
-        }
-        ,
+        },
+
         insertHtml:function(data) {
             /**
              * webkit insert html 有问题！会把标签去掉，算了直接用insertElement
