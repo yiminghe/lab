@@ -1,12 +1,12 @@
 /**
  * Just For Fun ,no copy no copy
  * @author:yiminghe@gmail.com
- * @ÉùÃ÷£ºÎÒÖ§³Ö¿ª·Å
+ * @å£°æ˜ï¼šæˆ‘æ”¯æŒå¼€æ”¾
  */
 KISSY.ready(function(S) {
     var KE = KISSYEDITOR,
         t = "textarea",
-        m = "½ûÖ¹copy!",
+        m = "ç¦æ­¢copy!",
         Event = S.Event,
         doc = document,
         body = doc.body,
@@ -15,40 +15,40 @@ KISSY.ready(function(S) {
         clip = new Node(body.appendChild(DOM.create('<' + t + ' style="position:absolute;left:-9999px;">' + m + '</' + t + '>')))
 
     /*
-    Ê¹ÓÃcopy¾Í²»ÓÃ×èÖ¹ÓÒ¼üÁË
+    ä½¿ç”¨copyå°±ä¸ç”¨é˜»æ­¢å³é”®äº†
     Event.on(document, "contextmenu", function(ev) {
         ev.halt();
     });
     */
 
     Event.on(document.body,
-        //¶Ô±à¼­À¸²Ëµ¥ÎŞĞ§
+        //å¯¹ç¼–è¾‘æ èœå•æ— æ•ˆ
         //"keydown",
 
-        //¸Ã×ö¼àÌıcopyÊÂ¼ş
+        //è¯¥åšç›‘å¬copyäº‹ä»¶
         "copy",
 
         function(ev) {
        // var keyCode = ev.keyCode;
 
         //mac and win
-        //²¶»ñ¸´ÖÆ¿ì½İ¼ü
+        //æ•è·å¤åˆ¶å¿«æ·é”®
         //if (keyCode === 67 && (ev.ctrlKey || ev.metaKey)) {
-            //Ã»ÓĞ¾¯¸æĞÅÏ¢Õâ¸ö¾Í¹»ÁË
+            //æ²¡æœ‰è­¦å‘Šä¿¡æ¯è¿™ä¸ªå°±å¤Ÿäº†
             //ev.halt();
             //return;
 
-            //±£´æÔ­À´µÄÑ¡ÔñÇøÓò
+            //ä¿å­˜åŸæ¥çš„é€‰æ‹©åŒºåŸŸ
             var s = new KE.Selection(doc),r = s.getRanges()[0];
-            //¾¯¸æ
-            // clip.html("½ûÖ¹copy£¡");
+            //è­¦å‘Š
+            // clip.html("ç¦æ­¢copyï¼");
             clip[0].focus();
             clip[0].select();
-            //Òì²½
+            //å¼‚æ­¥
             setTimeout(function() {
                 r.select();
             }, 0);
         //}
     });
-    body.appendChild(document.createTextNode("ÎÒÊÇÄÚÈİ£¬Äã¿ÉÒÔcopyÎÒ¿´¿´£¡"));
+    body.appendChild(document.createTextNode("æˆ‘æ˜¯å†…å®¹ï¼Œä½ å¯ä»¥copyæˆ‘çœ‹çœ‹ï¼"));
 });
