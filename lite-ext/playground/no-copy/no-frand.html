@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk"/>
+<title>no-fraud</title>
+</head>
+<body>
+
+<h1>选下面框中的文字</h1>
+<div id="wrapper" style=" padding:20px;background-color:#fff; border:1px solid green;">
+    http://www.tao<span style="display:none;">123</span>bao.com
+</div>
+<textarea rows="1" cols="1" style="position:absolute;left:-9999px;top:-9999px;z-index:-999" id="hack">hacked</textarea>
+<button id="activate">开启防钓鱼</button>
+
+<script>
+    var hack = document.getElementById('hack');
+
+    function clear(node) {
+        var style = node.style;
+        if ((style.position != "" && style.position != "static")
+                ||
+                style.display == "none"
+                || style.visibility == "hidden"
+                ) {
+            node.parentNode.removeChild(node);
+            return true;
+        }
+        return false;
+    }
+    function makeArray(o) {
+        if (o.item && document.all) {
+            var ret = [], i = 0, len = o.length;
+            for (; i < len; ++i) {
+                ret[i] = o[i];
+            }
+            return ret;
+        }
+        return [].slice.call(o);
+    }
+    function clearAll(node) {
+        if (!clear(node)) {
+            var c = makeArray(node.childNodes);
+            for (var i = 0; i < c.length; i++) {
+                var n = c[i]
+                n.nodeType == 1 && clearAll(n);
+            }
+        }
+    }
+
+    function getWrap(html) {
+        var div = document.createElement("div");
+        div.innerHTML = html;
+        return div;
+    }
+    function wrap(frag) {
+        var div = document.createElement("div");
+        div.appendChild(frag);
+        return div;
+    }
+    alert("你可以复制网址试试");
+    document.getElementById("activate").onclick = function() {
+        document.getElementById("activate").onclick = null;
+        alert("开启了防钓鱼，你可以再复制网址试试");
+        document.getElementById("wrapper").oncopy = function(e) {
+            var evt = e || window.event,
+                    userSelection, selectedDom,savedRange;
+            if (window.getSelection) {
+                userSelection = window.getSelection();
+                savedRange = userSelection.getRangeAt(0);
+
+            } else if (document.selection) { // should come last; Opera!
+                userSelection = document.selection.createRange();
+            }
+
+            selectedDom = userSelection.htmlText ? getWrap(userSelection.htmlText)
+                    :
+                    wrap(savedRange.cloneContents());
+            clearAll(selectedDom);
+            hack.value = selectedDom.innerText || selectedDom.textContent;
+            hack.focus();
+            hack.select();
+            setTimeout(function() {
+                if (userSelection.select) userSelection.select();
+                else
+                    userSelection.addRange(savedRange);
+            }, 10);
+
+        };
+    }
+</script>
+
+</body>
+</html>
