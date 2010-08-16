@@ -3,7 +3,10 @@ for kissy editor iframe
 @author:玉伯(lifesinger@gmail.com),yiminghe@gmail.com
 **/
 
-body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+/*
+iframe body no need to reset
+body,*/
+h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
 dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
 pre, /* text formatting elements 文本格式元素 */
 form, fieldset, legend, button, input, textarea, /* form elements 表单元素 */
@@ -136,7 +139,8 @@ caption {
     margin-bottom: .5em;
 }
 
-p, fieldset, table, pre {
+/*编辑器内p不要有间隔了，两个p来出间隔。p,*/
+fieldset, table, pre {
 /* so things don't run into each other */
     margin-bottom: 1em;
 }

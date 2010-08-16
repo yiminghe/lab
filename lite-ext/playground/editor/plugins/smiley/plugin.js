@@ -27,7 +27,8 @@ KISSYEDITOR.add("editor-plugin-smiley", function(KE) {
         _init:function() {
             var self = this,editor = self.editor;
             self.el = new TripleButton({
-                text:"smiley",
+                //text:"smiley",
+                contentCls:"ke-toolbar-smiley",
                 title:"插入表情",
                 container:editor.toolBarDiv
             });
@@ -35,10 +36,13 @@ KISSYEDITOR.add("editor-plugin-smiley", function(KE) {
             KE.Utils.lazyRun(this, "_prepare", "_real");
         },
         _hidePanel:function(ev) {
-            var t = ev.target;
+            var self = this,t = ev.target;
             //多窗口管理
-            if (t !== this.el.el[0])
-                this.smileyWin.hide();
+            if (DOM._4e_ascendant(ev.target, function(node) {
+                return  node[0] === self.el.el[0];
+            }))return;
+
+            this.smileyWin.hide();
         },
         _selectSmiley:function(ev) {
             ev.halt();

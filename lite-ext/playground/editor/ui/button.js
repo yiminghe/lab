@@ -20,7 +20,6 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
             styleSheet.appendChild(document.createTextNode(seed));
         }
     }
-
     var BUTTON_CLASS = "ke-triplebutton",
         ON_CLASS = "ke-triplebutton-on",
         OFF_CLASS = "ke-triplebutton-off",
@@ -53,6 +52,7 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
         state: {value:OFF},
         container:{},
         text:{},
+        contentCls:{},
         cls:{}
     };
 
@@ -63,7 +63,12 @@ KISSYEDITOR.add("kissy-editor-button", function(KE) {
             self.el = new Node(BUTTON_HTML);
             self.el._4e_unselectable();
             self._attachCls();
-            self.el.html(this.get("text"));
+            if (this.get("text"))
+                self.el.html(this.get("text"));
+            else if (this.get("contentCls")) {
+                self.el.html("<span class='ke-toolbar-item " + this.get("contentCls") + "'></span>")
+                self.el.one("span")._4e_unselectable();
+            }
             if (self.get("title")) self.el.attr("title", self.get("title"));
             container.appendChild(self.el[0]);
             self.el.on("click", self._action, self);

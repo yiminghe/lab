@@ -481,7 +481,8 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
             el = this.el;
         var self = this;
         self.el = new TripleButton({
-            text:this.get("type"),
+            //text:this.get("type"),
+            contentCls:this.get("contentCls"),
             title:this.get("title"),
             container:toolBarDiv
         });
@@ -492,13 +493,16 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
     }
 
     List.ATTRS = {
-        editor:{}
+        editor:{},
+        type:{},
+        contentCls:{}
     };
 
     S.extend(List, S.Base, {
 
         _init:function() {
-            var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv,
+            var editor = this.get("editor"),
+                toolBarDiv = editor.toolBarDiv,
                 el = this.el;
             var self = this;
             el.on("click", this._change, this);
@@ -558,11 +562,13 @@ KISSYEDITOR.add("editor-plugin-list", function(KE) {
         new List({
             editor:editor,
             title:"项目列表",
+            contentCls:"ke-toolbar-ul",
             type:"ul"
         });
         new List({
             editor:editor,
             title:"编号列表",
+            contentCls:"ke-toolbar-ol",
             type:"ol"
         });
     });

@@ -141,6 +141,7 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
     SingleFont.ATTRS = {
         editor:{},
         text:{},
+        contentCls:{},
         title:{},
         style:{}
     };
@@ -155,6 +156,7 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
             self.el = new TripleButton({
                 text:text,
                 title:title,
+                contentCls:this.get("contentCls"),
                 container:editor.toolBarDiv
             });
             self.el.on("offClick", self._on, self);
@@ -168,6 +170,8 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
                 style = self.get("style"),
                 title = self.get("title");
             style.apply(editor.document);
+            editor.focus();
+            editor.notifySelectionChange();
         },
         _off:function() {
             var self = this,
@@ -176,6 +180,8 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
                 style = self.get("style"),
                 title = self.get("title");
             style.remove(editor.document);
+            editor.focus();
+            editor.notifySelectionChange();
         },
         _selectionChange:function(ev) {
             var self = this,
@@ -208,38 +214,38 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
         });
 
         new SingleFont({
-            text:"B",
+            contentCls:"ke-toolbar-bold",
             title:"粗体",
             editor:editor,
             style:new KEStyle({
-                element        : 'strong'
+                element : 'strong'
             })
         });
 
         new SingleFont({
-            text:"I",
+            contentCls:"ke-toolbar-italic",
             title:"斜体",
             editor:editor,
             style:new KEStyle({
-                element        : 'em'
+                element : 'em'
             })
         });
 
         new SingleFont({
-            text:"U",
+            contentCls:"ke-toolbar-underline",
             title:"下划线",
             editor:editor,
             style:new KEStyle({
-                element        : 'u'
+                element : 'u'
             })
         });
 
         new SingleFont({
-            text:"DEL",
+            contentCls:"ke-toolbar-strikeThrough",
             title:"删除线",
             editor:editor,
             style:new KEStyle({
-                element        : 'del'
+                element : 'del'
             })
         });
 

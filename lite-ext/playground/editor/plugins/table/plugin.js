@@ -103,7 +103,8 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
                 toolBarDiv = editor.toolBarDiv,
                 myContexts = {};
             self.el = new TripleButton({
-                text:"table",
+                //text:"table",
+                contentCls:"ke-toolbar-table",
                 title:"±í¸ñ",
                 container:toolBarDiv
             });
@@ -662,5 +663,4 @@ KISSYEDITOR.add("editor-plugin-table", function(KE) {
 
         new TableUI(editor);
     });
-})
-    ;
+})    ;

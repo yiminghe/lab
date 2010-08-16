@@ -17,7 +17,8 @@ KISSYEDITOR.add("editor-plugin-preview", function(KE) {
                 container:editor.toolBarDiv,
                 cls:"ke-tool-editor-source",
                 title:"‘§¿¿",
-                text:"preview"
+                contentCls:"ke-toolbar-preview"
+                //text:"preview"
             });
             self.el.on("offClick", this._show, this);
         },

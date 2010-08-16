@@ -6,10 +6,11 @@ KISSYEDITOR.add("editor-plugin-justify", function(KE) {
     var S = KISSY,TripleButton = KE.TripleButton;
 
 
-    function Justify(editor, v, title) {
+    function Justify(editor, v, title, contentCls) {
         var self = this;
         self.editor = editor;
         self.v = v;
+        self.contentCls = contentCls;
         self.title = title;
         self._init();
     }
@@ -20,7 +21,8 @@ KISSYEDITOR.add("editor-plugin-justify", function(KE) {
         _init:function() {
             var self = this,editor = self.editor,toolBarDiv = editor.toolBarDiv;
             self.el = new TripleButton({
-                text:self.v,
+                contentCls:self.contentCls,
+                //text:self.v,
                 title:self.title,
                 container:toolBarDiv
             });
@@ -74,9 +76,9 @@ KISSYEDITOR.add("editor-plugin-justify", function(KE) {
 
     KE.on("instanceCreated", function(ev) {
         var editor = ev.editor;
-        new Justify(editor, "left", "左对齐");
-        new Justify(editor, "center", "居中对齐");
-        new Justify(editor, "right", "右对齐");
-        new Justify(editor, "justify", "两端对齐");
+        new Justify(editor, "left", "左对齐", "ke-toolbar-alignleft");
+        new Justify(editor, "center", "居中对齐", "ke-toolbar-aligncenter");
+        new Justify(editor, "right", "右对齐", "ke-toolbar-alignright");
+        //new Justify(editor, "justify", "两端对齐");
     });
 });

@@ -114,7 +114,8 @@ KISSYEDITOR.add("editor-plugin-link", function(KE) {
             var self = this,editor = self.editor;
             self.el = new TripleButton({
                 container:editor.toolBarDiv,
-                text:'link',
+                contentCls:"ke-toolbar-link",
+                //text:'link',
                 title:'≤Â»Î±‡º≠≥¨¡¥Ω”'
             });
             self.el.on("click", self.show, self);
@@ -166,6 +167,7 @@ KISSYEDITOR.add("editor-plugin-link", function(KE) {
 
             if (elementPath && elements) {
                 var lastElement = elementPath.lastElement;
+                if (!lastElement) return;
                 var a = lastElement._4e_ascendant(function(node) {
                     return node._4e_name() === 'a' && (!!node.attr("href"));
                 }, true);

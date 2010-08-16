@@ -39,7 +39,8 @@ KISSYEDITOR.add("editor-plugin-templates", function(KE) {
         _init:function() {
             var self = this,editor = self.editor,el = new TripleButton({
                 container:editor.toolBarDiv,
-                text:"template",
+                //text:"template",
+                contentCls:"ke-toolbar-template",
                 title:"Ä£°å"
             });
             el.on("click", self._show, self);

@@ -232,7 +232,8 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
         var self = this;
         self.el = new TripleButton({
             container:toolBarDiv,
-            text:this.get("type"),
+            contentCls:this.get("contentCls"),
+            //text:this.get("type"),
             title:this.get("title")
         });
         this.indentCommand = new IndentCommand(this.get("type"));
@@ -241,6 +242,7 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
 
     Indent.ATTRS = {
         type:{},
+        contentCls:{},
         editor:{}
     };
 
@@ -297,11 +299,13 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
         new Indent({
             editor:editor,
             title:"减少缩进量",
+            contentCls:"ke-toolbar-outdent",
             type:"outdent"
         });
         new Indent({
             editor:editor,
             title:"增加缩进量",
+            contentCls:"ke-toolbar-indent",
             type:"indent"
         });
 

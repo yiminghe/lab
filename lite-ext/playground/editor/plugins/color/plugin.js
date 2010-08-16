@@ -106,6 +106,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
     ColorSupport.ATTRS = {
         editor:{},
         styles:{},
+        contentCls:{},
         text:{}
     };
 
@@ -117,7 +118,8 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
                 el = new TripleButton({
                     container:toolBarDiv,
                     title:this.get("title"),
-                    text:this.get("text")
+                    contentCls:this.get("contentCls")
+                    //text:this.get("text")
                 });
 
             el.on("offClick", this._showColors, this);
@@ -125,10 +127,12 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             KE.Utils.lazyRun(this, "_prepare", "_real");
         },
         _hidePanel:function(ev) {
-            var t = ev.target;
+            var self = this;
             //多窗口管理
-            if (t !== this.el.el[0])
-                this.colorWin.hide();
+            if (DOM._4e_ascendant(ev.target, function(node) {
+                return node[0] === self.el.el[0];
+            }, true))return;
+            this.colorWin.hide();
         },
         _selectColor:function(ev) {
             ev.halt();
@@ -181,6 +185,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             editor:editor,
             styles:BACK_STYLES,
             title:"背景颜色",
+            contentCls:"ke-toolbar-bgcolor",
             text:"bgcolor"
         });
 
@@ -188,6 +193,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
             editor:editor,
             styles:FORE_STYLES,
             title:"文本颜色",
+            contentCls:"ke-toolbar-color",
             text:"color"
         });
     });

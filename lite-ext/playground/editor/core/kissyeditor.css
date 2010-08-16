@@ -1,5 +1,7 @@
 .ke-editor-wrap {
     background: white;
+    border: 1px solid #DFDFDF;
+    line-height: 1 !important;
 }
 
 .ke-wrap-table {
@@ -9,27 +11,35 @@
 }
 
 .ke-textarea-wrap {
-    border: 1px solid green;
 }
 
 .ke-editor-tools {
-    border: 1px solid gray;
-    border-bottom: none;
-    padding: 0 5px;
+    background: url("editor-bg.png") repeat-x scroll 0 -192px #E5E5E5;
+    border-bottom: 1px solid #DFDFDF;
+    line-height: 1;
+    overflow: hidden;
+    padding: 3px 3px 2px;
 }
 
 .ke-editor-status {
-    border: 1px solid gray;
-    border-top: none;
-    height: 17px;
+    background-color: #E5E5E5;
+    border-top: 1px solid #DFDFDF;
+    height: 16px;
+    line-height: 16px;
+    padding: 4px 0 5px;
 }
 
 .ke-popup-wrap {
     -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
     background-color: #FFFFFF;
     border: 1px solid #8F8F73;
     position: absolute;
     z-index: 10001;
+    -moz-box-shadow: 3px 3px 13px #DDDDDD;
+    -webkit-box-shadow: 3px 3px 13px #DDDDDD;
+    box-shadow: 3px 3px 13px #DDDDDD;
 }
 
 .ke-bubbleview-bubble {
@@ -47,4 +57,152 @@
     color: #000099;
     cursor: pointer;
     text-decoration: underline;
+}
+
+/***
+button from google wave
+
+.ke-tools-bold {
+    background: url("bold.png");
+    height: 21px;
+    width: 15px;
+}
+.ke-tools-i {
+    background: url("i.png");
+    height: 21px;
+    width: 16px;
+}
+.ke-tools-u {
+    background: url("u.png");
+    height: 21px;
+    width: 16px;
+}
+
+.ke-tools-del {
+    background: url("del.png");
+    height: 21px;
+    width: 17px;
+}
+**/
+
+.ke-toolbar-item {
+    background: url("toolbar-sprite.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 14px;
+    overflow: hidden;
+    text-indent: -999999px;
+    vertical-align: middle;
+    width: 15px;
+}
+
+.ke-toolbar-source {
+    background-position: -1013px 50%;
+    width: 16px;
+}
+
+.ke-toolbar-preview {
+    background-position: -897px 50%;
+    width: 15px;
+}
+
+.ke-toolbar-bold {
+    background-position: -32px 50%;
+}
+
+.ke-toolbar-italic {
+    background-position: -48px 50%;
+}
+
+.ke-toolbar-underline {
+    background-position: -64px 50%;
+}
+
+.ke-toolbar-strikeThrough {
+    background-position: -624px 50%;
+}
+
+.ke-toolbar-ol {
+    background-position: -176px 50%;
+}
+
+.ke-toolbar-ul {
+    background-position: -160px 50%;
+}
+
+.ke-toolbar-ul {
+    background-position: -160px 50%;
+}
+
+.ke-toolbar-outdent {
+    background-position: -144px 50%;
+}
+
+.ke-toolbar-indent {
+    background-position: -128px 50%;
+}
+
+.ke-toolbar-alignleft {
+    background-position: -192px 50%;
+}
+
+.ke-toolbar-aligncenter {
+    background-position: -208px 50%;
+}
+
+.ke-toolbar-alignright {
+    background-position: -224px 50%;
+}
+
+.ke-toolbar-image {
+    background-position: -978px 50%;
+    width: 18px;
+}
+
+.ke-toolbar-bgcolor {
+    background-position: -96px 50%;
+    height: 12px;
+}
+
+.ke-toolbar-color {
+    background-position: -80px 50%;
+    height: 12px;
+}
+
+.ke-toolbar-undo {
+    background-position: 0px 50%;
+}
+
+.ke-toolbar-redo {
+    background-position: -17px 50%;
+}
+
+.ke-toolbar-table {
+    background-position: -544px 50%;
+}
+
+.ke-toolbar-template {
+    background-position: -945px 50%;
+}
+
+.ke-toolbar-maximize {
+    background-position: -997px 50%;
+}
+
+.ke-toolbar-flash {
+    background-position: -736px 50%;
+    width: 16px;
+    height: 16px;
+}
+
+.ke-toolbar-link {
+    background-position: -560px 50%;
+    width: 16px;
+}
+
+.ke-toolbar-music {
+    background-position: -576px 50%;
+}
+
+.ke-toolbar-smiley {
+    background-position: -963px 50%;
 }

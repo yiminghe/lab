@@ -32,7 +32,8 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
                 container:editor.toolBarDiv,
                 cls:"ke-tool-editor-source",
                 title:"全屏",
-                text:"maximize"
+                contentCls:"ke-toolbar-maximize"
+                //text:"maximize"
             });
 
             self.el.on("offClick", self.maximize, self);
@@ -110,6 +111,8 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
 
                 //原来是聚焦，现在刷新designmode
                 sel = editor.getSelection();
+                //firefox 先失去焦点才行
+                self.el.el[0].focus();
                 editor.focus();
                 if (self.savedRanges && sel) {
                     sel.selectRanges(self.savedRanges);
@@ -180,7 +183,7 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
                 top:0
             });
             editor.iframe.css({
-                height:(viewportHeight - statusHeight - toolHeight - 6) + "px"
+                height:(viewportHeight - statusHeight - toolHeight - 14) + "px"
             });
             editor.textarea.css({
                 height:(viewportHeight - toolHeight - 4) + "px"

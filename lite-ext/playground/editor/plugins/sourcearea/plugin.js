@@ -17,7 +17,8 @@ KISSYEDITOR.add("editor-plugin-sourcearea", function(KE) {
                 container:editor.toolBarDiv,
                 cls:"ke-tool-editor-source",
                 title:"ิดย๋",
-                text:"source"
+                contentCls:"ke-toolbar-source"
+                //text:"source"
             });
             self.el.on("offClick", self._show, self);
             self.el.on("onClick", self._hide, self);

@@ -18,11 +18,12 @@
 
 <h1>Simple Editor Demo (支持表格右键)</h1>
 
-<div style="width:90%;margin:0 auto;">
+<div style="width:60%;margin:0 auto;">
 
     <textarea id="edit" style="width:100%;height:400px;border:none;margin:0 auto;">
         <script>alert(1);</script>
         <p>我是音乐：</p>
+
         <object height="37"
                 align=""
                 width="165"
@@ -66,8 +67,27 @@
         <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
 
         <p>我是flash：</p>
-        <embed src="http://player.youku.com/player.php/sid/XMTk2ODAzNjg0/v.swf" quality="high" width="480" height="400" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>
-
+        <object class="holiday-logo"
+                classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+                height="68" width="300">
+            <param name="movie"
+                   value="http://img01.taobaocdn.com/tps/i1/T12MVIXfVNXXXXXXXX.swf"/>
+            <param name="wmode" value="transparent"/>
+            <object class="holiday-logo"
+                    data="http://img01.taobaocdn.com/tps/i1/T12MVIXfVNXXXXXXXX.swf"
+                    height="68" name="holiday-logo"
+                    type="application/x-shockwave-flash"
+                    width="300">
+                <param name="wmode"
+                       value="transparent"/>
+                <a href="http://www.taobao.com/"
+                   style="height: 43px; margin-left: 56px;" target="_top">
+                    淘宝网
+                    <img alt="淘宝网" height="110" src="http://www.taobao.com/"
+                         title="Taobao.com - 阿里巴巴旗下网站" width="167"/>
+                </a>
+            </object>
+        </object>
         <ul>
             <li> 我是列表1</li>
             <li> 我是列表2
@@ -84,7 +104,7 @@
 
 <button id="t">parse</button>
 
-<div style="width:90%;margin:0 auto;">
+<div style="width:60%;margin:0 auto;">
 
     <textarea id="edit2" style="width:100%;height:400px;border:none;border:1px solid none;margin:0 auto;">
         <script>alert(1);</script>
@@ -133,8 +153,27 @@
         <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
 
         <p>我是flash：</p>
-        <embed src="http://player.youku.com/player.php/sid/XMTk2ODAzNjg0/v.swf" quality="high" width="480" height="400" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>
-
+        <object class="holiday-logo"
+                classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+                height="68" width="300">
+            <param name="movie"
+                   value="http://img01.taobaocdn.com/tps/i1/T12MVIXfVNXXXXXXXX.swf"/>
+            <param name="wmode" value="transparent"/>
+            <object class="holiday-logo"
+                    data="http://img01.taobaocdn.com/tps/i1/T12MVIXfVNXXXXXXXX.swf"
+                    height="68" name="holiday-logo"
+                    type="application/x-shockwave-flash"
+                    width="300">
+                <param name="wmode"
+                       value="transparent"/>
+                <a href="http://www.taobao.com/"
+                   style="height: 43px; margin-left: 56px;" target="_top">
+                    淘宝网
+                    <img alt="淘宝网" height="110" src="http://www.taobao.com/"
+                         title="Taobao.com - 阿里巴巴旗下网站" width="167"/>
+                </a>
+            </object>
+        </object>
         <ul>
             <li> 我是列表1</li>
             <li> 我是列表2
@@ -201,45 +240,69 @@
 <script type="text/javascript"
         src="../plugins/htmldataprocessor/plugin.js"></script>
 <script type="text/javascript"
+        src="../plugins/fakeobjects/plugin.js"></script>
+
+<!-源码--->
+<script type="text/javascript"
         src="../plugins/sourcearea/plugin.js?t=20100804151801"></script>
+<!--预览-->
 <script type="text/javascript"
         src="../plugins/preview/plugin.js?t=20100804151801"></script>
-
+<!--模板-->
+<script type="text/javascript"
+        src="../plugins/templates/plugin.js?t=20100804151801"></script>
+<!--撤销-->
+<script type="text/javascript"
+        src="../plugins/undo/plugin.js?t=20100804151801"></script>
+<!--字体-->
 <script type="text/javascript"
         src="../plugins/font/plugin.js?t=20100804151801"></script>
+<!--格式-->
 <script type="text/javascript"
         src="../plugins/format/plugin.js?t=20100804151801"></script>
+
+
+<!--颜色-->
+<script type="text/javascript"
+        src="../plugins/color/plugin.js?t=20100804151801"></script>
+<!--列表-->
 <script type="text/javascript"
         src="../plugins/list/plugin.js?t=20100804151801"></script>
+<!--缩进-->
 <script type="text/javascript"
         src="../plugins/indent/plugin.js?t=20100804151801"></script>
+<!--对齐-->
+<script type="text/javascript"
+        src="../plugins/justify/plugin.js?t=20100804151801"></script>
+<!--链接-->
+<script type="text/javascript"
+        src="../plugins/link/plugin.js"></script>
+<!--图像-->
+<script type="text/javascript"
+        src="../plugins/image/plugin.js?t=20100804151801"></script>
+<!--flash-->
+<script type="text/javascript"
+        src="../plugins/flash/plugin.js"></script>
+<!--音乐-->
+<script type="text/javascript"
+        src="../plugins/music/plugin.js"></script>
+<!--表格-->
+<script type="text/javascript"
+        src="../plugins/table/plugin.js?t=20100804151801"></script>
+<!--表情-->
+<script type="text/javascript"
+        src="../plugins/smiley/plugin.js"></script>
+
+
+<!--最大化-->
+<script type="text/javascript"
+        src="../plugins/maximize/plugin.js"></script>
+
+
+<!--路径-->
 <script type="text/javascript"
         src="../plugins/elementpath/plugin.js?t=20100804151801"></script>
 
-<script type="text/javascript"
-        src="../plugins/image/plugin.js?t=20100804151801"></script>
-<script type="text/javascript"
-        src="../plugins/color/plugin.js?t=20100804151801"></script>
-<script type="text/javascript"
-        src="../plugins/undo/plugin.js?t=20100804151801"></script>
-<script type="text/javascript"
-        src="../plugins/table/plugin.js?t=20100804151801"></script>
-<script type="text/javascript"
-        src="../plugins/justify/plugin.js?t=20100804151801"></script>
-<script type="text/javascript"
-        src="../plugins/templates/plugin.js?t=20100804151801"></script>
-<script type="text/javascript"
-        src="../plugins/maximize/plugin.js"></script>
-<script type="text/javascript"
-        src="../plugins/fakeobjects/plugin.js"></script>
-<script type="text/javascript"
-        src="../plugins/flash/plugin.js"></script>
-<script type="text/javascript"
-        src="../plugins/link/plugin.js"></script>
-<script type="text/javascript"
-        src="../plugins/music/plugin.js"></script>
-<script type="text/javascript"
-        src="../plugins/smiley/plugin.js"></script>
 <script type="text/javascript">
 
     KISSY.ready(function(S) {

@@ -219,11 +219,12 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
      * @param editor
      * @param text
      */
-    function RestoreUI(editor, text, title) {
+    function RestoreUI(editor, text, title, contentCls) {
         var self = this;
         this.editor = editor;
         self.title = title;
         this.text = text;
+        this.contentCls = contentCls;
         this._init();
     }
 
@@ -231,7 +232,8 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
         _init:function() {
             var self = this,editor = self.editor;
             self.el = new TripleButton({
-                text:self.text,
+                contentCls:self.contentCls,
+                //text:self.text,
                 title:self.title,
                 container:editor.toolBarDiv
             });
@@ -287,11 +289,11 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
         /**
          * 撤销工具栏按钮
          */
-        new RestoreUI(editor, "undo", "撤销");
+        new RestoreUI(editor, "undo", "撤销", "ke-toolbar-undo");
         /**
          * 重做工具栏按钮
          */
-        new RestoreUI(editor, "redo", "重做");
+        new RestoreUI(editor, "redo", "重做", "ke-toolbar-redo");
     });
 
 

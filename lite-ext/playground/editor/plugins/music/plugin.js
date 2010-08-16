@@ -59,8 +59,9 @@ KISSYEDITOR.add("editor-plugin-music", function(KE) {
             var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv;
 
             this.el = new TripleButton({
-                text:"music",
-                title:"“Ù¿÷",
+                //text:"music",
+                contentCls:"ke-toolbar-music",
+                title:"∑÷œÌ“Ù¿÷",
                 container:toolBarDiv
             });
 
@@ -88,9 +89,8 @@ KISSYEDITOR.add("editor-plugin-music", function(KE) {
         },
         hide:function(ev) {
             var self = this;
-            if (ev.target === this.el.el[0])return;
             if (DOM._4e_ascendant(ev.target, function(node) {
-                return node[0] === self.content[0];
+                return node[0] === self.content[0] || node[0] === self.el.el[0];
             }))return;
             this.d.hide();
         },

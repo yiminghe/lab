@@ -32,7 +32,8 @@ KISSYEDITOR.add("editor-plugin-image", function(KE) {
             var editor = this.get("editor"),toolBarDiv = editor.toolBarDiv;
 
             this.el = new TripleButton({
-                text:"img",
+                contentCls:"ke-toolbar-image",
+                //text:"img",
                 title:"Í¼Ïñ",
                 container:toolBarDiv
             });
@@ -62,11 +63,10 @@ KISSYEDITOR.add("editor-plugin-image", function(KE) {
         },
         hide:function(ev) {
             var self = this;
-            //console.log(ev.target);
-            if (ev.target === this.el.el[0])return;
-            if (DOM._4e_ascendant(ev.target,function(node) {
-                return node[0] === self.content[0];
-            }))return;
+
+            if (DOM._4e_ascendant(ev.target, function(node) {
+                return node[0] === self.content[0] || node[0] === self.el.el[0];
+            }, true))return;
             this.d.hide();
         },
         _real:function() {

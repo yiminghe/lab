@@ -90,7 +90,8 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
             var self = this,editor = self.editor;
             self.el = new TripleButton({
                 container:editor.toolBarDiv,
-                text:"flash",
+                contentCls:"ke-toolbar-flash",
+                //text:"flash",
                 title:"Flash"
             });
 
