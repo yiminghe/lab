@@ -18,9 +18,16 @@ KISSYEDITOR.add("editor-plugin-clipboard", function(KE) {
     S.augment(Paste, {
         _init:function() {
             var self = this,editor = self.editor;
-            Event.on(editor.document, "paste", self._paste, self);
+            if (UA.ie)
+                Event.on(editor.document, "keydown", self._paste, self);
+            else  Event.on(editor.document, "paste", self._paste, self);
         },
-        _paste:function() {
+        _paste:function(ev) {
+            if (ev.type === 'keydown' &&
+                !(ev.keyCode === 86 && (ev.ctrlKey || ev.metaKey))) {
+                return;
+            }
+            
             var self = this,editor = self.editor,doc = editor.document;
             var sel = editor.getSelection(),
                 range = new KERange(doc);
@@ -62,12 +69,12 @@ KISSYEDITOR.add("editor-plugin-clipboard", function(KE) {
                 // a div wrapper if you copy/paste the body of the editor.
                 // Remove hidden div and restore selection.
                 var bogusSpan;
+
                 pastebin = ( UA.webkit
-                    && ( bogusSpan = pastebin.first() )
-                    && ( bogusSpan.is && bogusSpan.hasClass('Apple-style-span') ) ?
+                    && ( bogusSpan = pastebin._4e_first() )
+                    && ( bogusSpan[0] && bogusSpan.hasClass('Apple-style-span') ) ?
                     bogusSpan : pastebin );
                 sel.selectBookmarks(bms);
-                //alert(pastebin.html());
                 editor.insertHtml(pastebin.html());
             }, 0);
         }

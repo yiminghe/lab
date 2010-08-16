@@ -597,7 +597,9 @@ KISSY.add("editor", function(S) {
             else {
                 self.document.execCommand('inserthtml', false, data);
             }
+
             self.focus();
+
             setTimeout(function() {
                 self.fire("save");
             }, 10);
