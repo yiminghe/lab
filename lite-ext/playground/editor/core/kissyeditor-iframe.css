@@ -23,13 +23,17 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 100%;
 }
 
-address, cite, dfn, em, var {
+address, cite, dfn, var {
     font-style: normal;
 }
 
 /* 将斜体扶正 */
 code, kbd, pre, samp {
     font-family: courier new, courier, monospace;
+}
+
+em {
+    font-style: oblique;
 }
 
 /* 统一等宽字体 */
@@ -143,7 +147,16 @@ ul, ol {
 }
 
 img.ke_flash {
-    background-image: url("placeholder.png");
+    background-image: url("placeholder_flash.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: 1px solid #A9A9A9;
+    height: 80px;
+    width: 80px;
+}
+
+img.ke_music {
+    background-image: url("placeholder_music.png");
     background-position: center center;
     background-repeat: no-repeat;
     border: 1px solid #A9A9A9;

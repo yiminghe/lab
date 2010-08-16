@@ -121,6 +121,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
                 });
 
             el.on("offClick", this._showColors, this);
+            this.el = el;
             KE.Utils.lazyRun(this, "_prepare", "_real");
         },
         _hidePanel:function(ev) {
@@ -154,7 +155,7 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
         _prepare:function(ev) {
             var self = this;
             this.colorPanel = new Node(html);
-            this.colorWin = Overlay.create({
+            this.colorWin = new Overlay({
                 el:this.colorPanel,
                 mask:false
             });

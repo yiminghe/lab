@@ -1,10 +1,11 @@
 /**
- * font formatting,modified from ckeditor
- * @modifier:yiminghe@gmail.com
+ * font formatting for kissy editor
+ * @author:yiminghe@gmail.com
  */
 KISSYEDITOR.add("editor-plugin-font", function(KE) {
     var S = KISSY,
         KEStyle = KE.Style,
+        TripleButton = KE.TripleButton,
         Node = S.Node,
         FONT_SIZES = ["8px","10px","12px",
             "14px","18px","24px","36px"],
@@ -131,6 +132,66 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
         }
     });
 
+    function SingleFont(cfg) {
+        SingleFont.superclass.constructor.call(this, cfg);
+        var self = this;
+        this._init();
+    }
+
+    SingleFont.ATTRS = {
+        editor:{},
+        text:{},
+        title:{},
+        style:{}
+    };
+
+    S.extend(SingleFont, S.Base, {
+        _init:function() {
+            var self = this,
+                editor = self.get("editor"),
+                text = self.get("text"),
+                style = self.get("style"),
+                title = self.get("title");
+            self.el = new TripleButton({
+                text:text,
+                title:title,
+                container:editor.toolBarDiv
+            });
+            self.el.on("offClick", self._on, self);
+            self.el.on("onClick", self._off, self);
+            editor.on("selectionChange", self._selectionChange, self);
+        },
+        _on:function() {
+            var self = this,
+                editor = self.get("editor"),
+                text = self.get("text"),
+                style = self.get("style"),
+                title = self.get("title");
+            style.apply(editor.document);
+        },
+        _off:function() {
+            var self = this,
+                editor = self.get("editor"),
+                text = self.get("text"),
+                style = self.get("style"),
+                title = self.get("title");
+            style.remove(editor.document);
+        },
+        _selectionChange:function(ev) {
+            var self = this,
+                editor = self.get("editor"),
+                text = self.get("text"),
+                style = self.get("style"),
+                title = self.get("title"),
+                elementPath = ev.path;
+            if (style.checkActive(elementPath)) {
+                self.el.set("state", TripleButton.ON);
+            } else {
+                self.el.set("state", TripleButton.OFF);
+            }
+
+        }
+    });
 
     KE.on("instanceCreated", function(ev) {
         var editor = ev.editor;
@@ -144,6 +205,42 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
             editor:editor,
             styles:FONT_FAMILY_STYLES,
             html:FONT_FAMILY_SELECTION_HTML
+        });
+
+        new SingleFont({
+            text:"B",
+            title:"粗体",
+            editor:editor,
+            style:new KEStyle({
+                element        : 'strong'
+            })
+        });
+
+        new SingleFont({
+            text:"I",
+            title:"斜体",
+            editor:editor,
+            style:new KEStyle({
+                element        : 'em'
+            })
+        });
+
+        new SingleFont({
+            text:"U",
+            title:"下划线",
+            editor:editor,
+            style:new KEStyle({
+                element        : 'u'
+            })
+        });
+
+        new SingleFont({
+            text:"DEL",
+            title:"删除线",
+            editor:editor,
+            style:new KEStyle({
+                element        : 'del'
+            })
         });
 
     });

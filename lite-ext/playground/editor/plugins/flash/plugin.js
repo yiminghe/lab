@@ -5,12 +5,25 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
         Overlay = KE.SimpleOverlay,
         flashFilenameRegex = /\.swf(?:$|\?)/i,
         dataProcessor = KE.HtmlDataProcessor,
+        MUSIC_PLAYER = "niftyplayer.swf",
+        CLS_FLASH = 'ke_flash',
+        CLS_MUSIC = 'ke_music',
+        TYPE_FLASH = 'flash',
+        TYPE_MUSIC = 'music',
         htmlFilter = dataProcessor && dataProcessor.htmlFilter,
         dataFilter = dataProcessor && dataProcessor.dataFilter;
 
     function isFlashEmbed(element) {
         var attributes = element.attributes;
-        return ( attributes.type == 'application/x-shockwave-flash' || flashFilenameRegex.test(attributes.src || '') );
+        return (
+            attributes.type == 'application/x-shockwave-flash'
+                ||
+                flashFilenameRegex.test(attributes.src || '')
+            );
+    }
+
+    function music(src) {
+        return src.indexOf(MUSIC_PLAYER) != -1;
     }
 
 
@@ -19,25 +32,45 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
             'object' : function(element) {
                 var attributes = element.attributes,
                     classId = attributes.classid && String(attributes.classid).toLowerCase();
+                var cls = CLS_FLASH,type = TYPE_FLASH;
                 if (!classId) {
                     // Look for the inner <embed>
                     for (var i = 0; i < element.children.length; i++) {
                         if (element.children[ i ].name == 'embed') {
                             if (!isFlashEmbed(element.children[ i ]))
                                 return null;
-                            return dataProcessor.createFakeParserElement(element, 'ke_flash', 'flash', true);
+                            if (music(element.children[ i ].attributes.src)) {
+                                cls = CLS_MUSIC;
+                                type = TYPE_MUSIC;
+                            }
+                            return dataProcessor.createFakeParserElement(element, cls, type, true);
                         }
                     }
                     return null;
                 }
 
-                return dataProcessor.createFakeParserElement(element, 'ke_flash', 'flash', true);
+                for (var i = 0; i < element.children.length; i++) {
+                    var c = element.children[ i ];
+                    if (c.name == 'param' && c.attributes.name == "movie") {
+                        if (music(c.attributes.value)) {
+                            cls = CLS_MUSIC;
+                            type = TYPE_MUSIC;
+                            break;
+                        }
+                    }
+                }
+                return dataProcessor.createFakeParserElement(element, cls, type, true);
             },
 
             'embed' : function(element) {
                 if (!isFlashEmbed(element))
                     return null;
-                return dataProcessor.createFakeParserElement(element, 'ke_flash', 'flash', true);
+                var cls = CLS_FLASH,type = TYPE_FLASH;
+                if (music(element.attributes.src)) {
+                    cls = CLS_MUSIC;
+                    type = TYPE_MUSIC;
+                }
+                return dataProcessor.createFakeParserElement(element, cls, type, true);
             }
         }}, 5);
 
@@ -62,7 +95,6 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
             });
 
             self.el.on("click", self._showConfig, this);
-
             KE.Utils.lazyRun(this, "_prepareShow", "_realShow");
         },
         _prepareShow:function() {
@@ -108,7 +140,8 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
                 'type="application/x-shockwave-flash">' +
                 '</embed>' +
                 '</object>');
-            var substitute = editor.createFakeElement(real, 'ke_flash', 'flash', true);
+            var cls = CLS_FLASH,type = TYPE_FLASH;
+            var substitute = editor.createFakeElement(real, cls, type, true);
             editor.insertElement(substitute);
             self.d.hide();
         }
