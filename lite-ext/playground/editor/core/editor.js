@@ -567,6 +567,8 @@ KISSY.add("editor", function(S) {
         },
 
         insertHtml:function(data) {
+            if (KE.HtmlDataProcessor)
+                data = KE.HtmlDataProcessor.toDataFormat(data, "p");
             /**
              * webkit insert html 有问题！会把标签去掉，算了直接用insertElement
              */
@@ -585,8 +587,6 @@ KISSY.add("editor", function(S) {
             self.fire("save");
             var selection = self.getSelection();
 
-            //if (selection.dataProcessor)
-            //    data = selection.dataProcessor.toHtml(data);
 
             if (UA.ie) {
                 var $sel = selection.getNative();
