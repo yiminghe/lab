@@ -54,7 +54,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             self.collapsed = (
                 self.startContainer &&
                     self.endContainer &&
-                    DOM._4e_equals(self.startContainer,self.endContainer) &&
+                    DOM._4e_equals(self.startContainer, self.endContainer) &&
                     self.startOffset == self.endOffset );
         },
         /**
@@ -252,7 +252,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 // In cases the end node is the same as the start node, the above
                 // splitting will also split the end, so me must move the end to
                 // the second part of the split.
-                if (DOM._4e_equals(startNode,endNode))
+                if (DOM._4e_equals(startNode, endNode))
                     endNode = new Node(startNode[0].nextSibling);
             }
             else {
@@ -389,13 +389,18 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 // No changes in the DOM should be done, so fix the split text (if any).
 
                 var startTextNode = self.startContainer[0];
-                if (startTextNode.nodeType == KEN.NODE_TEXT) {
+                if (startTextNode.nodeType == KEN.NODE_TEXT
+                    && startTextNode.nextSibling
+                    //yiminghe note:careful,nextsilbling should be text node 
+                    && startTextNode.nextSibling.nodeType == KEN.NODE_TEXT) {
                     startTextNode.data += startTextNode.nextSibling.data;
                     startTextNode.parentNode.removeChild(startTextNode.nextSibling);
                 }
 
                 var endTextNode = self.endContainer[0];
-                if (endTextNode.nodeType == KEN.NODE_TEXT && endTextNode.nextSibling) {
+                if (endTextNode.nodeType == KEN.NODE_TEXT &&
+                    endTextNode.nextSibling &&
+                    endTextNode.nextSibling.nodeType == KEN.NODE_TEXT) {
                     endTextNode.data += endTextNode.nextSibling.data;
                     endTextNode.parentNode.removeChild(endTextNode.nextSibling);
                 }
@@ -463,7 +468,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             var current = walkerRange.startContainer[0].childNodes[walkerRange.startOffset];
 
             var
-                isNotBookmarks = bookmark(true,undefined),
+                isNotBookmarks = bookmark(true, undefined),
                 isNotWhitespaces = whitespaces(true),
                 evaluator = function(node) {
                     return isNotWhitespaces(node) && isNotBookmarks(node);
@@ -715,9 +720,9 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     startContainer = startContainer.parent();
 
                     // Check all necessity of updating the end boundary.
-                    if (DOM._4e_equals(self.startContainer,self.endContainer))
+                    if (DOM._4e_equals(self.startContainer, self.endContainer))
                         self.setEnd(nextText, self.endOffset - self.startOffset);
-                    else if (DOM._4e_equals(startContainer,self.endContainer))
+                    else if (DOM._4e_equals(startContainer, self.endContainer))
                         self.endOffset += 1;
                 }
 
@@ -775,7 +780,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 startContainer[0].appendChild(node[0] || node);
 
             // Check if we need to update the end boundary.
-            if (DOM._4e_equals(node.parent(),self.endContainer))
+            if (DOM._4e_equals(node.parent(), self.endContainer))
                 self.endOffset++;
 
             // Expand the range to embrace the new node.
@@ -827,7 +832,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 end = self.endContainer,
                 ancestor;
 
-            if (DOM._4e_equals(start,end)) {
+            if (DOM._4e_equals(start, end)) {
                 if (includeSelf
                     && start[0].nodeType == KEN.NODE_ELEMENT
                     && self.startOffset == self.endOffset - 1)
@@ -901,7 +906,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                         if (enlargeable && !sibling) {
                             // If we reached the common ancestor, mark the flag
                             // for it.
-                            if (!commonReached && DOM._4e_equals(enlargeable,commonAncestor))
+                            if (!commonReached && DOM._4e_equals(enlargeable, commonAncestor))
                                 commonReached = true;
 
                             if (!body._4e_contains(enlargeable))
@@ -1052,7 +1057,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
                     while (enlargeable || sibling) {
                         if (enlargeable && !sibling) {
-                            if (!commonReached && DOM._4e_equals(enlargeable,commonAncestor))
+                            if (!commonReached && DOM._4e_equals(enlargeable, commonAncestor))
                                 commonReached = true;
 
                             if (!body._4e_contains(enlargeable))
@@ -1428,7 +1433,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // TODO: Why is 2.x doing CheckIsEmpty()?
             self.deleteContents();
 
-            if (startBlock && DOM._4e_equals(startBlock,endBlock)) {
+            if (startBlock && DOM._4e_equals(startBlock, endBlock)) {
                 if (isEndOfBlock) {
                     elementPath = new ElementPath(self.startContainer);
                     self.moveToPosition(endBlock, KER.POSITION_AFTER_END);
