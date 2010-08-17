@@ -48,13 +48,8 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
             //console.log(editor.iframeFocus);
 
             this._saveEditorStatus();
-            editor.iframe.css({
-                width: self.iframeWidth,
+            editor.wrap.css({
                 height:self.iframeHeight
-            });
-            editor.textarea.css({
-                width: self.textareaWidth,
-                height:self.textareaHeight
             });
             new Node(document.body).css({
                 width:"",
@@ -81,11 +76,8 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
         _saveSate:function() {
             var self = this,
                 editor = self.editor;
-            self.iframeWidth = editor.iframe._4e_style("width");
-            self.iframeHeight = editor.iframe._4e_style("height");
+            self.iframeHeight = editor.wrap._4e_style("height");
             self.editorWrapWidth = editor.editorWrap._4e_style("width");
-            self.textareaWidth = editor.textarea._4e_style("width");
-            self.textareaHeight = editor.textarea._4e_style("height");
             //主窗口滚动条也要保存哦
             self.scrollLeft = DOM.scrollLeft();
             self.scrollTop = DOM.scrollTop();
@@ -149,13 +141,7 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
                 viewportWidth = DOM.viewportWidth(),
                 statusHeight = editor.statusDiv ? editor.statusDiv.height() : 0,
                 toolHeight = editor.toolBarDiv.height();
-            editor.iframe.css({
-                width:(viewportWidth - 5) + "px"
-            });
 
-            editor.textarea.css({
-                width:(viewportWidth - 5) + "px"
-            });
             if (!UA.ie)
                 new Node(document.body).css({
                     width:0,
@@ -182,11 +168,8 @@ KISSYEDITOR.add("editor-plugin-maximize", function(KE) {
                 left:0,
                 top:0
             });
-            editor.iframe.css({
+            editor.wrap.css({
                 height:(viewportHeight - statusHeight - toolHeight - 14) + "px"
-            });
-            editor.textarea.css({
-                height:(viewportHeight - toolHeight - 4) + "px"
             });
         },
         _real:function() {

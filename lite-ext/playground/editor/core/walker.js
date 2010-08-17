@@ -7,6 +7,7 @@ KISSYEDITOR.add("editor-walker", function(KE) {
 
     var S = KISSY,
         KEN = KE.NODE,
+        DOM = S.DOM,
         Node = S.Node;
     // This function is to be called under a "walker" instance scope.
     function iterate(rtl, breakOnFalse) {
@@ -48,7 +49,8 @@ KISSYEDITOR.add("editor-walker", function(KE) {
                 return (
                     ( !movingOut
                         ||
-                        limitLTR[0] !== node[0] )
+                        ! DOM._4e_equals(limitLTR, node)
+                        )
                         //到达深度遍历的最后一个节点，结束
                         && ( !blockerLTR[0] || node[0] !== (blockerLTR[0]) )
 

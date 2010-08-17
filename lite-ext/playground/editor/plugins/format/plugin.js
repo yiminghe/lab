@@ -8,7 +8,7 @@ KISSYEDITOR.add("editor-plugin-format", function(KE) {
         Node = S.Node,
         FORMAT_SELECTION_HTML = "<select title='格式'>",
         FORMATS = {
-            "请选择格式/清除":"p",
+            "格式 / 清除":"p",
             "标题1":"h1",
             "标题2":"h2",
             "标题3":"h3",

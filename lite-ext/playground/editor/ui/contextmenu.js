@@ -40,7 +40,7 @@ KISSYEDITOR.add("kissy-editor-contextmenu", function(KE) {
             Event.on(doc, "contextmenu", function(ev) {
                 ContextMenu.hide.call(this);
                 var t = new Node(ev.target),o = t;
-                while (true) {
+                while (t) {
                     var name = t._4e_name(),stop = false;
                     if (name == "body")break;
                     for (var i = 0; i < global_tags.length; i++) {

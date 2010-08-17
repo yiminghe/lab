@@ -491,8 +491,8 @@ KISSYEDITOR.add("editor-selection", function(KE) {
             }
             else {
                 var sel = this.getNative();
+                if (!sel) return;
                 sel.removeAllRanges();
-
                 for (var i = 0; i < ranges.length; i++) {
                     var range = ranges[ i ], nativeRange = this.document.createRange(),startContainer = range.startContainer;
 
@@ -541,10 +541,10 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                         rangeStart = dirtyRange.startContainer,
                         rangeEnd = dirtyRange.endContainer;
 
-                    rangeStart[0] === bookmarkStart.parent()[0] && dirtyRange.startOffset++;
-                    rangeStart[0] === bookmarkEnd.parent()[0] && dirtyRange.startOffset++;
-                    rangeEnd[0] === bookmarkStart.parent()[0] && dirtyRange.endOffset++;
-                    rangeEnd[0] === bookmarkEnd.parent()[0] && dirtyRange.endOffset++;
+                    DOM._4e_equals(rangeStart, bookmarkStart.parent()) && dirtyRange.startOffset++;
+                    DOM._4e_equals(rangeStart, bookmarkEnd.parent()) && dirtyRange.startOffset++;
+                    DOM._4e_equals(rangeEnd, bookmarkStart.parent()) && dirtyRange.endOffset++;
+                    DOM._4e_equals(rangeEnd, bookmarkEnd.parent()) && dirtyRange.endOffset++;
                 }
             }
 
@@ -631,9 +631,18 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                     next = next.nextSibling;
                 }
                 isStartMarkerAlone =
-                    ( !( next && next.nodeValue && next.nodeValue.match(fillerTextRegex) )     // already a filler there?
-                        && ( forceExpand || !startNode[0].previousSibling ||
-                        ( startNode[0].previousSibling && startNode[0].previousSibling.nodeName.toLowerCase() == 'br' ) ) );
+                    (
+                        !( next && next.nodeValue && next.nodeValue.match(fillerTextRegex) )     // already a filler there?
+                            && ( forceExpand
+                            ||
+                            !startNode[0].previousSibling
+                            ||
+                            (
+                                startNode[0].previousSibling &&
+                                    DOM._4e_name(startNode[0].previousSibling) == 'br'
+                                )
+                            )
+                        );
 
                 // Append a temporary <span>&#65279;</span> before the selection.
                 // This is needed to avoid IE destroying selections inside empty
@@ -657,7 +666,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
 
             // Remove the markers (reset the position, because of the changes in the DOM tree).
             self.setStartBefore(startNode);
-            startNode.remove();
+            startNode._4e_remove();
 
             if (collapsed) {
                 if (isStartMarkerAlone) {
@@ -668,8 +677,10 @@ KISSYEDITOR.add("editor-selection", function(KE) {
                     self.document.selection.clear();
                 } else
                     ieRange.select();
-                this.moveToPosition(dummySpan, KER.POSITION_BEFORE_START);
-                dummySpan.remove();
+                if (dummySpan) {
+                    this.moveToPosition(dummySpan, KER.POSITION_BEFORE_START);
+                    dummySpan._4e_remove();
+                }
             }
             else {
                 self.setEndBefore(endNode);
@@ -773,7 +784,7 @@ KISSYEDITOR.add("editor-selection", function(KE) {
             // IE before version 8 will leave cursor blinking inside the document after
             // editor blurred unless we clean up the selection. (#4716)
             if (UA.ie < 8) {
-                Event.on(DOM._4e_getWin(doc), 'blur', function(evt) {
+                Event.on(DOM._4e_getWin(doc), 'blur', function() {
                     doc.selection.empty();
                 });
             }

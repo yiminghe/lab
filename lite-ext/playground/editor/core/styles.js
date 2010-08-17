@@ -5,6 +5,7 @@
 KISSYEDITOR.add("editor-styles", function(KE) {
 
     var S = KISSY,
+        DOM = S.DOM,
         KEST = KE.STYLE = {},
         KER = KE.RANGE,
         KESelection = KE.Selection,
@@ -191,8 +192,8 @@ KISSYEDITOR.add("editor-styles", function(KE) {
                         element = elements[ i ];
 
                         if (this.type == KEST.STYLE_INLINE
-                            && ( elementPath.block && element[0] == elementPath.block[0]
-                            || elementPath.blockLimit && element[0] == elementPath.blockLimit[0] ))
+                            && ( DOM._4e_equals(element, elementPath.block)
+                            || DOM._4e_equals(element, elementPath.blockLimit) ))
                             continue;
 
                         if (this.type == KEST.STYLE_OBJECT
@@ -491,7 +492,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         while (currentNode && currentNode[0]) {
             var applyStyle = false;
 
-            if (currentNode[0] == lastNode[0]) {
+            if (DOM._4e_equals(currentNode, lastNode)) {
                 currentNode = null;
                 applyStyle = true;
             }
@@ -699,7 +700,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
                 var clonedElement = startNode;
                 for (i = 0; ; i++) {
                     var newElement = startPath.elements[ i ];
-                    if (newElement[0] == boundaryElement[0])
+                    if (DOM._4e_equals(newElement, boundaryElement))
                         break;
                     // Avoid copying any matched element.
                     else if (newElement.match)

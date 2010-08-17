@@ -171,6 +171,9 @@ KISSYEDITOR.add("editor-plugin-color", function(KE) {
         _real:function(ev) {
             var xy = this.el.el.offset();
             xy.top += this.el.el.height() + 5;
+            if (xy.left + this.colorPanel.width() > DOM.viewportWidth() - 60) {
+                xy.left = DOM.viewportWidth() - this.colorPanel.width() - 60;
+            }
             this.colorWin.show(xy);
         },
         _showColors:function(ev) {

@@ -33,6 +33,7 @@ KISSYEDITOR.add("editor-focusmanager", function(KE) {
     }
 
     function blur() {
+        //console.log(" i lost focus");
         var editor = this;
         editor.iframeFocus = false;
     }

@@ -72,6 +72,10 @@ KISSYEDITOR.add("editor-plugin-image", function(KE) {
         _real:function() {
             var xy = this.el.el.offset();
             xy.top += this.el.el.height() + 5;
+            console.log(this.content.width(),xy.left,DOM.viewportWidth() );
+            if (xy.left + this.content.width() > DOM.viewportWidth()-60) {
+                xy.left = DOM.viewportWidth() - this.content.width()-60;
+            }
             this.d.show(xy);
         },
         _insert:function() {

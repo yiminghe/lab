@@ -11,6 +11,11 @@
 }
 
 .ke-textarea-wrap {
+    overflow:hidden;
+}
+
+.ke-textarea-wrap textarea {
+    border-width: 0;
 }
 
 .ke-editor-tools {
@@ -169,7 +174,7 @@ button from google wave
 }
 
 .ke-toolbar-undo {
-    background-position: 0px 50%;
+    background-position: 0 50%;
 }
 
 .ke-toolbar-redo {
@@ -205,4 +210,10 @@ button from google wave
 
 .ke-toolbar-smiley {
     background-position: -963px 50%;
+}
+
+.ke-toolbar-removeformat {
+    background-position: -255px 50%;
+    width: 17px;
+    height: 16px;
 }

@@ -5,6 +5,7 @@
 KISSY.add("editor", function(S) {
     var EventTarget = S.EventTarget,
         UA = S.UA,
+        DOM = S.DOM,
         Node = S.Node,
         Event = S.Event,
         KE = KISSYEDITOR,
@@ -59,10 +60,14 @@ KISSY.add("editor", function(S) {
                 " onmousedown='" +
                 //"console.log(\"trapped\");" +
                 "return false;'" +
+
                 "></div>"),
             wrap = new Node("<div class='ke-textarea-wrap'></div>");
         self.toolBarDiv = new Node("<div class='ke-editor-tools'></div>");
-        textarea.css("width") && editorWrap.css("width", textarea.css("width"));
+        if (textarea.css("width")) {
+            editorWrap.css("width", textarea.css("width"));
+            textarea.css("width", "100%");
+        }
         textarea[0].parentNode.insertBefore(editorWrap[0], textarea[0]);
         editorWrap[0].appendChild(self.toolBarDiv[0]);
         editorWrap[0].appendChild(wrap[0]);
@@ -71,13 +76,17 @@ KISSY.add("editor", function(S) {
         self.editorWrap = editorWrap;
         self.wrap = wrap;
         self._init();
-        textarea.css("height") && self.iframe.css("height", textarea.css("height"));
+
+        if (textarea.css("height")) {
+            wrap.css("height", textarea.css("height"));
+            textarea.css("height", "100%");
+        }
         //ie 点击按钮不丢失焦点
         self.toolBarDiv._4e_unselectable();
         self._UUID = INSTANCE_ID++;
         self.statusDiv = new Node("<div class='ke-editor-status'" +
-            "style='display:none'" +
-            " ></div>");
+            // "style='display:none'" +
+            " >");
         textarea[0].parentNode.parentNode.appendChild(self.statusDiv[0]);
         //fixTableForIe6(editorWrap, self.toolBarDiv, wrap, self.statusDiv);
     }
@@ -96,14 +105,20 @@ KISSY.add("editor", function(S) {
         sync:function() {
             this.textarea.val(this.getData());
         },
+        //撤销重做时，不需要格式化代码，直接取自身
+        _getRawData:function() {
+            return this.document.body.innerHTML;
+        },
+        //撤销重做时，不需要格式化代码，直接取自身
+        _setRawData:function(data) {
+            this.document.body.innerHTML = data;
+        },
         _hideSource:function() {
             var self = this;
             self.iframe.css(DISPLAY, "");
             self.textarea.css(DISPLAY, NONE);
             self.toolBarDiv.children().css(VISIBILITY, "");
-            self.statusDiv && self.statusDiv.css(VISIBILITY, "");
-            //firefox 光标激活，也不要使用focus，切换过来不要有光标
-            //self.blur();
+            self.statusDiv.children().css(VISIBILITY, "");
         },
 
         _showSource:    function() {
@@ -112,9 +127,11 @@ KISSY.add("editor", function(S) {
             self.iframe.css(DISPLAY, NONE);
             self.toolBarDiv.children().css(VISIBILITY, HIDDEN);
             self.toolBarDiv.all(".ke-tool-editor-source").css(VISIBILITY, "");
-            self.statusDiv && self.statusDiv.css(VISIBILITY, HIDDEN);
-            //编辑器区强制失去焦点
-            self.blur();
+            self.statusDiv.children().css(VISIBILITY, HIDDEN);
+            //ie textarea height:100%不起作用
+            if (UA.ie<8) {
+                self.textarea.css("height", self.wrap.css("height"));
+            }
         },
         _prepareIframeHtml:prepareIframeHtml,
 
@@ -133,7 +150,7 @@ KISSY.add("editor", function(S) {
 
             win && win.focus();
             //ie and firefox need body focus
-            //self.document && self.document.body.focus();
+            self.document && self.document.body.focus();
             self.notifySelectionChange();
         } ,
         blur:function() {
@@ -471,7 +488,21 @@ KISSY.add("editor", function(S) {
             self.iframe = iframe;
 
             self.on("dataReady", function() {
-                self.setData(textarea.value || "");
+                //默认填充p标签，
+                //!TODO:监控enter按键！
+                self.setData(S.trim(textarea.value) || "<p>&nbsp;</p>");
+                if (UA.ie < 7 && !S.trim(textarea.value)) {
+                    var ot = DOM.scrollTop(),ol = DOM.scrollLeft();
+                    var r = new KE.Range(self.document);
+                    r.selectNodeContents(new Node(self.document.getElementsByTagName("p")[0]));
+                    r.collapse();
+                    //ie6 会主屏滚动？？
+                    r.select();
+                    setTimeout(function() {
+                        window.scrollTo(ol, ot);
+                    }, 0);
+
+                }
                 KE.fire("instanceCreated", {editor:self});
             });
         } ,

@@ -46,13 +46,21 @@ KISSYEDITOR.add("editor-plugin-htmldataprocessor", function(KE) {
             }
         },
         attributes :  {
+            //防止word的垃圾class，全部杀掉算了，除了以ke_开头的编辑器内置class
+            'class' : function(value
+                // , element
+                ) {
+                if (/ke_/.test(value)) return value;
+                return false;
+            }
         }
     };
     if (UA.ie) {
-        var defaultHtmlFilterRules = {attributes:{}};
         // IE outputs style attribute in capital letters. We should convert
         // them back to lower case.
-        defaultHtmlFilterRules.attributes.style = function(value, element) {
+        defaultHtmlFilterRules.attributes.style = function(value
+            // , element
+            ) {
             return value.toLowerCase();
         };
     }
@@ -71,8 +79,7 @@ KISSYEDITOR.add("editor-plugin-htmldataprocessor", function(KE) {
             var writer = new HtmlParser.HtmlWriter(),
                 fragment = HtmlParser.Fragment.fromHtml(html, fixForBody);
             fragment.writeHtml(writer, htmlFilter);
-            var data = writer.getHtml(true);
-            return data;
+            return writer.getHtml(true);
         },
         //外部html进入编辑器
         toDataFormat : function(html, fixForBody) {

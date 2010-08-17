@@ -166,9 +166,9 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
 
     S.augment(IndentCommand, {
         exec:function(editor) {
+            editor.focus();
             var selection = editor.getSelection(),
                 range = selection && selection.getRanges()[0];
-
             var startContainer = range.startContainer,
                 endContainer = range.endContainer,
                 rangeRoot = range.getCommonAncestor(),

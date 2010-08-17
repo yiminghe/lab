@@ -55,6 +55,15 @@ KISSYEDITOR.add("editor-dom", function(KE) {
             return el;
         },
         editorDom = {
+            _4e_equals:function(e1, e2) {
+                //全部为空
+                if (!e1 && !e2)return true;
+                //一个为空，一个不为空
+                if (!e1 || !e2)return false;
+                e1 = normalElDom(e1);
+                e2 = normalElDom(e2);
+                return e1 === e2;
+            },
 
             _4e_isBlockBoundary:function(el, customNodeNames) {
                 el = normalEl(el);
@@ -475,7 +484,7 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                         return !!( el.compareDocumentPosition(node) & 16 );
                     },
             _4e_commonAncestor:function(el, node) {
-                if (node[0] === el[0])
+                if (el._4e_equals(node))
                     return el;
 
                 if (node[0].nodeType != KEN.NODE_TEXT && node._4e_contains(el))
@@ -551,6 +560,8 @@ KISSYEDITOR.add("editor-dom", function(KE) {
                 :
                 function(el) {
                     el = normalElDom(el);
+                    //删除firefox自己添加的标志
+                    UA.gecko && el.removeAttribute("_moz_dirty");
                     var attributes = el.attributes;
                     return ( attributes.length > 1 || ( attributes.length == 1 && attributes[0].nodeName != '_ke_expando' ) );
                 },

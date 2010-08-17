@@ -5,6 +5,7 @@
 KISSYEDITOR.add("editor-elementpath", function(KE) {
 
     var S = KISSY,
+        DOM = S.DOM,
         dtd = KE.XHTML_DTD,
         KEN = KE.NODE,
         UA = S.UA;
@@ -86,7 +87,7 @@ KISSYEDITOR.add("editor-elementpath", function(KE) {
                 return false;
 
             for (var i = 0; i < thisElements.length; i++) {
-                if (thisElements[ i ][0] !== otherElements[ i ][0])
+                if (!DOM._4e_equals(thisElements[ i ], otherElements[ i ]))
                     return false;
             }
 

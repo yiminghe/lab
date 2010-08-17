@@ -70,6 +70,9 @@ KISSYEDITOR.add("editor-plugin-smiley", function(KE) {
         _real:function() {
             var xy = this.el.el.offset();
             xy.top += this.el.el.height() + 5;
+            if (xy.left + this.smileyPanel.width() > DOM.viewportWidth()-60) {
+                xy.left = DOM.viewportWidth() - this.smileyPanel.width()-60;
+            }
             this.smileyWin.show(xy);
         },
         _show:function(ev) {

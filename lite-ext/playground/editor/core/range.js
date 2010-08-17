@@ -54,7 +54,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             self.collapsed = (
                 self.startContainer &&
                     self.endContainer &&
-                    self.startContainer[0] == self.endContainer[0] &&
+                    DOM._4e_equals(self.startContainer,self.endContainer) &&
                     self.startOffset == self.endOffset );
         },
         /**
@@ -252,7 +252,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 // In cases the end node is the same as the start node, the above
                 // splitting will also split the end, so me must move the end to
                 // the second part of the split.
-                if (startNode[0] === endNode[0])
+                if (DOM._4e_equals(startNode,endNode))
                     endNode = new Node(startNode[0].nextSibling);
             }
             else {
@@ -463,7 +463,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             var current = walkerRange.startContainer[0].childNodes[walkerRange.startOffset];
 
             var
-                isNotBookmarks = bookmark(true),
+                isNotBookmarks = bookmark(true,undefined),
                 isNotWhitespaces = whitespaces(true),
                 evaluator = function(node) {
                     return isNotWhitespaces(node) && isNotBookmarks(node);
@@ -562,6 +562,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             return container.childNodes[this.startOffset] || container;
         },
         createBookmark2 : function(normalized) {
+            //debugger;
             var self = this,startContainer = self.startContainer,
                 endContainer = self.endContainer,
                 startOffset = self.startOffset,
@@ -598,7 +599,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 }
 
                 // Process the end only if not normalized.
-                if (!self.isCollapsed) {
+                if (!self.collapsed) {
                     // Find out if the start is pointing to a text node that
                     // will be normalized.
                     if (endContainer[0].nodeType == KEN.NODE_ELEMENT) {
@@ -625,7 +626,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
             return {
                 start        : startContainer._4e_address(normalized),
-                end            : self.isCollapsed ? null : endContainer._4e_address(normalized),
+                end            : self.collapsed ? null : endContainer._4e_address(normalized),
                 startOffset    : startOffset,
                 endOffset    : endOffset,
                 normalized    : normalized,
@@ -633,9 +634,11 @@ KISSYEDITOR.add("editor-range", function(KE) {
             };
         },
         createBookmark : function(serializable) {
-            var startNode, endNode,
+            var startNode,
+                endNode,
                 baseId,
-                clone,self = this;
+                clone,
+                self = this;
             startNode = new Node("<span></span>", null, self.document);
             startNode.attr('_ke_bookmark', 1);
             startNode.css('display', 'none');
@@ -663,7 +666,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             }
 
             clone = self.clone();
-            clone.collapse(self);
+            clone.collapse(true);
             clone.insertNode(startNode);
 
             // Update the range position.
@@ -712,9 +715,9 @@ KISSYEDITOR.add("editor-range", function(KE) {
                     startContainer = startContainer.parent();
 
                     // Check all necessity of updating the end boundary.
-                    if (self.startContainer[0] == self.endContainer[0])
+                    if (DOM._4e_equals(self.startContainer,self.endContainer))
                         self.setEnd(nextText, self.endOffset - self.startOffset);
-                    else if (startContainer[0] == self.endContainer[0])
+                    else if (DOM._4e_equals(startContainer,self.endContainer))
                         self.endOffset += 1;
                 }
 
@@ -772,7 +775,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 startContainer[0].appendChild(node[0] || node);
 
             // Check if we need to update the end boundary.
-            if (node.parent()[0] === self.endContainer[0])
+            if (DOM._4e_equals(node.parent(),self.endContainer))
                 self.endOffset++;
 
             // Expand the range to embrace the new node.
@@ -824,7 +827,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                 end = self.endContainer,
                 ancestor;
 
-            if (start[0] === end[0]) {
+            if (DOM._4e_equals(start,end)) {
                 if (includeSelf
                     && start[0].nodeType == KEN.NODE_ELEMENT
                     && self.startOffset == self.endOffset - 1)
@@ -898,7 +901,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
                         if (enlargeable && !sibling) {
                             // If we reached the common ancestor, mark the flag
                             // for it.
-                            if (!commonReached && enlargeable[0] === commonAncestor[0])
+                            if (!commonReached && DOM._4e_equals(enlargeable,commonAncestor))
                                 commonReached = true;
 
                             if (!body._4e_contains(enlargeable))
@@ -1049,7 +1052,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
                     while (enlargeable || sibling) {
                         if (enlargeable && !sibling) {
-                            if (!commonReached && enlargeable[0] == commonAncestor[0])
+                            if (!commonReached && DOM._4e_equals(enlargeable,commonAncestor))
                                 commonReached = true;
 
                             if (!body._4e_contains(enlargeable))
@@ -1425,7 +1428,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
             // TODO: Why is 2.x doing CheckIsEmpty()?
             self.deleteContents();
 
-            if (startBlock && startBlock[0] == endBlock[0]) {
+            if (startBlock && DOM._4e_equals(startBlock,endBlock)) {
                 if (isEndOfBlock) {
                     elementPath = new ElementPath(self.startContainer);
                     self.moveToPosition(endBlock, KER.POSITION_AFTER_END);

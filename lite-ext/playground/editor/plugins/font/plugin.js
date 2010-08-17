@@ -8,9 +8,9 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
         TripleButton = KE.TripleButton,
         Node = S.Node,
         FONT_SIZES = ["8px","10px","12px",
-            "14px","18px","24px","36px"],
+            "14px","18px","24px","36px","48px","60px","72px","84px","96px","108px"],
         FONT_SIZE_STYLES = {},
-        FONT_SIZE_SELECTION_HTML = "<select title='大小'><option value=''>请选择字体大小</option>",
+        FONT_SIZE_SELECTION_HTML = "<select title='大小'><option value=''>大小 / 清除</option>",
         fontSize_style = {
             element        : 'span',
             styles        : { 'font-size' : '#(size)' },
@@ -22,7 +22,7 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
             "楷体_GB2312","微软雅黑","Georgia","Times New Roman",
             "Impact","Courier New","Arial","Verdana","Tahoma"],
         FONT_FAMILY_STYLES = {},
-        FONT_FAMILY_SELECTION_HTML = "<select title='字体'><option value=''>请选择字体</option>",
+        FONT_FAMILY_SELECTION_HTML = "<select title='字体'><option value=''>字体 / 清除</option>",
         fontFamily_style = {
             element        : 'span',
             styles        : { 'font-family' : '#(family)' },
@@ -170,8 +170,8 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
                 style = self.get("style"),
                 title = self.get("title");
             style.apply(editor.document);
-            editor.focus();
             editor.notifySelectionChange();
+            editor.focus();
         },
         _off:function() {
             var self = this,
@@ -180,8 +180,8 @@ KISSYEDITOR.add("editor-plugin-font", function(KE) {
                 style = self.get("style"),
                 title = self.get("title");
             style.remove(editor.document);
-            editor.focus();
             editor.notifySelectionChange();
+            editor.focus();
         },
         _selectionChange:function(ev) {
             var self = this,

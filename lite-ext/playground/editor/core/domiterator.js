@@ -4,6 +4,7 @@
  */
 KISSYEDITOR.add("editor-domiterator", function(KE) {
     var S = KISSY,
+        UA = S.UA,
         Walker = KE.Walker,
         KERange = KE.Range,KER = KE.RANGE,
         KEN = KE.NODE,
@@ -113,7 +114,7 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
                             // If we have found an empty block, and haven't started
                             // the range yet, it means we must return this block.
                             block = currentNode;
-                            isLast = currentNode[0] === lastNode[0];
+                            isLast = currentNode._4e_equals(lastNode);
                             break;
                         }
 
@@ -159,7 +160,7 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
                 }
 
                 // The last node has been found.
-                isLast = ( ( !closeRange || includeNode ) && currentNode[0] === lastNode[0]);
+                isLast = ( !closeRange || includeNode ) && currentNode._4e_equals(lastNode);
 
                 // If we are in an element boundary, let's check if it is time
                 // to close the range, otherwise we include the parent within it.
@@ -169,13 +170,13 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
 
                         if (parentNode._4e_isBlockBoundary(this.forceBrBreak && { br : 1 })) {
                             closeRange = true;
-                            isLast = isLast || ( parentNode[0] === (lastNode[0]) );
+                            isLast = isLast || parentNode._4e_equals(lastNode);
                             break;
                         }
 
                         currentNode = parentNode;
                         includeNode = true;
-                        isLast = ( currentNode[0] === lastNode[0] );
+                        isLast = currentNode._4e_equals(lastNode);
                         continueFromSibling = true;
                     }
                 }
@@ -195,7 +196,7 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
 
                     // Drop the range if it only contains bookmark nodes, and is
                     // not because of the original collapsed range. (#4087,#4450)
-                    if (boundaryNodes.startNode.parent()[0] === (startPath.blockLimit[0])
+                    if (boundaryNodes.startNode.parent()._4e_equals(startPath.blockLimit)
                         && isBookmark(boundaryNodes.startNode) && isBookmark(boundaryNodes.endNode)) {
                         range = null;
                         this._.nextNode = null;
@@ -268,7 +269,7 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
                     // the current range, which could be an <li> child (nested
                     // lists) or the next sibling <li>.
 
-                    this._.nextNode = ( block[0] === (lastNode[0]) ? null :
+                    this._.nextNode = ( block._4e_equals(lastNode) ? null :
                         range.getBoundaryNodes().endNode._4e_nextSourceNode(true, null, lastNode) );
                 }
             }
@@ -301,7 +302,7 @@ KISSYEDITOR.add("editor-domiterator", function(KE) {
             // above block can be removed or changed, so we can rely on it for the
             // next interation.
             if (!this._.nextNode) {
-                this._.nextNode = ( isLast || block[0] === (lastNode[0]) ) ? null :
+                this._.nextNode = ( isLast || block._4e_equals(lastNode) ) ? null :
                     block._4e_nextSourceNode(true, null, lastNode);
             }
 

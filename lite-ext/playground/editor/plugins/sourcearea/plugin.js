@@ -3,7 +3,9 @@
  * @author:yiminghe@gmail.com
  */
 KISSYEDITOR.add("editor-plugin-sourcearea", function(KE) {
-    var S = KISSY,TripleButton = KE.TripleButton;
+    var S = KISSY,
+        UA = S.UA,
+        TripleButton = KE.TripleButton;
 
     function SourceArea(editor) {
         this.editor = editor;
@@ -45,6 +47,12 @@ KISSYEDITOR.add("editor-plugin-sourcearea", function(KE) {
                 iframe = editor.iframe,
                 el = self.el;
             editor._hideSource();
+            editor.setData(textarea.val());
+            //firefox 光标激活，强迫刷新
+            if (UA.gecko && editor.iframeFocus) {
+                el.el[0].focus();
+                editor.focus();
+            }
             el.set("state", TripleButton.OFF);
         }
     });

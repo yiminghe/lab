@@ -13,7 +13,7 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
      * @param editor
      */
     function Snapshot(editor) {
-        var contents = editor.getData(),selection = contents && editor.getSelection();
+        var contents = editor._getRawData(),selection = contents && editor.getSelection();
         //内容html
         this.contents = contents;
         //选择区域书签标志
@@ -188,7 +188,7 @@ KISSYEDITOR.add("editor-plugin-undo", function(KE) {
             var d = ev.d,self = this,editor = self.editor,
                 snapshot = self.history.length > 0 ? self.history[this.index + d] : null;
             if (snapshot) {
-                editor.setData(snapshot.contents);
+                editor._setRawData(snapshot.contents);
                 if (snapshot.bookmarks)
                     self.editor.getSelection().selectBookmarks(snapshot.bookmarks);
                 else if (UA.ie) {
