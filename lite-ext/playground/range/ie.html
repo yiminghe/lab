@@ -1,0 +1,78 @@
+<meta charset="gbk"/>
+<p id="test"><strong>粗体</strong>普通|文字<i>斜体</i></p>
+<button id="run">
+    获得开始位置
+</button>
+<script type="text/javascript" src="../../base/javascript/ks-core.js"></script>
+<script type="text/javascript">
+
+    document.getElementById("test").childNodes[1].splitText(2);
+    function getPosition(range, start) {
+
+        range = range.duplicate();
+        range.collapse(start);
+        var parent = range.parentElement(),
+                siblings = parent.childNodes,
+            //往右就是文本节点
+                startRange,startIndex = -1;
+
+        for (var i = 0; i < siblings.length; i++) {
+            var child = siblings[ i ];
+            if (child.nodeType == 1) {
+                var tr = range.duplicate();
+                tr.moveToElementText(child);
+                var comparisonStart = tr.compareEndPoints('StartToStart', range),
+                        comparisonEnd = tr.compareEndPoints('EndToStart', range);
+
+                if (comparisonStart > 0)
+                    break;
+                else if (!comparisonStart
+                        || comparisonEnd == 1 && comparisonStart == -1)
+                    return { container : parent, offset : i };
+                else if (!comparisonEnd)
+                    return { container : parent, offset : i + 1 };
+                startRange = tr;
+                startIndex = i;
+            }
+        }
+        if (!startRange) {
+            startRange = range.duplicate();
+            startRange.moveToElementText(parent);
+            startRange.collapse(true);
+        } else {
+            startRange.collapse(false);
+        }
+
+        startRange.setEndPoint("EndToEnd", range);
+        var totalL = startRange.text.replace(/(\r\n|\r)/g, '\n').length,realL = 0;
+        for (var j = startIndex + 1; j < siblings.length; j++) {
+            realL = totalL;
+            totalL -= siblings[j].length;
+
+            if (totalL <= 0)break;
+        }
+        if (totalL == 0) {
+            return {
+                container:parent,
+                offset:j + 1
+            };
+        }
+        return {
+            container:  siblings[j],
+            offset:realL
+        };
+
+
+    }
+    document.getElementById("run").onclick = function() {
+        if (!KISSY.UA.ie) {
+            alert("请使用ie访问！");
+            return;
+        }
+        var sel = document.selection.createRange();
+        var start = getPosition(sel, true);
+        var end = getPosition(sel, false);
+        alert("start : " + start.container.nodeName + " : " + start.offset);
+        alert("end : " + end.container.nodeName + " : " + end.offset);
+    };
+</script>
