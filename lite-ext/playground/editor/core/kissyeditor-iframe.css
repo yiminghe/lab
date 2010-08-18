@@ -65,6 +65,11 @@ a {
     color: #000099;
 }
 
+/*编辑器内图片有链接*/
+a img {
+    border: 1px solid #000099;
+}
+
 /** 重置表单元素 **/
 legend {
     color: #000;

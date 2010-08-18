@@ -27,7 +27,7 @@ KISSYEDITOR.add("editor-plugin-clipboard", function(KE) {
                 !(ev.keyCode === 86 && (ev.ctrlKey || ev.metaKey))) {
                 return;
             }
-            
+
             var self = this,editor = self.editor,doc = editor.document;
             var sel = editor.getSelection(),
                 range = new KERange(doc);

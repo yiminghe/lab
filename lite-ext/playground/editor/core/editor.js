@@ -129,7 +129,7 @@ KISSY.add("editor", function(S) {
             self.toolBarDiv.all(".ke-tool-editor-source").css(VISIBILITY, "");
             self.statusDiv.children().css(VISIBILITY, HIDDEN);
             //ie textarea height:100%不起作用
-            if (UA.ie<8) {
+            if (UA.ie < 8) {
                 self.textarea.css("height", self.wrap.css("height"));
             }
         },
@@ -145,7 +145,7 @@ KISSY.add("editor", function(S) {
             UA.webkit && win && win.parent && win.parent.focus();
             //win && win.blur();
             //yiminghe note:firefox need this ,暂时使得iframe先失去焦点，触发 blinkCursor 补丁
-            if (UA.gecko)self.blur();
+            //if (UA.gecko)self.blur();
             //yiminghe note:webkit need win.focus
 
             win && win.focus();
@@ -504,6 +504,7 @@ KISSY.add("editor", function(S) {
 
                 }
                 KE.fire("instanceCreated", {editor:self});
+
             });
         } ,
 
@@ -599,7 +600,7 @@ KISSY.add("editor", function(S) {
 
         insertHtml:function(data) {
             if (KE.HtmlDataProcessor)
-                data = KE.HtmlDataProcessor.toDataFormat(data, "p");
+                data = KE.HtmlDataProcessor.toDataFormat(data);//, "p");
             /**
              * webkit insert html 有问题！会把标签去掉，算了直接用insertElement
              */

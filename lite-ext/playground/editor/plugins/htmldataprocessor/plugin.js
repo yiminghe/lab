@@ -73,7 +73,7 @@ KISSYEDITOR.add("editor-plugin-htmldataprocessor", function(KE) {
         dataFilter:dataFilter,
         //编辑器html到外部html
         toHtml:function(html, fixForBody) {
-            fixForBody = fixForBody || "p";
+            //fixForBody = fixForBody || "p";
             // Now use our parser to make further fixes to the structure, as
             // well as apply the filter.
             var writer = new HtmlParser.HtmlWriter(),
@@ -83,7 +83,7 @@ KISSYEDITOR.add("editor-plugin-htmldataprocessor", function(KE) {
         },
         //外部html进入编辑器
         toDataFormat : function(html, fixForBody) {
-            fixForBody = fixForBody || "p";
+            //fixForBody = fixForBody || "p";
             var writer = new HtmlParser.HtmlWriter(),
                 fragment = HtmlParser.Fragment.fromHtml(html, fixForBody);
             writer.reset();
