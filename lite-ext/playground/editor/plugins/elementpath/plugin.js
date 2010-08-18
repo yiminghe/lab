@@ -7,9 +7,8 @@ KISSYEDITOR.add("editor-plugin-elementpaths", function(KE) {
 
     function ElementPaths(cfg) {
         this.cfg = cfg;
-        this._init();
         this._cache = [];
-
+        this._init();
     }
 
     S.augment(ElementPaths, {
@@ -23,7 +22,10 @@ KISSYEDITOR.add("editor-plugin-elementpaths", function(KE) {
         },
         _selectionChange:function(ev) {
             //console.log(ev);
-            var self = this,cfg = self.cfg,editor = cfg.editor,holder = self.holder,
+            var self = this,
+                cfg = self.cfg,
+                editor = cfg.editor,
+                holder = self.holder,
                 statusDom = holder[0] || holder;
             var elementPath = ev.path,
                 elements = elementPath.elements,

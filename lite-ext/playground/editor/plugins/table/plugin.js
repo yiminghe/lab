@@ -68,7 +68,7 @@ KISSYEDITOR.add("editor-plugin-table", function(KE, undefined) {
             "<tr>" +
             "<td colspan='2'>" +
             "<label>" +
-            "标题：<input class='ke-table-caption' size='50'>" +
+            "标题：<input class='ke-table-caption' style='width:270px'>" +
             "</label>" +
             "</td>" +
             "</tr>" +

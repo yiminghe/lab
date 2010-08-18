@@ -20,7 +20,7 @@
 
 <div style="width:90%;margin:0 auto;">
 
-    <textarea id="edit" style="width:100%;height:400px;margin:0 auto;">
+    <textarea id="edit" tabindex="1" style="width:100%;height:400px;margin:0 auto;">
         <script>alert(1);</script>
         <p>Œ“ «“Ù¿÷£∫</p>
 
@@ -103,6 +103,7 @@
 </div>
 
 <button id="t" style="visibility:hidden;">parse</button>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <div style="width:60%;margin:0 auto;">
     <textarea id="edit2" style="width:100%;height:400px;margin:0 auto;"></textarea>
@@ -229,9 +230,12 @@
         src="../plugins/clipboard/plugin.js?t=20100817"></script>
 <script type="text/javascript">
 
+    // setTimeout(function(){
+
     KISSY.ready(function(S) {
         //return;
-        var KE = KISSYEDITOR,Node = S.Node;
+        var KE = KISSYEDITOR,
+                Node = S.Node;
         window.editor = new S.Editor(S.one("#edit"));
         window.editor2 = new S.Editor(S.one("#edit2"));
 
@@ -247,6 +251,7 @@
 
 
     });
+    // },5000);
 
 </script>
 </body>

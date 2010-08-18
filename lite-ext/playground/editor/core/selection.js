@@ -725,15 +725,33 @@ KISSYEDITOR.add("editor-selection", function(KE) {
         return ( !sel || sel.isInvalid ) ? null : sel;
     }
 
-
-    KE.on("instanceCreated", function(ev) {
-        var editor = ev.editor;
-
+    /**
+     * 监控选择区域变化
+     * @param editor
+     */
+    function monitorAndFix(editor) {
         var doc = editor.document,
-            body = new Node(doc.body);
+            body = new Node(doc.body),
+            html = new Node(doc.documentElement);
 
         if (UA.ie) {
             //wokao,ie 焦点管理不行啊
+            // In IE6/7 the blinking cursor appears, but contents are
+            // not editable. (#5634)
+            //终于和ck同步了，我也发现了这个bug，哈哈,ck3.3.2解决
+            if (UA.ie < 8 ||
+                //ie8 的 7 兼容模式
+                document.documentMode == 7) {
+                // The 'click' event is not fired when clicking the
+                // scrollbars, so we can use it to check whether
+                // the empty space following <body> has been clicked.
+                html.on('click', function(evt) {
+                    if (DOM._4e_name(evt.target) === "html")
+                        editor.getSelection().getRanges()[ 0 ].select();
+                });
+            }
+
+
             // Other browsers don't loose the selection if the
             // editor document loose the focus. In IE, we don't
             // have support for it, so we reproduce it here, other
@@ -862,6 +880,10 @@ KISSYEDITOR.add("editor-selection", function(KE) {
             Event.on(doc, 'mouseup', editor._monitor, editor);
             Event.on(doc, 'keyup', editor._monitor, editor);
         }
+    }
 
+    KE.on("instanceCreated", function(ev) {
+        var editor = ev.editor;
+        monitorAndFix(editor);
     });
 });

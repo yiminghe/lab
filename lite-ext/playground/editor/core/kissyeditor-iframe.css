@@ -1,6 +1,7 @@
 /**
 for kissy editor iframe
 @author:玉伯(lifesinger@gmail.com),yiminghe@gmail.com
+@from:resource://gre/res/html.css
 **/
 
 /*
@@ -19,15 +20,75 @@ th, td /* table elements 表格元素 */
 /** 设置默认字体 **/
 body, button, input, select, textarea /* for ie */
 {
-    font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
+    font: 14px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-size: 100%;
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin: .67em 0;
 }
 
-address, cite, dfn, var {
-    font-style: normal;
+h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: .83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    font-weight: bold;
+    margin: 1em 0;
+}
+
+h4 {
+    font-weight: bold;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    font-weight: bold;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    font-weight: bold;
+    margin: 2.33em 0;
+}
+
+blockquote {
+    display: block;
+    margin: 1em 40px;
+}
+
+address {
+    display: block;
+    font-style: italic;
+}
+
+i, cite, em, var, dfn {
+    font-style: italic;
+}
+
+u, ins {
+    text-decoration: underline;
+}
+
+s, strike, del {
+    text-decoration: line-through;
+}
+
+/* <hr> noshade and color attributes are handled completely by
+ * the nsHTMLHRElement attribute mapping code
+ */
+hr {
+    display: block;
+    height: 2px;
+    border: 1px inset;
+    margin: 0.5em auto 0.5em auto;
+    color: gray;
 }
 
 /* 将斜体扶正 */
@@ -35,20 +96,9 @@ code, kbd, pre, samp {
     font-family: courier new, courier, monospace;
 }
 
-em {
-    font-style: oblique;
-}
-
 /* 统一等宽字体 */
 small {
     font-size: 12px;
-}
-
-/* 小于 12px 的中文很难阅读，让 small 正常化 */
-
-/** 重置列表元素 **/
-ul, ol {
-    list-style: none;
 }
 
 sup {
@@ -58,16 +108,6 @@ sup {
 /* 重置，减少对行高的影响 */
 sub {
     vertical-align: text-bottom;
-}
-
-/*编辑器内不变色*/
-a {
-    color: #000099;
-}
-
-/*编辑器内图片有链接*/
-a img {
-    border: 1px solid #000099;
 }
 
 /** 重置表单元素 **/
@@ -80,33 +120,11 @@ fieldset, img {
     border: 0;
 }
 
-/* img 搭车：让链接里的 img 无边框 */
-button, input, select, textarea {
-    font-size: 100%;
-}
-
-/* 使得表单元素在 ie 下能继承字体大小 */
-/* 注：optgroup 无法扶正 */
-
-/** 重置表格元素 **/
 table {
+    display: table;
+    border-spacing: 2px;
     border-collapse: separate;
-    border-spacing: 1px;
-}
-
-/* require(reset.css) */
-
-html {
-    /**
-     ie6 iframe 内滚动条 bug
-    **/
-    _overflow-y: scroll;
-    _overflow-x: auto;
-}
-
-body {
-/* big font make content more readable */
-    font: 14px/1.8 verdana, tahoma, arial, sans-serif;
+    text-indent: 0;
 }
 
 blockquote, ul, ol, dl {
@@ -124,7 +142,7 @@ ol li {
     list-style: decimal outside;
 }
 
-ul li {
+ul  li {
 /* giving UL's LIs generated disc markers */
     list-style: disc outside;
 }

@@ -66,6 +66,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
         document.body.focus();
         var selection = new KESelection(document),ranges = selection.getRanges();
         for (var i = 0; i < ranges.length; i++)
+            //格式化后，range进入格式标签内
             func.call(self, ranges[ i ]);
         // Select the ranges again.
         selection.selectRanges(ranges);
@@ -639,6 +640,7 @@ KISSYEDITOR.add("editor-styles", function(KE) {
 
         firstNode.remove();
         lastNode.remove();
+        debugger;
         range.moveToBookmark(bookmark);
         // Minimize the result range to exclude empty text nodes. (#5374)
         range.shrink(KER.SHRINK_TEXT);

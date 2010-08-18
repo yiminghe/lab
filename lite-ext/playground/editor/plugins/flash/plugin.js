@@ -74,9 +74,12 @@ KISSYEDITOR.add("editor-plugin-flash", function(KE) {
             }
         }}, 5);
 
-    var html = "<div style='margin:10px;'><p><label>地址：<input class='ke-flash-url' size='50' /></label></p>" +
-        "<p style='margin:5px 0'><label>宽度：<input class='ke-flash-width' size='18' /></label>" +
-        "&nbsp;&nbsp;<label>高度：<input class='ke-flash-height' size='18' /></label></p>" +
+    var html = "<div style='margin:10px;'><p><label>地址：" +
+        "<input class='ke-flash-url' style='width:280px' /></label></p>" +
+        "<p style='margin:5px 0'><label>宽度：" +
+        "<input class='ke-flash-width' style='width:120px' /></label>" +
+        "&nbsp;&nbsp;<label>高度：<input class='ke-flash-height' " +
+        "style='width:110px' /></label></p>" +
 
         "<p style='margin:5px 0;text-align:right;'><button>确定</button></p></div>";
 
