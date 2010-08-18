@@ -1,9 +1,15 @@
+<!doctype html>
+<html>
+<head>
 <meta charset="gbk"/>
+<script type="text/javascript" src="../../base/javascript/ks-core.js" charset="utf-8"></script>
+</head>
+<body>
 <p id="test"><strong>粗体</strong>普通|文字<i>斜体</i></p>
 <button id="run">
     获得开始位置
 </button>
-<script type="text/javascript" src="../../base/javascript/ks-core.js"></script>
+
 <script type="text/javascript">
 
     document.getElementById("test").childNodes[1].splitText(2);
@@ -76,3 +82,5 @@
         alert("end : " + end.container.nodeName + " : " + end.offset);
     };
 </script>
+</body>
+</html>
