@@ -82,7 +82,9 @@ KISSY.add("editor", function(S) {
         self.statusDiv = editorWrap.one(ke_editor_status);
         //ie 点击按钮不丢失焦点
         self.toolBarDiv._4e_unselectable();
+        //可以直接调用插件功能
         self._commands = {};
+        self._plugins = {};
         var tw = textarea._4e_style(WIDTH),th = textarea._4e_style(HEIGHT);
         if (tw) {
             editorWrap.css(WIDTH, tw);
@@ -538,7 +540,7 @@ KISSY.add("editor", function(S) {
             selection.selectRanges([ range ]);
             self.focus();
             //http://code.google.com/p/kissy/issues/detail?can=1&start=100&id=121
-            clone && clone._4e_scrollIntoView(self.document);
+            clone && clone._4e_scrollIntoView();
             setTimeout(function() {
                 self.fire("save");
             }, 10);

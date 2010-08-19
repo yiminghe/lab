@@ -156,13 +156,13 @@ KISSYEDITOR.add("editor-plugin-enterkey", function(KE) {
                 tmpNode.html('&nbsp;');
 
                 range.insertNode(tmpNode);
-                tmpNode._4e_scrollIntoView(doc);
+                tmpNode._4e_scrollIntoView();
                 range.deleteContents();
             }
             else {
                 // We may use the above scroll logic for the new block case
                 // too, but it gives some weird result with Opera.
-                newBlock._4e_scrollIntoView(doc);
+                newBlock._4e_scrollIntoView();
             }
         }
         range.select();

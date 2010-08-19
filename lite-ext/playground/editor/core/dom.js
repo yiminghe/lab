@@ -929,16 +929,15 @@ KISSYEDITOR.add("editor-dom", function(KE) {
              */
             _4e_scrollIntoView:function(elem) {
                 elem = normalEl(elem);
-                var args = S.makeArray(arguments);
-                args.shift();
-                var l = DOM.scrollLeft(elem[0]),t = DOM.scrollTop(elem[0]),eoffset = elem.offset(),el = eoffset.left, et = eoffset.top;
-                if (DOM.viewportHeight(elem[0].ownerDocument) + t < et ||
+                var doc = elem[0].ownerDocument;
+                var l = DOM.scrollLeft(doc),t = DOM.scrollTop(doc),eoffset = elem.offset(),el = eoffset.left, et = eoffset.top;
+                if (DOM.viewportHeight(doc) + t < et ||
                     et < t ||
-                    DOM.viewportWidth(elem[0].ownerDocument) + l < el
+                    DOM.viewportWidth(doc) + l < el
                     ||
                     el < l
                     ) {
-                    elem.scrollIntoView.apply(elem, args);
+                    elem.scrollIntoView(doc);
                 }
             }
         };
