@@ -82,6 +82,7 @@ KISSY.add("editor", function(S) {
         self.statusDiv = editorWrap.one(ke_editor_status);
         //ie 点击按钮不丢失焦点
         self.toolBarDiv._4e_unselectable();
+        self._commands = {};
         var tw = textarea._4e_style(WIDTH),th = textarea._4e_style(HEIGHT);
         if (tw) {
             editorWrap.css(WIDTH, tw);
@@ -100,6 +101,12 @@ KISSY.add("editor", function(S) {
     }
 
     S.augment(Editor, EventTarget, {
+        addCommand:function(name, obj) {
+            this._commands[name] = obj;
+        },
+        execCommand:function(name) {
+            this._commands[name].exec(this);
+        },
         getData:function() {
             if (KE.HtmlDataProcessor)
                 return KE.HtmlDataProcessor.toHtml(this.document.body.innerHTML, "p");
@@ -433,7 +440,7 @@ KISSY.add("editor", function(S) {
             self.on("dataReady", function() {
                 self.detach("dataReady");
                 //默认填充p标签?
-                //!TODO:监控enter按键！
+                //监控enter按键！，文字必定有 p 包含
                 self.setData(S.trim(self.textarea.val()) || "");
                 KE.fire("instanceCreated", {editor:self});
             });
@@ -531,8 +538,7 @@ KISSY.add("editor", function(S) {
             selection.selectRanges([ range ]);
             self.focus();
             //http://code.google.com/p/kissy/issues/detail?can=1&start=100&id=121
-            //导致平常状况下滚屏，不处理
-            //clone && clone.scrollIntoView(self.document);
+            clone && clone._4e_scrollIntoView(self.document);
             setTimeout(function() {
                 self.fire("save");
             }, 10);

@@ -296,18 +296,18 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
 
     KE.on("instanceCreated", function(ev) {
         var editor = ev.editor;
-        new Indent({
+        editor.addCommand("outdent", new Indent({
             editor:editor,
             title:"减少缩进量",
             contentCls:"ke-toolbar-outdent",
             type:"outdent"
-        });
-        new Indent({
+        }));
+        editor.addCommand("indent", new Indent({
             editor:editor,
             title:"增加缩进量",
             contentCls:"ke-toolbar-indent",
             type:"indent"
-        });
+        }));
 
     });
 

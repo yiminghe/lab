@@ -1391,7 +1391,7 @@ KISSYEDITOR.add("editor-range", function(KE) {
 
             self.enlarge(KER.ENLARGE_BLOCK_CONTENTS);
             fixedBlock[0].appendChild(self.extractContents());
-            fixedBlock.trim();
+            fixedBlock._4e_trim();
 
             if (!UA.ie)
                 fixedBlock._4e_appendBogus();

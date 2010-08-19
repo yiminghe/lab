@@ -922,6 +922,24 @@ KISSYEDITOR.add("editor-dom", function(KE) {
 
                 // In the DTD # == text node.
                 return ( dtd && dtd['#'] );
+            },
+            /**
+             * 修正scrollIntoView在可视区域内不需要滚动
+             * @param el
+             */
+            _4e_scrollIntoView:function(elem) {
+                elem = normalEl(elem);
+                var args = S.makeArray(arguments);
+                args.shift();
+                var l = DOM.scrollLeft(elem[0]),t = DOM.scrollTop(elem[0]),eoffset = elem.offset(),el = eoffset.left, et = eoffset.top;
+                if (DOM.viewportHeight(elem[0].ownerDocument) + t < et ||
+                    et < t ||
+                    DOM.viewportWidth(elem[0].ownerDocument) + l < el
+                    ||
+                    el < l
+                    ) {
+                    elem.scrollIntoView.apply(elem, args);
+                }
             }
         };
 
