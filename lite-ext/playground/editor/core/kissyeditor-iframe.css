@@ -3,7 +3,10 @@ for kissy editor iframe
 @author:Óñ²®(lifesinger@gmail.com),yiminghe@gmail.com
 @from:resource://gre/res/html.css
 **/
-
+html{
+    _overflow-x:auto;
+    _overflow-y:scroll;
+}
 /*
 iframe body no need to reset
 body,*/
