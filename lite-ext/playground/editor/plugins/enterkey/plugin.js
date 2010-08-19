@@ -25,7 +25,7 @@ KISSYEDITOR.add("editor-plugin-enterkey", function(KE) {
     }
 
     function enterBlock(editor) {
-        debugger;
+        //debugger;
         // Get the range for the current selection.
         var range = getRange(editor);
         var doc = range.document;
