@@ -253,7 +253,7 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
                 el = this.el;
             var self = this;
             //off状态下触发捕获，注意没有on状态
-            el.on("offClick", this._change, this);
+            el.on("offClick", this.exec, this);
             if (this.get("type") == "outdent")
                 editor.on("selectionChange", this._selectionChange, this);
             else
@@ -261,7 +261,7 @@ KISSYEDITOR.add("editor-plugin-indent", function(KE) {
         },
 
 
-        _change:function() {
+        exec:function() {
             var editor = this.get("editor"),
                 el = this.el,
                 self = this;

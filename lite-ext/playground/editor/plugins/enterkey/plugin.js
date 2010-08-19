@@ -25,7 +25,7 @@ KISSYEDITOR.add("editor-plugin-enterkey", function(KE) {
     }
 
     function enterBlock(editor) {
-        //debugger;
+        debugger;
         // Get the range for the current selection.
         var range = getRange(editor);
         var doc = range.document;
@@ -33,7 +33,7 @@ KISSYEDITOR.add("editor-plugin-enterkey", function(KE) {
         if (range.checkStartOfBlock() && range.checkEndOfBlock()) {
             var path = new ElementPath(range.startContainer),
                 block = path.block;
-
+            //Ö»ÓÐÁ½²ã£¿
             if (block && ( block._4e_name() == 'li' || block.parent()._4e_name() == 'li' )) {
                 editor.execCommand('outdent');
                 return;
@@ -117,7 +117,7 @@ KISSYEDITOR.add("editor-plugin-enterkey", function(KE) {
 
                     if (element._4e_equals(elementPath.block) || element._4e_equals(elementPath.blockLimit))
                         break;
-
+                    //<li><strong>^</strong></li>
                     if (dtd.$removeEmpty[ element.getName() ]) {
                         element = element._4e_clone();
                         newBlock._4e_moveChildren(element);
