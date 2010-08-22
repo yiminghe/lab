@@ -35,9 +35,9 @@
             total+=c;
         }
         i=1;
-        var v2 = document.getElementById("t").value.replace(/^.+$/mg,function(){
+        var v2 = document.getElementById("t").value.replace(/^.+$/mg,function(m){
             var z=i;
-            return "<br/>"+(i++)+"(count:"+ls[z-1]+")"+" : ";
+            return "<br/>"+(i++)+"(count:"+ls[z-1]+")"+" : "+m;
         });
         v2+="<br/>total:"+total;
         document.getElementById("re").innerHTML=v2;
