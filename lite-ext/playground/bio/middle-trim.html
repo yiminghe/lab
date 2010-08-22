@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk" />
+<title>peng</title>
+</head>
+<body>
+<textarea style="width:90%;height:300px;" id='t'></textarea>
+<br/>
+<button id='run'>去除中间空白</button>
+<script>
+    document.getElementById("run").onclick = function() {
+
+        document.getElementById("t").value = document.getElementById("t").value.replace(/\s*([^\s]+)\s+([^\s]+)\s*/g,"$1$2");
+
+    };
+</script>
+</body>
+</html>
