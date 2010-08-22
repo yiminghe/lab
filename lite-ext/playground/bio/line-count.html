@@ -14,17 +14,24 @@
 
 </div>
 <script>
+    function trim(s){
+        return s.replace(/^\s+|\s+$/g,"");
+    }
     document.getElementById("run").onclick = function() {
         var v=document.getElementById("t").value,sep=document.getElementById("sep").value;
         v=v.split(/\n/);
-        var ls=[],total=0;
+        var ls=[],total=0,i2=0;
+        document.getElementById("t").value="";
         for(var i=0;i<v.length;i++){
-            var c=0,l=v[i];
+            var c=0,l=trim(v[i]);
+
+            if(!l) continue;
+            document.getElementById("t").value+=l+"\n";
             l=l.replace(new RegExp(".+?"+sep),"");
             l.replace(/[a-z]/ig,function(){
                 c++;
             });
-            ls[i]=c;
+            ls[i2++]=c;
             total+=c;
         }
         i=1;
