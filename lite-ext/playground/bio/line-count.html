@@ -17,7 +17,7 @@
     document.getElementById("run").onclick = function() {
         var v=document.getElementById("t").value,sep=document.getElementById("sep").value;
         v=v.split(/\n/);
-        var ls=[];
+        var ls=[],total=0;
         for(var i=0;i<v.length;i++){
             var c=0,l=v[i];
             l=l.replace(new RegExp(".+?"+sep),"");
@@ -25,13 +25,14 @@
                 c++;
             });
             ls[i]=c;
+            total+=c;
         }
         i=1;
-        var v2 = document.getElementById("t").value.replace(/^/mg,function(){
+        var v2 = document.getElementById("t").value.replace(/^.+$/mg,function(){
             var z=i;
             return "<br/>"+(i++)+"(count:"+ls[z-1]+")"+" : ";
         });
-
+        v2+="<br/>total:"+total;
         document.getElementById("re").innerHTML=v2;
 
     };
