@@ -87,10 +87,10 @@
             for (var j = 3; j >= 0; j--) {
                 str.push(getByte(n, j));
             }
-            // b.push(padding(n.toString(2)));
         }
         re.val(str.join(""));
-        var v = str;
+        S.Cookie.set("test", str.join(""));
+        var v = S.Cookie.get("test");
         for (var i = 0; i < v.length; i++) {
             var n = v[i].charCodeAt(0);
             b.push(padding(n.toString(2), 8));
