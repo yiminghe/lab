@@ -137,6 +137,7 @@
 
     for (var i = 1; i < 5; i++) {
         var m = new Node(flashGen[i - 1]);
+        //alert(m[0].outerHTML);
         var url = getFlashUrl(m);
         S.one("#re" + i).html(url);
         m.insertBefore(S.one("#re" + i));
