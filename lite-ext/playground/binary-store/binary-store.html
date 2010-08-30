@@ -10,7 +10,7 @@
 <button id="off">off</button>
 <button id="look">查询</button>
 <button id="all">获取cookie完整表示</button>
-<button id="trans">cookie串到二进制</button>
+
 <h1>cookie串</h1>
 <input id="re" style="width:100%"/>
 <h1>二进制串</h1>
@@ -87,21 +87,17 @@
             for (var j = 3; j >= 0; j--) {
                 str.push(getByte(n, j));
             }
-            b.push(padding(n.toString(2)));
+            // b.push(padding(n.toString(2)));
         }
         re.val(str.join(""));
-        binary.html(b.join(""))
-    });
-
-    trans.on("click", function() {
-        var v = re.val(),b = [];
+        var v = str;
         for (var i = 0; i < v.length; i++) {
             var n = v[i].charCodeAt(0);
-            console.log(n);
             b.push(padding(n.toString(2), 8));
         }
         binary.html(b.join(""))
     });
+
 
 </script>
 </body>
