@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="gbk" />
+<meta charset="gbk"/>
 <title>peng</title>
 </head>
 <body>
@@ -9,12 +9,21 @@
 <br/>
 <button id='run'>变为小写</button>
 <button id='run2'>变为大写</button>
+<button id='run3'>首字母大写</button>
 <script>
     document.getElementById("run").onclick = function() {
         document.getElementById("t").value = document.getElementById("t").value.toLowerCase();
     };
     document.getElementById("run2").onclick = function() {
         document.getElementById("t").value = document.getElementById("t").value.toUpperCase();
+    };
+    document.getElementById("run3").onclick = function() {
+        document.getElementById("t").value = document.getElementById("t").value.replace(/\w+/g, function(m) {
+            if (m.length > 1) {
+                return m.charAt(0).toUpperCase() + m.substring(1);
+            }
+            return m;
+        });
     };
 </script>
 </body>

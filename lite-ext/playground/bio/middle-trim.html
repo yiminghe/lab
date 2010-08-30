@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="gbk" />
+<meta charset="gbk"/>
 <title>peng</title>
 </head>
 <body>
@@ -11,7 +11,7 @@
 <script>
     document.getElementById("run").onclick = function() {
 
-        document.getElementById("t").value = document.getElementById("t").value.replace(/\s*([^\s]+)\s+([^\s]+)\s*/g,"$1$2");
+        document.getElementById("t").value = document.getElementById("t").value.replace(/[^\w]*([\w]+)[^\w]+([\w]+)[^\w]*/g, "$1$2");
 
     };
 </script>
