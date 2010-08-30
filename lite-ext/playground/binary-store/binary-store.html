@@ -9,15 +9,27 @@
 <button id="on">on</button>
 <button id="off">off</button>
 <button id="look">查询</button>
+<button id="all">获取cookie完整表示</button>
+<button id="trans">结果串到二进制</button>
+<h1>cookie串</h1>
+<input id="re" style="width:100%"/>
+<h1>二进制串</h1>
+<div id="binary" style="border:1px solid green;height:20px;">
+
+</div>
 <script type="text/javascript" src="../../base/javascript/ks-core.js"></script>
 <script type="text/javascript">
     var S = KISSY
             ,num = S.one("#num")
             ,on = S.one("#on")
+            ,re = S.one("#re")
             ,off = S.one("#off")
+            ,binary = S.one("#binary")
+            ,trans = S.one("#trans")
+            ,all = S.one("#all")
             ,all_one = (Math.pow(2, 32) - 1)
             ,look = S.one("#look");
-    var store = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    var store = [0,0,0];
     function check() {
         if (!/\d+/.test(num.val())) {
             alert("开关请输入整数！");
@@ -56,6 +68,39 @@
                 mask = all_one ^ Math.pow(2, index2);
         store[index] &= mask;
         alert("设置成功");
+    });
+
+    function getByte(i, index) {
+        return String.fromCharCode((i >> (index * 8)) & 0xFF);
+    }
+    function padding(i, n) {
+        n = n || 32;
+        while (i.length < n) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    all.on("click", function() {
+        var str = [],b = [];
+        for (var i = 0; i < store.length; i++) {
+            var n = store[i];
+            for (var j = 3; j >= 0; j--) {
+                str.push(getByte(n, j));
+            }
+            b.push(padding(n.toString(2)));
+        }
+        re.val(str.join(""));
+        binary.html(b.join(""))
+    });
+
+    trans.on("click", function() {
+        var v = re.val(),b = [];
+        for (var i = 0; i < v.length; i++) {
+            var n = v[i].charCodeAt(0);
+            console.log(n);
+            b.push(padding(n.toString(2), 8));
+        }
+        binary.html(b.join(""))
     });
 
 </script>
