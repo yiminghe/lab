@@ -1,13 +1,13 @@
 /**
- YUI3Êı¾İÑÓ³Ù¼ÓÔØ×é¼ş
- ĞŞ¸Ä×Ô£ºhttp://code.google.com/p/kissy/
+ YUI3æ•°æ®å»¶è¿ŸåŠ è½½ç»„ä»¶
+ ä¿®æ”¹è‡ªï¼šhttp://code.google.com/p/kissy/
  **/
 YUI.add('dataLazyLoad', function (Y) {
     var LAZY_TEXTAREA_CSS = "ks-datalazyload";
     var EMPTY_IMG_SRC = "http://a.tbcdn.cn/kissy/1.0.4/build/datalazyload/dot.gif";
     var IMG_SRC_BAK = "data-src";
-    var LAZY_LOAD_EVENT="lazyShow";
-    
+    var LAZY_LOAD_EVENT = "lazyShow";
+
     Y.mix(Y, {
         filter: function (arr, callback) {
             if (!arr || !arr.length) return;
@@ -20,16 +20,17 @@ YUI.add('dataLazyLoad', function (Y) {
         }
     });
     function DataLazyLoad(config) {
-    		//ÊµÀı»ò¹¤³§·½·¨¶¼¿ÉÒÔ
+        //å®ä¾‹æˆ–å·¥å‚æ–¹æ³•éƒ½å¯ä»¥
         if (!this instanceof DataLazyLoad) return new DataLazyLoad(config);
         DataLazyLoad.superclass.constructor.apply(this, arguments);
     }
+
     var WIN = Y.one(window);
-    
+
     DataLazyLoad.NAME = "dataLazyLoad";
     DataLazyLoad.ATTRS = {
         containers: {
-        		//Y.allĞÎÊ½²ÎÊıÍ³Ò»»¯´¦Àí
+            //Y.allå½¢å¼å‚æ•°ç»Ÿä¸€åŒ–å¤„ç†
             setter: function (nodes) {
                 var containers = Y.all(nodes);
                 if (!containers || containers.isEmpty()) {
@@ -40,14 +41,14 @@ YUI.add('dataLazyLoad', function (Y) {
         }
     };
     Y.extend(DataLazyLoad, Y.Base, {
-    		//µÃµ½¿É¼ûµÄÎÄµµ×İÖáÏÂÏŞ
+        //å¾—åˆ°å¯è§çš„æ–‡æ¡£çºµè½´ä¸‹é™
         _getLowerThreshold: function () {
-            return (WIN.get("docScrollY") + WIN.get("winHeight")*1.5);
+            return (WIN.get("docScrollY") + WIN.get("winHeight") * 1.5);
         },
-        //³õÊ¼»¯º¯Êı
+        //åˆå§‹åŒ–å‡½æ•°
         initializer: function (cfg) {
-        		//¼´½«ÓÉÓÚÑÓ³Ù¼ÓÔØ¶øÏÔÊ¾µÄÍ¼Æ¬ÔªËØ
-        		this.publish(LAZY_LOAD_EVENT);
+            //å³å°†ç”±äºå»¶è¿ŸåŠ è½½è€Œæ˜¾ç¤ºçš„å›¾ç‰‡å…ƒç´ 
+            this.publish(LAZY_LOAD_EVENT);
             var containers = this.get("containers");
             var self = this;
             var lazyImages = [];
@@ -56,7 +57,7 @@ YUI.add('dataLazyLoad', function (Y) {
             containers.each(function (el) {
                 el.all("img").each(function (img) {
                     var mY = img.getY();
-                    //³õÊ¼ÆÁÏÂµÄ²Å¶èĞÔ¼ÓÔØ
+                    //åˆå§‹å±ä¸‹çš„æ‰æƒ°æ€§åŠ è½½
                     if (mY <= threshold) {
                         return;
                     }
@@ -66,7 +67,7 @@ YUI.add('dataLazyLoad', function (Y) {
                 });
                 el.all("textarea." + LAZY_TEXTAREA_CSS).each(function (t) {
                     var mY = t.getY();
-                    //³õÊ¼ÆÁÏÂµÄ²Å¶èĞÔ¼ÓÔØ£¬ÆäËûÁ¢¼´´¦Àí
+                    //åˆå§‹å±ä¸‹çš„æ‰æƒ°æ€§åŠ è½½ï¼Œå…¶ä»–ç«‹å³å¤„ç†
                     if (mY <= threshold) {
                         t.insert(t.get("value"), "before");
                         t.remove();
@@ -77,22 +78,22 @@ YUI.add('dataLazyLoad', function (Y) {
             });
             this.lazyImages = lazyImages;
             this.lazyTextareas = lazyTextareas;
-            //resizeÒÔ¼°scrollÊ±¶¼ĞèÒª²é¿´ÊÇ·ñĞèÒªÑÓÊ±¼ÓÔØ
+            //resizeä»¥åŠscrollæ—¶éƒ½éœ€è¦æŸ¥çœ‹æ˜¯å¦éœ€è¦å»¶æ—¶åŠ è½½
             this._onScroll = WIN.on("scroll", this._loadByThreshold, this);
             this._onResize = WIN.on("resize", this._loadByThreshold, this);
         },
-        
-        //¸ù¾İ¹ö¶¯ÌõÎ»ÖÃ¿ªÊ¼ÑÓ³Ù¼ÓÔØ
+
+        //æ ¹æ®æ»šåŠ¨æ¡ä½ç½®å¼€å§‹å»¶è¿ŸåŠ è½½
         _loadByThreshold: function () {
             var lazyImages = this.lazyImages;
             var lazyTextareas = this.lazyTextareas;
             var threshold = this._getLowerThreshold();
-            var self=this;
+            var self = this;
             Y.filter(lazyImages, function (img) {
                 var mY = img.getY();
                 if (mY <= threshold) {
                     img.set("src", img.getAttribute(IMG_SRC_BAK));
-                    self.fire(LAZY_LOAD_EVENT,img);
+                    self.fire(LAZY_LOAD_EVENT, img);
                     return false;
                 }
             });
@@ -104,7 +105,7 @@ YUI.add('dataLazyLoad', function (Y) {
                     return false;
                 }
             });
-            //Èç¹û¿ÉÀÁ¼ÓÔØµÄ¶¼ÒÑ´¦Àí£¬ÔòÈ¥³ıresize,scrollµÄÊÂ¼ş°ó¶¨
+            //å¦‚æœå¯æ‡’åŠ è½½çš„éƒ½å·²å¤„ç†ï¼Œåˆ™å»é™¤resize,scrollçš„äº‹ä»¶ç»‘å®š
             if (lazyTextareas.length == 0 && lazyImages.length == 0) {
                 this.destructor();
             }
