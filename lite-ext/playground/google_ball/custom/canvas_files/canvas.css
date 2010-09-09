@@ -1,0 +1,25 @@
+
+/* Yeah, I didn't put in much effort in the style department ~ B */
+.picker{
+ display: block;
+ margin: 3px;
+}
+
+.picker input {
+  margin-left: 55px;
+}
+
+.lbl {
+ position: absolute;
+ width: 50px;
+ text-align: right;
+}
+
+#c {
+border: 1px solid gray;
+margin-top: 10px;
+}
+
+#btn{
+  width: 150px;
+}
