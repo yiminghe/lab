@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk" />
+<title>peng</title>
+</head>
+<body>
+<textarea style="width:90%;height:300px;" id='t'></textarea>
+<br/>
+<label>分隔符：<input id='sep' value=":"/></label>
+<button id='run'>每行字数统计</button>
+<h1>result:</h1>
+<div id="re" style="border:1px solid green">
+
+</div>
+<script>
+    function trim(s){
+        return s.replace(/^\s+|\s+$/g,"");
+    }
+    document.getElementById("run").onclick = function() {
+        var v=document.getElementById("t").value,sep=document.getElementById("sep").value;
+        v=v.split(/\n/);
+        var ls=[],total=0,i2=0;
+        document.getElementById("t").value="";
+        for(var i=0;i<v.length;i++){
+            var c=0,l=trim(v[i]);
+
+            if(!l) continue;
+            document.getElementById("t").value+=l+"\n";
+            l=l.replace(new RegExp(".+?"+sep),"");
+            l.replace(/[a-z]/ig,function(){
+                c++;
+            });
+            ls[i2++]=c;
+            total+=c;
+        }
+        i=1;
+        var v2 = document.getElementById("t").value.replace(/^.+$/mg,function(m){
+            var z=i;
+            return "<br/>"+(i++)+"(count:"+ls[z-1]+")"+" : "+m;
+        });
+        v2+="<br/>total:"+total;
+        document.getElementById("re").innerHTML=v2;
+
+    };
+</script>
+</body>
+</html>
