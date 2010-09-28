@@ -59,7 +59,7 @@
                     codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
                     classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
                 <param
-                        value="../src/plugins/music/niftyplayer.swf?file=../src/plugins/music/betty.mp3"
+                        value="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/music/niftyplayer.swf?file=http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/music/betty.mp3"
                         name="movie"/>
                 <param value="high" name="quality"/>
                 <param name="wmode" value="transparent"/>
@@ -73,7 +73,7 @@
                        type="application/x-shockwave-flash"
                        bgcolor="#FFFFFF"
                        quality="high"
-                       src="../src/plugins/music/niftyplayer.swf?file=../src/plugins/music/betty.mp3">
+                       src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/music/niftyplayer.swf?file=http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/music/betty.mp3">
                 </embed>
             </object>
             1111111111111111
@@ -198,8 +198,105 @@ box-shadow:2px 2px 0.5em #888888;
 
 
 <script src="http://github.com/yiminghe/kissy-sandbox/raw/master/attribute/attribute.js"></script>
-<script src="http://github.com/kissyteam/kissy-editor/raw/master/build/editor-all-pkg.js?"></script>
-<script src="http://github.com/kissyteam/kissy-editor/raw/master/build/biz/bangpai/editor-plugin-pkg.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/editor.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/utils.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/focusmanager.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/definition.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/dtd.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/dom.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/elementpath.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/walker.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/range.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/domiterator.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/selection.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/core/styles.js"></script>
+
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/button/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/contextmenu/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/overlay/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/select/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/bubbleview/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/dd/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/progressbar/plugin.js"></script>
+
+
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/htmlparser.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/basicwriter.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/htmlwriter.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/fragment.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/element.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/filter.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/text.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/htmlparser/comment.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/htmldataprocessor/plugin.js"></script>
+
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/fakeobjects/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/localStorage/plugin.js"></script>
+<!--草稿-->
+<script src="http://chengyu.taobao.ali.com/kissy_git/kissy-editor/src/plugins/draft/plugin.js"></script>
+<!--源码--->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/sourcearea/plugin.js"></script>
+<!--预览-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/preview/plugin.js"></script>
+<!--模板-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/templates/plugin.js"></script>
+<!--撤销-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/undo/plugin.js"></script>
+<!--清除格式-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/removeformat/plugin.js"></script>
+<!--字体-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/font/plugin.js"></script>
+<!--格式-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/format/plugin.js"></script>
+<!--颜色-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/colorsupport/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/forecolor/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/bgcolor/plugin.js"></script>
+<!--列表-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/list/plugin.js"></script>
+<!--缩进-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/indent/plugin.js"></script>
+<!--对齐-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/justify/plugin.js"></script>
+<!--链接-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/link/plugin.js"></script>
+<!--图像-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/image/plugin.js"></script>
+<!--flash-->
+<script src="http://chengyu.taobao.ali.com/kissy_git/kissy-editor/src/plugins/flashbridge/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/flashutils/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/flashsupport/plugin.js"></script>
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/flash/plugin.js"></script>
+<!--音乐-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/music/plugin.js"></script>
+<!--表格-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/table/plugin.js"></script>
+<!--表情-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/smiley/plugin.js"></script>
+<!--最大化-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/maximize/plugin.js"></script>
+<!--路径-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/elementpaths/plugin.js"></script>
+<!--捕获粘贴-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/clipboard/plugin.js"></script>
+<!--捕获 enter ,shift enter-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/enterkey/plugin.js"></script>
+<!--大小调节-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/resize/plugin.js"></script>
+<!--分页插入-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/plugins/pagebreak/plugin.js"></script>
+<!--
+youku,ku6,tudou视频
+-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/biz/bangpai/plugins/video/plugin.js"></script>
+<!--
+xiami 音乐
+-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/biz/bangpai/plugins/music/plugin.js"></script>
+<!--
+xiami 音乐
+-->
+<script src="http://github.com/kissyteam/kissy-editor/raw/master/src/biz/bangpai/plugins/upload/plugin.js"></script>
 
 <script>
     
@@ -207,7 +304,7 @@ box-shadow:2px 2px 0.5em #888888;
     KISSY.use('editor', function() {
 
         var KE = KISSY.Editor;
-        KE.Config.base = "http://github.com/kissyteam/kissy-editor/raw/master/build/";
+        KE.Config.base = "http://chengyu.taobao.ali.com/kissy_git/kissy-editor/src/";
 
          window.editor = KE("#editor", {
 
