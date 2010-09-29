@@ -1,0 +1,415 @@
+<?xml version="1.0"?>
+<!--
+build file for kissy editor
+@author:yiminghe@gmail.com
+-->
+<project name="kissy-editor-build"
+         default="run"
+         xmlns:ac="antlib:net.sf.antcontrib"
+        >
+    <description>Kissy Editor Build File</description>
+
+    <dirname property="current.dir" file="${ant.file.kissy-editor-build}"/>
+    <dirname property="project.dir" file="${ant.file.kissy-editor-build}/../"/>
+    <property name="root.dir" location="${project.dir}/../"/>
+
+    <property name="src.dir" location="${project.dir}/src/"/>
+    <property name="ks-tools.dir" location="${root.dir}/kissy-tools/"/>
+    <property name="build.dir" location="${project.dir}/build/"/>
+
+    <property name="theme.dir" value="theme"/>
+    <property name="biz.dir" value="biz"/>
+    <property name="version" value="2.0"/>
+    <property name="charset" value="UTF-8"/>
+    <property name="git.origin" value="origin"/>
+    <property name="git.gh-pages" value="gh-pages"/>
+    <property name="git.master" value="master"/>
+    <property name="git.wait" value="10"/>
+    <property name="git.url" value="http://www.github.com"/>
+
+    <fileset dir="${build.dir}/${theme.dir}"
+             includes="cool/editor-pkg-min.css"
+             id="cssembed_files">
+    </fileset>
+
+    <filelist dir="${src.dir}/core"
+              id="core_js"
+              files="../editor.js,utils.js,focusmanager.js,definition.js,
+                      dtd.js,dom.js,elementpath.js
+                      ,walker.js,range.js,domiterator.js,selection.js
+                      ,styles.js"/>
+
+    <fileset dir="${src.dir}"
+             includes="plugins/**/*.js"
+             id="main_js">
+    </fileset>
+
+    <tstamp>
+        <format property="timestamp.isoformat"
+                pattern="yyyy-MM-dd' 'HH:mm:ss" locale="en"/>
+    </tstamp>
+
+    <!--
+    create dir necessarily
+    -->
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+
+        <copy todir="${build.dir}"
+              encoding="${charset}"
+              outputencoding="${charset}">
+            <fileset dir="${src.dir}"
+                     includes="**/*"/>
+        </copy>
+    </target>
+
+    <!--
+    support for git by yiminghe,please select
+    "run git from windows command prompt"
+    when install
+    -->
+    <target
+            name="git"
+            depends="cssembed">
+
+        <input addproperty="git.commit.message">
+            git commit message :
+        </input>
+        <ac:if>
+            <not>
+                <equals arg1="${git.commit.message}" arg2="">
+                </equals>
+            </not>
+            <ac:then>
+                <exec executable="cmd"
+                      failonerror="true">
+                    <arg line="/c git add ."/>
+                </exec>
+                <exec executable="cmd" failonerror="true">
+                    <arg line="/c git commit -am '${git.commit.message}'"/>
+                </exec>
+
+                <!--
+                test whether online in order to push
+                -->
+                <waitfor maxwait="${git.wait}"
+                         maxwaitunit="second"
+                         timeoutproperty="git.offline">
+                    <http url="${git.url}"/>
+                </waitfor>
+
+                <ac:if>
+                    <not>
+                        <isset property="git.offline"/>
+                    </not>
+                    <ac:then>
+                        <exec executable="cmd" failonerror="true">
+                            <arg line="/c git push ${git.origin} ${git.master}"/>
+                        </exec>
+
+                        <exec executable="cmd" failonerror="true">
+                            <arg line="/c git checkout ${git.gh-pages}"/>
+                        </exec>
+
+                        <exec executable="cmd" failonerror="true">
+                            <arg line="/c git merge ${git.master}"/>
+                        </exec>
+
+                        <exec executable="cmd" failonerror="true">
+                            <arg line="/c git push ${git.origin} ${git.gh-pages}"/>
+                        </exec>
+
+                        <exec executable="cmd" failonerror="true">
+                            <arg line="/c git checkout ${git.master}"/>
+                        </exec>
+                    </ac:then>
+                    <ac:else>
+                        <echo>offline no push!</echo>
+                    </ac:else>
+                </ac:if>
+
+
+            </ac:then>
+        </ac:if>
+
+    </target>
+
+    <target name="run" depends="git">
+
+    </target>
+
+    <!--
+    minify all js and css to build dir
+    -->
+    <target name="minify" depends="concat">
+
+
+        <apply executable="java"
+               verbose="true"
+               dest="${build.dir}"
+               failonerror="true"
+               parallel="false"
+                >
+            <fileset dir="${src.dir}"
+                     includes="**/*.js"/>
+            <fileset dir="${build.dir}"
+                     includes="**/*-pkg.js"/>
+            <arg line="-jar"/>
+            <arg path="${ks-tools.dir}/closure-compiler/compiler.jar"/>
+            <arg line="--charset ${charset}"/>
+            <arg value="--warning_level"/>
+            <arg value="QUIET"/>
+            <arg value="--js"/>
+            <srcfile/>
+            <arg value="--js_output_file"/>
+            <targetfile/>
+            <mapper type="regexp" from="^(.*)\.(css|js)$" to="\1-min.\2"/>
+        </apply>
+
+        <apply executable="java"
+               verbose="true"
+               dest="${build.dir}"
+               failonerror="true"
+               parallel="false"
+                >
+            <fileset dir="${src.dir}"
+                     includes="**/*.css"/>
+            <fileset dir="${build.dir}"
+                     includes="**/*-pkg.css"/>
+            <arg line="-jar"/>
+            <arg path="${ks-tools.dir}/yuicompressor/yuicompressor.jar"/>
+            <arg line="--charset ${charset}"/>
+            <srcfile/>
+            <arg line="-o"/>
+            <targetfile/>
+            <mapper type="regexp" from="^(.*)\.(css|js)$" to="\1-min.\2"/>
+        </apply>
+
+        <!--
+        remove debug info
+        -->
+        <replaceregexp match="^\s*console\.log\(.+$"
+                       replace=""
+                       flags="g"
+                       byline="true"
+                       encoding="${charset}">
+            <fileset dir="${build.dir}"
+                     includes="**/*.js"/>
+        </replaceregexp>
+
+        <replaceregexp match="@TIMESTAMP@"
+                       replace="${timestamp.isoformat}"
+                       flags="g"
+                       byline="true"
+                       encoding="${charset}">
+            <fileset dir="${build.dir}"
+                     includes="**/*.js"/>
+        </replaceregexp>
+
+    </target>
+
+    <!--
+    embed css for icon
+    -->
+    <target name="cssembed" depends="native2ascii">
+
+        <apply executable="java"
+               verbose="true"
+               dest="${build.dir}/${theme.dir}"
+               failonerror="true"
+               parallel="false"
+                >
+            <fileset refid="cssembed_files"/>
+            <arg line="-jar"/>
+            <arg path="cssembed-0.3.3.jar"/>
+            <arg line="--charset ${charset}"/>
+            <srcfile/>
+            <arg line="-o"/>
+            <targetfile/>
+            <arg line="-v"/>
+            <mapper type="regexp" from="^(.*)\.css$" to="\1-datauri.css"/>
+        </apply>
+        <apply executable="java"
+               verbose="true"
+               dest="${build.dir}/${theme.dir}"
+               failonerror="true"
+               parallel="false"
+                >
+            <fileset refid="cssembed_files"/>
+            <arg line="-jar"/>
+            <arg path="cssembed-0.3.3.jar"/>
+            <arg line="--charset ${charset}"/>
+            <srcfile/>
+            <arg line="--mhtml"/>
+            <arg line="--mhtmlroot"/>
+            <arg line="MHTMLROOT"/>
+            <arg line="-o"/>
+            <targetfile/>
+            <arg line="-v"/>
+            <mapper type="regexp" from="^(.*)\.css$" to="\1-mhtml.css"/>
+        </apply>
+
+
+        <ac:for param="embedFile">
+            <fileset refid="cssembed_files"/>
+            <sequential>
+                <ac:var name="var.embed.dirname" unset="true"/>
+                <dirname property="var.embed.dirname" file="@{embedFile}"/>
+                <ac:var name="var.embed.basename" unset="true"/>
+                <basename property="var.embed.basename" file="${var.embed.dirname}"/>
+
+                <echo>
+                    build ${var.embed.basename} for @{embedFile}
+                </echo>
+                <replaceregexp match="background-image:[^!;]+!([^)]+)\)"
+                               replace="background-image:\
+                       expression(function(el){\
+                       if(window.KISSY&amp;&amp;\
+                       window.KISSY.Editor\
+                       &amp;&amp;\
+                       window.KISSY.Editor.Config\
+                       &amp;&amp;\
+                       window.KISSY.Editor.Config.base)\
+                       el.style.backgroundImage=\
+                       'url(mhtml:'+window.KISSY.Editor.Config.base+\
+                       'theme/${var.embed.basename}/editor-pkg-min-mhtml.css!\1)';}(this))"
+                               flags="g"
+                               byline="false"
+                               encoding="${charset}">
+                    <fileset dir="${build.dir}/${theme.dir}/${var.embed.basename}"
+                             includes="**/*-mhtml.css"/>
+                </replaceregexp>
+            </sequential>
+        </ac:for>
+
+        <fixcrlf includes="**/*-mhtml.css"
+                 srcdir="${build.dir}/${theme.dir}"
+                 encoding="${charset}"
+                 eol="crlf">
+        </fixcrlf>
+
+    </target>
+
+    <!--
+    concat js files
+    -->
+    <target name="concat" depends="prepare">
+        <!--
+        kissy editor core ,load plugins dynamically
+        -->
+        <concat destfile="${build.dir}/editor-core-pkg.js"
+                encoding="${charset}"
+                outputencoding="${charset}">
+            <filelist refid="core_js"/>
+        </concat>
+
+        <!--
+        full kissy editor ,all plugins static included
+        -->
+        <concat destfile="${build.dir}/editor-all-pkg.js"
+                encoding="${charset}"
+                outputencoding="${charset}">
+            <path location="${build.dir}/editor-core-pkg.js"/>
+            <fileset refid="main_js"/>
+        </concat>
+
+        <!--
+        biz build ,iteratively
+        -->
+        <ac:for param="biz">
+            <path>
+                <dirset dir="${build.dir}/${biz.dir}" includes="*"/>
+            </path>
+            <sequential>
+                <!--
+                get folder name 
+                -->
+                <ac:var name="var.biz.dirname" unset="true"/>
+                <basename property="var.biz.dirname" file="@{biz}"/>
+                <echo>
+                    build ${var.biz.dirname} for @{biz}
+                </echo>
+                <ac:if>
+                    <available file="@{biz}/plugins"></available>
+                    <ac:then>
+                        <concat destfile="@{biz}/editor-plugin-pkg.js"
+                                encoding="${charset}"
+                                outputencoding="${charset}">
+                            <fileset
+                                    dir="${src.dir}/${biz.dir}/${var.biz.dirname}/plugins"
+                                    includes="**/*.js"
+                                    />
+                        </concat>
+                    </ac:then>
+                </ac:if>
+
+            </sequential>
+        </ac:for>
+
+
+        <!--
+        full css build
+        -->
+        <ac:for param="theme">
+            <path>
+                <dirset dir="${build.dir}/${theme.dir}" includes="*"/>
+            </path>
+            <sequential>
+                <ac:var name="var.theme.dirname" unset="true"/>
+                <basename property="var.theme.dirname" file="@{theme}"/>
+                <echo>
+                    build ${var.theme.dirname} for @{theme}
+                </echo>
+
+                <concat
+                        destfile="@{theme}/editor-pkg.css"
+                        encoding="${charset}"
+                        outputencoding="${charset}">
+                    <filelist dir="${src.dir}/${theme.dir}" files="editor-common.css"/>
+                    <fileset
+                            dir="${src.dir}/${theme.dir}/${var.theme.dirname}"
+                            includes="*.css"/>
+                </concat>
+            </sequential>
+        </ac:for>
+
+    </target>
+
+    <!-- 对 JS 文件 ASCII 化 -->
+    <target name="native2ascii"
+            depends="minify">
+        <native2ascii
+                encoding="${charset}"
+                src="${build.dir}"
+                dest="${build.dir}"
+                includes="**/*-pkg-min.js"
+                >
+            <mapper type="regexp" from="^(.*)\.js$" to="\1-ascii.js"/>
+        </native2ascii>
+
+        <!--
+        先要删除
+        -->
+        <delete>
+            <fileset dir="${build.dir}">
+                <include name="**/*-pkg-min.js"/>
+            </fileset>
+        </delete>
+        <!--
+        才能移动
+        -->
+        <move todir="${build.dir}">
+            <fileset dir="${build.dir}">
+                <include name="**/*-ascii.js"/>
+            </fileset>
+            <mapper type="regexp" from="^(.*)-ascii\.js$" to="\1.js"/>
+        </move>
+
+
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+</project>

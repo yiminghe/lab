@@ -1,0 +1,13 @@
+/**
+element path plugin style
+@author:yiminghe@gmail.com
+**/
+.elementpath {
+    padding: 0 5px;
+    text-decoration: none;
+}
+
+.elementpath:hover {
+    background: #CCFFFF;
+    text-decoration: none;
+}

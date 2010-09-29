@@ -1,0 +1,1 @@
+KISSY.Editor.add("htmlparser-text",function(){function d(a){this.value=a;this._={isBlockLike:false}}var b=KISSY.Editor;if(!b.HtmlParser.Text){KISSY.augment(d,{type:b.NODE.NODE_TEXT,writeHtml:function(a,e){var c=this.value;e&&!(c=e.onText(c,this))||a.text(c)}});b.HtmlParser.Text=d}});
