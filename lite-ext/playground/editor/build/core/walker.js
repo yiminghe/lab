@@ -299,7 +299,10 @@ KISSY.Editor.add("walker", function(KE) {
         return function(node) {
             var isBookmark, parent;
             // Is bookmark inner text node?
-            isBookmark = ( node && node[0] && node[0].nodeType == KEN.NODE_TEXT && ( parent = node.parent() )
+            isBookmark = ( node &&
+                node[0] &&
+                node[0].nodeType == KEN.NODE_TEXT &&
+                ( parent = node.parent() )
                 && isBookmarkNode(parent) );
             // Is bookmark node?
             isBookmark = contentOnly ? isBookmark : isBookmark || isBookmarkNode(node);

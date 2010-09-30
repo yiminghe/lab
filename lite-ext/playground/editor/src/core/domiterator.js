@@ -15,15 +15,15 @@ KISSY.Editor.add("domiterator", function(KE) {
     function Iterator(range) {
         if (arguments.length < 1)
             return;
-
-        this.range = range;
-        this.forceBrBreak = false;
+        var self = this;
+        self.range = range;
+        self.forceBrBreak = false;
 
         // Whether include <br>s into the enlarged range.(#3730).
-        this.enlargeBr = true;
-        this.enforceRealBlocks = false;
+        self.enlargeBr = true;
+        self.enforceRealBlocks = false;
 
-        this._ || ( this._ = {} );
+        self._ || ( self._ = {} );
     }
 
     var beginWhitespaceRegex = /^[\r\n\t ]*$/,///^[\r\n\t ]+$/,//+:*??不匹配空串
@@ -44,7 +44,7 @@ KISSY.Editor.add("domiterator", function(KE) {
 
         getNextParagraph : function(blockTag) {
             // The block element to be returned.
-            var block;
+            var block,self = this;
 
             // The range object used to identify the paragraph contents.
             var range;
@@ -55,53 +55,59 @@ KISSY.Editor.add("domiterator", function(KE) {
             // Instructs to cleanup remaining BRs.
             var removePreviousBr, removeLastBr;
 
-            // This is the first iteration. Let's initialize it.
-            if (!this._.lastNode) {
-                range = this.range.clone();
-                range.enlarge(this.forceBrBreak || !this.enlargeBr ?
+            // self is the first iteration. Let's initialize it.
+            if (!self._.lastNode) {
+                range = self.range.clone();
+
+                //2010-09-30 shrink
+                //3.4.2 新增，
+                // Shrink the range to exclude harmful "noises" (#4087, #4450, #5435).
+                range.shrink(KER.SHRINK_ELEMENT, true);
+
+                range.enlarge(self.forceBrBreak || !self.enlargeBr ?
                     KER.ENLARGE_LIST_ITEM_CONTENTS : KER.ENLARGE_BLOCK_CONTENTS);
 
                 var walker = new Walker(range),
                     ignoreBookmarkTextEvaluator = Walker.bookmark(true, true);
                 // Avoid anchor inside bookmark inner text.
                 walker.evaluator = ignoreBookmarkTextEvaluator;
-                this._.nextNode = walker.next();
+                self._.nextNode = walker.next();
                 // TODO: It's better to have walker.reset() used here.
                 walker = new Walker(range);
                 walker.evaluator = ignoreBookmarkTextEvaluator;
                 var lastNode = walker.previous();
-                this._.lastNode = lastNode._4e_nextSourceNode(true);
+                self._.lastNode = lastNode._4e_nextSourceNode(true);
 
                 // We may have an empty text node at the end of block due to [3770].
                 // If that node is the lastNode, it would cause our logic to leak to the
                 // next block.(#3887)
-                if (this._.lastNode &&
-                    this._.lastNode[0].nodeType == KEN.NODE_TEXT &&
-                    !S.trim(this._.lastNode[0].nodeValue) &&
-                    this._.lastNode.parent()._4e_isBlockBoundary()) {
+                if (self._.lastNode &&
+                    self._.lastNode[0].nodeType == KEN.NODE_TEXT &&
+                    !S.trim(self._.lastNode[0].nodeValue) &&
+                    self._.lastNode.parent()._4e_isBlockBoundary()) {
                     var testRange = new KERange(range.document);
-                    testRange.moveToPosition(this._.lastNode, KER.POSITION_AFTER_END);
+                    testRange.moveToPosition(self._.lastNode, KER.POSITION_AFTER_END);
                     if (testRange.checkEndOfBlock()) {
                         var path = new ElementPath(testRange.endContainer);
                         var lastBlock = path.block || path.blockLimit;
-                        this._.lastNode = lastBlock._4e_nextSourceNode(true);
+                        self._.lastNode = lastBlock._4e_nextSourceNode(true);
                     }
                 }
 
                 // Probably the document end is reached, we need a marker node.
-                if (!this._.lastNode) {
-                    this._.lastNode = this._.docEndMarker = new Node(range.document.createTextNode(''));
-                    DOM.insertAfter(this._.lastNode[0], lastNode[0]);
+                if (!self._.lastNode) {
+                    self._.lastNode = self._.docEndMarker = new Node(range.document.createTextNode(''));
+                    DOM.insertAfter(self._.lastNode[0], lastNode[0]);
                 }
 
-                // Let's reuse this variable.
+                // Let's reuse self variable.
                 range = null;
             }
 
-            var currentNode = this._.nextNode;
-            lastNode = this._.lastNode;
+            var currentNode = self._.nextNode;
+            lastNode = self._.lastNode;
 
-            this._.nextNode = null;
+            self._.nextNode = null;
             while (currentNode) {
                 // closeRange indicates that a paragraph boundary has been found,
                 // so the range can be closed.
@@ -117,14 +123,14 @@ KISSY.Editor.add("domiterator", function(KE) {
                 if (!includeNode) {
                     var nodeName = currentNode._4e_name();
 
-                    if (currentNode._4e_isBlockBoundary(this.forceBrBreak && { br : 1 })) {
+                    if (currentNode._4e_isBlockBoundary(self.forceBrBreak && { br : 1 })) {
                         // <br> boundaries must be part of the range. It will
                         // happen only if ForceBrBreak.
                         if (nodeName == 'br')
                             includeNode = true;
                         else if (!range && !currentNode[0].childNodes.length && nodeName != 'hr') {
                             // If we have found an empty block, and haven't started
-                            // the range yet, it means we must return this block.
+                            // the range yet, it means we must return self block.
                             block = currentNode;
                             isLast = currentNode._4e_equals(lastNode);
                             break;
@@ -135,10 +141,10 @@ KISSY.Editor.add("domiterator", function(KE) {
                         if (range) {
                             range.setEndAt(currentNode, KER.POSITION_BEFORE_START);
 
-                            // The found boundary must be set as the next one at this
+                            // The found boundary must be set as the next one at self
                             // point. (#1717)
                             if (nodeName != 'br')
-                                this._.nextNode = currentNode;
+                                self._.nextNode = currentNode;
                         }
 
                         closeRange = true;
@@ -147,7 +153,7 @@ KISSY.Editor.add("domiterator", function(KE) {
                         if (currentNode[0].firstChild) {
                             // If we don't have a range yet, let's start it.
                             if (!range) {
-                                range = new KERange(this.range.document);
+                                range = new KERange(self.range.document);
                                 range.setStartAt(currentNode, KER.POSITION_BEFORE_START);
                             }
 
@@ -167,7 +173,7 @@ KISSY.Editor.add("domiterator", function(KE) {
                 // The current node is good to be part of the range and we are
                 // starting a new range, initialize it first.
                 if (includeNode && !range) {
-                    range = new KERange(this.range.document);
+                    range = new KERange(self.range.document);
                     range.setStartAt(currentNode, KER.POSITION_BEFORE_START);
                 }
 
@@ -180,7 +186,7 @@ KISSY.Editor.add("domiterator", function(KE) {
                     while (!currentNode[0].nextSibling && !isLast) {
                         var parentNode = currentNode.parent();
 
-                        if (parentNode._4e_isBlockBoundary(this.forceBrBreak && { br : 1 })) {
+                        if (parentNode._4e_isBlockBoundary(self.forceBrBreak && { br : 1 })) {
                             closeRange = true;
                             isLast = isLast || parentNode._4e_equals(lastNode);
                             break;
@@ -202,32 +208,42 @@ KISSY.Editor.add("domiterator", function(KE) {
 
                 // We have found a block boundary. Let's close the range and move out of the
                 // loop.
-                if (( closeRange || isLast ) && range) {
-                    var boundaryNodes = range.getBoundaryNodes(),
-                        startPath = new ElementPath(range.startContainer);
+                if (isLast || ( closeRange && range ))
+                    break;
 
-                    // Drop the range if it only contains bookmark nodes, and is
-                    // not because of the original collapsed range. (#4087,#4450)
-                    if (boundaryNodes.startNode.parent()._4e_equals(startPath.blockLimit)
-                        && isBookmark(boundaryNodes.startNode) && isBookmark(boundaryNodes.endNode)) {
-                        range = null;
-                        this._.nextNode = null;
+                //3.4.2 中被去掉了！不要了，改作一开始就shrink，参见开头 2010-09-30 shrink 注释 
+                ////qc #3879 ，选择td内所有问题，这里被出发了
+                //禁止，只有td内全部为空时才会略过
+                if (false) {
+                    if (( closeRange || isLast ) && range) {
+                        var boundaryNodes = range.getBoundaryNodes(),
+                            startPath = new ElementPath(range.startContainer);
+
+                        // Drop the range if it only contains bookmark nodes, and is
+                        // not because of the original collapsed range. (#4087,#4450)
+                        if (boundaryNodes.startNode.parent()._4e_equals(startPath.blockLimit)
+                            && isBookmark(boundaryNodes.startNode)
+                            && isBookmark(boundaryNodes.endNode)
+                            ) {
+                            range = null;
+                            self._.nextNode = null;
+                        }
+                        else
+                            break;
                     }
-                    else
+                    if (isLast)
                         break;
                 }
 
-                if (isLast)
-                    break;
 
             }
 
             // Now, based on the processed range, look for (or create) the block to be returned.
             if (!block) {
-                // If no range has been found, this is the end.
+                // If no range has been found, self is the end.
                 if (!range) {
-                    this._.docEndMarker && this._.docEndMarker._4e_remove();
-                    this._.nextNode = null;
+                    self._.docEndMarker && self._.docEndMarker._4e_remove();
+                    self._.nextNode = null;
                     return null;
                 }
 
@@ -237,14 +253,14 @@ KISSY.Editor.add("domiterator", function(KE) {
                 block = startPath.block;
 
                 if ((!block || !block[0])
-                    && !this.enforceRealBlocks
+                    && !self.enforceRealBlocks
                     && checkLimits[ startBlockLimit._4e_name() ]
                     && range.checkStartOfBlock()
                     && range.checkEndOfBlock())
                     block = startBlockLimit;
-                else if (!block || ( this.enforceRealBlocks && block._4e_name() == 'li' )) {
+                else if (!block || ( self.enforceRealBlocks && block._4e_name() == 'li' )) {
                     // Create the fixed block.
-                    block = new Node(this.range.document.createElement(blockTag || 'p'));
+                    block = new Node(self.range.document.createElement(blockTag || 'p'));
                     // Move the contents of the temporary range to the fixed block.
                     block[0].appendChild(range.extractContents());
                     block._4e_trim();
@@ -264,7 +280,7 @@ KISSY.Editor.add("domiterator", function(KE) {
                         block[0].appendChild(range.extractContents());
                         block._4e_trim();
 
-                        // Split the block. At this point, the range will be in the
+                        // Split the block. At self point, the range will be in the
                         // right position for our intents.
                         var splitInfo = range.splitBlock();
 
@@ -281,7 +297,7 @@ KISSY.Editor.add("domiterator", function(KE) {
                     // the current range, which could be an <li> child (nested
                     // lists) or the next sibling <li>.
 
-                    this._.nextNode = ( block._4e_equals(lastNode) ? null :
+                    self._.nextNode = ( block._4e_equals(lastNode) ? null :
                         range.getBoundaryNodes().endNode._4e_nextSourceNode(true, null, lastNode) );
                 }
             }
@@ -291,7 +307,7 @@ KISSY.Editor.add("domiterator", function(KE) {
                 if (previousSibling[0] && previousSibling[0].nodeType == KEN.NODE_ELEMENT) {
                     if (previousSibling._4e_name() == 'br')
                         previousSibling._4e_remove();
-                    else if (previousSibling[0].lastChild && previousSibling[0].lastChild.nodeName.toLowerCase() == 'br')
+                    else if (previousSibling[0].lastChild && DOM._4e_name(previousSibling[0].lastChild) == 'br')
                         DOM._4e_remove(previousSibling[0].lastChild);
                 }
             }
@@ -310,11 +326,11 @@ KISSY.Editor.add("domiterator", function(KE) {
                 }
             }
 
-            // Get a reference for the next element. This is important because the
+            // Get a reference for the next element. self is important because the
             // above block can be removed or changed, so we can rely on it for the
             // next interation.
-            if (!this._.nextNode) {
-                this._.nextNode = ( isLast || block._4e_equals(lastNode) ) ? null :
+            if (!self._.nextNode) {
+                self._.nextNode = ( isLast || block._4e_equals(lastNode) ) ? null :
                     block._4e_nextSourceNode(true, null, lastNode);
             }
 

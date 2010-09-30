@@ -55,7 +55,6 @@ KISSY.Editor.add("justify", function(editor) {
                         iterator = ranges[ i ].createIterator();
                         iterator.enlargeBr = true;
                         while (( block = iterator.getNextParagraph() )) {
-                            //console.log(block._4e_name());
                             block.removeAttr('align');
                             if (state == TripleButton.OFF)
                                 block.css('text-align', self.v);

@@ -618,7 +618,7 @@ KISSY.Editor.add("selection", function(KE) {
                 self.startContainer._4e_name() in nonCells
                 || self.endContainer[0].nodeType == KEN.NODE_ELEMENT &&
                 self.endContainer._4e_name() in nonCells) {
-                self.shrink(KEN.NODE_ELEMENT, true);
+                self.shrink(KER.SHRINK_ELEMENT, true);
             }
 
             var bookmark = self.createBookmark(),

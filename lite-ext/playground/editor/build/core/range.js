@@ -467,11 +467,11 @@ KISSY.Editor.add("range", function(KE) {
             //var current = walkerRange.startContainer[0].childNodes[walkerRange.startOffset];
             var walker = new KE.Walker(walkerRange),
                 isNotBookmarks = bookmark(true, undefined),
-                isNotWhitespaces = whitespaces(true),node,pre,
-                evaluator = function(node) {
-                    return isNotWhitespaces(node) && isNotBookmarks(node);
-                };
-            walkerRange.evaluator = evaluator;
+                isNotWhitespaces = whitespaces(true),node,pre;
+            walkerRange.evaluator = function(node) {
+                return isNotWhitespaces(node) && isNotBookmarks(node);
+            };
+
             //深度优先遍历的第一个元素
             //        x
             //     y     z
@@ -488,7 +488,8 @@ KISSY.Editor.add("range", function(KE) {
             if (!self.collapsed) {
                 mode = mode || KER.SHRINK_TEXT;
 
-                var walkerRange = self.clone(),startContainer = self.startContainer,
+                var walkerRange = self.clone(),
+                    startContainer = self.startContainer,
                     endContainer = self.endContainer,
                     startOffset = self.startOffset,
                     endOffset = self.endOffset;
@@ -648,7 +649,7 @@ KISSY.Editor.add("range", function(KE) {
                 baseId,
                 clone,
                 self = this;
-            startNode = new Node("<span></span>", null, self.document);
+            startNode = new Node("<span>", null, self.document);
             startNode.attr('_ke_bookmark', 1);
             startNode.css('display', 'none');
 
@@ -1167,7 +1168,6 @@ KISSY.Editor.add("range", function(KE) {
 
                     // Enlarging the start boundary.
                     var walkerRange = new KERange(self.document);
-
                     body = new Node(self.document.body);
 
                     walkerRange.setStartAt(body, KER.POSITION_AFTER_START);
@@ -1177,7 +1177,8 @@ KISSY.Editor.add("range", function(KE) {
                         blockBoundary,  // The node on which the enlarging should stop.
                         tailBr, //
                         defaultGuard = Walker.blockBoundary(
-                            ( unit == KER.ENLARGE_LIST_ITEM_CONTENTS ) ? { br : 1 } : null),
+                            ( unit == KER.ENLARGE_LIST_ITEM_CONTENTS ) ?
+                            { br : 1 } : null),
                         // Record the encountered 'blockBoundary' for later use.
                         boundaryGuard = function(node) {
                             var retval = defaultGuard(node);

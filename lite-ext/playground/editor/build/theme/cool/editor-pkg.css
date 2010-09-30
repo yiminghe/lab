@@ -382,14 +382,17 @@ a.ke-color-a span {
 }
 
 .ke-draft-help {
-    background: no-repeat scroll center center transparent;
+/*不能使用 center center ,ie 对于容器理解有误,text-indent会增加容器*/
+    background: no-repeat;
     background-image: url("icon_help.png");
     width: 14px;
     overflow: hidden;
     height: 14px;
     text-indent: 9999px;
     outline: none;
-}/**
+}
+
+/**
 kissy editor cool theme
 @author :yiminghe@gmail.com
 **/

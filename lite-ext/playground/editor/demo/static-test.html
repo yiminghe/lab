@@ -179,11 +179,8 @@
 </div>
 <h2>插入图片到编辑器1</h2>
 <div style="border:1px solid #c1c8d1;
-background-color:#fafafa;
-
 width:700px;
 margin:0 auto;
-
 -moz-box-shadow:2px 2px 0.5em #888888;
 -webkit-box-shadow:2px 2px 0.5em #888888;
 box-shadow:2px 2px 0.5em #888888;
@@ -320,7 +317,8 @@ xiami 音乐
                             serverUrl:"/code/upload/upload.jsp",
                             serverParams:{
                             },
-                            fileInput:"Filedata"
+                            fileInput:"Filedata",
+                            sizeLimit:1000//k
                         }
                     },
                     "templates": [
@@ -356,7 +354,9 @@ xiami 音乐
                         holder:"#imgup1",
                         serverUrl:"/code/upload/upload.jsp",
                         serverParams:{
-                        }
+                        },
+                        sizeLimit:1000//k,
+                        ,numberLimit:15
                     },
                     "bangpai-video":{
                         urlCfg:[

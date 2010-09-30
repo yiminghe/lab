@@ -409,6 +409,14 @@ KISSY.Editor.add("list", function(editor) {
                         iterator.forceBrBreak = false;
 
                         while (( block = iterator.getNextParagraph() )) {
+
+                            // Avoid duplicate blocks get processed across ranges.
+                            if (block._4e_getData('list_block'))
+                                continue;
+                            else
+                                block._4e_setMarker(database, 'list_block', 1);
+
+
                             var path = new ElementPath(block),
                                 pathElements = path.elements,
                                 pathElementsCount = pathElements.length,

@@ -198,7 +198,8 @@ box-shadow:2px 2px 0.5em #888888;
                         serverUrl:"/code/upload/upload.jsp",
                         serverParams:{
                         },
-                        fileInput:"Filedata"
+                        fileInput:"Filedata",
+                        sizeLimit:1000//k,
                     }
                 },
                 "font-size":{
@@ -234,7 +235,9 @@ box-shadow:2px 2px 0.5em #888888;
                             url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
                                     "url=@url@&callback=@callback@"//"&rand=@rand@"
                         }
-                    ]
+                    ],
+                    sizeLimit:1000//k,
+                    ,numberLimit:15
                 },
                 "draft":{
                     interval:5,
@@ -273,7 +276,8 @@ box-shadow:2px 2px 0.5em #888888;
                         serverUrl:"/code/upload/upload.jsp",
                         serverParams:{
                         },
-                        fileInput:"Filedata"
+                        fileInput:"Filedata",
+                        sizeLimit:1000//k,
                     }
                 },
                 "font-size":{
@@ -300,7 +304,9 @@ box-shadow:2px 2px 0.5em #888888;
                     serverUrl:"/code/upload/upload.jsp",
                     serverParams:{
                     },
-                    fileInput:"Filedata"
+                    fileInput:"Filedata",
+                    sizeLimit:1000//k,
+                    ,numberLimit:15
                 },
                 "bangpai-video":{
                     urlCfg:[

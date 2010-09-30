@@ -226,7 +226,7 @@ KISSY.Editor.add("image", function(editor) {
                     ok.on("click", function() {
                         self._insert();
                     });
-                    var cfg = (editor.cfg["pluginConfig"]["image"] || {})["upload"];
+                    var cfg = (editor.cfg["pluginConfig"]["image"] || {})["upload"] || {};
 
 
                     var tab = content.one("ul"),lis = tab.all("li"),
@@ -266,6 +266,7 @@ KISSY.Editor.add("image", function(editor) {
                                 movie:movie,
                                 methods:["removeFile",
                                     "cancel",
+                                    "clearFileList",
                                     "removeFile",
                                     "disable",
                                     "enable",
@@ -299,15 +300,25 @@ KISSY.Editor.add("image", function(editor) {
                                 }
                             ]);
                         });
+                        var sizeLimit = (cfg.sizeLimit) || (Number.MAX_VALUE);
 
-                        uploader.on("fileSelect", function() {
+                        uploader.on("fileSelect", function(ev) {
+                            var fileList = ev.fileList;
+                            for (var f in fileList) {
+                                var file = fileList[f],
+                                    size = Math.floor(file.size / 1000);
+                                if (size > sizeLimit) {
+                                    alert("最大上传大小上限：" + (sizeLimit) + "KB");
+                                    uploader.clearFileList();
+                                    return;
+                                }
+                            }
+
                             uploader.uploadAll(cfg.serverUrl, "POST",
                                 cfg.serverParams,
                                 cfg.fileInput);
                             d.loading();
-                        }
-                            )
-                            ;
+                        });
 
                         uploader.on("uploadCompleteData", function(ev) {
                             var data = S.trim(ev.data).replace(/\\r||\\n/g, "");
@@ -331,19 +342,14 @@ KISSY.Editor.add("image", function(editor) {
                     }
 
                 },
-                _updateTip
-                    :
-                    function(tipurl, a) {
-                        tipurl.html(a.attr("src"));
-                        tipurl.attr("href", a.attr("src"));
-                    }
-
-                ,
+                _updateTip:function(tipurl, a) {
+                    tipurl.html(a.attr("src"));
+                    tipurl.attr("href", a.attr("src"));
+                },
 
                 _real:function() {
                     this.d.show();
-                }
-                ,
+                },
                 _insert:function() {
                     var self = this,
                         url = self.imgUrl.val(),re;

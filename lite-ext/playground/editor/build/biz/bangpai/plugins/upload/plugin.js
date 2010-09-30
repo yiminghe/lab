@@ -13,9 +13,9 @@ KISSY.Editor.add("bangpai-upload", function(editor) {
         var DOM = S.DOM,
             JSON = S.JSON,
             PIC_NUM_LIMIT = 15,
-            PIC_NUM_LIMIT_WARNING = "系统将只保留15张",
+            PIC_NUM_LIMIT_WARNING = "系统将只保留n张",
             PIC_SIZE_LIMIT = 1000,
-            PIC_SIZE_LIMIT_WARNING = "图片不能超过1M",
+            PIC_SIZE_LIMIT_WARNING = "图片不能超过nM",
             Node = S.Node,
             holder = [],
             movie = KE.Config.base + KE.Utils.debugUrl("plugins/uploader/uploader.swf"),
@@ -136,6 +136,8 @@ KISSY.Editor.add("bangpai-upload", function(editor) {
                 self._ds = bangpaiCfg.serverUrl;
                 self._dsp = bangpaiCfg.serverParams || {};
                 self._fileInput = bangpaiCfg.fileInput || "Filedata";
+                self._sizeLimit = bangpaiCfg.sizeLimit || PIC_SIZE_LIMIT;
+                self._numberLimit = bangpaiCfg.numberLimit || PIC_NUM_LIMIT;
 
                 list.on("click", function(ev) {
                     var target = new Node(ev.target),tr;
@@ -253,12 +255,12 @@ KISSY.Editor.add("bangpai-upload", function(editor) {
                     list = self._list,
                     curNum = 0,
                     files = ev.fileList,
-                    available = PIC_NUM_LIMIT - list.all("tr").length;
+                    available = self._numberLimit - list.all("tr").length;
                 if (files) {
                     var l = self._getFilesSize(files);
 
                     if (l > available) {
-                        alert(PIC_NUM_LIMIT_WARNING);
+                        alert(PIC_NUM_LIMIT_WARNING.replace(/n/,self._numberLimit));
                     }
                     if (l >= available) {
                         self.disable();
@@ -296,10 +298,10 @@ KISSY.Editor.add("bangpai-upload", function(editor) {
                             "</td>"
                             + "</tr>").appendTo(list);
                         var prog = n.one(".ke-upload-progress");
-                        if (size > PIC_SIZE_LIMIT) {
+                        if (size > self._sizeLimit) {
                             self._uploadError({
                                 id:id,
-                                status:PIC_SIZE_LIMIT_WARNING
+                                status:PIC_SIZE_LIMIT_WARNING.replace(/n/,self._sizeLimit)
                             });
                             uploader.removeFile(id);
 
