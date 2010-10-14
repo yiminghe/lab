@@ -15,23 +15,25 @@
 
     .arrow_b, .arrow_a {
         border: 10px solid red;
-        border-color: red transparent transparent transparent;
+        border-color: red transparent transparent transparent; /*ie 透明*/
         _border-color: red tomato tomato tomato;
         _filter: chroma(color = tomato);
         position: absolute;
         width: 0;
         height: 0;
-        font-size: 0;
+        font-size: 0; /*窗口居中*/
         left: 50%;
         top: 100%;
     }
 
     .arrow_a {
-        border-top-color: white;
-        _border-top-color:red;
+        border-top-color: white; /*ie6 透明边框bug只能暂时妥协*/
+        _border-top-color: red; /*覆盖 b*/
         top: -11px;
         left: -10px;
     }
+
+
 </style>
 <body class="yui3-skin-sam  yui-skin-sam">
 
