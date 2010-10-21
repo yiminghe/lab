@@ -1,0 +1,182 @@
+﻿/**
+ *	reset.css
+ */
+html{
+	color:#000;
+	background:#FFF;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td{
+	margin:0;
+	padding:0;
+}
+table{
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+fieldset, img{
+	border: 0;
+}
+address, caption, cite, code, dfn, em, strong, th, var{
+	font-style: normal;
+	font-weight: normal;
+}
+li{
+	list-style:none;
+}
+caption, th{
+	text-align:left;
+}
+h1, h2, h3, h4, h5, h6{
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before, q:after{
+	content: '';
+}
+abbr, acronym{
+	border: 0;
+	font-variant: normal;
+}
+sup{
+	vertical-align: text-top;
+}
+sub{
+	vertical-align: text-bottom;
+}
+input, textarea, select{
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+}
+input, textarea, select{
+	*font-size: 100%;
+}
+legend{
+	color: #000;
+}
+
+/**
+ *	common.css
+ */
+html, body{
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	width: 100%;
+	height: 100%;
+}
+
+.clearfix:after{
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+	zoom: 1;
+	_height: 1px;
+}
+
+*html .clearfix{
+	height: 1%;
+}
+
+*+html .clearfix{
+	height: 1%;
+}
+
+/**
+ *	loading.css
+ */
+#loading{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	text-align: center;
+}
+
+#loading .text{
+	position: relative;
+	width: 676px;
+	height: 20px;
+	top: 119px;
+	text-align: center;
+	font-size: 14px;
+	margin: auto;
+}
+
+#loading .bar{
+	position: relative;
+	width: 676px;
+	height: 18px;
+	top: 139px;
+	left: 0;
+	border-width: 2px;
+	border-color: #606060 #e9e7e3 #e9e7e3 #606060;
+	border-style: solid;
+	background-color: #fff;
+	text-align: left;
+	margin: auto;
+}
+
+#loaded{
+	width: 0px;
+	height: 18px;
+	overflow: hidden;
+	background-color: #0a246a;
+}
+
+/**
+ *	page.css
+ */
+body{
+	text-align: center;
+}
+
+#page{
+	margin: auto;
+	width: auto;
+}
+
+#page .description{
+	margin: auto;
+	font-size: 14px;
+	line-height: 40px;
+	text-indent: 20px;
+}
+
+#page .paper{
+	margin: auto;
+	text-align: left;
+	position: relative;
+	width: 460px;
+	height: 0;
+}
+
+#page .paper .original,
+#page .paper .border,
+#page .paper .naked,
+#page .paper .control{
+	position: absolute;
+	overflow: hidden;
+	-moz-user-select: none;
+}
+
+#page .paper .control{
+	background-image: url(blank.gif);
+}
+
+#page .paper .naked .item{
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+}
+
+#page .paper .border .item{
+	position: absolute;
+	width: 22px;
+	height: 22px;
+	overflow: hidden;
+	background-image: url(box.gif);
+}

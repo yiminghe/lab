@@ -1,0 +1,6 @@
+/**
+ * @fileoverview
+ * @author dron
+ * @date 2010-10-14
+ */
+void function(){var $={loaded:{},loadScript:function($,_){_=_||document.getElementsByTagName("head")[0];var A=document.createElement("script");A.type="text/javascript";A.src=$;_.appendChild(A)},loadImages:function(B,A){var E=B.length,$=0,_=function(){$++;if($==E)A()},D=function(B){var A=document.createElement("img"),$=A.style;$.position="absolute";$.left=$.top="-10px";$.width=$.height="1px";document.body.appendChild(A);A.onerror=A.onload=function(){this.onerror=this.onload=null;_()};A.src=B};for(var F=0,C=B.length;F<C;F++)D(B[F])},conditionLoad:function($,_){var A=this;this.listen($,function(){A.loadScript(_)})},listen:function(_,$){_.interval=setInterval(function(){if(_()){clearInterval(_.interval);$()}},16)}};window.loader=$;$.loadScript("scripts/lib.js");$.conditionLoad(function(){return window.Ucren},"scripts/system.js");$.loadImages(["images/blank.gif","images/box.gif","images/mm10.png","images/mm11.png"],function(){$.loaded.images=true});$.conditionLoad(function(){return $.loaded.images&&$.loaded.systemJS},"scripts/main.js")}()
