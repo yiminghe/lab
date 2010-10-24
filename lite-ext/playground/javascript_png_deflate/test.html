@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Demo JavaScript PNG Viewer</title>
+    <style type="text/css">
+                .pixel {
+                        width: 1px;
+                        height: 1px;
+                        float: left;
+                        overflow: hidden;
+                }
+                #nativeimage {
+                        position: absolute;
+                        left: 10px;
+                        top: 112px;
+                }
+                #image {
+                        position: absolute;
+                        left: 10px;
+                        top: 10px;
+                }
+                #largeimage {
+                        position: absolute;
+                        border: 1px solid #000;
+                        top: 10px;
+                        left: 100px;
+                }
+                        #largeimage .pixel {
+                                width: 3px;
+                                height: 3px;
+                        }
+    </style>
+ </head>
+<body onload="show(gravatar);">
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <a href='http://blogs.ejb.cc/2010/10/21/%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E8%A7%A3%E6%9E%90base64%E7%BC%96%E7%A0%81%E5%9B%BE%E5%83%8F/' target='_blank'>原文：在浏览器中解析base64编码图像</a> 
+    
+    <br/>
+<script src="Base64.js" type="text/javascript"></script>
+<script src="Deflate.js" type="text/javascript"></script>
+<script src="PNG.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+var gravatar = 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAF1QTFRF2Mm3OYm/d7Xe3d3dsNzxhMHf9u7ksqKP5dnJhsLhk8zqicTj////i8bkkcvoqJaBjsnm9OT1bK3YZajVXaPRQI3DVp3NTpjKptbucrHcRpLGnNHrk8vnk8zn+un7Md8VjQAAAB90Uk5T////////////////////////////////////////AM0ZdhAAAABpSURBVHjaXMgHDsIADANAQxkFzOhe4P8/s0kkRMpFsiND+y1oOmQTVI/Xn7GGmuXhGLk0UPt+OdLz00L9PZD06qHhFsioAZovgXZmhrpj1kG7LQinDDaUmQ9/ZJ5f9ttwzmyoiqxaBRgA+LUKr7mucyMAAAAASUVORK5CYII=';
+String.prototype.padRight = function(c, n){
+        var txt = "";
+        for(var i=0;i<n-this.length;i++) txt += c;
+        return txt + this;
+};
+function show(data){
+        var png = new PNG(data);
+        var img = document.getElementById('image'), limg = document.getElementById('largeimage');
+        document.getElementById('nativeimage').src = 'data:image/png;base64,' + data;
+        img.innerHTML = "";
+        limg.innerHTML = "";
+        img.style.width = png.width + 'px';
+        img.style.height = png.height + 'px';
+        limg.style.width = (png.width * 3) + 'px';
+        limg.style.width = (png.height * 3) + 'px';
+        var line;
+        while(line = png.readLine())
+        {
+                for (var x = 0; x < line.length; x++){
+                        var px = document.createElement('div'), px2 = document.createElement('div');
+                        px.className = px2.className = 'pixel';
+                        px.style.backgroundColor = px2.style.backgroundColor = '#' + line[x].toString(16).padRight(0,6);
+                        img.appendChild(px);
+                        limg.appendChild(px2);
+                }
+        }
+}
+</script>
+<div id="image"></div>
+<div id="largeimage"></div>
+<img id="nativeimage" />
+</body>
+</html>
