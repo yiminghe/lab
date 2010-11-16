@@ -1,0 +1,123 @@
+<h1>manual</h1>
+<h2> 1. open console in (ie8 chrome firebug)</h2>
+<h2> 2. press 1 or 2 to focus area1 or area2</h2>
+<h2> 3. check console output</h2>
+
+<div tabindex="-1" id='a1'>
+    area 1
+</div>
+
+<div tabindex="-1" id='a2'>
+    area 2
+</div>
+
+
+<h1> refer </h1>
+<a href='http://www.w3.org/TR/DOM-Level-3-Events/#events-focusevent' target="_blank">http://www.w3.org/TR/DOM-Level-3-Events/#events-focusevent</a>
+
+<script>
+   var doc=document,
+   d1=doc.getElementById("a1"),
+   d2=doc.getElementById("a2"),
+   simpleAdd = doc.addEventListener ?
+            function(el, type, fn, capture) {
+                if (el.addEventListener) {
+                    el.addEventListener(type, fn, !!capture);
+                }
+            } :
+            function(el, type, fn) {
+                if (el.attachEvent) {
+                    el.attachEvent('on' + type, fn);
+                }
+            },
+        simpleRemove = doc.removeEventListener ?
+            function(el, type, fn, capture) {
+                if (el.removeEventListener) {
+                    el.removeEventListener(type, fn, !!capture);
+                }
+            } :
+            function(el, type, fn) {
+                if (el.detachEvent) {
+                    el.detachEvent('on' + type, fn);
+                }
+            };
+            
+   simpleAdd(d1,"focus",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a1 focus target:"+ev.target.id);
+        console.log("a1 focus relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d1,"focusin",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a1 focusin target:"+ev.target.id);
+        console.log("a1 focusin relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d1,"DOMFocusIn",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a1 DOMFocusIn target:"+ev.target.id);
+        console.log("a1 DOMFocusIn relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   
+   simpleAdd(d2,"focus",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a2 focus target:"+ev.target.id);
+        console.log("a2 focus relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d2,"focusin",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a2 focusin target:"+ev.target.id);
+        console.log("a2 focusin relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d2,"DOMFocusIn",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a2 DOMFocusIn target:"+ev.target.id);
+        console.log("a2 DOMFocusIn relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   
+   
+   
+   simpleAdd(d1,"blur",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a1 blur target:"+ev.target.id);
+        console.log("a1 blur relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d1,"focusout",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a1 focusout target:"+ev.target.id);
+        console.log("a1 focusout relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d1,"DOMFocusOut",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a1 DOMFocusOut target:"+ev.target.id);
+        console.log("a1 DOMFocusOut relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   
+   simpleAdd(d2,"blur",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a2 blur target:"+ev.target.id);
+        console.log("a2 blur relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d2,"focusout",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a2 focusout target:"+ev.target.id);
+        console.log("a2 focusout relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   simpleAdd(d2,"DOMFocusOut",function(ev){
+        if(!ev.target)ev.target={id:null};
+        console.log("a2 DOMFocusOut target:"+ev.target.id);
+        console.log("a2 DOMFocusOut relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+   });
+   
+   
+            
+   simpleAdd(doc,"keydown",function(ev){
+        var k=ev.keyCode;
+        if(k==49){
+            d1.focus();
+        }else if(k==50){
+            d2.focus();
+        }
+        console.log("keydown : "+k);
+   });         
+
+</script>
