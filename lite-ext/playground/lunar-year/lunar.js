@@ -1,5 +1,9 @@
+/**
+ * lunar calendar for kissy
+ * @author yiminghe@gmail.com(chengyu)
+ */
 //modified from http://blog.csdn.net/sYwb/archive/2005/04/05/337172.aspx
-//显示当前日期的阴阳历  Edit By R.W. (2004年12月24日 星期五)
+//显示当前日期的阴阳历
 /*
  ========原理说明：===================
  http://search.csdn.net/Expert/topic/974/974567.xml?temp=.8316614
@@ -32,7 +36,9 @@
  农历时用(公历时+1)/2就可以简单的得到了。
 
  */
-var getLunarDay = function () {
+
+KISSY.add("lunar", function(T) {
+
     var BASE_DATE = new Date(2001, 0, 1),
         BASE_YEAR = 2001,
         BASE_TG = 3,
@@ -42,10 +48,10 @@ var getLunarDay = function () {
         SPRING_2001_DIFF = 22,
         LEAP_YEAR = 0xFFF,
         SMALL_MONTH_DAYS = 29,
-        BIG_MONTH_DAYS = 30,
+
         LEAP_MONTH = 0x10000,
-        CANLENDAR_DATA = new Array(100),
-        MONTH_START_DAY = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334],
+
+
         TG_STRING = "甲乙丙丁戊己庚辛壬癸",
         TG_CYCLE = TG_STRING.length,
         DZ_STRING = "子丑寅卯辰巳午未申酉戌亥",
@@ -57,8 +63,8 @@ var getLunarDay = function () {
         LUNAR_DAY_LESS_THEN_10 = "初",
         LUNAR_DAY_10 = "十",
         LUNAR_DAY_20 = "廿",
-        LUNAR_DAY_20_EXACT = "二十",
         LUNAR_DAY_30 = "三十",
+        LUNAR_DAY_20_EXACT = "二十",
         WEEK = "周",
         SXCycle = SX.length,
         CANLENDAR_DATA = [
@@ -92,8 +98,8 @@ var getLunarDay = function () {
 
 
     function e2c(theDate) {
-        var total, m, n, k, cYear, cMonth, cDay, isEnd = false,
-            total = (theDate - BASE_DATE) / DAY_MILLI - SPRING_2001_DIFF;
+        var total, m, n, k, cYear, cMonth, cDay, isEnd = false;
+        total = (theDate - BASE_DATE) / DAY_MILLI - SPRING_2001_DIFF;
         for (m = 0; ; m++) {
             k = (CANLENDAR_DATA[m] < LEAP_YEAR) ? 11 : 12;
             for (n = k; n >= 0; n--) {
@@ -125,6 +131,7 @@ var getLunarDay = function () {
 
 
     function getcDate(cYear, cMonth, cDay) {
+
         var tmp = {};
         tmp.year = numToCh(cYear);
         tmp.tg = TG_STRING.charAt((cYear - BASE_YEAR - BASE_TG + TG_CYCLE) % TG_CYCLE); //年干
@@ -146,6 +153,7 @@ var getLunarDay = function () {
         else if (cDay !== 30) {
             tmp.day += NUM_STRING.charAt((cDay) % 10);
         }
+
         return tmp;
     }
 
@@ -178,7 +186,7 @@ var getLunarDay = function () {
      weekDay : "周三"
      }
      */
-    return function (solarYear, solarMonth, solarDay) {
+    T.getLunarDay = function (solarYear, solarMonth, solarDay) {
         if (Object.prototype.toString.call(solarYear) === '[object Date]')
             return e2c(new Date(solarYear.getFullYear(), solarYear.getMonth(), solarYear.getDate()));
         if (solarYear < 2001 || solarYear > 2020) {
@@ -187,4 +195,5 @@ var getLunarDay = function () {
             return e2c(new Date(solarYear, solarMonth - 1, solarDay));
         }
     }
-}();
+
+});
