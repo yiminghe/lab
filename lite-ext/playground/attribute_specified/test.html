@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>attribute Test</title>
+</head>
+<body>
+
+<div style="border:1px solid green;" id="test">
+    属性操作元素
+</div>
+
+<button id="attributes">
+    查看 attributes 长度
+</button>
+
+<button id="attribute0">
+    查看 attributes[0].specified
+</button>
+
+<button id="add">
+    通过 setAttribute 添加
+</button>
+
+<button id="add2">
+    通过 dom.xx=yy 添加
+</button>
+
+<script src=".././../base/javascript/kissy.js"></script>
+<script>
+    KISSY.ready(function(S) {
+        var test = S.one("#test")[0],
+                show = test.attributes,
+                attributes = S.one("#attributes"),
+                attribute0 = S.one("#attribute0"),
+                add = S.one("#add"),
+                add2 = S.one("#add2");
+        var id = 1;
+        attributes.on("click", function() {
+            alert(show.length);
+        });
+        attribute0.on("click", function() {
+            alert("attributes[0].specified : "+show[0].name+"@"+show[0].specified);
+        });
+        add.on("click", function() {
+            alert("before set attributes :" + show.length);
+            test.setAttribute("p_" + id, "v_" + id);
+            id++;
+            alert("after set attributes :" + show.length);
+        });
+        add2.on("click", function() {
+            alert("before set attributes :" + show.length);
+            test["p_" + id] = "v_" + id;
+            id++;
+            alert("after set attributes :" + show.length);
+        });
+    });
+</script>
+</body>
+</html>
