@@ -1,0 +1,26 @@
+<html><body><div id='t1' style='font-size:12px;'></div>
+    <canvas id='canvas' ></canvas>
+    
+    </body><script>
+  
+    
+    var ctx = document.getElementById('canvas').getContext('2d');
+    ctx.fillRect(0,0,150,150);
+    ctx.translate(75,75);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    var r=70;
+    ctx.moveTo(r,0);
+    for (var i=0;i<9;i++){
+        ctx.rotate(Math.PI/5);
+        if(i%2 == 0) {
+            ctx.lineTo((r/0.525731)*0.200811,0);
+        } else {
+            ctx.lineTo(r,0);
+        }
+    }
+    ctx.closePath();
+    ctx.fill();
+</script></html>
+
+
