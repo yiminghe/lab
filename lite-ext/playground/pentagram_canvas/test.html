@@ -1,26 +1,114 @@
-<html><body><div id='t1' style='font-size:12px;'></div>
-    <canvas id='canvas' ></canvas>
-    
-    </body><script>
-  
-    
+<html>
+<head>
+<meta charset="utf-8"/>
+</head>
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<div>
+    <label for="horiz_value">
+        放大倍数：
+        <input id="horiz_value" readonly style="border:none;"/>
+
+    </label>
+    <p>
+        <span class="horiz_slider"></span>
+    </p>
+</div>
+
+<div>
+    <label for="rotate">
+        旋转角度：
+        <input id="rotate" readonly style="border:none;"/>
+
+    </label>
+    <p>
+        <span class="horiz_slider2"></span>
+    </p>
+</div>
+
+<canvas id='canvas' width='400' height="400"></canvas>
+
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+</body>
+<script>
+
+
     var ctx = document.getElementById('canvas').getContext('2d');
-    ctx.fillRect(0,0,150,150);
-    ctx.translate(75,75);
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    var r=70;
-    ctx.moveTo(r,0);
-    for (var i=0;i<9;i++){
-        ctx.rotate(Math.PI/5);
-        if(i%2 == 0) {
-            ctx.lineTo((r/0.525731)*0.200811,0);
-        } else {
-            ctx.lineTo(r,0);
+
+    var r = 100,ro=0;
+    function draw() {
+        ctx.save();
+        ctx.fillRect(0, 0, 400, 400);
+        ctx.translate(200, 200);
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.rotate(2*Math.PI*ro/360);
+        ctx.moveTo(r, 0);
+        for (var i = 0; i < 9; i++) {
+            ctx.rotate(Math.PI / 5);
+            if (i % 2 == 0) {
+                ctx.lineTo((r / 0.525731) * 0.200811, 0);
+            } else {
+                ctx.lineTo(r, 0);
+            }
         }
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
     }
-    ctx.closePath();
-    ctx.fill();
-</script></html>
+
+    draw();
+
+    YUI().use("slider", function (Y) {
+        var xSlider = new Y.Slider({
+            value: 0
+        });
+        xSlider.render('.horiz_slider2');
+        xSlider.after("valueChange", function (e) {
+            var z = e.newVal / 100;
+            ro = 360 * z;
+            draw();
+        });
+        // Link the input value to the Slider
+        var xInput = Y.one("#rotate");
+        xInput.setData({
+            slider: xSlider
+        });
+        xInput.set("value", 0+"度");
+        // Pass the input as the 'this' object inside updateInput
+        xSlider.after("valueChange", updateInput, xInput);
+        function updateInput(e) {
+            this.set("value", e.newVal*360/100+"度");
+        }
+    });
+
+
+YUI().use("slider", function (Y) {
+        var xSlider = new Y.Slider({
+            value: 50
+        });
+        xSlider.render('.horiz_slider');
+        xSlider.after("valueChange", function (e) {
+            var z = e.newVal / 100;
+            r = 200 * z;
+            draw();
+        });
+        // Link the input value to the Slider
+        var xInput = Y.one("#horiz_value");
+        xInput.setData({
+            slider: xSlider
+        });
+        xInput.set("value", 50+"%");
+        // Pass the input as the 'this' object inside updateInput
+        xSlider.after("valueChange", updateInput, xInput);
+        function updateInput(e) {
+            this.set("value", e.newVal+"%");
+        }
+    });
+
+
+
+</script>
+</html>
 
 
