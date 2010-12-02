@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk" />
+<style>
+    #test,#test2 {
+        border:1px solid red;
+        position:fixed;
+        z-index:99;
+    }
+</style>    
+</head>
+<body>
+    <button class='info'>get info</button>
+    <p>占<a style='position:fixed;border:1px solid green;'>正在固定定位</a>位</p>
+     <p>占位</p>
+      <p>占位</p>
+       <p>占位</p>
+       <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <button class='info'>get info</button>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <button class='info'>get info</button>
+      <p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p><p>占位</p>
+      <p>占位</p>
+      <p>占位</p>
+      <div id='test'>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+      </div>
+      
+      <div id='test3' style='position:absolute;'>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+      </div>
+      
+      <div id='test2' style='top:200px;'>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+        <p>测试</p>
+      </div>
+      <p>即将绝对定位：<a style='position:absolute;border:1px solid green;'>正在绝对定位</a>，绝对定位结束</p>
+      <button class='info'>get info</button>
+      <script src="http://yiminghe.github.com/kissy/build/kissy-min.js"></script>
+      <script>
+        KISSY.ready(function(S){
+            var test=S.one("#test");
+            var test2=S.one("#test2");
+             var test3=S.one("#test3");
+            var infos=S.all(".info");
+            infos.on("click",function(){
+               
+                alert(test.css("top")+
+                " : "+
+                test[0].offsetTop+
+                " : "+test[0].getBoundingClientRect().top+
+                " : "+test.offset().top);
+                
+                
+                
+                alert(test2.css("top")+
+                " : "+
+                test2[0].offsetTop+
+                " : "+
+                test2[0].getBoundingClientRect().top+
+                " : "+test2.offset().top);
+                
+                
+                alert(test3.css("top")+
+                " : "+
+                test3[0].offsetTop+
+                " : "+
+                test3[0].getBoundingClientRect().top+
+                " : "+test3.offset().top);
+                
+            });
+        });
+      </script>
+</body>
+</html>
