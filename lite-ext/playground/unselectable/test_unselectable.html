@@ -57,7 +57,7 @@
                                                 e,
                                                 i = 0;
 
-                                        el.unselectable = 'on';
+                                        el.setAttribute("unselectable", 'on');
                                         var els = el.getElementsByTagName("*");
                                         while (( e = els[ i++ ] )) {
                                             switch (e.tagName.toLowerCase()) {
@@ -68,7 +68,7 @@
                                                     /* Ignore the above tags */
                                                     break;
                                                 default :
-                                                    e.unselectable = 'on';
+                                                    e.setAttribute("unselectable", 'on');
                                             }
                                         }
                                     }
