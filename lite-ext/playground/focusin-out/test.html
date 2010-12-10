@@ -1,13 +1,20 @@
+<style>
+    .focusd {
+      background:yellow;
+    }
+    
+    </style>
+
 <h1>manual</h1>
 <h2> 1. open console in (ie8 chrome firebug)</h2>
-<h2> 2. press 1 or 2 to focus area1 or area2</h2>
+<h2> 2. press 1 or 2 (or click) to focus area1 or area2</h2>
 <h2> 3. check console output</h2>
 
-<div tabindex="-1" id='a1'>
+<div tabindex="-1" id='a1' unselectable='on'>
     area 1
 </div>
 
-<div tabindex="-1" id='a2'>
+<div tabindex="-1" id='a2' unselectable='on'>
     area 2
 </div>
 
@@ -46,6 +53,7 @@
         if(!ev.target)ev.target={id:null};
         console.log("a1 focus target:"+ev.target.id);
         console.log("a1 focus relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+        d1.className='focusd';
    });
    simpleAdd(d1,"focusin",function(ev){
         if(!ev.target)ev.target={id:null};
@@ -62,6 +70,7 @@
         if(!ev.target)ev.target={id:null};
         console.log("a2 focus target:"+ev.target.id);
         console.log("a2 focus relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+        d2.className='focusd';
    });
    simpleAdd(d2,"focusin",function(ev){
         if(!ev.target)ev.target={id:null};
@@ -80,6 +89,7 @@
         if(!ev.target)ev.target={id:null};
         console.log("a1 blur target:"+ev.target.id);
         console.log("a1 blur relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+         d1.className='';
    });
    simpleAdd(d1,"focusout",function(ev){
         if(!ev.target)ev.target={id:null};
@@ -96,6 +106,7 @@
         if(!ev.target)ev.target={id:null};
         console.log("a2 blur target:"+ev.target.id);
         console.log("a2 blur relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
+         d2.className='';
    });
    simpleAdd(d2,"focusout",function(ev){
         if(!ev.target)ev.target={id:null};
@@ -108,7 +119,17 @@
         console.log("a2 DOMFocusOut relatedTarget:"+(ev.relatedTarget&&ev.relatedTarget.id||""));
    });
    
-   
+   simpleAdd(d1,"click",function(){
+         console.log("before d1 click");
+         d1.focus();
+         console.log("after d1 click");   
+    });
+    
+    simpleAdd(d2,"click",function(){
+         console.log("before d2 click");
+         d2.focus();
+         console.log("after d2 click");   
+    });
             
    simpleAdd(doc,"keydown",function(ev){
         var k=ev.keyCode;
