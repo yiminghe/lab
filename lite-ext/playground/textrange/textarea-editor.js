@@ -15,10 +15,10 @@
                 = textarea.onkeydown
                 = textarea.onkeyup = function() {
                 savedRange = document.selection.createRange();
-            }
+            };
             textarea.onfocusin = function() {
                 savedRange && savedRange.select();
-            }
+            };
         }
 
     }
