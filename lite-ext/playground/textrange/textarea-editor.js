@@ -66,6 +66,8 @@
             //moveToElementText	Moves the text range so that
             //the start and end positions of the range encompass the text in the given element.
             range_all.moveToElementText(textarea);
+            //alert(range_all.text.length);
+            //alert(textarea.value.length);
             // calculate selection start point by moving beginning of range_all to beginning of range
             //看这 ： http://msdn.microsoft.com/en-us/library/ms536373%28VS.85%29.aspx
             // Compare the start of the TextRange object with the start of the oRange parameter.
@@ -90,25 +92,36 @@
                  sel_start++) {
                 //每次越过了 \r\n，text.value里 \r\n 算两个
                 range_all.moveStart('character', 1);
-                //当前为\r，下个\n会被range略过的
-                if(textarea.value.charAt(sel_start)==="\r"){
+            }
+            //debugger
+            //alert(sel_start);
+            //alert(textarea.value.substring(0,sel_start));
+            // get number of line breaks from textarea start to selection start and add them to sel_start
+            for (i = 0;
+                 i <= sel_start;
+                 i++) {
+                if (textarea.value.charAt(i) == '\n') {
                     sel_start++;
                 }
             }
-            
             pos.selectionStart = sel_start;
             // create a selection of the whole textarea
             range_all = document.body.createTextRange();
             range_all.moveToElementText(textarea);
             // calculate selection end point by moving beginning of range_all to end of range
+            var flag = 0;
             for (var sel_end = 0;
-                 range_all.compareEndPoints('StartToEnd', range) < 0;
+                 (flag = range_all.compareEndPoints('StartToEnd', range)) < 0;
                  sel_end++) {
-                range_all.moveStart('character', 1);
-                //当前为\r，下个\n会被range略过的
-                if(textarea.value.charAt(sel_end)==="\r"){
+
+                if (textarea.value.charAt(sel_end) == '\n') {
                     sel_end++;
                 }
+                range_all.moveStart('character', 1);
+            }
+            //光标不可能停在\r,\n之间
+            if (textarea.value.charAt(sel_end) == '\n') {
+                sel_end++;
             }
             pos.selectionEnd = sel_end;
             // get selected and surrounding text
