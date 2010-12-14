@@ -1,0 +1,218 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+/*幻灯区域*/
+.hot-screen .attraction {
+    width: 490px;
+    height: 387px;
+    float: left;
+    display: inline; /**/
+}
+ol,ul,li{
+	margin:0;
+	padding:0;
+	list-style-type:none;
+}
+/*焦点幻灯*/
+.main-promo {
+    width: 490px;
+    height: 210px;
+    background-color: #EBF5FA;
+}
+
+.tb-slide, .tb-slide li, .tb-slide, .tb-slide li img {
+    height: 210px;
+    overflow: hidden;
+    width: 490px;
+}
+
+/*ie6,7 notice*/
+.main-promo .loading .tb-slide-list li{
+    background: url("http://img02.taobaocdn.com/tps/i2/T16WJqXaXeXXXXXXXX-32-32.gif") no-repeat scroll 50% 50%;
+}
+
+.tb-slide-triggers {
+    bottom: 5px;
+    height: 18px;
+    padding-top: 2px;
+    position: absolute;
+    right: 5px;
+    z-index: 10;
+}
+
+.tb-slide-triggers li {
+    background-color: #ffffff;
+    opacity: 0.7;
+    color: rgb(222, 125, 75);    
+    height: 20px;
+    line-height: 20px;
+    margin-top: -2px;
+    width: 20px;
+    float: left;
+    text-align: center;
+    font-size: 13px;
+    margin-left: 3px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.tb-slide-triggers li.ks-active
+/*,.tb-slide-triggers li.ks-active roundrect*/ {
+		font-weight: bold;
+    background-color: rgb(255, 102, 0);
+    filter: none;
+    opacity: 1;
+    color: #FFFFFF;
+}
+/*
+.tb-slide-triggers li roundrect {
+		background-color: #ffffff;
+    filter: alpha(opacity=70);
+    opacity: 0.7;
+    color: #FFFFFF;
+}
+*/
+</style>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.6/kissy.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+    <div class="main-promo">
+        <div class="bd">
+            <div class="slide-player tb-slide loading" id="J_Slide" style="position: relative;">
+                <ol class="tb-slide-list ks-switchable-content" style="position: absolute;">
+                    <li class="J_DirectPromo">
+                    	
+                    	<a href="#" target="_blank">
+                    		<img src="http://img04.taobaocdn.com/tps/i4/T1qSBTXcVyXXXXXXXX-470-150.jpg"></a>
+                    			
+                    		</li>
+                    <li class="J_ECPM"><!--
+                    	<a target="_blank" href="#">
+                    		<img width="470" height="150" border="0" 
+                    		src="http://img.alimama.cn/bcrm/adboard/picture/2010-12-10/101210135016237.gif"></a>
+                    		-->
+                    		</li>
+                    <li class="J_ECPM"><!--
+                    	<a target="_blank" href="#">
+                    		<img width="470" height="150" border="0" 
+                    		src="http://img.alimama.cn/bcrm/adboard/picture/2010-12-10/101210104956375.gif"></a>
+                    			-->
+                    		</li>
+                    <li class="J_ECPM"><!--
+                    	<a target="_blank" href="#">
+                    		<img width="470" height="150" border="0" 
+                    		src="http://img.alimama.cn/bcrm/adboard/picture/2010-12-10/101210144829058.jpg"></a>
+                    			-->
+                    		</li>
+                    <li class="J_DirectPromo"><!--
+                    	<a href="#" target="_blank">
+                    		<img src="http://img03.taobaocdn.com/tps/i3/T1TVFUXgXjXXXXXXXX-470-150.gif"></a>
+                    			-->
+                    		</li>
+                </ol>
+                <ul class="tb-slide-triggers ks-switchable-nav">
+                    <li class="ks-active">1
+                    </li>
+                    <li>2
+                    </li>
+                    <li>3
+                    </li>
+                    <li>4
+                    </li>
+                    <li>5
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+        <script>
+          
+
+						//attraction roundcorner by chengyu
+            KISSY.use('switchable', function(S) {
+
+                var DOM = S.DOM,
+                Node=S.Node,
+                ieEngine = document.documentMode||S.UA.ie;
+                var slider = S.Slide('#J_Slide', {
+                    effect: 'scrolly',
+                    easing: 'easeOutStrong'
+                });
+                if (ieEngine<9) {
+                	var normalColor,
+                		activeColor;
+                		function attr(el,cs){                			
+                			for(var c in cs){
+                				if(cs.hasOwnProperty(c)){
+                					//ie8 need
+                					el[c]=cs[c];
+                				}
+                			}
+                		}
+                    if (!document.namespaces.v) {
+                        document.namespaces.add("v", "urn:schemas-microsoft-com:vml");
+                    }
+                    var css = document.createStyleSheet();
+                    //ie8 : no v\\:*
+                    css.addRule("v\\:roundrect", "behavior: url(#default#VML);display:inline-block;");
+                    var lis = S.one("#J_Slide .tb-slide-triggers").all("li");                    
+                    lis.each(function(li,index) {
+                        try {                        	
+                            var bgColor = li.css("background-color"),width=li.css("width");
+                            if(index==slider.activeIndex){
+                            	activeColor=bgColor;
+                            }else{
+                            	normalColor=bgColor;
+                            }
+                            var rect = document.createElement('v:roundrect');
+                            attr(rect, {
+                                arcsize:width,
+                                //strokecolor:"#000",
+                                //strokeweight:"1px",
+                                stroked:false,                             
+                                fillcolor:bgColor
+                            });
+                            DOM.css(rect, {
+                                position:"absolute",
+                                top:0,
+                                left:0,
+                                width:width,
+                                height:width,                                                         
+                                antialias:true,
+                                //opacity:bgColor==normalColor?0.7:1,
+                                zIndex:-1
+                            });                           
+                            li.append(rect);
+                            //rect.outerHTML =rect.outerHTML ;
+                            li.css("backgroundColor", "transparent");
+                        } catch(e) {
+                        }
+                    });
+                    
+                    slider.on("beforeSwitch", function(ev) {
+                        var currentfill = S.get("roundrect",lis[this.activeIndex]);
+                        var fill = S.get("roundrect",lis[ev.toIndex]);
+                        attr(currentfill,{
+                        	fillcolor:normalColor,
+                        	strokecolor:normalColor
+                        });
+                        //DOM.css(currentfill,"opacity",0.7);     
+                        attr(fill,{
+                        	fillcolor:activeColor,
+                        	strokecolor:activeColor
+                        });
+                        currentfill = fill;
+                        //DOM.css(currentfill,"opacity",1);         
+                    });
+                }
+            });
+        </script>
+      </body>
+    </html>
