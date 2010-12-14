@@ -1,4 +1,10 @@
 (function() {
+    function log(s) {
+        return;
+        if (window.console)
+            console.log(s);
+    }
+
     var OLD_IE = !window.getSelection,IE = window.ActiveXObject;
 
     /**
@@ -11,16 +17,35 @@
         if (IE) {
             var savedRange;
             textarea.onmousedown
+                //onfocus 也要存储，如果直接外部设置selection，则也要讲设置后产生的range存起来
+                = textarea.onfocus
                 = textarea.onmouseup
                 = textarea.onkeydown
-                = textarea.onkeyup = function() {
-                savedRange = document.selection.createRange();
+                = textarea.onkeyup
+                = function() {
+                var r = document.selection.createRange();
+                //当从 console 过来点击页面时，textarea focus 事件被触发但是范围却不是textarea！
+                if (r.parentElement() == textarea) savedRange = r;
+                log("savedRange : " + event.type + " : " + r.parentElement().nodeName);
             };
             textarea.onfocusin = function() {
+                var r = document.selection.createRange();
+                log("onfocusin" + " : " + r.parentElement().nodeName);
+                //log(document.activeElement.outerHTML);;
                 savedRange && savedRange.select();
             };
-        }
+            textarea.onblur = function() {
+                log("blur");
+            };
 
+            textarea.onfocusout = function() {
+                log("onfocusout");
+                return;
+                savedRange = document.selection.createRange();
+                log("focusout " + " : " + savedRange.parentElement().outerHTML);
+                log(document.activeElement.outerHTML);
+            }
+        }
     }
 
     TextareaEditor.prototype = {
@@ -32,7 +57,10 @@
                 i,
                 range = document.selection.createRange();
             //parentElement : 获取给定文本范围的父元素。
-            if (textarea != range.parentElement()) return;
+            if (textarea != range.parentElement()) {
+                log(range.parentElement().outerHTML);
+                return;
+            }
             // create a selection of the whole textarea
             var range_all = document.body.createTextRange();
             //moveToElementText	Moves the text range so that
@@ -60,14 +88,19 @@
             for (var sel_start = 0;
                  range_all.compareEndPoints('StartToStart', range) < 0;
                  sel_start++) {
+                //每次越过了 \r\n，text.value里 \r\n 算两个
                 range_all.moveStart('character', 1);
             }
+            //debugger
+            //alert(sel_start);
+            //alert(textarea.value.substring(0,sel_start));
             // get number of line breaks from textarea start to selection start and add them to sel_start
             for (i = 0;
                  i <= sel_start;
                  i++) {
-                if (textarea.value.charAt(i) == '\n')
+                if (textarea.value.charAt(i) == '\n') {
                     sel_start++;
+                }
             }
             pos.selectionStart = sel_start;
             // create a selection of the whole textarea
@@ -82,8 +115,9 @@
             for (i = 0;
                  i <= sel_end;
                  i++) {
-                if (textarea.value.charAt(i) == '\n')
+                if (textarea.value.charAt(i) == '\n') {
                     sel_end++;
+                }
             }
             pos.selectionEnd = sel_end;
             // get selected and surrounding text
@@ -97,15 +131,24 @@
             };
         },
         setSelectionRange:OLD_IE ? function(start, end) {
-            var range = this.textarea.createTextRange();
+            log("setSelectionRange start");
+            var v = this.textarea.value,range = this.textarea.createTextRange();
             range.collapse(true);
+            start = getLengthForRange(v, start);
+            end = getLengthForRange(v, end);
             range.moveEnd("character", end);
             range.moveStart("character", start);
+            //select 附带 focus 效果哦
+            //内部应该是：
+            //1.focus
+            //2.select
             range.select();
+            log("setSelectionRange end");
         } : function(start, end) {
             this.textarea.setSelectionRange(start, end);
+            this.textarea.focus();
         },
-        insertData:OLD_IE ? function(text) {
+        insertData :OLD_IE ? function(text) {
             var textarea = this.textarea;
             textarea.focus();
             var range = document.selection.createRange();
@@ -124,7 +167,10 @@
             var np = start.length + text.length;
             this.setSelectionRange(np, np);
         }
-
     };
+    function getLengthForRange(text, v) {
+        return text.substring(0, v).replace(/\r\n/g, "\n").length;
+    }
+
     window.TextareaEditor = TextareaEditor;
 })();
