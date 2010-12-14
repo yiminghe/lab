@@ -1,30 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>
-			textrange
-		</title>
-		<script type="text/javascript" src="range.js">
-		</script>
-		
-	</head>
-	<body>
-		<form action="a.cgi">
-						<textarea id="test" rows="10" cols="50"></textarea>
-						<input type="button" id="add" value="get textarea range"/>
-					
-		</form>
-		<p>结果：</p>
-		<div style="border:1px solid red;" id="result"></div>
-		<script type="text/javascript">
-		var tx=document.getElementById("test");
-		var re=document.getElementById("result");
-		document.getElementById("add").onclick=function(){
-			tx.focus();
-			var pos=TextRangeUtil.getTextRange("test");
-			re.innerHTML=("range : "+pos.start +" - "+pos.end);
-		}
-		</script>
-	</body>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>
+    textrange
+</title>
+<script type="text/javascript" src="textarea-editor.js">
+</script>
+
+</head>
+<body>
+<form action="a.cgi">
+    <textarea id="test" rows="10" cols="50"></textarea>
+    <br/>
+    <input type="button" id="add" value="得到选择区域"/>
+    <br/>
+    <input id="text" style="width:100px"/>
+    <input type="button" id="insert" value="光标处插入文本"/>
+</form>
+<p>结果：</p>
+<div style="border:1px solid red;" id="result"></div>
+<script type="text/javascript">
+    var tx = document.getElementById("test"),te = new TextareaEditor(tx);
+    var re = document.getElementById("result");
+    document.getElementById("add").onclick = function() {
+        var pos = te.getSelection();
+        re.innerHTML = ("range : " + pos.selectionStart + " - " + pos.selectionEnd);
+    }
+
+    document.getElementById("insert").onclick = function() {
+        te.insertData(document.getElementById("text").value);
+    }
+</script>
+</body>
 </html>
