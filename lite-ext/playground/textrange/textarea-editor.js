@@ -90,18 +90,12 @@
                  sel_start++) {
                 //每次越过了 \r\n，text.value里 \r\n 算两个
                 range_all.moveStart('character', 1);
-            }
-            //debugger
-            //alert(sel_start);
-            //alert(textarea.value.substring(0,sel_start));
-            // get number of line breaks from textarea start to selection start and add them to sel_start
-            for (i = 0;
-                 i <= sel_start;
-                 i++) {
-                if (textarea.value.charAt(i) == '\n') {
+                //当前为\r，下个\n会被range略过的
+                if(textarea.value.charAt(sel_start)==="\r"){
                     sel_start++;
                 }
             }
+            
             pos.selectionStart = sel_start;
             // create a selection of the whole textarea
             range_all = document.body.createTextRange();
@@ -109,13 +103,10 @@
             // calculate selection end point by moving beginning of range_all to end of range
             for (var sel_end = 0;
                  range_all.compareEndPoints('StartToEnd', range) < 0;
-                 sel_end++)
+                 sel_end++) {
                 range_all.moveStart('character', 1);
-            // get number of line breaks from textarea start to selection end and add them to sel_end
-            for (i = 0;
-                 i <= sel_end;
-                 i++) {
-                if (textarea.value.charAt(i) == '\n') {
+                //当前为\r，下个\n会被range略过的
+                if(textarea.value.charAt(sel_end)==="\r"){
                     sel_end++;
                 }
             }
