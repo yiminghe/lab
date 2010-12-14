@@ -90,6 +90,7 @@
             return pos;
         } : function() {
             var textarea = this.textarea;
+            textarea.focus();
             return {
                 selectionStart:textarea.selectionStart,
                 selectionEnd:textarea.selectionEnd
