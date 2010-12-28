@@ -1,0 +1,9 @@
+<button onclick='document.domain=window.location.hostname;'>设置 hostname domain</button>
+<button onclick='document.domain="";'>设置 空 domain</button>
+<button onclick='alert(document.domain);'>读取 domain</button>
+<button onclick='notify();'>调用父级</button>
+<script>
+	function notify(){
+		parent.notify();
+	}
+</script>
