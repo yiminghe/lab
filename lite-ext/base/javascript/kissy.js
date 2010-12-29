@@ -143,7 +143,8 @@ build time: ${build.time}
                 rp;
 
             // add prototype chain
-            r.prototype = rp = create(sp, r);
+            rp = create(sp, r);
+            r.prototype = S.mix(rp, r.prototype);
             r.superclass = create(sp, s);
 
             // add prototype overrides
@@ -267,6 +268,8 @@ build time: ${build.time}
 
     S.__init();
 
+    return S;
+
 })(this, 'KISSY');
 /**
  * @module  lang
@@ -283,6 +286,7 @@ build time: ${build.time}
         trim = String.prototype.trim,
 
         EMPTY = '',
+        CLONE_MARKER = '__~ks_cloned',
         RE_TRIM = /^\s+|\s+$/g,
 
         // [[Class]] -> type pairs
@@ -329,17 +333,46 @@ build time: ${build.time}
         /**
          * Creates a deep copy of a plain object or array. Others are returned untouched.
          */
-        clone: function(o) {
-            var ret = o, b, k;
+        clone: function(o, f, cloned) {
+            var ret = o, isArray, k, stamp, marked = cloned || {};
 
             // array or plain object
-            if (o && ((b = S.isArray(o)) || S.isPlainObject(o))) {
-                ret = b ? [] : {};
-                for (k in o) {
-                    if (o.hasOwnProperty(k)) {
-                        ret[k] = S.clone(o[k]);
+            if (o && ((isArray = S.isArray(o)) || S.isPlainObject(o))) {
+
+                // avoid recursive clone
+                if (o[CLONE_MARKER]) {
+                    return marked[o[CLONE_MARKER]];
+                }
+                o[CLONE_MARKER] = (stamp = S.guid());
+                marked[stamp] = o;
+
+                // clone it
+                if (isArray) {
+                    ret = f ? S.filter(o, f) : o.concat();
+                } else {
+                    ret = {};
+                    for (k in o) {
+                        if (k !== CLONE_MARKER &&
+                            o.hasOwnProperty(k) &&
+                            (!f || (f.call(o, o[k], k, o) !== false))) {
+                            ret[k] = S.clone(o[k], f, marked);
+                        }
                     }
                 }
+            }
+
+            // clear marked
+            if (!cloned) {
+                S.each(marked, function(v) {
+                    if (v[CLONE_MARKER]) {
+                        try {
+                            delete v[CLONE_MARKER];
+                        } catch (e) {
+                            v[CLONE_MARKER] = undef;
+                        }
+                    }
+                });
+                marked = undef;
             }
 
             return ret;
@@ -474,12 +507,12 @@ build time: ${build.time}
          */
         filter: filter ?
             function(arr, fn, context) {
-                return filter.call(arr, fn, context);
+                return filter.call(arr, fn, context || this);
             } :
             function(arr, fn, context) {
                 var ret = [];
                 S.each(arr, function(item, i, arr) {
-                    if (fn.call(context, item, i, arr)) {
+                    if (fn.call(context || this, item, i, arr)) {
                         ret.push(item);
                     }
                 });
@@ -507,7 +540,7 @@ build time: ${build.time}
 
 })(KISSY);
 /**
- * @module  lang
+ * @module  web.js
  * @author  lifesinger@gmail.com
  */
 (function(S, undef) {
@@ -565,6 +598,43 @@ build time: ${build.time}
         },
 
         /**
+         * Creates a serialized string of an array or object.
+         * <code>
+         * {foo: 1, bar: 2}    // -> 'foo=1&bar=2'
+         * {foo: 1, bar: [2, 3]}    // -> 'foo=1&bar[]=2&bar[]=3'
+         * {foo: '', bar: 2}    // -> 'foo=&bar=2'
+         * {foo: undefined, bar: 2}    // -> 'foo=undefined&bar=2'
+         * {foo: true, bar: 2}    // -> 'foo=true&bar=2'
+         * </code>
+         */
+        param: function(o, sep) {
+            if (!S.isPlainObject(o)) return EMPTY;
+            sep = sep || SEP;
+
+            var buf = [], key, val;
+            for (key in o) {
+                val = o[key];
+                key = encodeURIComponent(key);
+
+                // val is valid non-array value
+                if (isValidParamValue(val)) {
+                    buf.push(key, '=', encodeURIComponent(val + EMPTY), sep);
+                }
+                // val is not empty array
+                else if (S.isArray(val) && val.length) {
+                    for (var i = 0, len = val.length; i < len; ++i) {
+                        if (isValidParamValue(val[i])) {
+                            buf.push(key, BRACKET + '=', encodeURIComponent(val[i] + EMPTY), sep);
+                        }
+                    }
+                }
+                // ignore other cases, including empty array, Function, RegExp, Date etc.
+            }
+            buf.pop();
+            return buf.join(EMPTY);
+        },
+
+        /**
          * Parses a URI-like query string and returns an object composed of parameter/value pairs.
          * <code>
          * 'section=blog&id=45'        // -> {section: 'blog', id: '45'}
@@ -604,40 +674,23 @@ build time: ${build.time}
         },
 
         /**
-         * Creates a serialized string of an array or object.
-         * <code>
-         * {foo: 1, bar: 2}    // -> 'foo=1&bar=2'
-         * {foo: 1, bar: [2, 3]}    // -> 'foo=1&bar[]=2&bar[]=3'
-         * {foo: '', bar: 2}    // -> 'foo=&bar=2'
-         * {foo: undefined, bar: 2}    // -> 'foo=undefined&bar=2'
-         * {foo: true, bar: 2}    // -> 'foo=true&bar=2'
-         * </code>
+         * Evalulates a script in a global context.
          */
-        param: function(o, sep) {
-            if (!S.isPlainObject(o)) return EMPTY;
-            sep = sep || SEP;
+        globalEval: function(data) {
+            if (data && RE_NOT_WHITE.test(data)) {
+                // Inspired by code by Andrea Giammarchi
+                // http://webreflection.blogspot.com/2007/08/global-scope-evaluation-and-dom.html
+                var head = doc.getElementsByTagName('head')[0] || docElem,
+                    script = doc.createElement('script');
 
-            var buf = [], key, val;
-            for (key in o) {
-                val = o[key];
-                key = encodeURIComponent(key);
+                // It works! All browsers support!
+                script.text = data;
 
-                // val is valid non-array value
-                if (isValidParamValue(val)) {
-                    buf.push(key, '=', encodeURIComponent(val + EMPTY), sep);
-                }
-                // val is not empty array
-                else if (S.isArray(val) && val.length) {
-                    for (var i = 0, len = val.length; i < len; ++i) {
-                        if (isValidParamValue(val[i])) {
-                            buf.push(key, BRACKET + '=', encodeURIComponent(val[i] + EMPTY), sep);
-                        }
-                    }
-                }
-                // ignore other cases, including empty array, Function, RegExp, Date etc.
+                // Use insertBefore instead of appendChild to circumvent an IE6 bug.
+                // This arises when a base node is used.
+                head.insertBefore(script, head.firstChild);
+                head.removeChild(script);
             }
-            buf.pop();
-            return buf.join(EMPTY);
         },
 
         /**
@@ -687,26 +740,6 @@ build time: ${build.time}
                     }
                 }
             };
-        },
-
-        /**
-         * Evalulates a script in a global context.
-         */
-        globalEval: function(data) {
-            if (data && RE_NOT_WHITE.test(data)) {
-                // Inspired by code by Andrea Giammarchi
-                // http://webreflection.blogspot.com/2007/08/global-scope-evaluation-and-dom.html
-                var head = doc.getElementsByTagName('head')[0] || docElem,
-                    script = doc.createElement('script');
-
-                // It works! All browsers support!
-                script.text = data;
-
-                // Use insertBefore instead of appendChild to circumvent an IE6 bug.
-                // This arises when a base node is used.
-                head.insertBefore(script, head.firstChild);
-                head.removeChild(script);
-            }
         },
 
         /**
@@ -892,20 +925,20 @@ build time: ${build.time}
         mix = S.mix,
 
         scriptOnload = doc.createElement('script').readyState ?
-            function(node, callback) {
-                var oldCallback = node.onreadystatechange;
-                node.onreadystatechange = function() {
-                    var rs = node.readyState;
-                    if (rs === 'loaded' || rs === 'complete') {
-                        node.onreadystatechange = null;
-                        oldCallback && oldCallback();
-                        callback.call(this);
-                    }
-                };
-            } :
-            function(node, callback) {
-                node.addEventListener('load', callback, false);
-            },
+                       function(node, callback) {
+                           var oldCallback = node.onreadystatechange;
+                           node.onreadystatechange = function() {
+                               var rs = node.readyState;
+                               if (rs === 'loaded' || rs === 'complete') {
+                                   node.onreadystatechange = null;
+                                   oldCallback && oldCallback();
+                                   callback.call(this);
+                               }
+                           };
+                       } :
+                       function(node, callback) {
+                           node.addEventListener('load', callback, false);
+                       },
 
         RE_CSS = /\.css(?:\?|$)/i,
         loader;
@@ -932,10 +965,10 @@ build time: ${build.time}
          * @return {KISSY}
          */
         add: function(name, fn, config) {
-            var self = this, mods = self.Env.mods, mod, o, oldr;
+            var self = this, mods = self.Env.mods, mod, o;
 
             // S.add(name, config) => S.add( { name: config } )
-            if (S.isString(name) && !config && S.isPlainObject(fn)) {
+            if (S['isString'](name) && !config && S.isPlainObject(fn)) {
                 o = {};
                 o[name] = fn;
                 name = o;
@@ -964,19 +997,12 @@ build time: ${build.time}
                 if (!mod.fns) mod.fns = [];
                 fn && mod.fns.push(fn);
 
-                //!TODO 暂时不考虑 requires 在 add 中的修改
-                // 和 order _requires 关联起来太复杂
-                oldr = mod['requires'];
                 mix((mods[name] = mod), config);
-                mods[name]['requires'] = oldr; // 不覆盖
 
                 // 对于 requires 都已 attached 的模块，比如 core 中的模块，直接 attach
                 if ((mod['attach'] !== false) && self.__isAttached(mod.requires)) {
                     self.__attachMod(mod);
                 }
-
-                //!TODO add 中指定了依赖项，这里没有继续载依赖项
-                //self.__isAttached(mod.requires) 返回 false
             }
 
             return self;
@@ -988,8 +1014,7 @@ build time: ${build.time}
          * S.use('mod-name', callback, config);
          * S.use('mod1,mod2', callback, config);
          * </code>
-         * config = {
-         *   order: true, // 默认为 false. 是否严格按照 modNames 的排列顺序来回调入口函数
+         * config = {         *
          *   global: KISSY // 默认为 KISSY. 当在 this.Env.mods 上找不到某个 mod 的属性时，会到 global.Env.mods 上去找
          * }
          */
@@ -997,9 +1022,10 @@ build time: ${build.time}
             modNames = modNames.replace(/\s+/g, EMPTY).split(',');
             config = config || {};
 
-            var self = this, mods = self.Env.mods,
+            var self = this,
+                modName,
                 global = (config || 0).global,
-                i, len = modNames.length, mod, name, fired;
+                i, len = modNames.length,fired;
 
             // 将 global 上的 mods, 移动到 instance 上
             if (global) self.__mixMods(global);
@@ -1009,28 +1035,10 @@ build time: ${build.time}
                 callback && callback(self);
                 return;
             }
-
             // 有尚未 attached 的模块
-            for (i = 0; i < len && (mod = mods[modNames[i]]); i++) {
-                if (mod.status === ATTACHED) continue;
-
-                // 通过添加依赖，来保证调用顺序
-                if (config.order && i > 0) {
-                    if (!mod.requires) mod.requires = [];
-                    mod._requires = mod.requires.concat(); // 保留，以便还原
-                    name = modNames[i - 1];
-
-                    if (!S.inArray(name, mod.requires)
-                        && !(S.inArray(mod.name, mods[name].requires || []))) { // 避免循环依赖
-                        mod.requires.push(name);
-                    }
-                }
-
-                self.__attach(mod, function() {
-                    if (mod._requires) {
-                        mod.requires = mod._requires; // restore requires
-                        delete mod._requires;
-                    }
+            for (i = 0; i < len && (modName = modNames[i]); i++) {
+                //从name开始调用，防止不存在模块
+                self.__attachModByName(modName, function() {
                     if (!fired && self.__isAttached(modNames)) {
                         fired = true;
                         callback && callback(self);
@@ -1040,32 +1048,104 @@ build time: ${build.time}
 
             return self;
         },
+        //加载指定模块名模块，如果不存在定义默认定义为内部模块
+        __attachModByName: function(modName, callback, global) {
+
+            var self = this,
+                mods = self.Env.mods,
+                //是否自带了css
+                hasCss = modName.indexOf("+css") != -1;
+            //得到真实组件名
+            modName = hasCss ? modName.replace(/\+css/g, "") : modName;
+            var mod = mods[modName];
+            //没有模块定义，内部模块不许定义
+            if (!mod) {
+                //默认js名字
+                var componentJsName = self.Config['componentJsName'] || function(m) {
+                    return m + '-pkg-min.js?t=20101229231326';
+                },  js = S.isFunction(componentJsName) ?
+                    componentJsName(modName) : componentJsName;
+                mod = {
+                    path:modName + '/' + js,
+                    charset: 'utf-8'
+                };
+                //添加模块定义
+                mods[modName] = mod;
+            }
+
+            if (hasCss) {
+                var componentCssName = self.Config['componentCssName'] || function(m) {
+                    return m + '-min.css?t=20101229231326';
+                },  css = S.isFunction(componentCssName) ?
+                    componentCssName(modName) :
+                    componentCssName;
+                mod.csspath = modName + '/' + css;
+            }
+            mod.name = modName;
+
+            if (mod && mod.status === ATTACHED) return;
+            self.__attach(mod, callback, global);
+        },
 
         /**
          * Attach a module and all required modules.
          */
         __attach: function(mod, callback, global) {
-            var self = this, requires = mod['requires'] || [],
+            var self = this,
+                mods = self.Env.mods,
+                //复制一份当前的依赖项出来，防止add后修改！
+                requires = (mod['requires'] || []).concat(),
                 i = 0, len = requires.length;
 
             // attach all required modules
             for (; i < len; i++) {
-                self.__attach(self.Env.mods[requires[i]], fn, global);
+                var r = mods[requires[i]];
+                if (r && r.status === ATTACHED) {
+                    //no need
+                } else {
+                    self.__attachModByName(requires[i], fn, global);
+                }
             }
 
             // load and attach this module
             self.__buildPath(mod);
-            self.__load(mod, fn, global);
+            self.__load(mod, function() {
+                // add 可能改了 config，这里重新取下
+                var newRequires = mod['requires'] || [],optimize = [];
+                //本模块下载成功后串行下载 require
+                for (var i = newRequires.length - 1; i >= 0; i--) {
+                    var r = newRequires[i],
+                        rmod = mods[r],
+                        inA = S.inArray(r, requires);
+                    //已经处理过了或将要处理
+                    if (rmod && rmod.status === ATTACHED ||
+                        inA) {
+                        //no need
+                    } else {
+                        //新增的依赖项
+                        self.__attachModByName(r, fn, global);
+                    }
+                    if (!inA) {
+                        optimize.push(r);
+                    }
+                }
+                if (optimize.length != 0) {
+                    optimize.unshift(mod.name);
+                    S.log(optimize + " : better to be used together", "warn");
+                }
+                fn();
+            }, global);
+
+            var attached = false;
 
             function fn() {
-                // add 可能改了 config，这里重新取下
-                var requires = mod['requires'] || [];
+                if (!attached && self.__isAttached(mod['requires'])) {
 
-                if (self.__isAttached(requires)) {
                     if (mod.status === LOADED) {
                         self.__attachMod(mod);
                     }
                     if (mod.status === ATTACHED) {
+                        attached = true;
                         callback();
                     }
                 }
@@ -1111,7 +1191,9 @@ build time: ${build.time}
             var mods = this.Env.mods, mod,
                 i = (modNames = S.makeArray(modNames)).length - 1;
 
-            for (; i >= 0 && (mod = mods[modNames[i]]); i--) {
+            for (; i >= 0; i--) {
+                var name = modNames[i].replace(/\+css/, "");
+                mod = mods[name] || {};
                 if (mod.status !== ATTACHED) return false;
             }
 
@@ -1134,7 +1216,7 @@ build time: ${build.time}
             }
 
             // 加载 css, 仅发出请求，不做任何其它处理
-            if (S.isString(mod[CSSFULLPATH])) {
+            if (S['isString'](mod[CSSFULLPATH])) {
                 self.getScript(mod[CSSFULLPATH]);
                 mod[CSSFULLPATH] = LOADED;
             }
@@ -1279,36 +1361,44 @@ build time: ${build.time}
      * @param src script source url
      * @return base for kissy
      * @example:
-     *   http://a.tbcdn.cn/s/kissy/1.1.5/??kissy-min.js,suggest/suggest-pkg-min.js
-     *   http://a.tbcdn.cn/??s/kissy/1.1.5/kissy-min.js,s/kissy/1.1.5/suggest/suggest-pkg-min.js
-     * http://a.tbcdn.cn/??s/kissy/1.1.5/suggest/suggest-pkg-min.js,s/kissy/1.1.5/kissy-min.js
+     *   http://a.tbcdn.cn/s/kissy/1.1.6/??kissy-min.js,suggest/suggest-pkg-min.js
+     *   http://a.tbcdn.cn/??s/kissy/1.1.6/kissy-min.js,s/kissy/1.1.5/suggest/suggest-pkg-min.js
+     *   http://a.tbcdn.cn/??s/kissy/1.1.6/suggest/suggest-pkg-min.js,s/kissy/1.1.5/kissy-min.js
+     *   http://a.tbcdn.cn/s/kissy/1.1.6/kissy-min.js?t=20101215.js
+     * @notice: custom combo rules, such as yui3:
+     *  <script src="path/to/kissy" data-combo-prefix="combo?" data-combo-sep="&"></script>
      */
-    //notice:timestamp
-    var baseReg = /^(.*)(seed|kissy)(-min)?\.js/i,
+    // notice: timestamp
+    var baseReg = /^(.*)(seed|kissy)(-min)?\.js[^/]*/i,
         baseTestReg = /(seed|kissy)(-min)?\.js/;
 
-    function getBaseUrl(src) {
-        var parts = src.split(/\s*,\s*/);
-        var base,
+    function getBaseUrl(script) {
+        var src = script.src,
+            prefix = script.getAttribute('data-combo-prefix') || '??',
+            sep = script.getAttribute('data-combo-sep') || ',',
+            parts = src.split(sep),
+            base,
             part0 = parts[0],
-            index = part0.indexOf("??");
-        //no combo
+            index = part0.indexOf(prefix);
+
+        // no combo
         if (index == -1) {
             base = src.replace(baseReg, '$1');
         } else {
             base = part0.substring(0, index);
             var part01 = part0.substring(index + 2, part0.length);
-            //combo first
-            //notice use match better than test
+            // combo first
+            // notice use match better than test
             if (part01.match(baseTestReg)) {
                 base += part01.replace(baseReg, '$1');
             }
-            //combo after first
+            // combo after first
             else {
                 for (var i = 1; i < parts.length; i++) {
                     var part = parts[i];
                     if (part.match(baseTestReg)) {
                         base += part.replace(baseReg, '$1');
+                        break;
                     }
                 }
             }
@@ -1323,13 +1413,14 @@ build time: ${build.time}
         // get base from current script file path
         var scripts = doc.getElementsByTagName('script'),
             currentScript = scripts[scripts.length - 1],
-            base = getBaseUrl(currentScript.src);
+            base = getBaseUrl(currentScript);
 
         this.Env.mods = {}; // all added mods
         this.Env._loadQueue = {}; // information for loading and loaded mods
 
-        this.Config.base = base;
-        this.Config.timeout = 10;   // the default timeout for getScript
+        // don't override
+        if (!this.Config.base) this.Config.base = base;
+        if (!this.Config.timeout) this.Config.timeout = 10;   // the default timeout for getScript
     };
     S.__initLoader();
 
@@ -1341,39 +1432,6 @@ build time: ${build.time}
 
 })(KISSY);
 
-/**
- * @module mods
- * @author lifesinger@gmail.com
- */
-(function(S) {
-
-    var map = {
-        core: {
-            path: 'packages/core-min.js',
-            charset: 'utf-8'
-        }
-    };
-
-    S.each([
-        'sizzle', 'dd', 'datalazyload', // pure utilities
-        'flash', // flash etc.
-        'switchable', 'suggest', 'calendar', // UI components based on Base
-        'uibase', 'overlay', 'imagezoom' // UI components based on UIBase
-    ],
-        function(modName) {
-            map[modName] = {
-                path: modName + '/' + modName + '-pkg-min.js',
-                requires: ['core'],
-                charset: 'utf-8'
-            };
-        });
-
-    map['calendar'].csspath = 'calendar/default-min.css';
-    map['overlay'].requires = ['uibase'];
-
-    S.add(map);
-
-})(KISSY);
 /*
 Copyright 2010, KISSY UI Library v1.1.7dev
 MIT Licensed
@@ -1517,6 +1575,7 @@ KISSY.add('ua', function(S) {
  *
  * TODO:
  *  - test mobile
+ *  - 3Q 大战后，360 去掉了 UA 信息中的 360 信息，需采用 res 方法去判断
  *
  */
 /**
@@ -3633,32 +3692,32 @@ build time: ${build.time}
  * @module  event
  * @author  lifesinger@gmail.com
  */
-KISSY.add('event', function(S, undefined) {
+KISSY.add('event', function(S, undef) {
 
     var doc = document,
         DOM = S.DOM,
         simpleAdd = doc.addEventListener ?
-            function(el, type, fn, capture) {
-                if (el.addEventListener) {
-                    el.addEventListener(type, fn, !!capture);
-                }
-            } :
-            function(el, type, fn) {
-                if (el.attachEvent) {
-                    el.attachEvent('on' + type, fn);
-                }
-            },
+                    function(el, type, fn, capture) {
+                        if (el.addEventListener) {
+                            el.addEventListener(type, fn, !!capture);
+                        }
+                    } :
+                    function(el, type, fn) {
+                        if (el.attachEvent) {
+                            el.attachEvent('on' + type, fn);
+                        }
+                    },
         simpleRemove = doc.removeEventListener ?
-            function(el, type, fn, capture) {
-                if (el.removeEventListener) {
-                    el.removeEventListener(type, fn, !!capture);
-                }
-            } :
-            function(el, type, fn) {
-                if (el.detachEvent) {
-                    el.detachEvent('on' + type, fn);
-                }
-            },
+                       function(el, type, fn, capture) {
+                           if (el.removeEventListener) {
+                               el.removeEventListener(type, fn, !!capture);
+                           }
+                       } :
+                       function(el, type, fn) {
+                           if (el.detachEvent) {
+                               el.detachEvent('on' + type, fn);
+                           }
+                       },
         EVENT_GUID = 'ksEventTargetId',
         SPACE = ' ',
         guid = S.now(),
@@ -3682,6 +3741,9 @@ KISSY.add('event', function(S, undefined) {
         add: function(target, type, fn, scope /* optional */) {
             if (batch('add', target, type, fn, scope)) return;
 
+
+            // Event.add([dom,dom])
+
             var id = getID(target), isNativeEventTarget,
                 special, events, eventHandle, fixedType, capture;
 
@@ -3701,19 +3763,23 @@ KISSY.add('event', function(S, undefined) {
             events = cache[id].events;
             if (!events[type]) {
                 isNativeEventTarget = !target.isCustomEventTarget;
-                special = ((isNativeEventTarget || target._supportSpecialEvent) && Event.special[type]) || { };
+                special = ((isNativeEventTarget || target._supportSpecialEvent)
+                    && Event.special[type]) || { };
 
                 eventHandle = function(event, eventData) {
                     if (!event || !event.fixed) {
                         event = new S.EventObject(target, event, type);
                     }
                     if (S.isPlainObject(eventData)) {
+                        //protect type
+                        var typeo = event.type;
                         S.mix(event, eventData);
+                        event.type = typeo;
                     }
                     if (special['setup']) {
                         special['setup'](event);
                     }
-                    return (special.handle || Event._handle)(target, event, events[type].listeners);
+                    return (special.handle || Event._handle)(target, event);
                 };
 
                 events[type] = {
@@ -3723,15 +3789,36 @@ KISSY.add('event', function(S, undefined) {
 
                 fixedType = special.fix || type;
                 capture = special['capture'];
-                if (isNativeEventTarget) {
-                    simpleAdd(target, fixedType, eventHandle, capture);
-                } else if (target._addEvent) { // such as Node
-                    target._addEvent(fixedType, eventHandle, capture);
+                if (special['init']) {
+                    special['init'].apply(null, S.makeArray(arguments));
                 }
-            }
+                if (isNativeEventTarget && special.fix !== false) {
+                    simpleAdd(target, fixedType, eventHandle, capture);
+                }
 
+            }
             // 增加 listener
             events[type].listeners.push({fn: fn, scope: scope || target});
+        },
+
+        __getListeners:function(target, type) {
+            var events = Event.__getEvents(target) || {},
+                eventsType,
+                listeners = [];
+
+            if ((eventsType = events[type])) {
+                listeners = eventsType.listeners;
+            }
+            return listeners;
+        },
+        __getEvents:function(target) {
+            var id = getID(target),c,
+                events;
+            if (id === -1) return; // 不是有效的 target
+            if (!id || !(c = cache[id])) return; // 无 cache
+            if (c.target !== target) return; // target 不匹配
+            events = c.events || { };
+            return events;
         },
 
         /**
@@ -3740,15 +3827,21 @@ KISSY.add('event', function(S, undefined) {
         remove: function(target, type /* optional */, fn /* optional */, scope /* optional */) {
             if (batch('remove', target, type, fn, scope)) return;
 
-            var id = getID(target),
-                events, eventsType, listeners,
-                i, j, len, c, t, special;
+            var events = Event.__getEvents(target),
+                id = getID(target),
+                eventsType,
+                listeners,
+                len,
+                i,
+                j,
+                t,
+                isNativeEventTarget = !target.isCustomEventTarget,
+                special = ((isNativeEventTarget || target._supportSpecialEvent)
+                    && Event.special[type]) || { };
 
-            if (id === -1) return; // 不是有效的 target
-            if (!id || !(c = cache[id])) return; // 无 cache
-            if (c.target !== target) return; // target 不匹配
+
+            if (events === undefined) return;
             scope = scope || target;
-            events = c.events || { };
 
             if ((eventsType = events[type])) {
                 listeners = eventsType.listeners;
@@ -3767,48 +3860,52 @@ KISSY.add('event', function(S, undefined) {
                 }
 
                 // remove(el, type) or fn 已移除光
-                if (fn === undefined || len === 0) {
+                if (fn === undef || len === 0) {
                     if (!target.isCustomEventTarget) {
                         special = Event.special[type] || { };
-                        simpleRemove(target, special.fix || type, eventsType.handle);
-                    }
-                    else if (target._removeEvent) { // such as Node
-                        target._removeEvent(type, eventsType.handle);
+                        if (special.fix !== false)
+                            simpleRemove(target, special.fix || type, eventsType.handle);
                     }
                     delete events[type];
                 }
             }
-
+            if (special.destroy) {
+                special.destroy.apply(null, S.makeArray(arguments));
+            }
             // remove(el) or type 已移除光
-            if (type === undefined || S.isEmptyObject(events)) {
+            if (type === undef || S.isEmptyObject(events)) {
                 for (type in events) {
                     Event.remove(target, type);
                 }
                 delete cache[id];
                 removeID(target);
             }
+
+
         },
 
-        _handle: function(target, event, listeners) {
+        _handle: function(target, event) {
             /* As some listeners may remove themselves from the
              event, the original array length is dynamic. So,
              let's make a copy of all listeners, so we are
              sure we'll call all of them.*/
+            var listeners = Event.__getListeners(target, event.type);
             listeners = listeners.slice(0);
-
             var ret, i = 0, len = listeners.length, listener;
-
-            // 让 nodelist 等集合，能自定义 scope
 
             for (; i < len; ++i) {
                 listener = listeners[i];
                 ret = listener.fn.call(listener.scope, event);
 
-                // 自定义事件对象，可以用 return false 来立刻停止后续监听函数
-                // 注意：return false 仅停止当前 target 的后续监听函数，并不会阻止冒泡
-                // 目前没有实现自定义事件对象的冒泡，因此 return false 和 stopImmediatePropagation 效果是一样的
-                if ((ret === false && target.isCustomEventTarget) ||
-                    event.isImmediatePropagationStopped) {
+                // 和 jQuery 逻辑保持一致
+                // return false 等价 preventDefault + stopProgation
+                if (ret !== undef) {
+                    event.result = ret;
+                    if (ret === false) {
+                        event.halt();
+                    }
+                }
+                if (event.isImmediatePropagationStopped) {
                     break;
                 }
             }
@@ -3819,6 +3916,8 @@ KISSY.add('event', function(S, undefined) {
         _getCache: function(id) {
             return cache[id];
         },
+
+        __getID:getID,
 
         _simpleAdd: simpleAdd,
         _simpleRemove: simpleRemove
@@ -3846,14 +3945,6 @@ KISSY.add('event', function(S, undefined) {
             S.each(types.split(SPACE), function(type) {
                 Event[methodName](targets, type, fn, scope);
             });
-            return true;
-        }
-
-        // unpack nodelist
-        if (targets.getDOMNodes) {
-            for (var i = 0; i < targets.length; i++) {
-                Event[methodName](targets.item(i), types, fn, scope);
-            }
             return true;
         }
     }
@@ -3916,11 +4007,6 @@ KISSY.add('event-object', function(S, undefined) {
         else { // custom
             self.type = type;
             self.target = currentTarget;
-        }
-
-        // 让 custom 的 ev.target 指向包装过后的对象，比如 Node
-        if (currentTarget.isCustomEventTarget) {
-            if (S.DOM._isKSNode(currentTarget)) self.target = new S.Node(self.target);
         }
 
         // bug fix: in _fix() method, ie maybe reset currentTarget to undefined.
@@ -4090,8 +4176,6 @@ KISSY.add('event-target', function(S, undefined) {
             if(t && S.isFunction(t.handle)) {
                 return t.handle(undefined, eventData);
             }
-
-            return this; // chain
         },
 
         on: function(type, fn, scope) {
@@ -4137,7 +4221,7 @@ KISSY.add('event-mouseenter', function(S) {
                     event.type = o.name;
                 },
 
-                handle: function(el, event, listeners) {
+                handle: function(el, event) {
                     // 保证 el 为原生 DOMNode
                     if(S.DOM._isKSNode(el)) {
                         el = el[0];
@@ -4156,7 +4240,7 @@ KISSY.add('event-mouseenter', function(S) {
 
                         if (parent !== el) {
                             // handle event if we actually just moused on to a non sub-element
-                            Event._handle(el, event, listeners);
+                            Event._handle(el, event);
                         }
                     } catch(e) {
                         S.log(e);
@@ -4204,6 +4288,136 @@ KISSY.add('event-focusin', function(S) {
 /**
  * NOTES:
  *  - webkit 和 opera 已支持 DOMFocusIn/DOMFocusOut 事件，但上面的写法已经能达到预期效果，暂时不考虑原生支持。
+ */
+/**
+ * @module  event-hashchange for ie6,7
+ * @author  yiminghe@gmail.com
+ */
+KISSY.add('event-hashchange', function(S) {
+
+    var Event = S.Event,
+        ie = document['documentMode'] || S.UA['ie'];
+
+    // 让 ie6,7 支持 hashchange
+    if (ie < 8) {
+        var timer;
+
+        var startIE = function () {
+            //S.log("init ie6,7 hashchange");
+
+            /**
+             * 前进后退 ： start -> timer
+             * 直接输入 : timer -> addHistory -> start
+             * 触发统一在 start(load)
+             * iframe 内容和 url 同步
+             */
+            var iframe = S.DOM.create("<iframe class='ks-hashchange-history-iframe'" +
+                "style='position:absolute;" +
+                "left:-9999px;top:-9999px;'>");
+            S.DOM.prepend(iframe, document.body);
+            var h = 0,
+                location = window.location;
+            //初始化
+            function init() {
+                //debugger
+
+                Event.remove(iframe, "load");
+                addHistory(location.hash || "#");
+                Event.add(iframe, "load", start);
+                check();
+            }
+
+            Event.add(iframe, "load", init);
+
+            //后退触发点
+            //或addHistory 调用
+            function start() {
+                //debugger
+                var c = S.trim(iframe.contentWindow.document.body.innerHTML);
+                var ch = location.hash || "#";
+                //后退时不等
+                //改变location则相等
+                if (c != ch) {
+                    //设为相等，但是这是不希望触发hashchange
+                    location.hash = c;
+                }
+                notifyHashChange();
+            }
+
+            function addHistory(archor) {
+                //debugger
+                var html = '<html><body>' + archor + '</body></html>';
+                var doc = iframe.contentWindow.document;
+                try {
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            function check() {
+                timer = setTimeout(function() {
+                    var c = S.trim(iframe.contentWindow.document.body.innerHTML);
+                    var ch = location.hash || "#";
+                    if (c != ch) {
+                        addHistory(ch);
+                    }
+                    //S.log("monitor ie6,7 hashchange!");
+                    check();
+                }, 500);
+            }
+
+
+            startIE = check;
+        },stopIE = function() {
+            clearTimeout(timer);
+            timer = null;
+        };
+
+        function notifyHashChange() {
+
+            for (var i = 0; i < targets.length; i++) {
+                var t = targets[i];
+                //模拟暂时没有属性
+                Event._handle(t, {type:"hashchange"});
+            }
+        }
+
+        var targets = [];
+
+        Event.special["hashchange"] = {
+            //不用注册dom事件
+            fix: false,
+            init: function(target) {
+                var index = S.indexOf(target, target);
+                if (index == -1)
+                    targets.push(target);
+                if (!timer) {
+                    startIE();
+                }
+            },
+            destroy: function(target, type) {
+
+                var events = Event.__getEvents(target);
+                if (!events[type]) {
+                    var index = S.indexOf(target, targets);
+                    if (index >= 0)
+                        targets.splice(index, 1);
+                }
+                if (targets.length == 0) {
+                    stopIE();
+                }
+            }
+        }
+    }
+});
+
+/**
+ * v1 : 2010-12-29
+ * refer : http://yiminghe.javaeye.com/blog/377867
  */
 /*
 Copyright 2010, KISSY UI Library v1.1.7dev
@@ -4385,11 +4599,15 @@ KISSY.add('nodelist', function(S) {
  */
 KISSY.add('node-attach', function(S, undefined) {
 
-    var DOM = S.DOM, Event = S.Event,
+    var DOM = S.DOM,
+        Event = S.Event,
         nodeTypeIs = DOM._nodeTypeIs,
         isKSNode = DOM._isKSNode,
-        NP = S.Node.prototype,
-        NLP = S.NodeList.prototype,
+        EventTarget = S.EventTarget,
+        Node = S.Node,
+        NodeList = S.NodeList,
+        NP = Node.prototype,
+        NLP = NodeList.prototype,
         GET_DOM_NODE = 'getDOMNode',
         GET_DOM_NODES = GET_DOM_NODE + 's',
         HAS_NAME = 1,
@@ -4540,18 +4758,54 @@ KISSY.add('node-attach', function(S, undefined) {
     }
 
     // event-target
-    S.mix(NP, S.EventTarget);
-    NP._supportSpecialEvent = true;
-    NP._addEvent = function(type, handle, capture) {
-        Event._simpleAdd(this[0], type, handle, capture);
-    };
-    NP._removeEvent = function(type, handle, capture) {
-        Event._simpleRemove(this[0], type, handle, capture);
-    };
-    delete NP.fire;
+    function tagFn(fn, wrap) {
+        fn.__wrap = fn.__wrap || [];
+        fn.__wrap.push(wrap);
+    }
 
-    S.mix(NLP, S.EventTarget);
-    delete NLP.fire;
+    S.augment(Node, EventTarget, {
+        fire:null,
+        on:function(type, fn, scope) {
+            var self = this;
+
+            function wrap(ev) {
+                var args = S.makeArray(arguments);
+                args.shift();
+                ev.target = new Node(ev.target);
+                args.unshift(ev);
+                return fn.apply(scope || self, args);
+            }
+
+            Event.add(this[0], type, wrap, scope);
+            tagFn(fn, wrap);
+            return this;
+        },
+        detach:function(type, fn, scope) {
+            if (S.isFunction(fn)) {
+                var wraps = fn.__wrap || [];
+                for (var i = 0; i < wraps.length; i++) {
+                    Event.remove(this[0], type, wraps[i], scope);
+                }
+            } else {
+                Event.remove(this[0], type, fn, scope);
+            }
+            return this; // chain
+        }
+    });
+    S.augment(NodeList, EventTarget, {fire:null});
+    NP._supportSpecialEvent = true;
+
+    S.each({
+        on:"add",
+        detach:"remove"
+    }, function(v, k) {
+        NLP[k] = function(type, fn, scope) {
+            for (var i = 0; i < this.length; i++) {
+                this.item(i).on(type, fn, scope);
+            }
+        };
+    });
+
 });
 /*
 Copyright 2010, KISSY UI Library v1.1.7dev
@@ -5090,21 +5344,23 @@ KISSY.add('ajax', function(S, undef) {
             contentType: 'application/x-www-form-urlencoded',
             async: true,
             data: null,
-            xhr: win.XMLHttpRequest ?
-                function() {
-                    return new win.XMLHttpRequest();
-                } :
-                function() {
-                    try {
-                        // ie 6 下请求缓存中的资源无法正确返回 xhr.responseText, 需要使用老版本的 XMLHTTP
-                        // jQuery 没有考虑请求缓存的情况
-                        return new win.ActiveXObject(
-                            S.UA.ie == 6 ?
-                                'Msxml2.XMLHTTP.5.0' :
-                                'Microsoft.XMLHTTP');
-                    } catch(e) {
-                    }
-                },
+            xhr: win.ActiveXObject ?
+                 function() {
+                     if (win.XmlHttpRequest) {
+                         try {
+                             return new win.XMLHttpRequest();
+                         } catch(xhrError) {
+                         }
+                     }
+
+                     try {
+                         return new win.ActiveXObject('Microsoft.XMLHTTP');
+                     } catch(activeError) {
+                     }
+                 } :
+                 function() {
+                     return new win.XMLHttpRequest();
+                 },
             accepts: {
                 xml: 'application/xml, text/xml',
                 html: 'text/html',
@@ -6134,7 +6390,7 @@ build time: ${build.time}
  * @module  Attribute
  * @author  yiminghe@gmail.com, lifesinger@gmail.com
  */
-KISSY.add('attribute', function(S, undefined) {
+KISSY.add('attribute', function(S, undef) {
 
     /**
      * Attribute provides the implementation for any object
@@ -6187,29 +6443,10 @@ KISSY.add('attribute', function(S, undefined) {
         },
 
         /**
-         * Configures a group of attributes, and sets initial values.
-         * @param attrConfigs {Object} An object with attribute name/configuration pairs.
-         * @param values {Object} An object with attribute name/value pairs, defining the initial values to apply.
-         *        Values defined in the cfgs argument will be over-written by values in this argument.
-         */
-        addAttrs: function(attrConfigs, values) {
-            var host = this;
-
-            S.each(attrConfigs, function(attrConfig, name) {
-                if (name in values) {
-                    attrConfig.value = values[name];
-                }
-                host.addAttr(name, attrConfig);
-            });
-
-            return host;
-        },
-
-        /**
          * Checks if the given attribute has been added to the host.
          */
         hasAttr: function(name) {
-            return name && (name in (this.__attrs || {}));
+            return name && this.__attrs.hasOwnProperty(name);
         },
 
         /**
@@ -6267,7 +6504,7 @@ KISSY.add('attribute', function(S, undefined) {
 
             // if setter has effect
             if (setter) setValue = setter.call(host, value);
-            if (setValue !== undefined) value = setValue;
+            if (setValue !== undef) value = setValue;
 
             // finally set
             host.__attrVals[name] = value;
@@ -6302,7 +6539,7 @@ KISSY.add('attribute', function(S, undefined) {
 
             if ((valFn = attrConfig.valueFn)) {
                 val = valFn.call(host);
-                if (val !== undefined) {
+                if (val !== undef) {
                     attrConfig.value = val;
                 }
                 delete attrConfig.valueFn;
