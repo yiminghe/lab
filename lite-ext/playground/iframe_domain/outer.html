@@ -1,5 +1,7 @@
 <button onclick='document.domain=window.location.hostname;'>设置 hostname domain</button>
-<button onclick='document.domain="";'>设置 空 domain</button>
+<button onclick='document.domain=window.location.hostname.substring(window.location.hostname.indexOf(".")+1);'>
+	设置 短domain
+</button>
 <button onclick='alert(document.domain);'>读取 domain</button>
 <script>
 	function notify(){
