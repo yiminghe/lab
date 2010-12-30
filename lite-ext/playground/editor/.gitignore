@@ -1,8 +1,0 @@
-*.iml
-.idea/
-*~
-*.diff
-*.patch
-*.bak
-.DS_Store
-Thumb.db

@@ -1,1 +1,0 @@
-KISSY.Editor.add("bgcolor",function(d){var a=KISSY.Editor,e=a.ColorSupport,f=e.VALID_COLORS,b={},g={element:"span",styles:{"background-color":"#(color)"}};b.inherit=new a.Style(g,{color:"inherit"});for(var c=0;c<f.length;c++){var h=f[c];b[h]=new a.Style(g,{color:h})}d.addPlugin(function(){new e({editor:d,styles:b,title:"背景颜色",contentCls:"ke-toolbar-bgcolor",text:"bgcolor"})})});
