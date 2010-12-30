@@ -6,8 +6,14 @@
 </head>
 <body>
 <button onclick="window.location.hash='#t'+(+new Date())">
-    设置hash
+    设置hash，增加历史导航
 </button>
+
+
+<button onclick="replaceHistory('#m'+(+new Date()))">
+    设置hash，替换当前历史导航
+</button>
+
 <script src="../../base/javascript/kissy.js"></script>
 <script>
     var S = KISSY,
@@ -36,7 +42,7 @@
                 //debugger
                 var _histFrame = iframe[0];
                 iframe.detach("load");
-                addHistory(window.location.hash || "#");
+                addHistory(location.hash || "#");
                 iframe.on("load", start);
             }
 
@@ -47,19 +53,19 @@
             function start() {
                 //debugger
                 var c = S.trim(_histFrame.contentWindow.document.body.innerHTML);
-                var ch = window.location.hash || "#";
+                var ch = location.hash || "#";
                 //后退时不等
                 //改变location则相等
                 if (c != ch) {
                     //设为相等，但是这是不希望触发hashchange
-                    window.location.hash = c;
+                    location.hash = c;
                 }
                 notifyHashChange();
             }
 
             var _histFrame = iframe[0];
 
-            window.addHistory = function(archor) {
+            var addHistory = function(archor) {
                 //debugger
                 var html, doc;
                 html = '<html><body>' + archor + '</body></html>';
@@ -73,23 +79,29 @@
                     return false;
                 }
             }
+            
+            window.replaceHistory=function(archor){
+            		_histFrame.contentWindow.document.body.innerHTML=archor;
+            		location.replace(archor);
+            		notifyHashChange();
+            }
 
             setInterval(function() {
                 var c = S.trim(_histFrame.contentWindow.document.body.innerHTML);
-                var ch = window.location.hash || "#";
+                var ch = location.hash || "#";
                 if (c != ch) {
                     addHistory(ch);
                 }
             }, 500);
         }
 
-        window.addHistory = function(archor) {
-            window.hash = archor;
+        window.replaceHistory = function(archor) {
+            location.replace(archor);
         };
 
         function notifyHashChange() {
             //debugger
-            alert("hash change : " + window.location.hash);
+            alert("hash change : " + location.hash);
         }
 
 
@@ -99,6 +111,7 @@
             S.Event.on(window, "hashchange", notifyHashChange);
         }
     });
+    alert("page loaded");
 </script>
 </body>
 </html>
