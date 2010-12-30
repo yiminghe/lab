@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>云烈编辑器 demo </title>
+<link href="http://assets.taobaocdn.com/tbsp/reset-grids.css?t=20090602.css" rel="stylesheet"/>
+<!--[if lt IE 8]>
+<link href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-mhtml.css?t=201010281013" rel="stylesheet"/>
+<![endif]-->
+<!--[if gte IE 8]><!-->
+<link href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-datauri.css?t=201010281013" rel="stylesheet"/>
+<!--<![endif]-->
+
+</head>
+<body>
+
+<h1>KISSY Editor Demo</h1>
+
+<div style="width: 90%; margin: 0 auto">
+    <label for="editor">Editor Instance 1:</label>
+    <textarea id="editor" tabindex="1" style="width:100%;height:400px;">
+        <p>测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+            测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测
+            试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测
+            试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+            测试测试测试测试测试测试测试</p>
+    </textarea>
+
+</div>
+
+<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy-min.js"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.5/editor/editor-all-pkg-min.js"></script>
+<script src="word-count.js"></script>
+<script>
+
+
+    KISSY.ready(function(S) {
+        // just for test
+
+        S.use('editor', function() {
+
+
+            var editor = S.Editor("#editor", {
+                customStyle:"p{text-indent:2em;}",
+                attachForm:true,
+                //编辑器内弹窗z-index底线，防止互相覆盖
+                baseZIndex:10000,
+                pluginConfig: {
+                    "image":{
+                        upload:{
+                            //返回格式
+                            //正确：{imgUrl:""}
+                            //错误：{error:""}
+                            serverUrl:"/code/upload/upload.jsp",
+                            fileInput:"Filedata"
+                        }
+                    },
+
+                    "font-size":false,
+                    "font-family":false,
+                    //"font-bold":false,
+                    "font-italic":false,
+                    "font-underline":false,
+                    "font-strikeThrough":false,
+
+                    "draft":{
+                        interval:5,
+                        limit:10,
+                        helpHtml:  "<div " +
+                                "style='width:200px;'>" +
+                                "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容，" +
+                                "如果发现内容丢失，" +
+                                "请选择恢复编辑历史</div></div>"
+                    }
+                }
+            }).use("font,image,flash,preview,undo", function() {
+                var self = this,
+                        htmlDataProcessor = self.htmlDataProcessor,
+                        dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
+
+                if (dataFilter) {
+                    dataFilter.addRules({
+                        elements : {
+                            $:function(el) {
+                                var tagName = el.name || "";
+                                if (!S.inArray(tagName, ["object","embed","img"]))
+                                    delete el.attributes;
+                            }
+                        }
+                    });
+                }
+            });
+
+            KISSY.wordcount.bind('#editor',1000, editor);
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>KISSY Editor Test</title>
+<link href="http://assets.taobaocdn.com/tbsp/reset-grids.css?t=20090602.css" rel="stylesheet"/>
+<link href="../build/theme/cool/editor-pkg.css" rel="stylesheet" id="theme"/>
+<script src="../../kissy/build/kissy.js"></script>
+</head>
+<body>
+
+<h1>KISSY Editor Demo</h1>
+
+<p>
+    <label>选择主题：
+        <select id="themes">
+            <option value="google">
+                google
+            </option>
+            <option value="cool">
+                清爽
+            </option>
+        </select></label>
+    <script>
+        KISSY.ready(function(S) {
+            var theme = S.one("#theme"),themes = S.one("#themes");
+            themes.val("cool");
+            themes.on("change", function() {
+                var v = themes.val();
+                theme.attr("href", "../build/theme/" + v + "/editor-pkg.css");
+            });
+        })
+    </script>
+</p>
+<form>
+    <div style="width: 90%; margin: 0 auto">
+        <label for="editor">Editor Instance 1:</label>
+        <textarea id="editor" tabindex="0" style="width:100%;height:400px;margin:0 auto;">
+            <script>alert(1);</script>
+            <p>
+                我是虾米音乐
+            </p>
+            <p>
+                <embed width="257" height="33"
+                       allownetworking="internal"
+                       allowscriptaccess="never"
+                       type="application/x-shockwave-flash"
+                       src="http://www.xiami.com/widget/235508_2734338/singlePlayer.swf"
+                       quality="high"/>
+                111111111111111111111111
+                <embed src="http://www.xiami.com/widget/0_1806480/singlePlayer.swf"
+                       type="application/x-shockwave-flash" width="257" height="33"
+                       wmode="transparent"></embed>
+                1111111111111111111111
+            </p>
+
+            <p>我是音乐：</p>
+            <p>
+                111111111111111111111
+                <object height="37"
+                        align=""
+                        width="165"
+                        codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
+                        classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+                    <param
+                            value="../src/plugins/music/niftyplayer.swf?file=../src/plugins/music/betty.mp3"
+                            name="movie"/>
+                    <param value="high" name="quality"/>
+                    <param name="wmode" value="transparent"/>
+                    <param value="#FFFFFF" name="bgcolor"/>
+                    <embed height="37"
+                           align=""
+                           wmode="transparent"
+                           width="165"
+                           pluginspage="http://www.macromedia.com/go/getflashplayer"
+                           swliveconnect="true"
+                           type="application/x-shockwave-flash"
+                           bgcolor="#FFFFFF"
+                           quality="high"
+                           src="../src/plugins/music/niftyplayer.swf?file=../src/plugins/music/betty.mp3">
+                    </embed>
+                </object>
+                1111111111111111
+            </p>
+            <p> 1 2 3 4 5 6 7 78 <a href="http://www.g.cn">我是google</a> 1 1 1 12234 3 45</p>
+            <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
+            <p>我是图片 <img style="width: 470px; height: 150px;"
+                         src="http://img02.taobaocdn.com/tps/i2/T1xjtKXmtrXXXXXXXX-470-150.jpg"
+                         alt=""></p>
+
+
+            <p>我是视频优酷</p>
+            <p>
+                11111111111111111111
+                <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" height="400" width="480">
+                    <param name="quality" value="high"/>
+                    <param name="wmode" value="transparent"/>
+                    <param name="movie" value="http://player.youku.com/player.php/sid/XMjA0MTgwMjIw/v.swf"/>
+                    <embed height="400"
+                           wmode="transparent"
+                           pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="http://player.youku.com/player.php/sid/XMjA0MTgwMjIw/v.swf" type="application/x-shockwave-flash" width="480"/>
+
+                </object>
+                1111111111111111111
+            </p>
+
+            <p>我是表格，支持右键</p>
+            <table style="width: 200px;" border="1" cellpadding="1" cellspacing="1">
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3 <span>3.1</span> 3.2 <span>3.3</span></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <p>我是段落 <span style="background-color: red;"> 我是段落 我是段落 </span> 我是段落 <img src="http://img05.taobaocdn.com/tps/i5/T117hGXndsXXXXXXXX-15-13.gif"> 我是段落 我是段落 </p>  <p> 我是段落 我是段落 <br></p>
+
+            <p>我是flash：</p>
+            <p>
+                11111111111111
+                <object class="holiday-logo"
+                        classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+                        height="68" width="300">
+                    <param name="movie"
+                           value="http://img01.taobaocdn.com/tps/i1/T12MVIXfVNXXXXXXXX.swf"/>
+                    <param name="wmode" value="transparent"/>
+                    <object class="holiday-logo"
+                            data="http://img01.taobaocdn.com/tps/i1/T12MVIXfVNXXXXXXXX.swf"
+                            height="68" name="holiday-logo"
+                            type="application/x-shockwave-flash"
+                            width="300">
+                        <param name="wmode"
+                               value="transparent"/>
+                        <a href="http://www.taobao.com/"
+                           style="height: 43px; margin-left: 56px;" target="_top">
+                            淘宝网
+                            <img alt="淘宝网" height="110" src="http://www.taobao.com/"
+                                 title="Taobao.com - 阿里巴巴旗下网站" width="167"/>
+                        </a>
+                    </object>
+                </object>
+                111111111111
+            </p>
+            <ul>
+                <li> 我是列表1</li>
+                <li> 我是列表2
+                    <ul>
+                        <li><p>我是列表2.1</p></li>
+                        <li> 我是列表2.2</li>
+                        <li> 我是列表2.3</li>
+                    </ul>
+                </li>
+                <li> 我是列表3</li>
+            </ul>
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+            <ul>
+                <li> 我是列表1</li>
+                <li> 我是列表2
+                    <ul>
+                        <li><p>我是列表2.1</p></li>
+                        <li> 我是列表2.2</li>
+                        <li> 我是列表2.3</li>
+                    </ul>
+                </li>
+                <li><p>我是列表3</p></li>
+            </ul>
+
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+
+        </textarea>
+    </div>
+    <input type="submit" value="submit"/>
+</form>
+<a href="http://www.g.cn"> leave </a>
+<div style="width: 60%; margin: 50px auto;position:relative;overflow:hidden;">
+    <label for="editor2">Editor Instance 2:</label>
+    <textarea id="editor2" style="width:99%;height:400px;margin:0 auto;"></textarea>
+</div>
+<!--from kissy component start-->
+<script src="../../kissy/build/uibase/uibase-pkg.js"></script>
+<script src="../../kissy/build/dd/dd-pkg.js"></script>
+<script src="../../kissy/build/overlay/overlay-pkg.js"></script>
+<!--from kissy component end-->
+
+<script src="../src/editor.js"></script>
+<script src="../src/core/utils.js"></script>
+<script src="../src/core/dom.js"></script>
+<script src="../src/core/focusmanager.js"></script>
+<script src="../src/core/definition.js"></script>
+<script src="../src/core/zindexmanager.js"></script>
+<script src="../src/core/dtd.js"></script>
+<script src="../src/core/elementpath.js"></script>
+<script src="../src/core/walker.js"></script>
+<script src="../src/core/range.js"></script>
+<script src="../src/core/domiterator.js"></script>
+<script src="../src/core/selection.js"></script>
+<script src="../src/core/styles.js"></script>
+<script src="../src/core/htmlparser/htmlparser.js"></script>
+<script src="../src/core/htmlparser/basicwriter.js"></script>
+<script src="../src/core/htmlparser/htmlwriter.js"></script>
+<script src="../src/core/htmlparser/fragment.js"></script>
+<script src="../src/core/htmlparser/element.js"></script>
+<script src="../src/core/htmlparser/filter.js"></script>
+<script src="../src/core/htmlparser/text.js"></script>
+<script src="../src/core/htmlparser/comment.js"></script>
+
+
+<script src="../src/plugins/button/plugin.js"></script>
+<script src="../src/plugins/contextmenu/plugin.js"></script>
+
+<script src="../src/plugins/overlay/support/editor/focus_4e-ext.js"></script>
+<script src="../src/plugins/overlay/support/editor/overlay.js"></script>
+
+<!--overlay component start
+<script src="../src/plugins/overlay/plugin.js"></script>
+overlay component end-->
+
+<script src="../src/plugins/select/plugin.js"></script>
+<script src="../src/plugins/bubbleview/plugin.js"></script>
+
+
+<script src="../src/plugins/tabs/plugin.js"></script>
+<script src="../src/plugins/progressbar/plugin.js"></script>
+
+
+<script src="../src/plugins/htmldataprocessor/plugin.js"></script>
+<script src="../src/plugins/fakeobjects/plugin.js"></script>
+<script src="../src/plugins/localstorage/plugin.js"></script>
+
+<!--草稿-->
+<script src="../src/plugins/draft/plugin.js"></script>
+<script src="../src/plugins/draft/support/plugin.js"></script>
+<!--源码-->
+<script src="../src/plugins/sourcearea/support/plugin.js"></script>
+<script src="../src/plugins/sourcearea/plugin.js"></script>
+<!--预览-->
+<script src="../src/plugins/preview/plugin.js"></script>
+<!--模板-->
+<script src="../src/plugins/templates/plugin.js"></script>
+<!--撤销-->
+<script src="../src/plugins/undo/plugin.js"></script>
+<!--清除格式-->
+<script src="../src/plugins/removeformat/plugin.js"></script>
+<!--字体-->
+<script src="../src/plugins/font/plugin.js"></script>
+<!--格式-->
+<script src="../src/plugins/format/plugin.js"></script>
+<!--颜色-->
+<script src="../src/plugins/colorsupport/plugin.js"></script>
+<script src="../src/plugins/color/plugin.js"></script>
+<!--列表-->
+<script src="../src/plugins/list/plugin.js"></script>
+<script src="../src/plugins/list/support/plugin.js"></script>
+<!--缩进-->
+<script src="../src/plugins/indent/plugin.js"></script>
+<script src="../src/plugins/indent/support/plugin.js"></script>
+<!--对齐-->
+<script src="../src/plugins/justify/plugin.js"></script>
+<!--链接-->
+<script src="../src/plugins/link/plugin.js"></script>
+<!--图像-->
+<script src="../src/plugins/image/plugin.js"></script>
+<!--flash-->
+<script src="../src/plugins/flashbridge/plugin.js"></script>
+<script src="../src/plugins/flashutils/plugin.js"></script>
+<script src="../src/plugins/flash/support/plugin.js"></script>
+<script src="../src/plugins/flash/plugin.js"></script>
+<!--音乐-->
+<script src="../src/plugins/music/plugin.js"></script>
+<script src="../src/plugins/music/support/plugin.js"></script>
+<!--表格-->
+<script src="../src/plugins/table/plugin.js"></script>
+<script src="../src/plugins/table/support/plugin.js"></script>
+<!--表情-->
+<script src="../src/plugins/smiley/plugin.js"></script>
+<script src="../src/plugins/smiley/support/plugin.js"></script>
+<!--最大化-->
+<script src="../src/plugins/maximize/plugin.js"></script>
+<script src="../src/plugins/maximize/support/plugin.js"></script>
+<!--路径-->
+<script src="../src/plugins/elementpaths/plugin.js"></script>
+<!--捕获粘贴-->
+<script src="../src/plugins/clipboard/plugin.js"></script>
+<!--捕获 enter ,shift enter-->
+<script src="../src/plugins/enterkey/plugin.js"></script>
+<!--大小调节-->
+<script src="../src/plugins/resize/plugin.js"></script>
+<!--分页插入-->
+<script src="../src/plugins/pagebreak/plugin.js"></script>
+
+<script src="../src/plugins/separator/plugin.js"></script>
+
+<!--
+youku,ku6,tudou视频
+-->
+<script src="../src/biz/bangpai/plugins/video/plugin.js"></script>
+<script src="../src/biz/bangpai/plugins/video/support/plugin.js"></script>
+<!--
+xiami 音乐
+-->
+<script src="../src/biz/bangpai/plugins/music/plugin.js"></script>
+<script src="../src/biz/bangpai/plugins/music/support/plugin.js"></script>
+<!--
+xiami 音乐
+-->
+<script src="../src/biz/bangpai/plugins/upload/plugin.js"></script>
+
+<!--
+<script src="../src/biz/bangpai/plugins/upload/dialog/plugin.yui.js"></script>
+<script src="../src/biz/bangpai/plugins/upload/dialog/plugin.longzang.js"></script>
+-->
+
+<script src="../src/biz/bangpai/plugins/sourcearea/plugin.js"></script>
+<script>
+    KISSY.ready(function(S) {
+
+        S.use('editor', function() {
+
+            var KE = KISSY.Editor;
+
+            //document.domain="taobao.com";
+            // just for test
+            var base = location.href.replace(/^(.*kissy-editor\/).*$/i, '$1');
+            KISSY.Config.base = base;
+            KISSY.Config.debug = "dev";
+
+            KE.Config.base = base + "src/";
+            var cfg = {
+                attachForm:true,
+                baseZIndex:10000,
+                //自定义样式
+                //customStyle:"p{color:purple;}",
+                //自定义外部样式
+                //customLink:["http://localhost/customLink.css","http://xx.com/y2.css"],
+                //是否一开始自动聚焦
+                //focus:true,
+                pluginConfig: {
+                    "image":{
+                        upload:{
+                            serverUrl:"/code/upload/upload.jsp",
+                            serverParams:{
+                                waterMark:function() {
+                                    return S.one("#ke_img_up_watermark_1")[0].checked;
+                                }
+                            },
+                            fileInput:"Filedata",
+                            sizeLimit:1000,//k
+                            extraHtml:"<p style='margin-top:10px;'><input type='checkbox' id='ke_img_up_watermark_1' checked='checked'> 图片加水印，防止别人盗用</p>"
+                        }
+                    },
+                    "templates": [
+                        {
+                            demo: "模板1效果演示html"  ,
+                            html: "<div style='border:1px solid red'>模板1效果演示html</div><p></p>"
+                        },
+                        {
+                            demo: "模板2效果演示html",
+                            html: "<div style='border:1px solid red'>模板2效果演示html</div>"
+                        }
+                    ],
+                    //"font-size":false,
+                    //"font-family":false,
+                    //"font-bold":false,
+                    // "font-italic":false,
+                    //"font-underline":false,
+                    //"font-strikeThrough":false,
+                    "bangpai-upload":{
+                        serverUrl:"/code/upload/upload.jsp",
+                        serverParams:{
+                            waterMark:function() {
+                                return S.one("#ke_img_up_watermark_2")[0].checked;
+                            }
+                        },
+                        //previewSuffix:"_60x60",
+                        previewWidth:"80px",
+                        sizeLimit:1000//k,
+                        ,numberLimit:15,
+                        extraHtml:"<p style='margin-top:10px;'>" +
+                                "<input type='checkbox' " +
+                                "style='vertical-align:middle;margin:0 5px;' " +
+                                "id='ke_img_up_watermark_2'>" +
+                                "<span style='vertical-align:middle;'>图片加水印，防止别人盗用</span></p>"
+                    },
+                    "bangpai-video":{
+                        urlCfg:[
+                            {
+                                reg:/tudou\.com/i,
+                                url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
+                                        "url=@url@&callback=@callback@"//"&rand=@rand@"
+                            }
+                        ],
+                        providers:[
+                            {
+                                reg:/taobaocdn\.com/i,
+                                width:480,
+                                height:400,
+                                detect:function(url) {
+                                    return url;
+                                }
+                            }
+                        ]
+                    },
+                    "draft":{
+                        interval:5,
+                        limit:10,
+                        helpHtml:  "<div " +
+                                "style='width:200px;'>" +
+                                "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容，" +
+                                "如果发现内容丢失，" +
+                                "请选择恢复编辑历史</div></div>"
+                    },
+                    "resize":{
+                        direction:["y"]
+                    }
+                }
+            };
+            
+            window.editor2 = KE("#editor", S.clone(cfg)).use("elementpaths,sourcearea,preview," +
+                    "bangpai-sourcearea,templates,separator," +
+                    "undo,separator,removeformat,font,format,color,separator," +
+                    "list,indent" +
+                    ",justify,separator,link" +
+                    ",image,flash,bangpai-video,music," +
+                    "bangpai-music,smiley,separator,table,resize," +
+                    "draft,bangpai-upload,pagebreak,separator,maximize");
+            /*
+            window.editor3 = KE("#editor2", S.clone(cfg)).use("elementpaths,sourcearea,preview," +
+                    "bangpai-sourcearea,templates,separator," +
+                    "undo,separator,removeformat,font,format,color,separator," +
+                    "list,indent" +
+                    ",justify,separator,link" +
+                    ",image,flash,bangpai-video,music," +
+                    "bangpai-music,smiley,separator,table,resize," +
+                    "draft,bangpai-upload,pagebreak,separator,maximize");*/
+        });
+    });
+
+
+</script>
+</body>
+</html>
