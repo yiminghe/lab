@@ -1,5 +1,5 @@
-ï»¿KISSY.add("biz/m1/m2",function(S,DOM){
-	var info=DOM.create("<div style='font-size:30px;'>æ¨¡å—2åˆå§‹åŒ–ï¼</div>");
+KISSY.add(function(S,DOM){
+	var info=DOM.create("<div style='font-size:30px;'>Ä£¿é2³õÊ¼»¯£¡</div>");
 	DOM.prepend(info,document.body);
 	return {
 			log:function(s){

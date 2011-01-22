@@ -1,0 +1,1 @@
+KISSY.add(function(d,e,a,b){var c=e.create("<button>\u6a21\u57571\u521d\u59cb\u5316\u4e86\uff0c\u53ef\u4ee5\u6309\u6211</button>");e.prepend(c,document.body);a.on(c,"click",function(){b.log("\u6a21\u57571\u8c03\u7528\u6a21\u57572\uff01")})},{requires:["dom","event","./m1/m2"]});

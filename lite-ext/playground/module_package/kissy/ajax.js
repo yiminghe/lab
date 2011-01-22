@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2011, KISSY UI Library v1.1.7dev
 MIT Licensed
 build time: ${build.time}
@@ -298,7 +298,7 @@ KISSY.add('ajax/impl', function(S, EventTarget, S_JSON, undef) {
     return io;
 
 }, {
-    requires:["event/target","json"]
+    requires:["event","json"]
 });
 
 /**

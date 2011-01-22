@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2011, KISSY UI Library v1.1.7dev
 MIT Licensed
 build time: ${build.time}
@@ -178,6 +178,9 @@ KISSY.add('node/attach', function(S, DOM, Event, Node, NodeList, undefined) {
                 var args = S.makeArray(arguments);
                 args.shift();
                 ev.target = new Node(ev.target);
+                if (ev.relatedTarget) {
+                    ev.relatedTarget = new Node(ev.relatedTarget);
+                }
                 args.unshift(ev);
                 return fn.apply(scope || self, args);
             }
@@ -243,7 +246,7 @@ KISSY.add('node/node', function(S, DOM, undefined) {
             domNode = DOM.create(html, props, ownerDocument);
             // 将 S.Node('<p>1</p><p>2</p>') 转换为 NodeList
             if (domNode.nodeType === 11) { // fragment
-                return new S.NodeList(domNode.childNodes);
+                return new (S.require("node/nodelist"))(domNode.childNodes);
             }
         }
         // handle Node

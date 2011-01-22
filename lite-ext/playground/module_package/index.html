@@ -1,13 +1,25 @@
-﻿<meta charset='utf-8'/>
-<script src="./kissy/seed.js">
+<meta charset='gbk'/>
+<!--
+<script src="http://localhost/kissy_git/kissy/build/seed.js" charset='utf-8'>
 </script>
+-->
+
+<script src="kissy/seed-min.js">
+</script>
+
+
 <script>
 KISSY.packages({
 	name:"biz",
-	path:"."
+	path:".",
+	charset:"gbk"
 });
+
+
 
 KISSY.use("biz/m1",function(S){
 	alert("app start");	
 });
+
+
 </script>
