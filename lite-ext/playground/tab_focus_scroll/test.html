@@ -10,21 +10,23 @@
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <a id='after' href='#'>after</a>
-
+<div id='log'>
+</div>
 
 <script>
 window.onload=function(){
+	var logger=document.getElementById("log");
 	window.onscroll=function(){
-		console.log("scroll");	
+		logger.innerHTML+=("<br/>scroll");	
 	};
 	
 	document.onkeydown=function(){
-		console.log("keydown");	
+		logger.innerHTML+=("<br/>keydown");	
 	};
 	
 		
 	document.getElementById("after").onfocus=function(){
-		console.log("focus");
+		logger.innerHTML+=("<br/>focus");
 	};
 };
 </script>
