@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>tab_focus_scroll</title>
+	</head>
+	<body>
+<br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<a id='after' href='#'>after</a>
+
+
+<script>
+window.onload=function(){
+	window.onscroll=function(){
+		console.log("scroll");	
+	};
+	
+	document.onkeydown=function(){
+		console.log("keydown");	
+	};
+	
+		
+	document.getElementById("after").onfocus=function(){
+		console.log("focus");
+	};
+};
+</script>
+</body>
+</html>
