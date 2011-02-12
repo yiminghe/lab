@@ -1,0 +1,23 @@
+﻿<meta charset='utf-8'/>
+<script src="./kissy/seed.js">
+</script>
+<script>
+KISSY.packages({
+	name:"biz2",
+	path:"."
+});
+KISSY.compress({
+	dom:"core",
+	ua:"core",
+	event:"core",
+	node:"core",
+	json:"core",
+	ajax:"core",
+	anim:"core",
+	base:"core",
+	cookie:"core"
+});
+KISSY.use("biz2/m1",function(S){
+	alert("app start");	
+});
+</script>

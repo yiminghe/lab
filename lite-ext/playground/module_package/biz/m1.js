@@ -1,9 +1,12 @@
-KISSY.add(function(S,DOM,Event,m2){
-	var btn=DOM.create("<button>Ä£¿é1³õÊ¼»¯ÁË£¬¿ÉÒÔ°´ÎÒ</button>");
+ï»¿KISSY.add(function(S,DOM,Event,m2){
+	var btn=DOM.create("<button>æ¨¡å—1åˆå§‹åŒ–äº†ï¼Œå¯ä»¥æŒ‰æˆ‘</button>");
 	DOM.prepend(btn,document.body);
 	Event.on(btn,"click",function(){
-			m2.log("Ä£¿é1µ÷ÓÃÄ£¿é2£¡");
+			m2.log("æ¨¡å—1è°ƒç”¨æ¨¡å—2ï¼");
 	});
 },{
-	requires:["dom","event","./m1/m2"]
+	requires:["dom","event",
+	"./m1/m2"
+	//"biz/m1/m2"
+	]
 });
