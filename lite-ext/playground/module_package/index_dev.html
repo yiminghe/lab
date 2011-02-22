@@ -2,12 +2,14 @@
 <script src="./kissy/seed.js">
 </script>
 <script>
-KISSY.packages({
-	name:"biz",
-	path:"."
+KISSY.config({
+	packages:[{
+		name:"biz",
+		path:"."
+	}]
 });
 
-KISSY.use("biz/m1",function(S){
+KISSY.use("biz/m1?t=2011a",function(S){
 	alert("app start");	
 });
 </script>

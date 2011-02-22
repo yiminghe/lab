@@ -22,8 +22,8 @@ d:\code\kissy_git\kissy\src\event\target.js
 d:\code\kissy_git\kissy\src\event\focusin.js
 d:\code\kissy_git\kissy\src\event\mouseenter.js
 d:\code\kissy_git\kissy\src\event.js
-D:\code\kissy_git\demo\.\biz3\m1\m2.js
-D:\code\kissy_git\demo\.\biz3\m1.js
+d:\code\kissy_git\demo\biz3\m1\m2.js
+d:\code\kissy_git\demo\biz3\m1.js
 **/
 
 /**
@@ -3071,6 +3071,6 @@ KISSY.add("biz3/m1", function(S, DOM, Event, m2) {
   Event.on(btn, "click", function() {
     m2.log("\u6a21\u57571\u8c03\u7528\u6a21\u57572\uff01")
   })
-}, {requires:["dom", "event", "./m1/m2"]});
+}, {requires:["dom", "event", "./m1/m2?t=2011"]});
 
 

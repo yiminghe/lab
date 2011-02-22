@@ -2,20 +2,14 @@
 <script src="./kissy/seed.js">
 </script>
 <script>
-KISSY.packages({
-	name:"biz2",
-	path:"."
-});
-KISSY.compress({
-	dom:"core",
-	ua:"core",
-	event:"core",
-	node:"core",
-	json:"core",
-	ajax:"core",
-	anim:"core",
-	base:"core",
-	cookie:"core"
+KISSY.config({
+	packages:[{
+		name:"biz2",
+		path:"."
+	}],
+	combine:{
+		 core:['dom','ua','event','node','json','ajax','anim','base','cookie']
+	}
 });
 KISSY.use("biz2/m1",function(S){
 	alert("app start");	
