@@ -49,7 +49,7 @@
                 //设置前保存光标位置
                 if (!o.selectionStart) {
                     range1 = document.selection.createRange().duplicate();
-                    range1.moveEnd('character', this.input.value.length);
+                    range1.moveEnd('character', o.value.length);
                     pos1 = o.value.lastIndexOf(range1.text);
                 } else {
                     pos1 = o.selectionStart;
