@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>
+    身份验证
+</title>
+
+<meta content="yiminghe@gmail.com" name="author"/>
+
+<script src="../../base/javascript/kissy.js"></script>
+
+</head>
+<body>
+
+<h1>身份证号输入即时验证</h1>
+
+<h2>
+    除了 keydown 外的 keyup 监控解决方案
+</h2>
+<h2>
+    利用 keyup 监控键入字符，前17位必须为数字，第18位可以是数字或x,X
+</h2>
+<dl>
+    <dt>问题：</dt>
+    <dd>
+        keyup 时木已成舟，无法阻止，若用户输错只能通过重新设置 input 的值，但是会使得光标随改动移至末尾，而不是保留在输入前的中间位置。
+    </dd>
+    <dt>解决：</dt>
+    <dd>
+        通过设置前保存光标位置，设置后重新restore光标位置,注意 ie 和标准浏览器的差别
+    </dd>
+</dl>
+</p>
+<label>身份证号：<input id='idd' maxlength="18"/></label>
+
+<script type="text/javascript">
+
+    KISSY.ready(function(S) {
+        var idd = S.one("#idd");
+        idd.on("keyup", function() {
+            var pos1,error = false;
+            var range1,range2;
+            var o = this[0];
+            if (!o.value.match(/^(([0-9]{0,18})|([0-9]{17,17}x))$/i)) error = true;
+            //出错处理光标保存逻辑
+            if (error) {
+                //设置前保存光标位置
+                if (!o.selectionStart) {
+                    range1 = document.selection.createRange().duplicate();
+                    range1.moveEnd('character', this.input.value.length);
+                    pos1 = o.value.lastIndexOf(range1.text);
+                } else {
+                    pos1 = o.selectionStart;
+                }
+
+                //设置新值
+                if (o.value.length < 18) {
+                    o.value = o.value.replace(/[^0-9]/g, '');
+                }
+                else if (o.value.length == 18) {
+                    o.value = o.value.replace(/[^0-9xX]/g, '');
+                }
+
+                //恢复光标位置
+                if (!o.selectionStart) {
+                    range2 = o.createTextRange();
+                    range2.collapse(true);
+                    range2.move('character', pos1 - 1);
+                    range2.select();
+                } else {
+                    o.selectionStart = pos1 - 1;
+                    o.selectionEnd = pos1 - 1;
+                }
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>
