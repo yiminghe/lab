@@ -230,22 +230,22 @@ Narcissus.interpreter = (function() {
 
     function resetEnvironment() {
         ExecutionContext.current = new ExecutionContext(GLOBAL_CODE, Narcissus.options.version);
-        let names = Object.getOwnPropertyNames(global);
-        for (let i = 0, n = names.length; i < n; i++) {
+        var names = Object.getOwnPropertyNames(global);
+        for (var i = 0, n = names.length; i < n; i++) {
             delete global[names[i]];
         }
-        for (let key in globalScope) {
+        for (var key in globalScope) {
             delete globalScope[key];
         }
         moduleInstances.clear();
         globalStaticEnv = new StaticEnv();
 
-        let names = Object.getOwnPropertyNames(hostProxy);
-        for (let i = 0, n = names.length; i < n; i++) {
+        var names = Object.getOwnPropertyNames(hostProxy);
+        for (var i = 0, n = names.length; i < n; i++) {
             globalStaticEnv.bind(names[i], new Def());
         }
-        for (let key in globalBase) {
-            let val = globalBase[key];
+        for (var key in globalBase) {
+            var val = globalBase[key];
             global[key] = val;
             globalScope[key] = val;
             // NB: this assumes globalBase never contains module or import bindings
@@ -978,7 +978,7 @@ Narcissus.interpreter = (function() {
             for (i = 0, j = c.length; i < j; i++) {
                 t = c[i];
                 if (t.type === PROPERTY_INIT) {
-                    let c2 = t.children;
+                    var c2 = t.children;
                     v[c2[0].value] = getValue(execute(c2[1], x));
                 } else {
                     f = newFunction(t, x);
