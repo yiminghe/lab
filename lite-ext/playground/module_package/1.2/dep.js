@@ -1,3 +1,3 @@
-KISSY.add("1.2/dep",function(){
+KISSY.add(function(){
     alert("1.2/dep loaded");
 });
