@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<script>
+    var host = window.location.hostname;
+    var base = window.location.href.replace(/[^/]*$/, "").replace(/https?:\/\//, "");
+
+    base=base.replace(host,host+":8080/code");
+    var webSocket = new WebSocket('ws://' + base + 'upgrade.jsp');
+
+    webSocket.onopen = function(event) {
+        console.log("connected");
+        webSocket.send("hello");
+    };
+
+    webSocket.onmessage = function(event) {
+        console.log("received : " + event.data);
+    };
+</script>
+
+    
+
+</body>
+</html>
