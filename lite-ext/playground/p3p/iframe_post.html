@@ -1,23 +1,22 @@
 <meta charset='utf-8'/>
 <script type="text/javascript" src="../../base/javascript/kissy.js"></script>
-<iframe id="ok" name="ok"></iframe>
 <script type="text/javascript">
     KISSY.ready(function(S) {
         S.use("ua,dom", function(S, UA, DOM) {
             var ok = S.get("#ok");
-            var action = "https://yiminghe.taobao.com/upload/cookies?set=2";
-            if (false&&UA.safari) {
+            var action = "https://yiminghe.taobao.com/upload/cookies?set=1";
+            if (UA.safari) {
                 var form = DOM.create("<form " +
                         " method='post' " +
                         "action='" + action + "'" +
-                        " target='ok'" +
+                       
                         " style='position: absolute;left: -9999;top: -9999px'>");
                 DOM.append(form,document.body);
                 DOM.append(DOM.create("<input name='set' value='1'/>"), form);
                 form.submit();
 
             } else {
-                ok.src = action;
+                window.location = action;
             }
         });
     });

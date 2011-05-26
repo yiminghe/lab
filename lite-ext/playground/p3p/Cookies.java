@@ -10,11 +10,16 @@ public class Cookies extends HttpServlet {
 			throws ServletException, IOException {
 		if (request.getParameter("set") != null) {
 			// ie need this
-			response.addHeader("P3P", "CP=\"CAO PSA OUR\"");
-			System.out.println(request.getPathInfo());
-			response.addCookie(new Cookie("logined", "ok"));
-			response.sendRedirect(request.getContextPath() + request.getServletPath());
-
+			//response.addHeader("P3P", "CP=\"CAO PSA OUR\"");
+			String set = request.getParameter("set");
+			if (set.equals("1")) {
+				System.out.println(request.getPathInfo());
+				response.addCookie(new Cookie("logined", "ok"));
+				response.sendRedirect(request.getContextPath() + request.getServletPath());
+			} else {
+				response.sendRedirect("http://localhost/lite-ext/" +
+						"lite-ext/playground/p3p/iframe_post.html");
+			}
 		} else {
 			Cookie[] cs = request.getCookies();
 			if (cs != null) {
