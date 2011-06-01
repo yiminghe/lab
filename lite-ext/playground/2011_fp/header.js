@@ -135,7 +135,10 @@ FP.add("top-header", function(fp) {
 		    searchTab.on("switch",function(ev){
 		        var n=ev.currentIndex;		        
 		        tabpanels[n].appendChild(form);
-		        switchToTab(n);               
+		        switchToTab(n); 
+		        setTimeout(function(){    
+		            tabs[n].focus();
+		        },0);
                 searchType.value = SEARCH_TYPE_LIST[n];                
                 if (fp.get('#J_monitorImg')) {
                     var time = new Date().getTime();
