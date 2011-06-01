@@ -121,10 +121,9 @@ FP.add("top-header", function(fp) {
                 }
             });
             
-            tab_as.each(function(a){
-                Event.on(a,"click",function(e){
-                    e.preventDefault();
-                });
+            
+            Event.on(tab_as,"click",function(e){
+                e.preventDefault();
             });
             
             var searchTab = new S.Tabs(DOM.get("#J_TSearchTabs").parentNode,{
