@@ -136,9 +136,15 @@ FP.add("top-header", function(fp) {
 		        var n=ev.currentIndex;		        
 		        tabpanels[n].appendChild(form);
 		        switchToTab(n); 
-		        setTimeout(function(){    
-		            tabs[n].focus();
+		        
+		        setTimeout(function(){   
+		            if(ev.originalEvent.type=="click"){
+		                that.focus(q);
+		            }else{ 
+		                tabs[n].focus();
+		            }
 		        },0);
+		        
                 searchType.value = SEARCH_TYPE_LIST[n];                
                 if (fp.get('#J_monitorImg')) {
                     var time = new Date().getTime();
