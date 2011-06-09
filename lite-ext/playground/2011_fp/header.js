@@ -136,9 +136,9 @@ FP.add("top-header", function(fp) {
 		        var n=ev.currentIndex;		        
 		        tabpanels[n].appendChild(form);
 		        switchToTab(n); 
-		        
-		        setTimeout(function(){   
-		            if(ev.originalEvent.type=="click"){
+		        var type=ev.originalEvent.type;
+		        setTimeout(function(){
+		            if(type=="click"){
 		                that.focus(q);
 		            }else{ 
 		                tabs[n].focus();
