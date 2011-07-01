@@ -9,8 +9,7 @@
     }
 
     #preview img {
-        // scale well for non-ie
-        max-height: 200px;
+    / / scale well for non-ie max-height : 200 px;
         max-width: 200px;
     }
 </style>
@@ -46,6 +45,8 @@
                         width:width,
                         height:height
                     });
+
+            S.log("image.size: " + img.prop("fileSize"));
         }
 
         f.on("change", function() {
@@ -79,6 +80,7 @@
             img = $("<img src='" + filePath + "'/>").appendTo(preview);
             if (img.prop("complete")) {
                 resize.call(img);
+                S.log("image.size: " + img.prop("fileSize"));
             } else {
                 img.on("load", resize);
             }
