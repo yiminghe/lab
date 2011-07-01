@@ -23,7 +23,7 @@
 <h1> 上传预览 </h1>
 
 <label>选择图片：<input type="file" id='f'/></label>
-<div id="preview" style="width:200px;height:200px;">
+<div id="preview">
 
 </div>
 <script src=".././../base/javascript/kissy.js"></script>
@@ -61,17 +61,21 @@
             // http://acidmartin.wordpress.com/2009/06/09/the-mystery-of-cfakepath-unveiled/
             // fake path
             if (UA.ie > 7) {
-                f[0].select();
-                filePath = document.selection.createRange().text;
-            }
-            if (files) {
-                fileSize = files[0].fileSize;
-                S.log("files[0].fileSize : " + fileSize);
+                try {
+                    f[0].select();
+                    filePath = document.selection.createRange().text;
+                } catch(e) {
+                    S.log("createRange error :");
+                    S.log(e);
+                }
             }
 
             S.log("filePath : " + filePath);
 
             if (files) {
+                // the standard way to detect size
+                fileSize = files[0].fileSize;
+                S.log("files[0].fileSize : " + fileSize);
                 var r = new FileReader();
                 r.onload = function(ev) {
                     preview.html("<img src='" + ev.target.result + "'/>");
@@ -79,17 +83,21 @@
                 r.readAsDataURL(files[0]);
                 return;
             }
-            img && img.detach();
-            preview.html("");
-            img = $("<img src='" + filePath + "'/>").appendTo(preview);
-            if (img.prop("complete")) {
-                resize.call(img);
-                S.log("image.size: " + img.prop("fileSize"));
-            } else {
-                img.on("load", resize);
+            // ie6 can detect image size/width/height to resize
+            if (UA.ie == 6) {
+                img && img.detach();
+                preview.html("");
+                img = $("<img src='" + filePath + "'/>").appendTo(preview);
+                if (img.prop("complete")) {
+                    resize.call(img);
+                    S.log("image.size: " + img.prop("fileSize"));
+                } else {
+                    img.on("load", resize);
+                }
+                return
             }
-            // not needed?
-            //preview.prop("filters").item("DXImageTransform.Microsoft.AlphaImageLoader").src = filePath;
+            // ie>6 more security about image except filter ,can not detact image size or with or height
+            preview.prop("filters").item("DXImageTransform.Microsoft.AlphaImageLoader").src = filePath;
         });
     });
 
