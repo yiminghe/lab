@@ -66,6 +66,7 @@ FP.add("top-header", function(fp) {
                 searchType = that.config.form["search_type"];
 
             var CURRENT = "current",
+                FOCUS = 'focus'
                 SEARCH_TYPE_LIST = ["item", "mall", "shop", "auction", "taoba", "share"],
                 SEARCH_TYPE_ACTION = {
                     "item": function() {
@@ -140,6 +141,7 @@ FP.add("top-header", function(fp) {
 		        setTimeout(function(){
 		            if(type=="click"){
 		                that.focus(q);
+		                field.addClass(FOCUS);
 		            }else{ 
 		                tabs[n].focus();
 		            }

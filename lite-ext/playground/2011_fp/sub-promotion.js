@@ -1,4 +1,5 @@
 FP.add('sub-promotion',function(S){
+    var DOM=S.DOM;
 	S.namespace('Subpromotion');
 	S.Subpromotion.init = function(){
 
@@ -71,6 +72,13 @@ FP.add('sub-promotion',function(S){
 		var recom = new S.Tabs("#J_recom",{
 		        aria:true,
 				activeIndex: parseInt(S.get('#J_recom').getAttribute('data-active-index')) || 0
+		});
+		
+		
+		var recomHd=S.get('#J_recom .hd');
+		DOM.query('li',recomHd).each(function(n){
+		    n.hideFocus=true;
+		    n.style.outline='none';    
 		});
 
         //右侧促销区金牌秒杀倒计时

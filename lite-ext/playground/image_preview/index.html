@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>图片上传预览</title>
+<style>
+    #preview {
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod = 'scale');
+    }
+
+    #preview img {
+        // scale well for non-ie
+        max-height: 200px;
+        max-width: 200px;
+    }
+</style>
+</head>
+<body>
+
+<h1> 上传预览 </h1>
+
+<label>选择图片：<input type="file" id='f'/></label>
+<div id="preview" style="width:200px;height:200px;">
+
+</div>
+<script src=".././../base/javascript/kissy.js"></script>
+<script>
+
+    KISSY.ready(function(S) {
+        var $ = S.all,UA = S.UA;
+        var f = $("#f"),preview = $("#preview"),img;
+
+        function resize() {
+
+            var img = $(this),
+                    width = img.prop("width"),
+                    height = img.prop("height");
+            if (width > height) {
+                height = height * 200 / width;
+                width = 200;
+            } else {
+                width = width * 200 / height;
+                height = 200;
+            }
+            img.prop({
+                        width:width,
+                        height:height
+                    });
+        }
+
+        f.on("change", function() {
+            var fileSize ,
+                    files = f.prop("files"),
+                    filePath = f.val();
+            S.log("original filePath : " + filePath);
+            // http://acidmartin.wordpress.com/2009/06/09/the-mystery-of-cfakepath-unveiled/
+            // fake path
+            if (UA.ie > 7) {
+                f[0].select();
+                filePath = document.selection.createRange().text;
+            }
+            if (files) {
+                fileSize = files[0].fileSize;
+                S.log("files[0].fileSize : " + fileSize);
+            }
+
+            S.log("filePath : " + filePath);
+
+            if (files) {
+                var r = new FileReader();
+                r.onload = function(ev) {
+                    preview.html("<img src='" + ev.target.result + "'/>");
+                };
+                r.readAsDataURL(files[0]);
+                return;
+            }
+            img && img.detach();
+            preview.html("");
+            img = $("<img src='" + filePath + "'/>").appendTo(preview);
+            if (img.prop("complete")) {
+                resize.call(img);
+            } else {
+                img.on("load", resize);
+            }
+            // not needed?
+            //preview.prop("filters").item("DXImageTransform.Microsoft.AlphaImageLoader").src = filePath;
+        });
+    });
+
+</script>
+</body>
+</html>
