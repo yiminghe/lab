@@ -75,6 +75,7 @@ overflow: auto;">
 
 <script src="../../base/javascript/kissy-min.js"></script>
 
+
 <script>
     KISSY.ready(function(S) {
         var DOM = S.DOM,
@@ -140,8 +141,6 @@ overflow: auto;">
                 bottom:Infinity
             };
 
-            var inHtml;
-
             for (var el = element; el = getOffsetParent(el);) {
 
 
@@ -176,7 +175,6 @@ overflow: auto;">
                     visibleRect.bottom = Math.min(visibleRect.bottom,
                             pos.top + el.clientHeight);
                     visibleRect.left = Math.max(visibleRect.left, pos.left);
-                    inHtml = true;
                 }
             }
 
@@ -187,10 +185,6 @@ overflow: auto;">
 
             visibleRect.left = Math.max(visibleRect.left, scrollX);
             visibleRect.top = Math.max(visibleRect.top, scrollY);
-            if (!inHtml) {
-                visibleRect.right += visibleRect.left - originalLeft;
-                visibleRect.bottom += visibleRect.top - originalTop;
-            }
             visibleRect.right = Math.min(visibleRect.right, scrollX + DOM.viewportWidth());
             visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + DOM.viewportHeight());
 
