@@ -60,7 +60,7 @@
             S.log("original filePath : " + filePath);
             // http://acidmartin.wordpress.com/2009/06/09/the-mystery-of-cfakepath-unveiled/
             // fake path
-            if (UA.ie > 7) {
+            if (UA.ie > 6) {
                 try {
                     f[0].select();
                     filePath = document.selection.createRange().text;
