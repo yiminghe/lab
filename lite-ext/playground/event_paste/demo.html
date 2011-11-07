@@ -15,9 +15,9 @@
 	KISSY.ready(function(S){
 		var $=S.all;
 		$("#t").on(S.UA.ie?"beforepaste":"paste",function(e){
-		var s=e.originalEvent.clipboardData.getData("text/html");
-		var s2=e.originalEvent.clipboardData.getData("text/plain");
-		debugger
+		//var s=e.originalEvent.clipboardData.getData("text/html");
+		//var s2=e.originalEvent.clipboardData.getData("text/plain");
+		//var s=clipboardData.getData("Text");
 			$("#t2").text("");
 			$("#t2")[0].focus();
 			setTimeout(function(){
