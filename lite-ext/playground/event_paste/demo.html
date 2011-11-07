@@ -18,6 +18,27 @@
 		//var s=e.originalEvent.clipboardData.getData("text/html");
 		//var s2=e.originalEvent.clipboardData.getData("text/plain");
 		//var s=clipboardData.getData("Text");
+		/*
+		    var clip = Components.classes["@mozilla.org/widget/clipboard"].getService(Components.interfaces.nsIClipboard);  
+    if (!clip) return false;  
+      
+    var trans = Components.classes["@mozilla.org/widget/transferable"].createInstance(Components.interfaces.nsITransferable);  
+    if (!trans) return false;  
+    trans.addDataFlavor("text/unicode");  
+
+	    clip.getData(trans, clip.kGlobalClipboard);  
+      
+    var str       = new Object();  
+    var strLength = new Object();  
+      
+    trans.getTransferData("text/unicode", str, strLength);  
+
+	    if (str) {  
+      str = str.value.QueryInterface(Components.interfaces.nsISupportsString);  
+      pastetext = str.data.substring(0, strLength.value / 2);  
+    }  
+
+	alert(pastetext);*/
 			$("#t2").text("");
 			$("#t2")[0].focus();
 			setTimeout(function(){
