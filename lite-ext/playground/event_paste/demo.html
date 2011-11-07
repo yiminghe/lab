@@ -1,0 +1,29 @@
+<script src='http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js' charset='utf-8'></script>
+
+<h1>copy to textarea</h1>
+
+<div>
+123456abcd890
+</div>
+
+<br/>
+<div id='t' style='width:200px;height:200px;border:1px solid green' contenteditable='true'></div>
+
+<div id='t2' style='width:200px;height:200px;position:absolute;left:-700px;top:1px;border:1px solid red' contenteditable='true'></div>
+
+<script>
+	KISSY.ready(function(S){
+		var $=S.all;
+		$("#t").on(S.UA.ie?"beforepaste":"paste",function(e){
+		var s=e.originalEvent.clipboardData.getData("text/html");
+		var s2=e.originalEvent.clipboardData.getData("text/plain");
+		debugger
+			$("#t2").text("");
+			$("#t2")[0].focus();
+			setTimeout(function(){
+				$("#t").text($("#t2").text().replace(/[^\d]+/,""));
+				$("#t")[0].focus();
+			},0);
+		});
+	});
+</script>
