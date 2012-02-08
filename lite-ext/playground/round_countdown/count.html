@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title></title>
+<style>
+    #c {
+        border: 1px solid red;
+        position: absolute;
+        left: 100px;
+        top: 100px;
+        width: 100px;
+        height: 100px;
+        border-radius: 100px;
+        line-height: 100px;
+        text-align: center;
+        background: #00639E;
+        /*
+        overflow: visible;
+        */
+        overflow: hidden;
+    }
+
+    .progress {
+        position: absolute;
+        display: none;
+        overflow: hidden;
+        border: 0 solid #001;
+        /*
+        border-left-color: red;
+        border-right-color: green;
+        border-top-color: #800080;
+        border-bottom-color: #ffff00;
+        */
+        filter: alpha(opacity = 50) Chroma(color = 'red');
+        opacity: 0.5;
+    }
+</style>
+<script>
+    if (window.location.href.indexOf("localhost/") != -1) {
+        document.write('<script src="http://localhost/kissy_git/kissy/build/kissy.js"' + ' charset="utf-8"><' + '/script>');
+    }
+    else if (window.location.href.indexOf("fed.ued.taobao.net/kissy-team/kissyteam/") != -1) {
+        document.write('<script src="http://assets.daily.taobao.net/s/kissy/1.2.0/kissy.js"' + ' charset="utf-8">' + '<' + '/script>');
+    }
+    else {
+        document.write('<script src="http://docs.kissyui.com/kissy/build/kissy.js"' + ' charset="utf-8">' + '<' + '/script>');
+    }
+</script>
+</head>
+<body>
+<div id="c">
+    <span id="cin"></span>
+</div>
+<button id="stop">stop</button>
+<button id="start">start</button>
+<input type="checkbox" checked="checked" id="total"/>完全停止
+<script src="count.js"></script>
+<script>
+    KISSY.ready(function (S) {
+        var $ = S.all;
+        var countdown = 10;
+        $("#cin").html(countdown);
+        var c = new RoundCountDown({
+            container:$("#c"),
+            duration:1
+        });
+
+
+        $("#start").on("click", function () {
+            var countdown = 10;
+            $("#cin").html(countdown);
+            c.start();
+        });
+
+        c.on("complete", function () {
+            $("#cin").html(--countdown);
+            if (countdown > 0) {
+                c.start();
+            } else {
+                alert("时间到咯");
+            }
+        });
+
+        $("#stop").on("click", function () {
+            c.stop(!!($("#total").attr("checked")));
+        });
+    });
+</script>
+</body>
+</html>
