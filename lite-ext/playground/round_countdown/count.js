@@ -1,10 +1,11 @@
 function RoundCountDown(cfg) {
 
     var duration = (cfg.duration || 8) / 8,
+        opacity = cfg.opacity || 0.5,
         c = cfg.container,
         Node = KISSY.Node,
         $ = Node.all,
-        UA=KISSY.UA,
+        UA = KISSY.UA,
         width = c.innerWidth(),
         height = c.innerHeight(),
         left = width / 2,
@@ -13,26 +14,26 @@ function RoundCountDown(cfg) {
         maskStyle = [
             {
                 "border-left-width":0,
-                "border-left-color":UA.ie?"red":"transparent",
+                "border-left-color":UA.ie==6 ? "red" : "transparent",
                 left:left,
                 top:-top
             },
             {
                 "border-top-width":0,
-                "border-top-color":UA.ie?"red":"transparent",
+                "border-top-color":UA.ie==6 ? "red" : "transparent",
                 left:left,
                 top:top
             },
             {
                 "border-right-width":0,
-                "border-right-color":UA.ie?"red":"transparent",
+                "border-right-color":UA.ie==6 ? "red" : "transparent",
                 width:left,
                 left:-left,
                 top:top
             },
             {
                 "border-bottom-width":0,
-                "border-bottom-color":UA.ie?"red":"transparent",
+                "border-bottom-color":UA.ie==6 ? "red" : "transparent",
                 height:top,
                 left:-left,
                 top:-top
@@ -81,6 +82,10 @@ function RoundCountDown(cfg) {
 
     for (var i = 0; i < 4; i++) {
         masks[i] = $("<div class='progress'>").appendTo(c);
+        if (UA.ie === 6) {
+            masks[i].css("filter", "Chroma(color = 'red')");
+        }
+        masks[i].css("opacity", opacity);
     }
 
     this.maskStyle = maskStyle;

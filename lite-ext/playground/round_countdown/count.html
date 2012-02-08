@@ -25,15 +25,13 @@
         position: absolute;
         display: none;
         overflow: hidden;
-        border: 0 solid #001;
+        border: 0 solid #000;
         /*
         border-left-color: red;
         border-right-color: green;
         border-top-color: #800080;
         border-bottom-color: #ffff00;
         */
-        filter: alpha(opacity = 50) Chroma(color = 'red');
-        opacity: 0.5;
     }
 </style>
 <script>
@@ -63,7 +61,8 @@
         $("#cin").html(countdown);
         var c = new RoundCountDown({
             container:$("#c"),
-            duration:1
+            duration:1,
+            opacity:0.5
         });
 
 
