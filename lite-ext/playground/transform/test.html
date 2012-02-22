@@ -18,7 +18,7 @@
         
         <div style='width:100px;height:100px;border:1px solid green;position:absolute;left:200px;top:200px;' id='c'></div>
     </div>
-<script src='http://localhost/kissy_git/kissy/build/kissy.js'></script>
+<script src='http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js'></script>
 <script>
     var S=KISSY,ua=KISSY.UA,DOM=S.DOM,Event=S.Event;
     
@@ -37,7 +37,9 @@
     var d=DOM.get("#t"),
         orig={
             height:d.offsetHeight,
-            width:d.offsetWidth
+            width:d.offsetWidth,
+            marginTop:parseInt(DOM.css(d,"marginTop")),
+            marginLeft:parseInt(DOM.css(d,"marginLeft"))
         };
     
     function rotate(d,angle){
@@ -47,13 +49,67 @@
         if(ua.ie&&ua.ie<9){
             style.filter='progid:DXImageTransform.Microsoft.Matrix(M11=' + matrix[0][0] + ',M12=' + matrix[0][1] + ',M21=' 
             + matrix[1][0] + ',M22=' + matrix[1][1] + ',SizingMethod="auto expand")';
-            style.marginTop = (orig.height-d.offsetHeight) /2;
-            style.marginLeft = (orig.width-d.offsetWidth) /2;
+            //style.marginTop = (orig.height-d.offsetHeight) /2;
+            //style.marginLeft = (orig.width-d.offsetWidth) /2;
+            setXy(0.5,0,matrix);
         }else{           
             S.each(prefix,function(p){
                  style[p+"Transform"]="rotate("+angle+"deg)";
             });
         }
+    }
+    
+    
+    function multiple(m1,m2){
+        
+        m=[];
+        
+        function set(x,y,v){
+            if(!m[x]){m[x]=[];}
+            m[x][y]=v;
+        }
+        
+        var r1=m1.length,
+            c1=m1[0].length,
+            r2=m2.length,
+            c2=m2[0].length;
+            
+        for(var i=0;i<r1;i++){
+            
+            for(var k=0;k<c2;k++){
+                var sum=0;
+                for(var j=0;j<r2;j++){
+                    sum+=m1[i][j]*m2[j][k];
+                }
+                
+                set(i,k,sum);
+            }
+        }   
+        
+        return m; 
+        
+    }
+    
+    function setXy(px,py,m){
+        var centerX=orig.width/2,
+        centerY=orig.height/2;
+       
+        var originX=px*orig.width,
+        originY=py*orig.height;
+       
+        var diffX=centerX-originX,
+        diffY=centerY-originY;
+       
+        var transformed=multiple(m,[[diffX],[diffY]]),
+            transformedX= transformed[0][0]+originX,
+            transformedY=transformed[1][0]+originY;
+        
+        var diff=[transformedX-d.offsetWidth/2,transformedY-d.offsetHeight/2];
+        
+        DOM.css(d,{
+            marginTop:orig.marginTop+diff[1],
+            marginLeft:orig.marginTop+diff[0]
+        });            
     }
   
     var deg=0,
@@ -61,7 +117,9 @@
         t2=DOM.get("#t2"),
         stop=0,
         deta=1;
-    
+        S.each(prefix,function(p){
+            S.one("#t").css(p+"TransformOrigin","50% 0");
+        });
     var anim = setInterval(function(){
         if(stop){
             return;
