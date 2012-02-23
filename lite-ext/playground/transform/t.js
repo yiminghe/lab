@@ -16,7 +16,7 @@ KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
         stop = 0;
 
     S.each(prefix, function (p) {
-        S.one(t).css(p + "TransformOrigin", "50% 0");
+        S.one(d).css(p + "TransformOrigin", "50% 0");
     });
 
     var anim = setInterval(function () {
