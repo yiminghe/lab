@@ -105,7 +105,7 @@ KISSY.FpTransform = function (line, toy, deta, range,interval, container, callba
         if (inRegion(t2, container)) {
             container.appendChild(t2);
             t2.style.position = "static";
-            t2.style.cursor = "";
+            t2.style.cursor = "auto";
             clearInterval(anim);
             Event.remove(t2);
             Event.remove(doc, 'mouseup', onMouseUp);
