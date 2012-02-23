@@ -5,7 +5,9 @@
 </head>
 <body>
     <div style='position:absolute;left:100px;top:100px;'>
-        <div style='position:absolute;width:100px;height:200px;border:1px solid red' id='t'>
+        <div style='position:absolute;width:100px;height:200px;border:1px solid red;
+
+        ' id='t'>
         </div>
         <div style='position:absolute;width:100px;height:200px;border:1px solid green' id='t2'>
         </div>
@@ -13,7 +15,7 @@
 <script src='http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js'></script>
 <script src='t.js'></script>
 <script>
-    var S=KISSY,$=S.all;    
+    var S=KISSY,$=S.all;
     S.FpTransform.rotate($("#t")[0],60);
     alert($("#t").height());
     alert($("#t").width());

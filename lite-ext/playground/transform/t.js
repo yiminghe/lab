@@ -3,7 +3,10 @@ KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
 
     var doc = document;
 
-    var prefix = ["Ms", "Webkit", "Moz", "O", ""];
+
+    var ieVersion = doc.documentMode || ua.ie;
+
+    var prefix = ["ms", "Webkit", "Moz", "O", ""];
 
     var d = DOM.get(line);
     container = DOM.get(container);
@@ -13,6 +16,8 @@ KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
     var deg = 0,
         dragging = 0,
         t2 = DOM.get(toy),
+        bottom = DOM.css(t2, "bottom"),
+        left = DOM.css(t2, "left"),
         stop = 0;
 
     S.each(prefix, function (p) {
@@ -46,10 +51,20 @@ KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
         }
     });
 
+    var mouseDiff = [t2.offsetWidth / 2, t2.offsetHeight / 2];
+
     Event.on(t2, "mousedown", function (e) {
+        var xy = DOM.offset(t2);
+        S.log(xy.left + ":" + xy.top);
         DOM.css(doc.body, {
             cursor:"move"
         });
+//        if (!ieVersion || ieVersion > 8) {
+//            mouseDiff = [
+//                e.pageX - xy.left,
+//                e.pageY - xy.top
+//            ];
+//        }
         dragging = 1;
         e.preventDefault();
     });
@@ -78,8 +93,8 @@ KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
                 doc.body.appendChild(t2);
             }
             DOM.offset(t2, {
-                left:e.pageX,
-                top:e.pageY
+                left:e.pageX - mouseDiff[0],
+                top:e.pageY - mouseDiff[1]
             });
         }
     });
@@ -99,9 +114,9 @@ KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
                 callback();
             }
         } else {
-            DOM.get("#t").appendChild(t2);
-            DOM.css(t2, "bottom", "0");
-            DOM.css(t2, "left", "");
+            d.appendChild(t2);
+            DOM.css(t2, "bottom", bottom);
+            DOM.css(t2, "left", left);
             DOM.css(t2, "top", "");
             stop = 0;
         }
@@ -112,7 +127,9 @@ KISSY.FpTransform.rotate = function () {
 
     var S = KISSY, ua = KISSY.UA, DOM = S.DOM;
 
-    var prefix = ["Ms", "Webkit", "Moz", "O", ""];
+    var prefix = ["ms", "Webkit", "Moz", "O", ""];
+
+    var ieVersion = document.documentMode || ua.ie;
 
     function generateMatrix(angle) {
         var rad = angle * (Math.PI / 180),
@@ -131,13 +148,13 @@ KISSY.FpTransform.rotate = function () {
             d.orig = {
                 height:d.offsetHeight,
                 width:d.offsetWidth,
-                marginTop:parseInt(DOM.css(d, "marginTop")),
-                marginLeft:parseInt(DOM.css(d, "marginLeft"))
+                marginTop:parseInt(DOM.css(d, "marginTop")) || 0,
+                marginLeft:parseInt(DOM.css(d, "marginLeft")) || 0
             };
         }
         var style = d.style;
         var matrix = generateMatrix(angle);
-        if (ua.ie && ua.ie < 9) {
+        if (ieVersion && ieVersion < 9) {
             style.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=' + matrix[0][0] + ',M12=' + matrix[0][1] + ',M21='
                 + matrix[1][0] + ',M22=' + matrix[1][1] + ',SizingMethod="auto expand")';
             //style.marginTop = (orig.height-d.offsetHeight) /2;

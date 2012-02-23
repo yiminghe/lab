@@ -4,11 +4,38 @@
 <!-- ie8 is not ok <absolute transform><absolute>wrong</absolute></absolute> -->
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
 <meta charset="utf-8">
+<style>
+    #t2 {
+        background-image: url(http://img02.taobaocdn.com/tps/i2/T1Rj9TXeFsXXXXXXXX-375-75.png);
+        width: 70px;
+        height: 77px;
+        position: absolute;
+        bottom: 0px;
+        cursor: move;
+    }
+
+    #t{
+        width:70px;
+        height:300px;
+
+        position:absolute;
+    }
+
+    #l {
+        width:5px;
+        height:233px;
+        background:gray;
+        margin: 0 auto;
+    }
+</style>
 </head>
 <body>
-<div style='position:absolute;left:100px;top:100px;'>
-    <div style='width:20px;height:100px;background:red;position:absolute;margin-top:0;margin-left:0;' id='t'>
-        <div style='background:blue;width:20px;height:20px;position:absolute;bottom:0;cursor:move;' id='t2'>
+<div style='position:absolute;left:500px;top:100px;'>
+    <div id='t'>
+        <div id="l">
+
+        </div>
+        <div id='t2'>
 
         </div>
     </div>
@@ -16,9 +43,9 @@
             <div style='width:20px;height:100px;background:green;position:absolute;'>
             </div>
             -->
-    <div style='width:25px;height:25px;border:1px solid green;position:absolute;left:200px;top:200px;' id='c'></div>
+    <div style='width:75px;height:85px;border:1px solid green;position:absolute;left:200px;top:200px;' id='c'></div>
 </div>
-<script src='http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js'></script>
+<script src='http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js'></script>
 <script src='t.js'></script>
 <script>
     KISSY.FpTransform(
