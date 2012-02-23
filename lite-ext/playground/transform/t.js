@@ -1,4 +1,4 @@
-KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
+KISSY.FpTransform = function (line, toy, deta, range,interval, container, callback) {
     var S = KISSY, ua = KISSY.UA, DOM = S.DOM, Event = S.Event;
 
     var doc = document;
@@ -36,7 +36,7 @@ KISSY.FpTransform = function (line, toy, deta, range, container, callback) {
         }
         deg += deta;
         rotate(d, deg);
-    }, 30);
+    }, interval);
 
 
     Event.on(t2, "mouseenter", function () {
