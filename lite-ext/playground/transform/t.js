@@ -1,7 +1,39 @@
-KISSY.FpTransform = function (line, toy, deta, range,interval, container, callback) {
-    var S = KISSY, ua = KISSY.UA, DOM = S.DOM, Event = S.Event;
+KISSY.FpTransform = function (line, toy, deta, range, interval, container, callback) {
+    var S = KISSY, ua = KISSY.UA, UA = ua, DOM = S.DOM, STYLE = "style", Event = S.Event;
 
     var doc = document;
+
+
+    function unselectable(selector) {
+        var _els = DOM.query(selector), elem, j;
+        for (j = _els.length - 1; j >= 0; j--) {
+            elem = _els[j];
+            if (UA['gecko']) {
+                elem[STYLE]['MozUserSelect'] = 'none';
+            }
+            else if (UA['webkit']) {
+                elem[STYLE]['KhtmlUserSelect'] = 'none';
+            } else {
+                if (UA['ie'] || UA['opera']) {
+                    var e, i = 0,
+                        els = elem.getElementsByTagName("*");
+                    elem.setAttribute("unselectable", 'on');
+                    while (( e = els[ i++ ] )) {
+                        switch (e.tagName.toLowerCase()) {
+                            case 'iframe' :
+                            case 'textarea' :
+                            case 'input' :
+                            case 'select' :
+                                /* Ignore the above tags */
+                                break;
+                            default :
+                                e.setAttribute("unselectable", 'on');
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
     var ieVersion = doc.documentMode || ua.ie;
@@ -19,6 +51,8 @@ KISSY.FpTransform = function (line, toy, deta, range,interval, container, callba
         bottom = DOM.css(t2, "bottom"),
         left = DOM.css(t2, "left"),
         stop = 0;
+
+    unselectable(t2);
 
     S.each(prefix, function (p) {
         S.one(d).css(p + "TransformOrigin", "50% 0");
