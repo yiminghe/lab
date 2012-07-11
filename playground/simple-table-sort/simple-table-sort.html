@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			- inline event handler - simple table sort example 
+		</title>
+		<script type="text/javascript" src="../../lite-ext/base/javascript/ext-core-min.js">
+		</script>
+		<style>
+		    td {
+		        border:1px solid red;
+		        padding:5px;
+		    }
+            .tool-sort {
+                background:transparent url(../../GridLite/images/sort-bg.gif) no-repeat scroll left center;
+                cursor:pointer;
+                float:right;
+                font-size:1px;
+                height:16px;
+                overflow:hidden;
+                width:21px;
+            }
+            .tool-asc {
+                background-image:url(../../GridLite/images/asc.gif);
+            }
+            .tool-des {
+                background-image:url(../../GridLite/images/desc.gif);
+            }
+		    
+		    
+		</style>
+	</head>
+	<body>
+	    <table id="myTable"> 
+
+<tr> 
+    <td onclick="LiteExtTools.TableSorter.sortTd(this,function(t1,t2){
+       
+        if(t1==t2) return 0;
+        return t1>t2?-1:1;
+        });"><div style="width:100px;"><div class="tool-sort"></div>Last Name</div></td> 
+    <td onclick="LiteExtTools.TableSorter.sortTd(this,function(t1,t2){
+       
+        
+        if(t1==t2) return 0;
+        return t1>t2?-1:1;
+        });"><div style="width:100px;"><div class="tool-sort"></div>First Name</div></td> 
+    <td onclick="LiteExtTools.TableSorter.sortTd(this,function(t1,t2){
+       
+        if(t1==t2) return 0;
+        return t1>t2?-1:1;
+        });"><div style="width:200px;"><div class="tool-sort"></div>Email</div></td> 
+    <td>Due</td> 
+    <td>Web Site</td> 
+</tr> 
+
+
+<tr> 
+    <td>Smith</td> 
+    <td>John</td> 
+    <td>jsmith@gmail.com</td> 
+    <td>$50.00</td> 
+    <td>http://www.jsmith.com</td> 
+</tr> 
+<tr> 
+    <td>Bach</td> 
+    <td>Frank</td> 
+    <td>fbach@yahoo.com</td> 
+    <td>$50.00</td> 
+    <td>http://www.frank.com</td> 
+</tr> 
+<tr> 
+    <td>Doe</td> 
+    <td>Jason</td> 
+    <td>jdoe@hotmail.com</td> 
+    <td>$100.00</td> 
+    <td>http://www.jdoe.com</td> 
+</tr> 
+<tr> 
+    <td>Conway</td> 
+    <td>Tim</td> 
+    <td>tconway@earthlink.net</td> 
+    <td>$50.00</td> 
+    <td>http://www.timconway.com</td> 
+</tr> 
+
+</table> 
+		<script type="text/javascript">
+		   Ext.ns("LiteExtTools.TableSorter");
+LiteExtTools.TableSorter = {
+    findIndex : function (tr, index_) {
+        var re = tr.firstChild;
+        while(re.nodeName.toLowerCase() != 'td'){
+             re = re.nextSibling;
+        }
+        var i = 0;
+        while (re) {
+            if (i == index_) break;
+            re = re.nextSibling;
+            if (re.nodeName.toLowerCase() == 'td') {
+                
+                i++;
+            }
+        }
+
+        return re;
+    },
+    sortTd : function (td, sortFunction) {
+        
+       
+        
+        
+        var td_ext = Ext.fly(td);
+        var index = 0;
+        while ((td_ext = Ext.fly(td_ext).prev("td", true))) {
+            index++;
+        }
+        
+        
+        
+        var trs = [];
+        var tr = Ext.fly(td).parent("tr", true);
+        var firstTr = tr;
+        
+        
+        var ths=Ext.fly(tr).select(">td");
+        ths.each(function(el){
+           
+            var s;
+            if(s=el.child(".tool-sort",true))
+            s.className="tool-sort";
+        });
+        
+        if('a'==td.sort) {
+            td.sort='b';
+            Ext.fly(td).child(".tool-sort",true).className="tool-asc tool-sort";
+        }
+        else if('b'==td.sort){
+            td.sort='a';   
+            Ext.fly(td).child(".tool-sort",true).className="tool-des tool-sort";
+            
+        } else{
+            Ext.fly(td).child(".tool-sort",true).className="tool-des tool-sort";
+            td.sort='a';  
+        }
+        
+        
+        var trP = firstTr.parentNode;
+        while ((tr = Ext.fly(tr).next("tr", true))) {
+
+            trs.push(tr);
+        }
+
+        trs.sort(function (t1, t2) {
+            var td1 = LiteExtTools.TableSorter.findIndex(t1, index);
+            var td2 = LiteExtTools.TableSorter.findIndex(t2, index);
+            if('b'==td.sort)
+            return 0-sortFunction(td1.innerHTML, td2.innerHTML);
+            return sortFunction(td1.innerHTML, td2.innerHTML);
+        });
+
+        for (var i = 0; i < trs.length; i++) {
+
+            if (firstTr.nextSibling) {
+                trP.insertBefore(trs[i], firstTr.nextSibling);
+            } else {
+                trP.appendChild(trs[i]);
+            }
+        }
+        
+
+    }
+};
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>hashchange history</title>
+</head>
+<body>
+<button onclick="window.location.hash='#t'+(+new Date())">
+    设置hash，增加历史导航
+</button>
+
+
+<button onclick="replaceHistory('#m'+(+new Date()))">
+    设置hash，替换当前历史导航
+</button>
+
+<script src="../../lite-ext/base/javascript/kissy.js"></script>
+<script>
+    var S = KISSY,
+            Node = S.Node,
+            UA = S.UA;
+
+    S.ready(function() {
+
+        var addHistoryBtn = S.one("#addHistoryBtn");
+        var ieEngine = document.documentMode || UA.ie;
+
+
+        function ie() {
+
+            /**
+             * 前进后退 ： start -> timer
+             * 直接输入 : timer -> addHistory -> start
+             * 触发统一在 start(load)
+             * iframe 内容和 url 同步
+             */
+            var iframe = new Node("<iframe style='position:absolute;" +
+                    "left:-9999px;top:-9999px;'>").prependTo(document.body),
+                    h = 0;
+            //初始化
+            function init() {
+                //debugger
+                var _histFrame = iframe[0];
+                iframe.detach("load");
+                addHistory(location.hash || "#");
+                iframe.on("load", start);
+            }
+
+            iframe.on("load", init);
+
+            //后退触发点
+            //或addHistory 调用
+            function start() {
+                //debugger
+                var c = S.trim(_histFrame.contentWindow.document.body.innerHTML);
+                var ch = location.hash || "#";
+                //后退时不等
+                //改变location则相等
+                if (c != ch) {
+                    //设为相等，但是这是不希望触发hashchange
+                    location.hash = c;
+                }
+                notifyHashChange();
+            }
+
+            var _histFrame = iframe[0];
+
+            var addHistory = function(archor) {
+                //debugger
+                var html, doc;
+                html = '<html><body>' + archor + '</body></html>';
+                try {
+                    doc = _histFrame.contentWindow.document;
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+            
+            window.replaceHistory=function(archor){
+            		_histFrame.contentWindow.document.body.innerHTML=archor;
+            		location.replace(archor);
+            		notifyHashChange();
+            }
+
+            setInterval(function() {
+                var c = S.trim(_histFrame.contentWindow.document.body.innerHTML);
+                var ch = location.hash || "#";
+                if (c != ch) {
+                    addHistory(ch);
+                }
+            }, 500);
+        }
+
+        window.replaceHistory = function(archor) {
+            location.replace(archor);
+        };
+
+        function notifyHashChange() {
+            //debugger
+            alert("hash change : " + location.hash);
+        }
+
+
+        if (ieEngine < 8) {
+            ie();
+        } else {
+            S.Event.on(window, "hashchange", notifyHashChange);
+        }
+    });
+    alert("page loaded");
+</script>
+</body>
+</html>

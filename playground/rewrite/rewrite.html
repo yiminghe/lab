@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk"/>
+</head>
+<body>
+<script src="../../lite-ext/base/javascript/ks-core.js"></script>
+<script>
+
+
+    function Dialog() {
+        this.el = new Node("<div style='display:none;position:absolute;left:100px;top:100px'>���Ǵ���</div>")
+        document.body.appendChild(this.el[0]);
+    }
+
+    Dialog.prototype = {
+        prototype:  Dialog,
+        show:function() {
+            this.el.css("display", "");
+        } ,
+        hide:function() {
+            this.el.css("display", "none");
+        }
+    };
+
+
+    function Dialog_v2() {
+
+    }
+
+    Dialog_v2.prototype = {
+        prototype:  Dialog_v2,
+        show:function() {
+            if (!this.init) {
+                this.el = new Node("<div style='display:none;position:absolute;left:100px;top:100px'>���Ǵ���</div>")
+                document.body.appendChild(this.el[0]);
+                this.init = true;
+            }
+            this.el.css("display", "");
+        } ,
+        hide:function() {
+            this.el.css("display", "none");
+        }
+    };
+
+
+    function Dialog_v3() {
+
+    }
+
+    Dialog_v3.prototype = {
+        prototype:  Dialog_v3,
+        show:function() {
+
+            this.el = new Node("<div style='display:none;position:absolute;left:100px;top:100px'>���Ǵ���</div>")
+            document.body.appendChild(this.el[0]);
+
+            var self = this;
+            self.show = function() {
+                self.el.css("display", "");
+            };
+            self.show();
+        } ,
+        hide:function() {
+            this.el.css("display", "none");
+        }
+    };
+
+    function Dialog_v4() {
+        lazyRun(this, "_prepare", "_real");
+    }
+
+    Dialog_v4.prototype = {
+        prototype:  Dialog_v4,
+        show:function() {
+            this._prepare();
+        } ,
+        _real:function() {
+            this.el.css("display", "");
+        },
+        _prepare:function() {
+            this.el = new Node("<div style='display:none;position:absolute;left:100px;top:100px'>���Ǵ���</div>");
+            document.body.appendChild(this.el[0]);
+        },
+        hide:function() {
+            this.el.css("display", "none");
+        }
+    };
+
+    var lazyRun = function(obj, before, after) {
+        var b = obj[before],a = obj[after];
+        obj[before] = function() {
+            b.apply(this, arguments);
+            a.apply(this, arguments);
+            obj[before] = obj[after];
+        }
+    };
+    function Mask() {
+    }
+    function Dialog_v5() {
+
+    }
+
+    Dialog_v5.prototype = {
+        prototype:  Dialog_v5,
+        show:function() {
+            if (!Dialog_v5.mask) {
+                Dialog_v5.mask = new Mask();
+            }
+            //use mask
+        }
+    };
+
+    function Dialog_v6() {
+
+    }
+
+    Dialog_v6.prototype = {
+        prototype:  Dialog_v6,
+        _prepare:function(){
+            Dialog_v6.mask=new Mask();
+        },
+        _real:function(){
+            //use mask
+        },
+        show:function() {
+            this._prepare();
+        }
+    };
+    lazyRun(Dialog_v6.prototype,"_prepare","_real");
+
+
+</script>
+</body>
+</html>

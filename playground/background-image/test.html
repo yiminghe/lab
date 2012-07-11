@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style type="text/css">
+    #container {
+        background-image: url("http://img02.taobaocdn.com/tps/i2/T1xjtKXmtrXXXXXXXX-470-150.jpg");
+        background-repeat: no-repeat;
+        background-position: 0 50%;
+        background-attachment: scroll;
+        height: 500px;
+        overflow: auto;
+        border: 1px solid red;
+        padding: 10px;
+         margin: 10px;
+    }
+
+    #contents {
+
+        border: 1px solid green;
+        height: 900px;
+    }
+</style>
+</head>
+<body>
+<select id="attachment">
+    <option>scroll</option>
+    <option>fixed</option>
+    <option>local</option>
+</select>
+<select id="origin">
+    <option>padding-box</option>
+    <option>border-box</option>
+    <option>content-box</option>
+</select>
+<label>background-position:<input value="50% 50%" id="bp"/>
+</label>
+<button id="bpa">应用background-position</button>
+<div id="container">
+
+    <div id="contents">
+        contents
+    </div>
+</div>
+<div style="height:999px;">
+
+</div>
+<script src="../../lite-ext/base/javascript/kissy.js"></script>
+<script>
+    KISSY.ready(function(S) {
+        var attachment = S.one("#attachment"),
+                origin = S.one("#origin"),
+                bpa = S.one("#bpa"),
+                bp = S.one("#bp"),
+                container = S.one("#container");
+        attachment.on("change", function() {
+            container.css("background-attachment", attachment.val());
+        });
+
+        origin.on("change", function() {
+            container.css("background-origin", origin.val());
+        });
+
+        bpa.on("click", function() {
+            container.css("background-position", bp.val());
+        });
+
+    });
+</script>
+</body>
+</html>

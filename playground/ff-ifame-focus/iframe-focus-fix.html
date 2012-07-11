@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>iframe-focus bug in firefox</title>
+</head>
+<body>
+<div onmousedown="return false;" id="test">
+
+    <a href="#" id="run">change iframe position</a>
+    <a href="#" id="fix" style="display:none;">fix iframe</a>
+</div>
+<script src="../../lite-ext/base/javascript/ks-core.js"></script>
+<script>
+    KISSY.ready(function(S) {
+        var UA = S.UA,Event = S.Event,iframe = new S.Node("<iframe></iframe>");
+        // iframe.attr("src", "data.html");
+
+
+        iframe.on("load", function() {
+            iframe.detach();
+            var win = iframe[0].contentWindow,
+                    doc = win.document,body = doc.body;
+            doc.open();
+            doc.write("<p>i am iframe data</p>");
+            doc.close();
+            body = doc.body;
+            setTimeout(function() {
+                if (UA.gecko || UA.opera) {
+                    body.contentEditable = true;
+                }
+                else if (UA.webkit)
+                    body.parentNode.contentEditable = true;
+                else
+                    doc.designMode = 'on';
+            }, 0);
+            var a = S.one("#run");
+            a.on("click", function(ev) {
+                focus && save();
+                iframe.css({
+                    position:"absolute",
+                    top:"100px"
+                });
+
+                show();
+                ev.halt();
+            });
+
+            var focus = false;
+            Event.on(win, "focus", function() {
+                focus = true;
+            });
+            Event.on(win, "blur", function() {
+                focus = false;
+            });
+
+
+            /**
+             * @author:yiminghe@gmail.com
+             */
+            var savedRange = null;
+
+            function save() {
+                var sel = win.getSelection();
+                if (sel) {
+                    savedRange = sel.getRangeAt(0);
+                }
+            }
+
+            function show() {
+
+                if (UA.gecko) {
+                    //激活光标
+                    body.contentEditable = false;
+                    body.contentEditable = true;
+
+                    if (focus) {
+                        a[0].focus();
+                        win.focus();
+                        body.focus();
+
+                        //范围回复
+                        var sel = win.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(savedRange);
+
+                    }
+
+                }
+            }
+        });
+        iframe.appendTo(S.one("#test"));
+    });
+</script>
+</body>
+</html>

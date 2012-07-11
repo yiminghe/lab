@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk"/>
+<style>
+    .ke-focus {
+        outline: none;
+    }
+</style>
+</head>
+<body>
+<!--firefox����tabindex�ſ���
+tabindex="" //tab��������
+tabindex="1" //tab������
+
+���߸��׵ģ�
+contenteditable=""
+-->
+<div
+
+     style="position:absolute;width:100px;height:300px;border:1px solid green;top:100px;" id="d1">
+    <a class="ke-focus" href="#"></a>
+    <p> ����Ե���Ȼ��ie��֧�ֿ���֧��keydown��
+    </p>
+    <p> ����Ե���Ȼ��ie��֧�ֿ���֧��keydown��
+    </p>
+</div>
+
+
+<div
+       
+        style="position:absolute;width:100px;height:300px;left:150px;top:100px;border:1px solid red;" id="d2">
+    <a class="ke-focus" href="#"></a>
+    <p> ����Ե���Ȼ��ie��֧�ֿ���֧��keydown��
+    </p>
+    <p> ����Ե���Ȼ��ie��֧�ֿ���֧��keydown��
+    </p>
+</div>
+
+<button id="f1">��߻�ý���</button>
+<button id="f2">�ұ߻�ý���</button>
+<button id="f3">ȫ��ʧȥ����</button>
+<br/><br/><br/><br/>
+<script src="../../lite-ext/base/javascript/ks-core.js"></script>
+<script>
+    KISSY.ready(function(S) {
+        var d1 = S.one("#d1"),a1 = d1.one("a");
+        var d2 = S.one("#d2"),a2 = d2.one("a");
+
+        S.one("#f1").on("click", function() {
+            alert("����԰�������");
+            //ie֧��
+            //d1[0].focus();
+            a1[0].focus();
+        });
+        S.one("#f2").on("click", function() {
+            alert("����԰�������");
+            a2[0].focus();
+        });
+
+        S.one("#f3").on("click", function() {
+            alert("����԰�������");
+            a1[0].blur();
+            a2[0].blur();
+        });
+
+        d1.on("keydown", function(ev) {
+            var c = String.fromCharCode(ev.keyCode);
+            alert("detect on d1 :" + c + ",from element :" + ev.target.nodeName);
+        });
+
+        d2.on("keydown", function(ev) {
+            var c = String.fromCharCode(ev.keyCode);
+            alert("detect on d2 :" + c + ",from element :" + ev.target.nodeName);
+        });
+
+    });
+</script>
+</body>
+</html>
