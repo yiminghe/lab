@@ -22,7 +22,7 @@
     <li><a href="http://24ways.org/2005/have-your-dom-and-script-it-too">Have Your DOM and Script It Too</a></li>
 </ul>
 
-<script src="http://kissy.googlecode.com/svn/trunk/build/packages/ks-core.js"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.3.0rc/kissy.js"></script>
 <script>
 
     var doc = document, bd = doc.body,
@@ -41,10 +41,10 @@
 
     // ie 会执行
     t.innerHTML = 'html 2<script defer>alert("set innerHTML via defer");<\/script>';
-    // 测试纯 script - ie 下不会执行。解决办法是在 script 前面加任意一个字符，比如 -
+    // 测试纯 script - ie678 下不会执行。解决办法是在 script 前面加任意一个字符，比如 -
     t.innerHTML = '<script defer>alert("set innerHTML(only script) via defer");<\/script>';
 
-    // firefox 会执行
+    // firefox14 不会执行
     div = doc.createElement('DIV');
     div.innerHTML = 'html 3<script>alert("set innerHTML via appendChild");<\/script>';
     t.appendChild(div);
@@ -52,10 +52,11 @@
     // firefox 和 ie 会执行
     div = doc.createElement('DIV');
     div.innerHTML = 'html 4<script defer>alert("set innerHTML via appendChild + defer");<\/script>';
-    t.appendChild(div);
+    //alert("!");
+    //t.appendChild(div);
 
     // 所有浏览器都会执行
-    t.innerHTML = 'html 5<img src="avatar2009.png" onload="alert(\'set innerHTML via image onload\')" />';
+    t.innerHTML = 'html 5<img src="http://img03.taobaocdn.com/tps/i3/T1ogqgXfXeXXXXXXXX-168-42.png" onload="alert(\'set innerHTML via image onload\')" />';
     
 		// 所有浏览器都执行
     // 解析出 inline script 代码段，再 globalEval, 详见 KISSY.DOM.html 方法的实现
