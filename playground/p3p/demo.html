@@ -5,8 +5,8 @@
     KISSY.ready(function(S) {
         S.use("ua,dom", function(S, UA, DOM) {
             var ok = S.get("#ok");
-            var action = "https://yiminghe.taobao.com/upload/cookies?set=2";
-            if (false&&UA.safari) {
+            var action = "http://yiminghe.taobao.com:8080/upload/cookies";
+            if (UA.safari) {
                 var form = DOM.create("<form " +
                         " method='post' " +
                         "action='" + action + "'" +
@@ -15,7 +15,6 @@
                 DOM.append(form,document.body);
                 DOM.append(DOM.create("<input name='set' value='1'/>"), form);
                 form.submit();
-
             } else {
                 ok.src = action;
             }

@@ -4,17 +4,15 @@
     KISSY.ready(function(S) {
         S.use("ua,dom", function(S, UA, DOM) {
             var ok = S.get("#ok");
-            var action = "https://yiminghe.taobao.com/upload/cookies?set=1";
+            var action = "http://yiminghe.taobao.com:8080/upload/cookies"; // ?set=2 »á¸²¸Ç servlet post
             if (UA.safari) {
                 var form = DOM.create("<form " +
                         " method='post' " +
-                        "action='" + action + "'" +
-                       
+                        "action='" + action + "'" +                       
                         " style='position: absolute;left: -9999;top: -9999px'>");
                 DOM.append(form,document.body);
                 DOM.append(DOM.create("<input name='set' value='1'/>"), form);
                 form.submit();
-
             } else {
                 window.location = action;
             }
