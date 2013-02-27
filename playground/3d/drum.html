@@ -1,0 +1,233 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src='http://a.tbcdn.cn/s/kissy/1.3.0/kissy.js'></script>
+</head>
+<style>
+		
+	.drum {
+		 -ms-perspective: 9000px;
+		 -moz-perspective: 9000px;
+		 -webkit-perspective:9000px;
+		 
+		 -webkit-perspective-origin:50% 50%;
+		 -moz-perspective-origin:50% 50%;
+		 -ms-perspective-origin:50% 50%;
+		
+		 -webkit-transform-style: preserve-3d;
+		 -moz-transform-style: preserve-3d;
+		 -ms-transform-style: preserve-3d;
+		 
+		 position:relative;
+		 left:500px;
+		 top:100px;
+		 -webkit-transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+		 -moz-transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+		 -ms-transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+		 /*outline:1px solid green;*/
+	}
+	
+	.plane {
+			position:absolute;
+			left:50%;
+			background:url(drum.png) no-repeat;
+			/*
+			-webkit-transform-style: preserve-3d;
+			-webkit-backface-visibility:visible;
+			*/
+	}
+	.cover {
+		left:0;
+	}
+	</style>
+<body>
+	
+	<p>
+		credits to : http://www.keithclark.co.uk/labs/css3-fps/
+	</p>
+	<form id='f'>
+	<p>
+		<label>
+			rotateX: <input type='range' max='360' min='-360' step='1' value='0' id='rotateX'/>	
+		</label>
+	</p>
+	
+	<p>
+		<label>
+			rotateY: <input type='range' max='360' min='-360' step='1' value='0' id='rotateY'/>	
+		</label>
+	</p>
+	
+	<p>
+		<label>
+			rotateZ: <input type='range' max='360' min='-360' step='1' value='0' id='rotateZ'/>	
+		</label>
+	</p>
+	
+	
+	<p>
+		<label>
+			scale: <input type='range' max='10' min='0' step='0.1' value='1' id='scale'/>	
+		</label>
+	</p>
+	
+	<p>
+		<label>
+			perspective: <input type='range' max='9000' min='10' step='1' value='9000' id='perspective'/>	
+		</label>
+	</p>
+	
+	<p>
+		<label>
+			perspectiveX: <input type='range' max='100' min='0' step='1' value='50' id='perspectiveX'/>	
+		</label>
+	</p>
+	
+	<p>
+		<label>
+			perspectiveY: <input type='range' max='100' min='0' step='1' value='50' id='perspectiveY'/>	
+		</label>
+	</p>
+</form>
+
+		<div class='drum'>
+		</div>
+
+	<script>
+		
+		var $=KISSY.all, S=KISSY;
+		
+		var drum=$('.drum');
+
+		
+		var diameter = 100;
+		var r = diameter/2;
+		var height =196;
+		var sides=20;
+		var coverSize=100;
+		
+		drum.css({
+			'width':diameter,
+			'height':height
+		});
+		
+		var planeTpl="<div class='plane {cls}' style='"+
+		"background-position: {bx}px {by}px;"+
+		"width: {w}px;"+
+		"margin-left: {ml}px;"+
+		"height: {h}px;"+
+		"-webkit-transform: translate3d({tx}px,{ty}px,{tz}px)"+
+		"rotateX({rx}rad) rotateY({ry}rad) rotateZ({rz}rad);"+
+		"-moz-transform: translate3d({tx}px,{ty}px,{tz}px)"+
+		"rotateX({rx}rad) rotateY({ry}rad) rotateZ({rz}rad);"+
+		"-ms-transform: translate3d({tx}px,{ty}px,{tz}px)"+
+		"rotateX({rx}rad) rotateY({ry}rad) rotateZ({rz}rad);"+
+		"'></div>";
+		
+		function createPlane(config){				
+				return $(S.substitute(planeTpl,config));
+		}		
+		
+		function createDrum(){
+			
+				drum.append(createPlane({
+					w:100,
+					cls:'cover',
+					h:100,
+					bx:0,
+					by:-196,
+					tx:0,
+					ty:-coverSize/2,
+					tz:0,
+					ml:0,
+					rx:Math.PI/2,
+					ry:0,
+					rz:0
+				}));
+				
+				drum.append(createPlane({
+					w:100,
+					cls:'cover',
+					h:100,
+					bx:0,
+					by:-196,
+					tx:0,
+					ml:0,
+					ty:height-coverSize/2,
+					tz:0,
+					rx:-Math.PI/2,
+					ry:0,
+					rz:0
+				}));
+				
+				var sideAngle=2*Math.PI/sides;
+				var sideLen=2*r*Math.tan(sideAngle/2);
+				for(var i = 0; i < sides; i++){
+					// center
+					var tx = Math.sin(sideAngle*i)*r;
+					var tz=Math.cos(sideAngle*i)*r;
+					var ry=Math.atan2(tx,tz);
+					drum.append(createPlane({
+						w:sideLen,
+						cls:'',
+						ml:-sideLen/2,
+						h:196,
+						// little deviation
+						bx:Math.min(0,-(sideLen*i-4)),
+						by:0,
+						// transform does not recognize 1e-9 science representation
+						tx:tx.toFixed(2),
+						ty:0,
+						tz:tz.toFixed(2),
+						rx:0,
+						rz:0,
+						ry:ry.toFixed(2)
+					}));			
+				}				
+		}
+		
+		createDrum();
+		
+		var rotateX = $('#rotateX');		
+		var rotateY = $('#rotateY');		
+		var rotateZ = $('#rotateZ');		
+		var scale = $('#scale');	
+		var perspective = $('#perspective');	
+		var perspectiveX = $('#perspectiveX');	
+		var perspectiveY = $('#perspectiveY');	
+		
+		
+		S.each([rotateX,rotateY,rotateZ,scale],function(rotate){
+			rotate.on('change',function(){			
+				var scaleVal = scale.val();
+				var val='rotateX('+rotateX.val()+'deg)'+
+				'rotateY('+rotateY.val()+'deg)'+'rotateZ('+rotateZ.val()+'deg)'+
+				'scale3d('+scaleVal+','+scaleVal+','+scaleVal+')';
+				drum.css('-webkit-transform',val);
+				drum.css('-moz-transform',val);
+				drum.css('-ms-transform',val);
+			});	
+		});
+		
+		perspective.on('change',function(){
+				var val=perspective.val()+'px';
+				drum.css('-webkit-perspective',val);
+				drum.css('-moz-perspective',val);
+				drum.css('-ms-perspective',val);
+		});
+		
+		S.each([perspectiveX,perspectiveY],function(perspective){
+			perspective.on('change',function(){
+					var v=perspectiveX.val()+'%'+' '+perspectiveY.val()+'%';
+					drum.css('-webkit-perspective-origin',v);
+					drum.css('-moz-perspective-origin',v);
+					drum.css('-ms-perspective-origin',v);
+			});
+		});
+		$('#f')[0].reset();
+		
+	</script>
+	
+</body>
+</html>
