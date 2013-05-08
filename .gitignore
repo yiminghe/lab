@@ -13,5 +13,6 @@ Thumbs.db
 .*proj
 .svn/
 *.swp
+*.class
 out/
 node_modules/
