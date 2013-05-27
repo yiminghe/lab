@@ -54,7 +54,7 @@
 		function toCountMap(arr){
 			var ret={};
 			S.each(arr,function(v){
-					
+					v=v.toLowerCase();
 					if(ret[v]){
 						ret[v]++;
 					}else {
