@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>��ݹ���</title>
+	<title>数据处理</title>
 	<script type='text/javascript' src='../../lite-ext/base/javascript/ext-core-min.js'></script>
 
 
@@ -28,9 +28,9 @@
 	<div id='log'>
 	</div>
 	<form action='#'>
-	<label for='in_text'>���룺</label><br />
+	<label for='in_text'>输入</label><br />
 <textarea id='in_text' rows='20' cols='30'></textarea><br />
-<label for='out_text' >�����</label>   <input type='button' id='start' value='��ʼ����'/><br />
+<label for='out_text' >输出</label>   <input type='button' id='start' value='开始'/><br />
 
 <textarea id='out_text' rows='20' cols='100'></textarea>
 </form>
@@ -45,7 +45,7 @@
 				Ext.get('log').dom.innerHTML='';
 				var input=Ext.get('in_text').getValue();
 				if(!input.trim()) {
-					alert('������');
+					alert('无输入');
 					return;
 
 				}
@@ -91,12 +91,12 @@
 
 
 					}else {
-						Ext.get('log').dom.innerHTML+='���Ϲ��� ����(����/����/����) :'+line+'<br />';
+						Ext.get('log').dom.innerHTML+='输出 :'+line+'<br />';
 					}
 				}
 
 				Ext.get('out_text').dom.value=result;
-				alert('�������');
+				alert('完成');
 	  });
 
 		});
