@@ -1,0 +1,11 @@
+<div id='t' style='width:100px;height:100px;border:10px solid red'></div>
+<script>
+	setTimeout(function(){
+			document.getElementById('t').addEventListener('touchstart',function(){
+				alert('touchstart-t')
+			},false);
+			document.addEventListener('touchstart',function(){
+				alert('touchstart')
+			},false);
+	},199);
+</script>
