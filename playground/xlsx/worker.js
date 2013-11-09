@@ -11,7 +11,7 @@ self.onmessage=function(e){
 			var row0=sheets[0].data[0];
 			var fieldCol=-1;
 			for(var i=0;i<row0.length;i++){
-			  if(row0[i].value.trim()==fieldVal){
+			  if(String(row0[i].value).trim()==fieldVal){
 			  	fieldCol=i;
 			  	break;
 			  }
@@ -30,8 +30,8 @@ self.onmessage=function(e){
 			});
 			var sheet1afterdata=sheet0data.slice(1);
 			sheet1afterdata.sort(function(a1,a2){
-				  var v1=a1[fieldCol].value.trim();
-				  var v2=a2[fieldCol].value.trim();
+				  var v1=String(a1[fieldCol].value).trim();
+				  var v2=String(a2[fieldCol].value).trim();
 				  if(v1>v2) return 1;
 				  if(v1<v2) return -1;
 				  return 0;
@@ -39,7 +39,7 @@ self.onmessage=function(e){
 			var rowCount=sheet1afterdata.length;
 			for(var i=0;i<sheet1afterdata.length;i++){
 				do{
-					var val=sheet1afterdata[i][fieldCol].value.trim();
+					var val=String(sheet1afterdata[i][fieldCol].value).trim();
 					var r=sheet1afterdata[i].concat([]);
 					r.unshift({
 						formatCode: "General",
@@ -50,13 +50,13 @@ self.onmessage=function(e){
 						++i;
 						break;
 					}
-			  }while(val==sheet1afterdata[++i][fieldCol].value.trim());
+			  }while(val==String(sheet1afterdata[++i][fieldCol].value).trim());
 			  --i;
 			  
 			  for(var j=1;j<sheets.length;j++){
 				  var otherRows=sheets[j].data;
 				  for(var k=1;k<otherRows.length;k++){
-				     var otherVal=otherRows[k][fieldCol].value;
+				     var otherVal=String(otherRows[k][fieldCol].value);
 				     if(val==otherVal.trim()){
 				     	  var r=  otherRows[k].concat([]);
 				     		r.unshift({
