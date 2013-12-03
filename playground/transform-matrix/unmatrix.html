@@ -31,11 +31,7 @@
         if (A * D - B * C) {
             scaleX = Math.sqrt(A * A + B * B);
             skew= (A*C+B*D)/(A*D-C*B);
-            if(!B&&!C){
-            	scaleY = D;
-            } else {
-            	scaleY=(C*scaleX*(A * D - B * C))/(A*(A*C+B*D)-B*(A*D-C*B))
-            }
+            scaleY=(scaleX*(A * D - B * C))/(A*A+B*B);
             // step (6)
             if (A * D < B * C) {
                 skew = -skew;
