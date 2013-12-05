@@ -3,7 +3,11 @@
 </style>
 <label> 2d transform: <input id='input' value='rotate(20deg) skew(30deg) scale(2,3)' size='40'/></label>
 <button id='ok'>ok</button>
-<div id='t' style='width:100px;height:100px;border:1px solid red;'>
+<div id='t' style='width:100px;height:100px;border:1px solid red;position:absolute;z-index:-1'>
+	<div style='width:10px;height:10px;background:red;position:absolute;left:45px;top:45px;'></div>
+</div>
+<div id='t' style='width:100px;height:100px;border:1px solid red;position:absolute;z-index:-1'>
+	<div style='width:10px;height:10px;background:green;position:absolute;left:45px;top:45px;'></div>
 </div>
 <div id='css' style='border:1px solid green;'></div>
 <script src='http://g.tbcdn.cn/kissy/k/1.4.0/seed.js' data-config="{combine:true}"></script>
