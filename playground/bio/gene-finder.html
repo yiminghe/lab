@@ -1,0 +1,67 @@
+
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="http://g.tbcdn.cn/kissy/k/1.4.3/css/dpl/??base-min.css,tables-min.css,forms-min.css">
+         <link rel="stylesheet" href="http://g.tbcdn.cn/kissy/k/1.4.3/button/assets/dpl.css">
+<script src='http://g.tbcdn.cn/kissy/k/1.4.3/seed-min.js' data-config='{combine:true}'></script>
+        </head>
+<body>
+    <div class='container'>
+    <form class="form-horizontal">
+
+            
+    <legend>gene finder</legend>
+    <div class="control-group">
+
+<label class="control-label" for="content">gene: (空格或空行分隔)</label>
+ <div class="controls">
+<textarea class='input-xlarge' style='width:700px;height:200px' id='content'></textarea>
+  </div>
+ </div>
+ <div class="form-actions">
+
+                        <button class="ks-button" id="find">find</button>
+                    </div>
+                 
+</form>
+    
+<div id='result'></div>
+</div>
+<script>
+    KISSY.use('io,node',function(S,io,Node){
+        var $=Node.all;
+        var map={};
+        io({
+            url:'gene2id.txt',
+            async:false,
+            success:function(data){
+                var lines=data.trim().split(/\n/);
+                lines.forEach(function(l){
+                    var ls =l.split(/\s+/);
+                    map[ls[1]]=ls[0];
+                });
+            }
+        });
+        
+        $('#find').on('click',function(e){
+            e.halt();
+            var content = $('#content').val().trim().split(/(\s+|\n+)/);
+            var html='<table class="table table-bordered table-striped"><thead><tr><th>序号</th><th>基因</th></tr></thead><tbody>';
+            var find;
+            content.forEach(function(c){
+                if(map[c]){
+                    find=1;
+                    html+='<tr><td>'+map[c]+'</td><td>'+c+'</td></tr>';
+                }
+            });
+            html+='</tbody></table>';
+            if(find)
+            $('#result').html(html);
+            else
+                $('#result').html('not found');
+        });
+    });
+</script>
+</body>
+</html>
