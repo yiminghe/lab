@@ -50,9 +50,12 @@
                 var html = '<table class="table table-bordered table-striped"><thead><tr><th>序号</th><th>基因</th></tr></thead><tbody>';
                 var find;
                 content.forEach(function (c) {
+                    if(!c.trim()){return;}
                     if (map[c]) {
                         find = 1;
                         html += '<tr><td>' + map[c] + '</td><td>' + c + '</td></tr>';
+                    } else {
+                        html += '<tr><td style="color:red">-1</td><td>' + c + '</td></tr>';
                     }
                 });
                 html += '</tbody></table>';
