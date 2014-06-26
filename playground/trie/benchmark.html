@@ -1,0 +1,54 @@
+<script src='//cdnjs.cloudflare.com/ajax/libs/benchmark/1.0.0/benchmark.js'></script>
+<script src='http://g.tbcdn.cn/kissy/k/1.4.2/seed-min.js'></script>
+<script src='./trie.js'></script>
+<script src='./split-hash.js'></script>
+<div id='log'></div>
+<script>
+var sep = 'In computer science, a trie, also called digital tree and sometimes radix tree or prefix tree (as they can be searched by prefixes), is an ordered tree data structure that is used to store a dynamic set or associative array where the keys are usually strings. Unlike a binary search tree, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated. All the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string. Values are normally not associated with every node, only with leaves and some inner nodes that correspond to keys of interest. For the space-optimized presentation of prefix tree, see compact prefix tree.';
+var str = new Array(10).join(' '+sep+' ');
+</script>
+<script src='./test.js'></script>
+<script>
+(function(){
+    var log = function(str){
+        document.getElementById('log').innerHTML +='<p>'+str+'</p>';
+    };
+    log('running...');
+    var suite = new Benchmark.Suite;
+    // add tests
+    suite.add('trie count large string', function() {
+      trieCount(str);
+    })
+    .add('split&hash count large string', function() {
+      splitHashCount(str);
+    })
+    // add listeners
+    .on('cycle', function(event) {
+      log(String(event.target));
+    })
+    .on('complete', function() {
+      log('<span style="color:red">large string fastest is ' + this.filter('fastest').pluck('name')+'</span>');
+    })
+    // run async
+    .run({ 'async': true });
+    
+    
+    suite = new Benchmark.Suite;
+    // add tests
+    suite.add('trie count small string', function() {
+      trieCount(sep);
+    })
+    .add('split&hash count small string', function() {
+      splitHashCount(sep);
+    })
+    // add listeners
+    .on('cycle', function(event) {
+      log(String(event.target));
+    })
+    .on('complete', function() {
+      log('<span style="color:red">small string fastest is ' + this.filter('fastest').pluck('name')+'</span>');
+    })
+    // run async
+    .run({ 'async': true });
+})();
+</script>
