@@ -8,11 +8,13 @@
     var trieAll = {};
     trieTraverse(ret.trie,function(count,word){
         trieAll[word]=count;
+        log(count,word);
     });
     console.log('--------------------------');
     var splitHashAll = {};
     ret = splitHashCount(str,function(count,word){
         splitHashAll[word]=count;
+         log(count,word);
     });
     console.log(ret);
     console.log('--------------------------');
