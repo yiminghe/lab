@@ -1,0 +1,173 @@
+<style>
+    html, body {
+        padding: 0;
+        margin: 0;
+    }
+
+    img {
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+    }
+</style>
+<img src="sandia-1.png">
+<img src="sandia-2.png">
+<img src="sandia.png">
+<canvas id='c' width='800' height='500'></canvas>
+<button id="start" style="position: absolute;left:10px;top:10px;">restart</button>
+<script>
+    // modified from hilo
+    (function () {
+        var canvas = document.getElementById('c');
+        var context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        window.onresize = function () {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+
+        function getNormal(p1, p2) {
+            var dx = p2.x - p1.x, dy = p2.y - p1.y;
+            var length = Math.sqrt(dx * dx + dy * dy);
+            return {x: dx / length, y: dy / length};
+        }
+
+        function getAngle() {
+            var start = points[0];
+            var end = points[points.length - 1];
+            if (start && end && start !== end) {
+                var dx = end.x - start.x, dy = end.y - start.y;
+                var angle = Math.atan2(dy, dx) * 180 / Math.PI >> 0;
+                if (angle < 0) {
+                    angle = angle + 360;
+                }
+                return angle;
+            }
+            return 0;
+        }
+
+        var sandia = document.createElement('img');
+        sandia.src = 'sandia.png';
+
+        var sandia1 = document.createElement('img');
+        sandia1.src = 'sandia-1.png';
+
+        var sandia2 = document.createElement('img');
+        sandia2.src = 'sandia-2.png';
+
+        function drawFruit() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(sandia, 100, 100);
+        }
+
+        function drawSlice(angle) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.beginPath();
+            context.moveTo(points[0].x, points[0].y);
+            context.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+            context.closePath();
+            context.stroke();
+            context.save();
+            context.translate(149, 142);
+            // sandia-1 is almost vertical ...
+            angle += 80;
+            angle %= 360;
+            // make sandia-1 sandia-2 stable in original coordinate
+            if (angle > 90 && angle < 270) {
+                angle = angle - 180;
+            }
+            context.rotate(angle / 180 * Math.PI);
+            context.drawImage(sandia1, -49, -42);
+            context.drawImage(sandia2, -20, -42);
+            context.restore();
+        }
+
+
+        window.onload = drawFruit;
+
+        document.getElementById('start').onclick = function () {
+            drawFruit();
+        };
+
+        var points = [];
+        var pointLife = 300;
+        var pointWidthStep = 0.5;
+        var endSharpRatio = 2;
+        var fillStyle = '#000';
+        var borderWidth = 0;
+        var borderStyle = null;
+        var record = 0;
+        canvas.addEventListener('mousedown', function (e) {
+            points = [];
+            record = 1;
+        }, false);
+        canvas.addEventListener('mousemove', function (e) {
+            if (!record) {
+                return;
+            }
+            var point = {
+                ts: Date.now(),
+                x: e.pageX,
+                y: e.pageY
+            };
+            var len = points.length;
+            if (len > 0) {
+                point.normal = getNormal(points[len - 1], point);
+            }
+            points.push(point);
+        }, false);
+        canvas.addEventListener('mouseup', function (e) {
+            record = 0;
+            var now = Date.now();
+            var len = points.length;
+
+            //remove dead points
+
+            while (len && now - points[0].ts > pointLife) {
+                points.shift();
+                len--;
+            }
+            if (len < 2) return;
+
+            var step = pointWidthStep, sharp = endSharpRatio,
+                    p = points[0], normal, pw, flag = 1, i = 1;
+
+            //draw path
+            context.beginPath();
+            context.moveTo(p.x, p.y);
+
+            while (i) {
+                p = points[i];
+                normal = p.normal;
+                pw = i * step;
+
+                context.lineTo(p.x + flag * normal.y * pw, p.y - flag * normal.x * pw);
+                if (i == len - 1 && flag > 0) {
+                    //draw end sharp point
+                    context.lineTo(p.x + normal.x * pw * sharp, p.y + normal.y * pw * sharp);
+                    flag = -1;
+                } else {
+                    i += flag;
+                }
+            }
+
+            context.closePath();
+
+            //border style
+            if (borderWidth) {
+                context.lineWidth = borderWidth;
+                context.strokeStyle = borderStyle;
+                context.stroke();
+            }
+
+            //fill style
+            context.fillStyle = fillStyle;
+            context.fill();
+
+            setTimeout(function () {
+                drawSlice(getAngle());
+            }, 500);
+        }, false);
+    })();
+</script>
