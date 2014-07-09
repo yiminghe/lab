@@ -1,0 +1,62 @@
+<style>
+    html, body {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+<canvas id='c' width='800' height='500' style="border: 1px solid red"></canvas>
+<canvas id='c2' width='800' height='500' style="border: 1px solid green"></canvas>
+<script src="matrix.js"></script>
+<script>
+    // hilo from taobao
+    (function () {
+        var c = document.getElementById('c');
+        var c2 = document.getElementById('c2');
+        var context = c.getContext('2d');
+        var context2 = c2.getContext('2d');
+        var points = [
+            {
+                x: 1, y: 1
+            },
+            {
+                x: 100,
+                y: 1
+            },
+            {
+                x: 100,
+                y: 200
+            },
+            {
+                x: 1,
+                y: 200
+            }
+        ];
+        var x = 100;
+        var y = 100;
+        var rotate = 45;
+        var scaleX = 1.5;
+        var scaleY = 1.5;
+        rotate = 29;
+        scaleX = 2;
+        scaleY = 2;
+        x = 110;
+        y = 0;
+
+        function bench(name, fn) {
+            var start = Date.now();
+            for (var i = 0; i < 2; i++) {
+                fn();
+            }
+            console.log(name + ' end: ' + (Date.now() - start));
+        }
+
+        bench('canvas api: ', function () {
+            drawContext(c,context, points, x, y, rotate, scaleX, scaleY);
+        });
+        bench('matrix api: ', function () {
+            draw(c2,context2, points, x, y, rotate, scaleX, scaleY);
+        });
+//        drawContext(context, points, x, y, rotate, scaleX, scaleY);
+//       draw(context2, points, x, y, rotate, scaleX, scaleY);
+    })();
+</script>
