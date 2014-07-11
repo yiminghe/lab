@@ -6,6 +6,7 @@
 </style>
 <canvas id='c' width='800' height='500' style="border: 1px solid red"></canvas>
 <canvas id='c2' width='800' height='500' style="border: 1px solid green"></canvas>
+<canvas id='c3' width='800' height='500' style="border: 1px solid black"></canvas>
 <script src="matrix.js"></script>
 <script>
     // hilo from taobao
@@ -14,6 +15,8 @@
         var c2 = document.getElementById('c2');
         var context = c.getContext('2d');
         var context2 = c2.getContext('2d');
+        var c3 = document.getElementById('c3');
+        var context3 = c3.getContext('2d');
         var points = [
             {
                 x: 1, y: 1
@@ -44,7 +47,7 @@
 
         function bench(name, fn) {
             var start = Date.now();
-            for (var i = 0; i < 2; i++) {
+            for (var i = 0; i < 200; i++) {
                 fn();
             }
             console.log(name + ' end: ' + (Date.now() - start));
@@ -54,7 +57,10 @@
             drawContext(c,context, points, x, y, rotate, scaleX, scaleY);
         });
         bench('matrix api: ', function () {
-            draw(c2,context2, points, x, y, rotate, scaleX, scaleY);
+            drawMatrix(c2,context2, points, x, y, rotate, scaleX, scaleY);
+        });
+        bench('matrix transform api: ', function () {
+            drawTransform(c3,context3, points, x, y, rotate, scaleX, scaleY);
         });
 //        drawContext(context, points, x, y, rotate, scaleX, scaleY);
 //       draw(context2, points, x, y, rotate, scaleX, scaleY);

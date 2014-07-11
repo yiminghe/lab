@@ -177,7 +177,7 @@ function drawContext(canvas,context, points, x, y, rotation, scaleX, scaleY) {
     context.restore();
 }
 
-function draw(canvas,context, points, x, y, rotation, scaleX, scaleY) {
+function drawMatrix(canvas,context, points, x, y, rotation, scaleX, scaleY) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     var i, p;
     var matrix = new Matrix(1, 0, 0, 1, 0, 0);
@@ -199,4 +199,27 @@ function draw(canvas,context, points, x, y, rotation, scaleX, scaleY) {
     context.closePath();
     context.fillStyle = '#000';
     context.fill();
+}
+
+function drawTransform(canvas,context, points, x, y, rotation, scaleX, scaleY) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    var i, p;
+    var matrix = new Matrix(1, 0, 0, 1, 0, 0);
+
+    // inverse order
+    if (scaleX != 1 || scaleY != 1) matrix.scale(scaleX, scaleY);
+    if (rotation != 0) matrix.rotate(rotation * Math.PI / 180);
+    if (x != 0 || y != 0)matrix.translate(x, y);
+    var ns=points;
+    context.save();
+    context.setTransform(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty);
+    context.moveTo(ns[0].x, ns[0].y);
+    for (i = 1; i < ns.length; i++) {
+        p = ns[i];
+        context.lineTo(p.x, p.y);
+    }
+    context.closePath();
+    context.fillStyle = '#000';
+    context.fill();
+    context.restore();
 }
