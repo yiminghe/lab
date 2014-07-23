@@ -1,105 +1,106 @@
-Êı×Ö(0µ½3)£º<input id="v" value="0" readonly/> <br/>
-<input type="button" id="r" value="Ôö¼Ó">
-<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script> 
+<meta charset="UTF-8">
+æ•°å­—(0åˆ°3)ï¼š<input id="v" value="0" readonly/> <br/>
+<input type="button" id="r" value="å¢åŠ ">
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
 <script>
-YUI().use("node", "attribute", function (Y) {
-    /*
-	1.Ô­Ê¼Àà£¬ÒµÎñÂß¼­Óëui»ìºÏ
-	*/
+    YUI().use("node", "attribute", function (Y) {
+        /*
+         1.åŸå§‹ç±»ï¼Œä¸šåŠ¡é€»è¾‘ä¸uiæ··åˆ
+         */
 
-    function Increaser(domInput, domAction) {
-        this.input = domInput;
-        this.domAction = domAction;
-        this.domAction.on("click", this.increasing, this);
-    }
-    Increaser.prototype.increasing = function (e) {
-        if (this.input.get("value") == "3") {
-            this.input.set("value", 0);
-        } else {
-            this.input.set("value", parseInt(this.input.get("value")) + 1);
+        function Increaser(domInput, domAction) {
+            this.input = domInput;
+            this.domAction = domAction;
+            this.domAction.on("click", this.increasing, this);
         }
-    };
-    //new Increaser(Y.one("#v"),Y.one("#r"));
-    /*
-2.¸Ä½øÀà£¬Çø·ÖÒµÎñdomainÓëui£¬duplicate observed data£¬
-½«Êı¾İ¸´ÖÆµ½Ò»¸öÁìÓò¶ÔÏóÖĞ£¬½¨Á¢Ò»¸öobserverÄ£Ê½£¬ÓÃÒÔÍ¬²½ÁìÓò¶ÔÏóºÍgui¶ÔÏóÄÚµÄÖØ¸´Êı¾İ
-*/
-    function GuiIncreaser(domInput, domAction) {
-        this.input = domInput;
-        this.domAction = domAction;
-        this.domainIncreaser = new DomainIncreaser(this.input.get("value"));
-        this.domainIncreaser.addObserver(this);
-        this.domAction.on("click", this.increasing, this);
-    }
-    GuiIncreaser.prototype = {
-        constructor: GuiIncreaser,
-        increasing: function (e) {
-            this.domainIncreaser.increase();
-        },
-        //observer
-        update: function (v) {
-            this.input.set("value", v);
-        }
-    }
-    function DomainIncreaser(v) {
-        this.v = v;
-        this.observers = [];
-    }
-    DomainIncreaser.prototype = {
-        constructor: DomainIncreaser,
-        addObserver: function (o) {
-            if (Y.Array.indexOf(this.observers, o) == -1) {
-                this.observers.push(o);
-            }
-        },
-        checkChange: function () {
-            if (this.v == "4") this.v = 0;
-        },
-        //observable
-        notify: function () {
-            for (var i = this.observers.length - 1; i >= 0; i--) {
-                this.observers[i].update(this.v);
-            }
-        },
-        increase: function () {
-            this.v = parseInt(this.v) + 1;
-            this.checkChange();
-            this.notify();
-        }
-    }
-    //new GuiIncreaser(Y.one("#v"),Y.one("#r"));
-    /*
-3.ÀûÓÃ yui3 attribute ¼ò»¯2£¬½«domainºÍguiÖØĞÂ½áºÏ£¬ÀûÓÃyui3 attribute·ÖÀëÓëÍ¬²½
-*/
-    function AttributeIncreaser(domInput, domAction) {
-        this.input = domInput;
-        this.domAction = domAction;
-        var attrs = {
-            "v": {
-                value: this.input.get("value"),
-                //domainÒµÎñÂß¼­
-                setter: function (v) {
-                    if (v == "4") return 0;
-                }
+        Increaser.prototype.increasing = function (e) {
+            if (this.input.get("value") == "3") {
+                this.input.set("value", 0);
+            } else {
+                this.input.set("value", parseInt(this.input.get("value")) + 1);
             }
         };
-        this.addAttrs(attrs);
-        //domainÒµÎñÂß¼­
-        this.domAction.on("click", this.increase, this);
-        //ÊôĞÔÓëguiÍ¬²½
-        this.after("vChange", this.afterVChange, this);
-    }
-    AttributeIncreaser.prototype = {
-        constructor: AttributeIncreaser,
-        increase: function () {
-            this.set("v", parseInt(this.get("v")) + 1);
-        },
-        afterVChange: function (e) {
-            this.input.set("value", e.newVal);
+        //new Increaser(Y.one("#v"),Y.one("#r"));
+        /*
+         2.æ”¹è¿›ç±»ï¼ŒåŒºåˆ†ä¸šåŠ¡domainä¸uiï¼Œduplicate observed dataï¼Œ
+         å°†æ•°æ®å¤åˆ¶åˆ°ä¸€ä¸ªé¢†åŸŸå¯¹è±¡ä¸­ï¼Œå»ºç«‹ä¸€ä¸ªobserveræ¨¡å¼ï¼Œç”¨ä»¥åŒæ­¥é¢†åŸŸå¯¹è±¡å’Œguiå¯¹è±¡å†…çš„é‡å¤æ•°æ®
+         */
+        function GuiIncreaser(domInput, domAction) {
+            this.input = domInput;
+            this.domAction = domAction;
+            this.domainIncreaser = new DomainIncreaser(this.input.get("value"));
+            this.domainIncreaser.addObserver(this);
+            this.domAction.on("click", this.increasing, this);
         }
-    };
-    Y.augment(AttributeIncreaser, Y.Attribute);
-    //2,3µÄÁíÒ»¸öºÃ´¦ÊÇ¾¡¿ÉÄÜÉÙµÃ touch dom,Ìá¸ßĞ§ÂÊ
-    new AttributeIncreaser(Y.one("#v"), Y.one("#r"));
-});
+        GuiIncreaser.prototype = {
+            constructor: GuiIncreaser,
+            increasing: function (e) {
+                this.domainIncreaser.increase();
+            },
+            //observer
+            update: function (v) {
+                this.input.set("value", v);
+            }
+        }
+        function DomainIncreaser(v) {
+            this.v = v;
+            this.observers = [];
+        }
+        DomainIncreaser.prototype = {
+            constructor: DomainIncreaser,
+            addObserver: function (o) {
+                if (Y.Array.indexOf(this.observers, o) == -1) {
+                    this.observers.push(o);
+                }
+            },
+            checkChange: function () {
+                if (this.v == "4") this.v = 0;
+            },
+            //observable
+            notify: function () {
+                for (var i = this.observers.length - 1; i >= 0; i--) {
+                    this.observers[i].update(this.v);
+                }
+            },
+            increase: function () {
+                this.v = parseInt(this.v) + 1;
+                this.checkChange();
+                this.notify();
+            }
+        }
+        //new GuiIncreaser(Y.one("#v"),Y.one("#r"));
+        /*
+         3.åˆ©ç”¨ yui3 attribute ç®€åŒ–2ï¼Œå°†domainå’Œguié‡æ–°ç»“åˆï¼Œåˆ©ç”¨yui3 attributeåˆ†ç¦»ä¸åŒæ­¥
+         */
+        function AttributeIncreaser(domInput, domAction) {
+            this.input = domInput;
+            this.domAction = domAction;
+            var attrs = {
+                "v": {
+                    value: this.input.get("value"),
+                    //domainä¸šåŠ¡é€»è¾‘
+                    setter: function (v) {
+                        if (v == "4") return 0;
+                    }
+                }
+            };
+            this.addAttrs(attrs);
+            //domainä¸šåŠ¡é€»è¾‘
+            this.domAction.on("click", this.increase, this);
+            //å±æ€§ä¸guiåŒæ­¥
+            this.after("vChange", this.afterVChange, this);
+        }
+        AttributeIncreaser.prototype = {
+            constructor: AttributeIncreaser,
+            increase: function () {
+                this.set("v", parseInt(this.get("v")) + 1);
+            },
+            afterVChange: function (e) {
+                this.input.set("value", e.newVal);
+            }
+        };
+        Y.augment(AttributeIncreaser, Y.Attribute);
+        //2,3çš„å¦ä¸€ä¸ªå¥½å¤„æ˜¯å°½å¯èƒ½å°‘å¾— touch dom,æé«˜æ•ˆç‡
+        new AttributeIncreaser(Y.one("#v"), Y.one("#r"));
+    });
 </script>

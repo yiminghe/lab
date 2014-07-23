@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
 <head>
-	<meta charset="gbk" />
-	<title>ĞÇ¼¶ÆÀ¶¨</title>
+	<meta charset='utf-8'/>
+	<title>æ˜Ÿçº§è¯„å®š</title>
 	<style id="skinCss">
 		ul,li {
 			list-style-type:none;
@@ -75,30 +75,30 @@
 		
 		
 		<li>
-			<a href="rate.htm?rate=1" hidefocus="on" class="r1" title="1ĞÇ" ><img src="star.png" alt="1ĞÇ" /></a>
+			<a href="rate.htm?rate=1" hidefocus="on" class="r1" title="1æ˜Ÿ" ><img src="star.png" alt="1æ˜Ÿ" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=2" hidefocus="on" class="r2" title="2ĞÇ" ><img src="star.png" alt="2ĞÇ" /></a>
+			<a href="rate.htm?rate=2" hidefocus="on" class="r2" title="2æ˜Ÿ" ><img src="star.png" alt="2æ˜Ÿ" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=3" hidefocus="on" class="r3" title="3ĞÇ" ><img src="star.png" alt="3ĞÇ" /></a>
+			<a href="rate.htm?rate=3" hidefocus="on" class="r3" title="3æ˜Ÿ" ><img src="star.png" alt="3æ˜Ÿ" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=4" hidefocus="on" class="r4" title="4ĞÇ" ><img src="star.png" alt="4ĞÇ" /></a>
+			<a href="rate.htm?rate=4" hidefocus="on" class="r4" title="4æ˜Ÿ" ><img src="star.png" alt="4æ˜Ÿ" /></a>
 		</li>
 		
 		<li>
-			<a href="rate.htm?rate=5" hidefocus="on" class="r5" title="5ĞÇ" ><img src="star.png" alt="5ĞÇ" /></a>
+			<a href="rate.htm?rate=5" hidefocus="on" class="r5" title="5æ˜Ÿ" ><img src="star.png" alt="5æ˜Ÿ" /></a>
 		</li>
 		
 		
 	</ul>
 	
 	<div style="margin:50px;">
-	<label>ĞÇĞÇÑÕÉ«£º
+	<label>æ˜Ÿæ˜Ÿé¢œè‰²ï¼š
 		<select id="skin">
 			
 		
@@ -106,12 +106,12 @@
 		</label>
 	</div>
 	
-	<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui.js"></script>
 	<script type="text/javascript">
 	
 		YUI().use("node","stylesheet",function(Y){
 			
-			//»»·ô¿ØÖÆ
+			//æ¢è‚¤æ§åˆ¶
 			var skin=Y.one("#skin");
 			var skinCss=Y.StyleSheet("#skinCss");
 			var opts="";
@@ -124,7 +124,7 @@
 			skin.on("change",function(e){
 				
 				var v=this.get("value");
-				//Ö±½Ó²Ù×İexternal css
+				//ç›´æ¥æ“çºµexternal css
 				skinCss.set("ul.rate.operable li a:hover",{
 					"backgroundColor":Y.Color.toHex(v)
 				});
@@ -135,12 +135,12 @@
 			
 			var rate=Y.one("#rateContainer");
 			var rateAs=rate.all("a");
-			//js¿ÉÓÃ£¬ÔòÈ¥³ıhref£¬×¢ÒâieÈ¥³ıºó²»¿ÉhoverÁË
+			//jså¯ç”¨ï¼Œåˆ™å»é™¤hrefï¼Œæ³¨æ„ieå»é™¤åä¸å¯hoveräº†
 			if(Y.UA.ie) 
 				rateAs.on("click",function(e){e.preventDefault();});
 			else
 				rateAs.removeAttribute("href");
-			//js¿ÉÓÃ£¬Ôòµã»÷ºóÈ¥³ı°ó¶¨ÊÂ¼şÒÔ¼°²»ÔÙ¿ÉÊó±êÂÓ¹ı¸Ä±ä
+			//jså¯ç”¨ï¼Œåˆ™ç‚¹å‡»åå»é™¤ç»‘å®šäº‹ä»¶ä»¥åŠä¸å†å¯é¼ æ ‡æ è¿‡æ”¹å˜
 			var rateHandler=rate.delegate("click",function(e){				
 				this.setStyles({
 					"backgroundColor":skin.get("value")
@@ -148,7 +148,7 @@
 				rate.removeClass("operable");
 				e.halt();
 				rateHandler.detach();
-				alert("Ñ¡ÔñÁË"+this.get("title"));
+				alert("é€‰æ‹©äº†"+this.get("title"));
 			},"a");
 			
 		});

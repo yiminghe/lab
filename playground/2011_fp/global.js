@@ -1,6 +1,6 @@
 /**
- * È«¾ÖÄ£¿é
- * @desc ½ö´¦Àí¶¥Í¨ºÍÒ»Ð©È«¾Ö¹¦ÄÜµÄÔØÈë
+ * È«ï¿½ï¿½Ä£ï¿½ï¿½
+ * @desc ï¿½ï¿½ï¿½ï¿½ï¿½?Í¨ï¿½ï¿½Ò»Ð©È«ï¿½Ö¹ï¿½ï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½
  * @creater sorrycc@gmail.com(yunqian)
  * @depends tb-core
  */
@@ -25,24 +25,24 @@ TB.add('mod~global', function() {
         HOSTNAME = IS_DAILY ? '.daily.taobao.net' : '.taobao.com',
         EMPTY = '',
 
-        // https ÇëÇó (µÇÂ¼×¢²áÒ³Ãæ)
+        // https ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Â¼×¢ï¿½ï¿½Ò³ï¿½ï¿½)
         isHTTPS = (doc.location.href.indexOf("https://") === 0),
     
-        // ËùÓÐÓÃµ½µÄ cookie
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ cookie
         COOKIES = {},
 
-        // ³õÊ¼»¯º¯Êý¶ÓÁÐ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         runItems = {
 
             /**
-             * ¶¥Í¨
+             * ï¿½ï¿½Í¨
              */
             siteNav: function() {
                 if (!siteNavElem) return;
                 siteNavElem.setAttribute("role","navigation");
                 var submenus = [];
                 S.each(getElementsByClassName('menu', '*', siteNavElem), function(el) {
-                    /*aria support by ³ÐÓñ*/
+                    /*aria support by ï¿½ï¿½ï¿½ï¿½*/
                     var el_bd = getElementsByClassName('menu-bd', '*', el)[0];
                     var el_hd = getElementsByClassName('menu-hd', '*', el)[0];
                     el_hd.tabIndex=0;
@@ -56,12 +56,12 @@ TB.add('mod~global', function() {
                     }
                     
                     el_hd.setAttribute("aria-haspopup",el_bd.getAttribute("id"));
-                    el_hd.setAttribute("aria-label","ÓÒ¼üµ¯³ö²Ëµ¥£¬tab¼üµ¼º½£¬esc¹Ø±Õµ±Ç°²Ëµ¥");
+                    el_hd.setAttribute("aria-label","ï¿½Ò¼ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½tabï¿½ï¿½ï¿½escï¿½Ø±Õµï¿½Ç°ï¿½Ëµï¿½");
                     
                     if (el && el_bd) {
-                        // Ìí¼Ó iframe shim ²ã
-                        // ÔÚ https Ò³Ãæ£¬µ± iframe µÄ src ÉèÎª about:blank »áÊ¹µÃ IE µ¯³ö"°²È«È·ÈÏ¿ò"£¬¶ø
-                        // µÇÂ½×¢²áÒ³µÄÏÂÀ­¸²¸ÇÇøÓò²¢Ã»ÓÐ SELECT ÔªËØÐèÒª¸²¸Ç£¬ËùÒÔÔÚÕâÐ©Ò³ÃæÖÐ²»´´½¨¶ÔÓ¦µÄ iframe
+                        // ï¿½ï¿½ï¿½ iframe shim ï¿½ï¿½
+                        // ï¿½ï¿½ https Ò³ï¿½æ£¬ï¿½ï¿½ iframe ï¿½ï¿½ src ï¿½ï¿½Îª about:blank ï¿½ï¿½Ê¹ï¿½ï¿½ IE ï¿½ï¿½ï¿½ï¿½"ï¿½ï¿½È«È·ï¿½Ï¿ï¿½"ï¿½ï¿½ï¿½ï¿½
+                        // ï¿½ï¿½Â½×¢ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ SELECT Ôªï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©Ò³ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ iframe
                         var iframe = false;
                         if (!isHTTPS&&isIE6) {
                             iframe = doc.createElement('iframe');
@@ -94,8 +94,8 @@ TB.add('mod~global', function() {
                                 el_bd.setAttribute("aria-hidden","false");
                                 
                                 if(!iframe) return;
-                                // Ö»ÓÐ menulist ÏÔÊ¾³öÀ´ºó£¬²ÅÄÜ»ñÈ¡ offset Öµ
-                                // ¸ß¶È¼õ 5 ÊÇÒòÎª ie6 ÏÂ£¬iframe ´¦Àí padding - bottom µÄÒ»¸ö bug
+                                // Ö»ï¿½ï¿½ menulist ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬²ï¿½ï¿½Ü»ï¿½È¡ offset Öµ
+                                // ï¿½ß¶È¼ï¿½ 5 ï¿½ï¿½ï¿½ï¿½Îª ie6 ï¿½Â£ï¿½iframe ï¿½ï¿½ï¿½ï¿½ padding - bottom ï¿½ï¿½Ò»ï¿½ï¿½ bug
                                 iframe.style.height = parseInt(el_bd.offsetHeight) + 25 + 'px';
                                 iframe.style.width = parseInt(el_bd.offsetWidth) + 1 + 'px';
                             }
@@ -154,9 +154,9 @@ TB.add('mod~global', function() {
                 
                 
 
-                // ¼àÌý¶¥²¿ËÑË÷Ìá½»
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á½»
                 addEvent(doc.forms['topSearch'], 'submit', function() {
-                    if (form['q'].value == EMPTY) { // ¿ÕËÑË÷£¬Ìø×ªµ½ÎÒÒªÂò
+                    if (form['q'].value == EMPTY) { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½
                         form.action = 'http://list.taobao.com/browse/cat-0.htm';
                     }
                 });
@@ -166,18 +166,18 @@ TB.add('mod~global', function() {
              * WebWW (tdog)
              */
             tDog: function() {
-                // ¼ÓÔØ webww js µÄ¿ª¹Ø£º
-                // £¨url ÖÐÓÐ tstart/tdog ²ÎÊý£© »ò £¨ÓÐ g_config È«¾Ö±äÁ¿£¬ÇÒ appId Öµ²»Îª -1£©
+                // ï¿½ï¿½ï¿½ï¿½ webww js ï¿½Ä¿ï¿½ï¿½Ø£ï¿½
+                // ï¿½ï¿½url ï¿½ï¿½ï¿½ï¿½ tstart/tdog ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ g_config È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ appId Öµï¿½ï¿½Îª -1ï¿½ï¿½
                 if ((APPID && APPID != -1) || 'tstart' in urlConfig || 'tdog' in urlConfig) {
                     S.ready(function() {
-                        var url = 'http://' + assetsHost + '/p/header/webww-min.js?t=20110513.js';
+                        var url = 'http://' + assetsHost + '/p/header/webww.js?t=20110513.js';
                         S.getScript(url);
                     });
                 }
             },
 
             /**
-             * ÌÔ±¦ÊµÑéÊÒ
+             * ï¿½Ô±ï¿½Êµï¿½ï¿½ï¿½ï¿½
              */
             tLabs: function() {
                 var l = getCookie('l');
@@ -199,7 +199,7 @@ TB.add('mod~global', function() {
             },
 
             /**
-             * ²âÊÔ»·¾³ÖÐÌæ»»Ò³Í·Á´½Ótaobao.comÎª{test}.taobao.net
+             * ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ»»Ò³Í·ï¿½ï¿½ï¿½ï¿½taobao.comÎª{test}.taobao.net
              */
             initHeaderLinks: function () {
                 if (domain.indexOf('.taobao.net') === -1) return;
@@ -219,10 +219,10 @@ TB.add('mod~global', function() {
                 }
             },
             /**
-             * ³õÊ¼»¯µÇ³öÁ´½Ó
+             * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½
              */
             initLogout: function() {
-                /* Èç¹ûÓÃ»§ÒÑµÇÂ¼£¬¸ø[ÍË³ö]Á´½Ó×¢²áÊÂ¼þ£¬ÏÈ·¢ËÍ×¢ÏúÇëÇóµ½alipay£¬±ÜÃâ´ÜºÅbug */
+                /* ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ñµï¿½Â¼ï¿½ï¿½ï¿½ï¿½[ï¿½Ë³ï¿½]ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½alipayï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Üºï¿½bug */
                 var logoutEl = doc.getElementById('#J_Logout');
                 if (!logoutEl) return;
 
@@ -239,7 +239,7 @@ TB.add('mod~global', function() {
             },
 
             /**
-             * ³õÊ¼»¯ÍøÕ¾µ¼º½Òì²½¼ÓÔØ
+             * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½ì²½ï¿½ï¿½ï¿½ï¿½
              */
             initSiteNav: function() {
                 var trigger = doc.getElementById('J_Service'), container = doc.getElementById('J_ServicesContainer'), node,
@@ -248,7 +248,7 @@ TB.add('mod~global', function() {
                 if (!trigger || !container) return;
 
                 addEvent(trigger, 'mouseover', handler);
-                /*aria support by ³ÐÓñ*/
+                /*aria support by ï¿½ï¿½ï¿½ï¿½*/
                 addEvent(trigger,'keydown',handler);
 
                 function handler(e) {                    
@@ -262,7 +262,7 @@ TB.add('mod~global', function() {
                 window[CALLBACK] = function(html) {
                     if (node) node.parentNode.removeChild(node);
                     node = null;
-                    // È·±£Ò»¶¨µÄÈÝ´í£¬µ«¿¼ÂÇµ½¿ÉÄÜµÄÊ¹ÓÃÂÊ£¬¹ÊÖ»¼òµ¥µØ´¦Àí¿ÉÄÜ³öÏÖµÄ´íÎó
+                    // È·ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ý´?ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½Üµï¿½Ê¹ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½Ö»ï¿½òµ¥µØ´ï¿½ï¿½ï¿½ï¿½ï¿½Ü³ï¿½ï¿½ÖµÄ´ï¿½ï¿½ï¿½
                     try {
                         container.innerHTML = html;
                         container.style.height = 'auto';
@@ -298,7 +298,7 @@ TB.add('mod~global', function() {
             },
 
             /**
-             * Ç°¶Ëµ¥Ôª²âÊÔ¿ò¼ÜÔØÈë
+             * Ç°ï¿½Ëµï¿½Ôªï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
              */
             test: function() {
                 S.ready(function() {
@@ -310,7 +310,7 @@ TB.add('mod~global', function() {
             },
 
             /**
-             * ³õÊ¼»¯ mini ¹ºÎï³µ
+             * ï¿½ï¿½Ê¼ï¿½ï¿½ mini ï¿½ï¿½ï¿½ï³µ
              * qiaohua
              */
             miniCart: function() {
@@ -319,11 +319,11 @@ TB.add('mod~global', function() {
                 
                 if (IS_TMALL || domain.indexOf('tmall.net') > -1) {
                     if (S.isUndefined(APPID)) {
-                        // µÈ´ý, ÉÌ³Ç php »ñÈ¡²»µ½ cookie , µ«µõ¶¥Ã¿´Î¶¼»á¸ø http://www.taobao.com/go/app/tmall/login-api.php ·¢ÇëÇó
+                        // ï¿½È´ï¿½, ï¿½Ì³ï¿½ php ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ cookie , ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½Î¶ï¿½ï¿½ï¿½ï¿½ http://www.taobao.com/go/app/tmall/login-api.php ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         return;
                     }
                     else if (!(getCookie('uc2') && getCookie('mt'))) {
-                        // ÉÌ³ÇÓ¦ÓÃ ²»ÄÜÊµÊ±Í¬²½ cookie, ÐèÒª·¢ËÍhttp://www.taobao.com/go/app/tmall/login-api.php ·¢ÇëÇó
+                        // ï¿½Ì³ï¿½Ó¦ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ÊµÊ±Í¬ï¿½ï¿½ cookie, ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½http://www.taobao.com/go/app/tmall/login-api.php ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         S.getScript('http://www'+HOSTNAME+'/go/app/tmall/login-api.php'+'?t='+S.now());
                         return;
                     }
@@ -334,19 +334,19 @@ TB.add('mod~global', function() {
 
     TB.Global = {
         /**
-         * ³õÊ¼»¯ Global Ä£¿é
+         * ï¿½ï¿½Ê¼ï¿½ï¿½ Global Ä£ï¿½ï¿½
          */
         init: function(cfg) {
             assetsHost = IS_DAILY ? 'assets.daily.taobao.net' : 'a.tbcdn.cn';
             urlConfig = S.unparam(location.search.substring(1));
             siteNavElem = doc.getElementById('site-nav');
 
-            // minicart ¿ª¹Ø±êÖ¾
+            // minicart ï¿½ï¿½ï¿½Ø±ï¿½Ö¾
             this._OFF = !!!siteNavElem;
             this.config = cfg;
             if (cfg && cfg.mc && cfg.mc === -1)  this._OFF = true;
 
-            // Ò³Ãæ±»Ç¶ÈëÊ±, ²»ÐèÒª½øÐÐ³õÊ¼»¯
+            // Ò³ï¿½æ±»Ç¶ï¿½ï¿½Ê±, ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ð³ï¿½Ê¼ï¿½ï¿½
             if (window.top !== window.self) {
                 S.log(['in frame, exit']);
                 this._OFF = true;
@@ -358,65 +358,65 @@ TB.add('mod~global', function() {
         },
         
         /**
-         * µÇÂ¼ÐÅÏ¢
+         * ï¿½ï¿½Â¼ï¿½ï¿½Ï¢
          * config: {memberServer:'', loginServer:'', redirectUrl:'', loginUrl:'', logoutUrl:'', forumServer:''}
-         * ×¢£ºconfig µÄ¸÷Ïî¶¼ÊÇ¿ÉÑ¡Ïî
+         * ×¢ï¿½ï¿½config ï¿½Ä¸ï¿½ï¿½î¶¼ï¿½Ç¿ï¿½Ñ¡ï¿½ï¿½
          */
         writeLoginInfo: function(config) {
             config = config || {};
 
             var self = this,
-                nick = getCookie('_nk_') || getCookie('tracknick'), // ÓÃ»§êÇ³Æ£¬Session ÄÚÓÐÐ§
-                ucMap = unparam(getCookie('uc1')),// user cookie ÓÃ»§µÄÅäÖÃÐÅÏ¢
-                msgCount = parseInt(ucMap['_msg_']) || 0, // Õ¾ÄÚÐÅÎ´¶ÁÊýÁ¿
-                timeStamp = S.now(), // Ê±¼ä´Á
+                nick = getCookie('_nk_') || getCookie('tracknick'), // ï¿½Ã»ï¿½ï¿½Ç³Æ£ï¿½Session ï¿½ï¿½ï¿½ï¿½Ð§
+                ucMap = unparam(getCookie('uc1')),// user cookie ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+                msgCount = parseInt(ucMap['_msg_']) || 0, // Õ¾ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                timeStamp = S.now(), // Ê±ï¿½ï¿½ï¿½
 
                 memberServer = config['memberServer'] || 'http://member1.taobao.com',
                 loginServer = config['loginServer'] || 'https://login.taobao.com',
-                loginUrl = config['loginUrl'] || loginServer + '/member/login.jhtml?f=top', // ¶ÔÓÚ²ÊÆ±µÈÓ¦ÓÃ£¬Ö±½Ó´«ÈëloginUrl
+                loginUrl = config['loginUrl'] || loginServer + '/member/login.jhtml?f=top', // ï¿½ï¿½ï¿½Ú²ï¿½Æ±ï¿½ï¿½Ó¦ï¿½Ã£ï¿½Ö±ï¿½Ó´ï¿½ï¿½ï¿½loginUrl
 
                 defaultRedirectUrl = location.href,
                 redirectUrl, logoutUrl, regUrl, pMsgUrl, spaceUrl, output = EMPTY;
 
-            // ¶ÔÓÚµÇÂ¼Ò³Ãæ£¬µÇÂ¼ºóÄ¬ÈÏÌø×ªµ½ÎÒµÄÌÔ±¦¡£ÆäËüÒ³ÃæÌø»Øµ±Ç°Ò³Ãæ
+            // ï¿½ï¿½ï¿½Úµï¿½Â¼Ò³ï¿½æ£¬ï¿½ï¿½Â¼ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½Òµï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½Øµï¿½Ç°Ò³ï¿½ï¿½
             if (/^http.*(\/member\/login\.jhtml)$/i.test(defaultRedirectUrl)) {
-                // Îª¿ÕÊ±£¬ºó¶Ë»áÄ¬ÈÏÌø×ªµ½ÎÒµÄÌÔ±¦
+                // Îªï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ë»ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½Òµï¿½ï¿½Ô±ï¿½
                 defaultRedirectUrl = EMPTY;
             }
 
             redirectUrl = config['redirectUrl'] || defaultRedirectUrl;
             if (redirectUrl) loginUrl += '&redirectURL=' + encodeURIComponent(redirectUrl);
 
-            logoutUrl = config['logoutUrl'] || loginServer + '/member/logout.jhtml?f=top'; // ×¢Ïúurl
-            regUrl = memberServer + '/member/newbie.htm'; // ×¢²áurl
+            logoutUrl = config['logoutUrl'] || loginServer + '/member/logout.jhtml?f=top'; // ×¢ï¿½ï¿½url
+            regUrl = memberServer + '/member/newbie.htm'; // ×¢ï¿½ï¿½url
             pMsgUrl = memberServer + '/message/list_private_msg.htm?t=' + timeStamp;
             spaceUrl = 'http://jianghu.taobao.com/admin/home.htm?t=' + timeStamp;
 
-            if (self.isLogin()) { // ÒÑµÇÂ¼£¬ÏÔÊ¾£ºÄúºÃ£¬XXX£¡[ÍË³ö] Õ¾ÄÚÐÅ(n)
-                output = 'ÄúºÃ£¬<a class="user-nick" href="' + spaceUrl + '" target="_top">'
-                    + escapeHTML(unescape(nick.replace(/\\u/g, '%u'))) + '</a>£¡'
+            if (self.isLogin()) { // ï¿½Ñµï¿½Â¼ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ã£ï¿½XXXï¿½ï¿½[ï¿½Ë³ï¿½] Õ¾ï¿½ï¿½ï¿½ï¿½(n)
+                output = 'ï¿½ï¿½Ã£ï¿½<a class="user-nick" href="' + spaceUrl + '" target="_top">'
+                    + escapeHTML(unescape(nick.replace(/\\u/g, '%u'))) + '</a>ï¿½ï¿½'
                     + self.showVIP()
-                    + '<a id="J_Logout" href="' + logoutUrl + '" target="_top">ÍË³ö</a>'
-                    + '<a href="' + pMsgUrl + '" target="_top">Õ¾ÄÚÐÅ';
+                    + '<a id="J_Logout" href="' + logoutUrl + '" target="_top">ï¿½Ë³ï¿½</a>'
+                    + '<a href="' + pMsgUrl + '" target="_top">Õ¾ï¿½ï¿½ï¿½ï¿½';
                 if (msgCount) {
                     output += '(' + msgCount + ')';
                 }
                 output += '</a>';
-            } else { // Î´µÇÂ¼£¬ÏÔÊ¾£ºÄúºÃ£¬»¶Ó­À´ÌÔ±¦£¡[ÇëµÇÂ¼] [Ãâ·Ñ×¢²á]
-                output = 'ÄúºÃ£¬»¶Ó­À´ÌÔ±¦£¡<a href="' + loginUrl + '" target="_top">ÇëµÇÂ¼</a>';
-                output += '<a href="' + regUrl + '" target="_top">Ãâ·Ñ×¢²á</a>';
+            } else { // Î´ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½Ó­ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Â¼] [ï¿½ï¿½ï¿½×¢ï¿½ï¿½]
+                output = 'ï¿½ï¿½Ã£ï¿½ï¿½ï¿½Ó­ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½<a href="' + loginUrl + '" target="_top">ï¿½ï¿½ï¿½Â¼</a>';
+                output += '<a href="' + regUrl + '" target="_top">ï¿½ï¿½ï¿½×¢ï¿½ï¿½</a>';
             }
 
             doc.write(output);
         },
 
         /**
-         * µÇÂ¼ÓÃ»§ÏÔÊ¾VIP Í¼±ê
-         * 0£ºÆÕÍ¨»áÔ±£¬²»Õ¹Ê¾
-         * 1£ºVIP»Æ½ð»áÔ±
-         * 2£ºVIP°×½ð»áÔ±
-         * 3£ºVIP×êÊ¯»áÔ±
-         * -100£º´æÁ¿¼¤»îµÄ»áÔ±
+         * ï¿½ï¿½Â¼ï¿½Ã»ï¿½ï¿½ï¿½Ê¾VIP Í¼ï¿½ï¿½
+         * 0ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½Õ¹Ê¾
+         * 1ï¿½ï¿½VIPï¿½Æ½ï¿½ï¿½Ô±
+         * 2ï¿½ï¿½VIPï¿½×½ï¿½ï¿½Ô±
+         * 3ï¿½ï¿½VIPï¿½ï¿½Ê¯ï¿½ï¿½Ô±
+         * -100ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ô±
          */
         showVIP: function() {
             var tag = parseInt(unparam(getCookie('uc1'))['tag']) || 0,
@@ -424,18 +424,18 @@ TB.add('mod~global', function() {
                 vip_host = 'http://vip' + HOSTNAME;
             S.log(['vip', tag]);
             if (S.indexOf(tag, [1, 2, 3]) > -1) {
-                ret = '<span class="menu"><a href="'+vip_host+'" rel="nofollow" target="_top"  class="user-vip vip-icon'+tag+'" title="'+(tag===1? '»Æ½ð': (tag === 2? '°×½ð':'×êÊ¯'))+'»áÔ±"> </a></span>';
+                ret = '<span class="menu"><a href="'+vip_host+'" rel="nofollow" target="_top"  class="user-vip vip-icon'+tag+'" title="'+(tag===1? 'ï¿½Æ½ï¿½': (tag === 2? 'ï¿½×½ï¿½':'ï¿½ï¿½Ê¯'))+'ï¿½ï¿½Ô±"> </a></span>';
             } else if (tag === -100) {
                 ret = '<span class="menu">'
-                    + '<span class="vip-ovl menu-bd">ÄúÒÑ¾ß±¸VIP×Ê¸ñ<a href="'+vip_host+'/apply_vip.htm" rel="nofollow" target="_top" >µãÁÁVIPÍ¼±ê</a></span>'
+                    + '<span class="vip-ovl menu-bd">ï¿½ï¿½ï¿½Ñ¾ß±ï¿½VIPï¿½Ê¸ï¿½<a href="'+vip_host+'/apply_vip.htm" rel="nofollow" target="_top" >ï¿½ï¿½ï¿½ï¿½VIPÍ¼ï¿½ï¿½</a></span>'
                     + '<a class="vip-icon0 menu-hd" rel="nofollow" target="_top" href="'+vip_host+'"> <b></b></a>'
                     + '</span>';
             }
             return ret;
         },
         /**
-         * ÅÐ¶ÏÊÇ·ñÊÇµÇÂ¼ÓÃ»§
-         * ÓÃ»§ÊÇ·ñÒÑ¾­µÇÂ¼¡£×¢Òâ£º±ØÐëÍ¬Ê±ÅÐ¶Ï nick Öµ£¬ÒòÎª _nk_ ºÍ _l_g_ ÓÐÊ±²»Í¬²½
+         * ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Çµï¿½Â¼ï¿½Ã»ï¿½
+         * ï¿½Ã»ï¿½ï¿½Ç·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½Â¼ï¿½ï¿½×¢ï¿½â£ºï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½Ð¶ï¿½ nick Öµï¿½ï¿½ï¿½ï¿½Îª _nk_ ï¿½ï¿½ _l_g_ ï¿½ï¿½Ê±ï¿½ï¿½Í¬ï¿½ï¿½
          */
         isLogin: function() {
             /*if (win.userCookie) {
@@ -448,7 +448,7 @@ TB.add('mod~global', function() {
         },
 
         /**
-         * ÅÐ¶ÏÊÇ·ñÊÇ»Ò¶ÈÓÃ»§
+         * ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ç»Ò¶ï¿½ï¿½Ã»ï¿½
          */
         isGreyUser: function() {
             var uc2 = unparam(getCookie('uc2')),
@@ -460,13 +460,13 @@ TB.add('mod~global', function() {
         },
 
         /**
-         * ÊÇ·ñÔÚÁÐ±íÖÐ
+         * ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½
          */
         isInList: function() {
-            // ËÑË÷(3), detail(1), ÎÒµÄ¹ºÎï³µ(19), 3C list(8), spu detail(7), ÌÔ±¦Ê×Ò³(6), Ð¬³Ç(17), ½»Ò×Ò³Ãæ(15)
-            // Ö÷list(18), µêÆÌ(2), ÊÕ²Ø¼Ð(5), »úÆ±²ÊÆ±(10), ¾Û»®Ëã(9)
+            // ï¿½ï¿½ï¿½ï¿½(3), detail(1), ï¿½ÒµÄ¹ï¿½ï¿½ï³µ(19), 3C list(8), spu detail(7), ï¿½Ô±ï¿½ï¿½ï¿½Ò³(6), Ð¬ï¿½ï¿½(17), ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½(15)
+            // ï¿½ï¿½list(18), ï¿½ï¿½ï¿½ï¿½(2), ï¿½Õ²Ø¼ï¿½(5), ï¿½ï¿½Æ±ï¿½ï¿½Æ±(10), ï¿½Û»ï¿½ï¿½ï¿½(9)
             var tmp = (S.indexOf(APPID, [2, 5, 6, 3, 1, 15, 19, 7, 8, 9, 17, 18, 10]) > -1 || IS_TMALL || domain.indexOf('tmall.net') > -1);
-            // µêÆÌ²»ÏÔÊ¾
+            // ï¿½ï¿½ï¿½Ì²ï¿½ï¿½ï¿½Ê¾
             /*if (S.indexOf(APPID, [2]) > -1) {
                 tmp = false;
             }*/
@@ -474,36 +474,36 @@ TB.add('mod~global', function() {
             return tmp;
         },
         /**
-        * µõ¶¥ÊÇ·ñ¾ßÓÐ¹ºÎï³µÔªËØ
+        * ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï³µÔªï¿½ï¿½
         */
         getCartElem: function() {
             return siteNavElem  && getElementsByClassName('cart', 'li', siteNavElem)[0];
         },
         /**
-         * ³õÊ¼»¯ mini ¹ºÎï³µ
+         * ï¿½ï¿½Ê¼ï¿½ï¿½ mini ï¿½ï¿½ï¿½ï³µ
          */
         initMiniCart: function() {
-            // µ½´Ë Òª±£Ö¤ÓÐ cookie or userCookie Öµ
+            // ï¿½ï¿½ï¿½ï¿½ Òªï¿½ï¿½Ö¤ï¿½ï¿½ cookie or userCookie Öµ
             var self= this,
                 CARTNUM_API = 'http://buy' + HOSTNAME
                             + '/auction/cart/top_cart_quantity.htm?',
                 request = function() {
-                    // ÇëÇó¹ºÎï³µÊýÁ¿
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½
                     S.getScript(CARTNUM_API + 'callback=TB.Global.setCartNum' + '&t=' + S.now() + (APPID ? '&appid=' + APPID : EMPTY));
                 };
-            // ÔÚÁÐ±íÀï»òÊÇÉÌ³ÇÒ³Ãæ, ÇÒÊÇ»Ò¶ÈÓÃ»§
+            // ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½Ò³ï¿½ï¿½, ï¿½ï¿½ï¿½Ç»Ò¶ï¿½ï¿½Ã»ï¿½
             //if (!(SHOW_MC = (!!self.getCartElem()) && self.isInList() && self.isGreyUser())) return;
             if (self._OFF = (self._OFF || !!!self.getCartElem())) return;
             S.log(['off', self._OFF]);
 
             var mt = unparam(getCookie('mt')), ci, cp;
 
-            // ¶ÁÈ¡ cookie ³É¹¦
+            // ï¿½ï¿½È¡ cookie ï¿½É¹ï¿½
             if (mt && (ci = mt.ci)) {
                 ci = ci.split('_');
                 cp = parseInt(ci[1]);
                 ci = parseInt(ci[0]);
-                //  ÊÇ·ñ¹Øµô, true Îª ¹Øµô, false/undefined Îª ¿ªÆô
+                //  ï¿½Ç·ï¿½Øµï¿½, true Îª ï¿½Øµï¿½, false/undefined Îª ï¿½ï¿½ï¿½ï¿½
                 self._OFF = ci < 0;
 
                 if (ci < 0) {
@@ -534,10 +534,10 @@ TB.add('mod~global', function() {
             }
         },
         /**
-         * ÉèÖÃ mini ¹ºÎï³µµÄÊýÁ¿
+         * ï¿½ï¿½ï¿½ï¿½ mini ï¿½ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
          */
         setCartNum: function(num) {
-            //  ²»ÓÃthis, ¶øÓÃ TB.Global ÊÇÒòÎª detail ÉÏ, µ÷ÓÃ setCartNum Ê± this Îª window ÁË
+            //  ï¿½ï¿½ï¿½ï¿½this, ï¿½ï¿½ï¿½ï¿½ TB.Global ï¿½ï¿½ï¿½ï¿½Îª detail ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ setCartNum Ê± this Îª window ï¿½ï¿½
             if (!S.isNumber(num) || TB.Global._OFF) return;
 
             var trigger = TB.Global.getCartElem();
@@ -545,13 +545,13 @@ TB.add('mod~global', function() {
             if (!trigger) return;
 
             var elem = trigger.getElementsByTagName('a')[0],
-                title = '<b class="mini-cart-line"></b><s></s>' +'¹ºÎï³µ',
-                // ÔÚ¹ºÎï³µÒ³Ãæ, ²»ÏÔÊ¾¸¡²ã
+                title = '<b class="mini-cart-line"></b><s></s>' +'ï¿½ï¿½ï¿½ï³µ',
+                // ï¿½Ú¹ï¿½ï¿½ï³µÒ³ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
                 showLayer = APPID !== 19;
 
-            // ÊýÁ¿Ð¡ÓÚ 0 Ê±
+            // ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ 0 Ê±
             if (num<0) {
-                // Ö»ÒªÓÐ -1 ¾Í±íÊ¾¹Ø±Õ
+                // Ö»Òªï¿½ï¿½ -1 ï¿½Í±ï¿½Ê¾ï¿½Ø±ï¿½
                 TB.Global._OFF = num === -1;
 
                 elem.innerHTML = title;
@@ -561,7 +561,7 @@ TB.add('mod~global', function() {
                 return;
             }
 
-            elem.innerHTML = title + '<b' + (num<10?' class="mc-pt3"':EMPTY) + '>' + num + '</b>' + '¼þ' + (showLayer?'<i></i>':EMPTY);
+            elem.innerHTML = title + '<b' + (num<10?' class="mc-pt3"':EMPTY) + '>' + num + '</b>' + 'ï¿½ï¿½' + (showLayer?'<i></i>':EMPTY);
             elem.href = 'http://ju.atpanel.com/?url=http://buy' + HOSTNAME
                       + '/auction/cart/my_cart.htm?from=mini&ad_id=&am_id=&cm_id=&pm_id=150042785330be233161';
             addClass(trigger, MINICART_CLS);
@@ -576,7 +576,7 @@ TB.add('mod~global', function() {
                 S.ready(function() {
                     var times = 0;
                     S.getScript('./minicart.js', function() {
-                        // minicart.js ÒÀÀµÓÚ ks-core, ÑÓ³Ù+¼ì²âS.DOMÊÇ·ñok
+                        // minicart.js ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ks-core, ï¿½Ó³ï¿½+ï¿½ï¿½ï¿½S.DOMï¿½Ç·ï¿½ok
                         if (S.DOM) {
                             win.MiniCart.init(num, showLayer);
                         } else {
@@ -585,7 +585,7 @@ TB.add('mod~global', function() {
                                 setTimeout(arguments.callee, 1000);
                                 times++;
                             }
-                            // Èç¹ûÊµÔÚÃ»ÓÐ ks-core
+                            // ï¿½ï¿½ï¿½Êµï¿½ï¿½Ã»ï¿½ï¿½ ks-core
                             else {
                                 S.use('core', function() {
                                     win.MiniCart.init(num, showLayer);
@@ -598,7 +598,7 @@ TB.add('mod~global', function() {
         },
 
         /**
-         * ¸ø tmall ÏÂÔËÐÐÄÇÐ©ÒÀÀµÓÚ cookie µÄ¹¦ÄÜ, °üº¬ mini¹ºÎï³µ, Tlabs
+         * ï¿½ï¿½ tmall ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ cookie ï¿½Ä¹ï¿½ï¿½ï¿½, ï¿½ï¿½ miniï¿½ï¿½ï¿½ï³µ, Tlabs
          * @param cfg
          */
         run: function(cfg) {
@@ -608,11 +608,11 @@ TB.add('mod~global', function() {
             runItems.tLabs();
 
 
-            // ÏÔÊ¾ vip icon
+            // ï¿½ï¿½Ê¾ vip icon
             if (self.isLogin()) {
                 var times = 0;
 
-                // µÈ´ý login-api, ÉèÖÃ DOM ºó, ÔÙ¼ÓÈë VIP ±êÖ¾, ²»È»µÄ»°×ÜÊÇÃ»ÓÐµÇ³öÔªËØµÄ
+                // ï¿½È´ï¿½ login-api, ï¿½ï¿½ï¿½ï¿½ DOM ï¿½ï¿½, ï¿½Ù¼ï¿½ï¿½ï¿½ VIP ï¿½ï¿½Ö¾, ï¿½ï¿½È»ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ÐµÇ³ï¿½Ôªï¿½Øµï¿½
                 S.later(function() {
                     var logoutEl = doc.getElementById('J_Logout');
                     S.log(['tmall vip try: ', times]);
@@ -639,7 +639,7 @@ TB.add('mod~global', function() {
     // Utilities
 
     /**
-     * »ñÈ¡ Cookie
+     * ï¿½ï¿½È¡ Cookie
      */
     function getCookie(name) {
         if (win.userCookie && !S.isUndefined(win.userCookie[name])) {
@@ -654,7 +654,7 @@ TB.add('mod~global', function() {
     }
 
     /**
-     * ±àÂë HTML (from prototype framework 1.4)
+     * ï¿½ï¿½ï¿½ï¿½ HTML (from prototype framework 1.4)
      */
     function escapeHTML(str) {
         var div = doc.createElement('div'),
@@ -664,7 +664,7 @@ TB.add('mod~global', function() {
     }
 
     /**
-     * Í¨¹ý ClassName »ñÈ¡ÔªËØ
+     * Í¨ï¿½ï¿½ ClassName ï¿½ï¿½È¡Ôªï¿½ï¿½
      */
     function getElementsByClassName(cls, tag, context) {
         var els = context.getElementsByTagName(tag || '*'),
@@ -682,7 +682,7 @@ TB.add('mod~global', function() {
     }
 
     /**
-     * Ìí¼ÓÊÂ¼þ
+     * ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
      */
     function addEvent(el, type, fn, capture) {
         if (!el) return;
@@ -694,7 +694,7 @@ TB.add('mod~global', function() {
     }
 
     /**
-     * É¾³ýÊÂ¼þ
+     * É¾ï¿½ï¿½ï¿½Â¼ï¿½
      */
     function removeEvent(el, type, fn, capture) {
         if (!el) return;
@@ -706,7 +706,7 @@ TB.add('mod~global', function() {
     }
 
     /**
-     * ¼òÒ×°æÔö¼Ó/É¾³ýÔªËØµÄ class
+     * ï¿½ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½/É¾ï¿½ï¿½Ôªï¿½Øµï¿½ class
      * @param elem
      * @param cls
      */

@@ -18,7 +18,7 @@
 	      "lite-ext/TabPanelLite/css/tabpanel.css",
 	      "lite-ext/WindowLite/css/aol/windowlite.css",
 	      "lite-ext/base/css/core.css"],
-	      "js": ["lite-ext/base/javascript/ext-core-min.js", 
+	      "js": ["lite-ext/base/javascript/ext-core.js",
 	      "lite-ext/WindowLite/javascript/windowlite.js",
 	      "lite-ext/TabPanelLite/javascript/tabpanel.js",
 	      "imgUploader.js"

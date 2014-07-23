@@ -29,7 +29,7 @@ build file for kissy editor
     <property name="git.url" value="http://www.github.com"/>
 
     <fileset dir="${build.dir}/${theme.dir}"
-             includes="cool/editor-pkg-min.css"
+             includes="cool/editor-pkg.css"
              id="cssembed_files">
     </fileset>
 
@@ -443,7 +443,7 @@ build file for kissy editor
                 encoding="${charset}"
                 src="${build.dir}"
                 dest="${build.dir}"
-                includes="**/*-min.js"
+                includes="**/*.js"
                 >
             <mapper type="regexp" from="^(.*)\.js$" to="\1-ascii.js"/>
         </native2ascii>
@@ -453,7 +453,7 @@ build file for kissy editor
         -->
         <delete>
             <fileset dir="${build.dir}">
-                <include name="**/*-min.js"/>
+                <include name="**/*.js"/>
             </fileset>
         </delete>
         <!--

@@ -3,41 +3,41 @@
  * @author yiminghe@gmail.com(chengyu)
  */
 //modified from http://blog.csdn.net/sYwb/archive/2005/04/05/337172.aspx
-//��ʾ��ǰ���ڵ�������
+//显示当前日期的阴阳历
 /*
- ========ԭ��˵����===================
+ ========原理说明：===================
  http://search.csdn.net/Expert/topic/974/974567.xml?temp=.8316614
- ���ȣ����湫��ũ��֮���ת����Ϣ:������һ����Ϊ��㣬
- �Ѵ���һ����������(����Ҫ����)��ũ����Ϣ����������
- Ҫ����һ�����Ϣ��ֻҪ������Ϣ�͹���:
- 1)ũ��ÿ���µĴ�С;2)�����Ƿ������£������Լ����µĴ�С��
+ 首先，保存公历农历之间的转换信息:以任意一年作为起点，
+ 把从这一年起若干年(依需要而定)的农历信息保存起来。
+ 要保存一年的信息，只要两个信息就够了:
+ 1)农历每个月的大小;2)今年是否有闰月，闰几月以及闰月的大小。
 
- ��һ��������������Щ��Ϣ���㹻�ˡ�
- ����ķ�����:��һλ����ʾһ���µĴ�С�����¼�Ϊ1��С�¼�Ϊ0��
- �������õ�12λ(������)��13λ(������)�����ø���λ����ʾ���µ��·ݣ�û�����¼�Ϊ0��
+ 用一个整数来保存这些信息就足够了。
+ 具体的方法是:用一位来表示一个月的大小，大月记为1，小月记为0，
+ 这样就用掉12位(无闰月)或13位(有闰月)，再用高四位来表示闰月的月份，没有闰月记为0。
 
- ��-----��----:
- 2000�����Ϣ������0xc96�����ɶ����ƾ���110010010110B��
- ��ʾ�ĺ�����:1��2��5��8��10��11�´������·�С��
- 2001���ũ����Ϣ������0x1a95(��Ϊ���£�������13λ)��
- ����ľ���1��2��4��5��8��10��12�´�
- �����·�С(0x1a95=1101010010101B)��
- 4�µĺ�����һ��0��ʾ������4��С�����ŵ��Ǹ�1��ʾ5�´�
+ ※-----例----:
+ 2000年的信息数据是0xc96，化成二进制就是110010010110B，
+ 表示的含义是:1、2、5、8、10、11月大，其余月份小。
+ 2001年的农历信息数据是0x1a95(因为闰月，所以有13位)，
+ 具体的就是1、2、4、5、8、10、12月大，
+ 其余月份小(0x1a95=1101010010101B)，
+ 4月的后面那一个0表示的是闰4月小，接着的那个1表示5月大。
 
- �����Ϳ�����һ��������������Щ��Ϣ��������������CalendarDate[]��������Щ��Ϣ��
+ 这样就可以用一个数组来保存这些信息。在这里用数组CalendarDate[]来保存这些信息。
 
- �������㷨:
- 1�����㴦����ʱ�䵽��ʼ�����³�һ��������
- 2������ʼ��ݿ�ʼ����ȥÿһ�µ�������һֱ��ʣ�������û����һ����Ϊֹ��
- ��ʱ��CalendarDate[]���±굽�˶��٣����Ǽ�ȥ�˶����꣬
- ����ʼ��ݼ�������±�Ϳ��Եõ�ũ����ݣ�Ȼ�󿴼�ȥ�˼����¡�
- ������겻���»������»��ں��棬�Ϳ���ֱ�ӵõ�ũ���·ݣ���������·�������һ���£�
- ������¾������£���������µĺ��棬��Ҫ��ȥ1���ܵõ��·�����ʣ�����������ũ���գ�
- ũ��ʱ��(����ʱ+1)/2�Ϳ��Լ򵥵ĵõ��ˡ�
+ ※具体算法:
+ 1。计算处所求时间到起始年正月初一的天数。
+ 2。从起始年份开始，减去每一月的天数，一直到剩余的天数没有下一个多为止。
+ 此时，CalendarDate[]的下标到了多少，就是减去了多少年，
+ 用起始年份加上这个下标就可以得到农历年份，然后看减去了几个月。
+ 如果本年不闰月或者闰月还在后面，就可以直接得到农历月份，如果在闰月份数后面一个月，
+ 则这个月就是闰月，如果在闰月的后面，则要减去1才能得到月份数。剩余的天数就是农历日，
+ 农历时用(公历时+1)/2就可以简单的得到了。
 
  */
 
-KISSY.add("lunar", function(T) {
+(function(T) {
 
     var BASE_DATE = new Date(2001, 0, 1),
         BASE_YEAR = 2001,
@@ -52,20 +52,20 @@ KISSY.add("lunar", function(T) {
         LEAP_MONTH = 0x10000,
 
 
-        TG_STRING = "���ұ����켺�����ɹ�",
+        TG_STRING = "甲乙丙丁戊己庚辛壬癸",
         TG_CYCLE = TG_STRING.length,
-        DZ_STRING = "�ӳ���î������δ�����纥",
+        DZ_STRING = "子丑寅卯辰巳午未申酉戌亥",
         DZ_CYCLE = DZ_STRING.length,
-        NUM_STRING = "��һ�����������߰˾�ʮ",
-        MONTH_STRING = "�������������߰˾�ʮ����",
-        WEEK_STRING = "��һ����������",
-        SX = "��ţ������������Ｆ����",
-        LUNAR_DAY_LESS_THEN_10 = "��",
-        LUNAR_DAY_10 = "ʮ",
-        LUNAR_DAY_20 = "إ",
-        LUNAR_DAY_30 = "��ʮ",
-        LUNAR_DAY_20_EXACT = "��ʮ",
-        WEEK = "��",
+        NUM_STRING = "零一二三四五六七八九十",
+        MONTH_STRING = "正二三四五六七八九十冬腊",
+        WEEK_STRING = "日一二三四五六",
+        SX = "鼠牛虎兔龙蛇马羊猴鸡狗猪",
+        LUNAR_DAY_LESS_THEN_10 = "初",
+        LUNAR_DAY_10 = "十",
+        LUNAR_DAY_20 = "廿",
+        LUNAR_DAY_30 = "三十",
+        LUNAR_DAY_20_EXACT = "二十",
+        WEEK = "周",
         SXCycle = SX.length,
         CANLENDAR_DATA = [
             //0xA4B,0x5164B,0x6A5,0x6D4,0x415B5,0x2B6,0x957,0x2092F,0x497,0x60C96,    // 1921-1930
@@ -78,7 +78,7 @@ KISSY.add("lunar", function(T) {
             //0x497,0x64B, 0x30D4A,0xEA5,0x80D65,0x5AC,0xAB6,0x5126D,0x92E,0xC96,     // 1991-2000
             0x41A95, 0xD4A, 0xDA5, 0x20B55, 0x56A, 0x7155B, 0x25D, 0x92D, 0x5192B, 0xA95, // 2001-2010
             0xB4A, 0x416AA, 0xAD5, 0x90AB5, 0x4BA, 0xA5B, 0x60A57, 0x52B, 0xA93, 0x40E95]; // 2011-2020
-    //0:С��,1:����
+    //0:小月,1:大月
 
 
     function getBit(m, n) {
@@ -94,7 +94,7 @@ KISSY.add("lunar", function(T) {
         return re;
     }
 
-    //�õ� Date ��Ӧ��ũ����ʾ
+    //得到 Date 对应的农历表示
 
 
     function e2c(theDate) {
@@ -127,15 +127,15 @@ KISSY.add("lunar", function(T) {
         return lunarDate;
     }
 
-    //ũ�����ڵ����ı�ʾ
+    //农历日期的中文表示
 
 
     function getcDate(cYear, cMonth, cDay) {
 
         var tmp = {};
         tmp.year = numToCh(cYear);
-        tmp.tg = TG_STRING.charAt((cYear - BASE_YEAR - BASE_TG + TG_CYCLE) % TG_CYCLE); //���
-        tmp.dz = DZ_STRING.charAt((cYear - BASE_YEAR - BASE_DZ + DZ_CYCLE) % DZ_CYCLE); //��֧
+        tmp.tg = TG_STRING.charAt((cYear - BASE_YEAR - BASE_TG + TG_CYCLE) % TG_CYCLE); //年干
+        tmp.dz = DZ_STRING.charAt((cYear - BASE_YEAR - BASE_DZ + DZ_CYCLE) % DZ_CYCLE); //年支
         tmp.sx = SX.charAt((cYear - BASE_YEAR - BASE_SX + SXCycle) % SXCycle);
         if (cMonth < 1) {
             tmp.leap = true;
@@ -144,7 +144,7 @@ KISSY.add("lunar", function(T) {
             tmp.month = MONTH_STRING.charAt(cMonth - 1);
         }
         tmp.day = (cDay < 11) ? LUNAR_DAY_LESS_THEN_10 : ((cDay < 20) ? LUNAR_DAY_10 : ((cDay < 30) ? LUNAR_DAY_20 : LUNAR_DAY_30));
-        /*ئ*/
+        /*卅*/
         if (cDay == 10) {
             tmp.day += LUNAR_DAY_10;
         } else if (cDay == 20) {
@@ -158,42 +158,42 @@ KISSY.add("lunar", function(T) {
     }
 
     /*
-     ����ת��ũ��
-     @param solarYear{Number} ������
-     @param solarYear{Number} ������
-     @param solarYear{Number} ������
-     @return {object} ��Ӧ�ù������ڵ�����ũ����ʾ
+     公历转换农历
+     @param solarYear{Number} 公历年
+     @param solarYear{Number} 公历年
+     @param solarYear{Number} 公历年
+     @return {object} 对应该公历日期的中文农历表示
      {
-     tg:{String} ���
-     dz:{String} ��֧
-     sx:{String} ����
-     leap:{Boolean} �Ƿ�����(��),
-     weekDay:{String} �������ı�ʾ,
-     year: {String} �����ı�ʾ,
-     month:{String} �����ı�ʾ,
-     day:{String} �����ı�ʾ,
+     tg:{String} 天干
+     dz:{String} 地支
+     sx:{String} 属相
+     leap:{Boolean} 是否闰月(后),
+     weekDay:{String} 星期中文表示,
+     year: {String} 年中文表示,
+     month:{String} 月中文表示,
+     day:{String} 日中文表示,
      }
-     ���磺
+     例如：
      getLunarDay(2001, 5, 23):
      {
-     year : "������һ",
-     tg : "��",
-     dz : "��",
-     sx : "��",
+     year : "二零零一",
+     tg : "辛",
+     dz : "巳",
+     sx : "蛇",
      leap : true,
-     month : "��",
-     day : "��һ",
-     weekDay : "����"
+     month : "四",
+     day : "初一",
+     weekDay : "周三"
      }
      */
     T.getLunarDay = function (solarYear, solarMonth, solarDay) {
         if (Object.prototype.toString.call(solarYear) === '[object Date]')
             return e2c(new Date(solarYear.getFullYear(), solarYear.getMonth(), solarYear.getDate()));
         if (solarYear < 2001 || solarYear > 2020) {
-            return ""; //��ݲ���1921-2020��Χ���޷���á�
+            return ""; //年份不在1921-2020范围，无法获得。
         } else {
             return e2c(new Date(solarYear, solarMonth - 1, solarDay));
         }
     }
 
-});
+})(KISSY);

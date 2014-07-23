@@ -96,7 +96,7 @@ KISSY.add("editor", function(S) {
     }
 
     function getJSName() {
-        return "plugin-min.js?t=2010-12-28 14:49:10";
+        return "plugin.js?t=2010-12-28 14:49:10";
     }
 
     S.app(Editor, S.EventTarget);

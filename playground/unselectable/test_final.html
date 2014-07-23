@@ -31,7 +31,7 @@
 </div>
 
 </body>
-<script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js"></script>
+<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
 
 <script>
     KISSY.ready(function(S) {
@@ -47,7 +47,7 @@
                                 : UA.webkit ?
                                 function(el) {
                                     el = el[0] || el;
-                                    el.style.KhtmlUserSelect = 'none';
+                                    el.style.userSelect = 'none';
                                 }
                                 :
                                 function(el) {
@@ -77,16 +77,16 @@
         var list = S.all(".x-test");
 
         list.on("focus", function() {
-            S.log(this.attr("id") + " focus");
-            this.addClass("x-focus");
+            S.log(S.all(this).attr("id") + " focus");
+            S.all(this).addClass("x-focus");
         });
 
         S.all(".x-test").on("blur", function() {
-            S.log(this.attr("id") + " blur");
-            this.removeClass("x-focus");
+            S.log(S.all(this).attr("id") + " blur");
+            S.all(this).removeClass("x-focus");
         });
         d2.on("mousedown", function(ev) {
-            S.log(this.attr("id") + " mousedown");
+            S.log(S.all(this).attr("id") + " mousedown");
             ev.preventDefault();
         });
         d1[0].focus();

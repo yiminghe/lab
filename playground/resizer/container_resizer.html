@@ -1,12 +1,12 @@
 <!doctype html>
 <html>
 <head>
-<meta charset='gbk'/>
+<meta charset='utf-8'/>
 <title>resizer for container</title>
 <style>
 /*{padding:0;margin:0;}*/
 body {
-	font:12px/1.5 tahoma,arial,宋体,sans-serif;
+	font:12px/1.5 tahoma,arial,瀹嬩綋,sans-serif;
 }
 #demo {
 	width:200px;
@@ -16,7 +16,7 @@ body {
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
-	/*-moz-binding: url('ellipsis.xml#ellipsis'); firefox用了这个以后，虽然能显示ellipsis，但是dom对象不能操作了 */
+	/*-moz-binding: url('ellipsis.xml#ellipsis'); firefox鐢ㄤ簡杩欎釜浠ュ悗锛岃櫧鐒惰兘鏄剧ずellipsis锛屼絾鏄痙om瀵硅薄涓嶈兘鎿嶄綔浜� */
 	border:1px solid #ccc;
 	position:relative;
 }
@@ -31,14 +31,14 @@ body {
 	cursor:e-resize;
 }
 </style>
-<!--<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy-min.js"></script>-->
+<!--<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy.js"></script>-->
 <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>-->
-<script src="http://a.tbcdn.cn/s/kissy/1.1.6/kissy-min.js" charset="utf-8"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.6/kissy.js" charset="utf-8"></script>
 </head>
 
 <body>
 
-<div id="demo">文字很多很多，超出框外的文字显示“...”，把鼠标放在框内，可以看到右边有个小方块，可以拖动哦！但是firefox不支持text-overflow，用XUL实现ellipsis效果会导致this层dom对象不能操作了~</div>
+<div id="demo">鏂囧瓧寰堝寰堝锛岃秴鍑烘澶栫殑鏂囧瓧鏄剧ず鈥�...鈥濓紝鎶婇紶鏍囨斁鍦ㄦ鍐咃紝鍙互鐪嬪埌鍙宠竟鏈変釜灏忔柟鍧楋紝鍙互鎷栧姩鍝︼紒浣嗘槸firefox涓嶆敮鎸乼ext-overflow锛岀敤XUL瀹炵幇ellipsis鏁堟灉浼氬鑷磘his灞俤om瀵硅薄涓嶈兘鎿嶄綔浜唦</div>
 <p></p>
 
 <script>

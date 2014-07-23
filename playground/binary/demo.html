@@ -1,28 +1,30 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8"/>
-<title>binary Test</title>
+    <meta charset="utf-8"/>
+    <title>binary Test</title>
 </head>
 <body>
 
 <h1>responseText to get binary</h1>
+
 <div>
     <button id="b1">get binary by responseText</button>
 </div>
 
 <h2></h2>
+
 <div>
     <button id="b2">get binary natively</button>
 </div>
 <script>
 
-    window.onload = function() {
+    window.onload = function () {
 
         var b1 = document.getElementById("b1"),
                 b2 = document.getElementById("b2");
 
-        b1.onclick = function() {
+        b1.onclick = function () {
             var req = new XMLHttpRequest();
             req.open('GET', 'linuxstart.bin', true);
             // XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com]
@@ -48,21 +50,24 @@
             req.send(null);
         };
 
-        b2.onclick = function() {
+        b2.onclick = function () {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "linuxstart.bin", false);
+            xhr.open("GET", "linuxstart.bin", true);
             xhr.responseType = "arraybuffer";
+
+            xhr.onload = function () {
+                // no support for w3 xhr.responseBlob
+                var buffer = xhr.responseBlob || xhr.response || xhr.mozResponseArrayBuffer;
+                if (buffer) {
+                    var byteArray = new Uint8Array(buffer);
+                    console.log(byteArray.byteLength);
+                    alert("第一个字节 : " + byteArray[0].toString(2));
+                    alert("第二个字节 : " + byteArray[1].toString(2));
+                    alert("倒数第二个字节 : " + byteArray[byteArray.byteLength - 2].toString(2));
+                    alert("最后一个字节 : " + byteArray[byteArray.byteLength - 1].toString(2));
+                }
+            };
             xhr.send(null);
-            // no support for w3 xhr.responseBlob
-            var buffer = xhr.responseBlob || xhr.response || xhr.mozResponseArrayBuffer;
-            if (buffer) {
-                var byteArray = new Uint8Array(buffer);
-                console.log(byteArray.byteLength);
-                alert("第一个字节 : " + byteArray[0].toString(2));
-                alert("第二个字节 : " + byteArray[1].toString(2));
-                alert("倒数第二个字节 : " + byteArray[byteArray.byteLength - 2].toString(2));
-                alert("最后一个字节 : " + byteArray[byteArray.byteLength - 1].toString(2));
-            }
         };
 
     };

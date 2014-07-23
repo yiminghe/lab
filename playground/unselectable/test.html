@@ -23,7 +23,7 @@
 </div>
 
 </body>
-<script src="http://yiminghe.github.com/kissy/build/kissy-min.js"></script>
+<script src="http://yiminghe.github.com/kissy/build/kissy.js"></script>
 
 <script>
     KISSY.ready(function(S) {
@@ -70,16 +70,16 @@
         var list = S.all(".x-test");
 
         list.on("focus", function() {
-            S.log(this.attr("id") + " focus");
-            this.addClass("x-focus");
+            S.log(S.all(this).attr("id") + " focus");
+            S.all(this).addClass("x-focus");
         });
 
         S.all(".x-test").on("blur", function() {
-            S.log(this.attr("id") + " blur");
-            this.removeClass("x-focus");
+            S.log(S.all(this).attr("id") + " blur");
+            S.all(this).removeClass("x-focus");
         });
         d2.on("mousedown", function() {
-            S.log(this.attr("id") + " mousedown");
+            S.log(S.all(this).attr("id") + " mousedown");
         });
         d1[0].focus();
     });

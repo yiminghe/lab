@@ -1,46 +1,46 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml"> 
 <head> 
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
-<title>Ì°³ÔÉßcanvas</title> 
+<meta charset='utf-8'/>
+<title>è´ªåƒè›‡canvas</title> 
 <script> 
 	
-	//ËÄ¸ö·½Ïò
+	//å››ä¸ªæ–¹å‘
 	var UP = 0,DOWN = 1,LEFT = 2,RIGHT = 3;
-	//ËÄ¸ö·½Ïò¼üÖµ
+	//å››ä¸ªæ–¹å‘é”®å€¼
 	var KEY_UP = 38,KEY_DOWN = 40,KEY_LEFT = 37,KEY_RIGHT = 39;
-	//»­Í¼µÄÔªËØ
+	//ç”»å›¾çš„å…ƒç´ 
 	var game,context;
-	//½çÃæ¿íºÍ¸ß
+	//ç•Œé¢å®½å’Œé«˜
 	var width = 300,height = 300;
-	//·½¿éµÄ´óĞ¡
+	//æ–¹å—çš„å¤§å°
 	var blockSize = 10;
-	//Ì°³ÔÉß¶ÔÏó
+	//è´ªåƒè›‡å¯¹è±¡
 	var snake;
-	//·½Ïò¶ÔÓ¦µÄÔöÁ¿Êı×é
+	//æ–¹å‘å¯¹åº”çš„å¢é‡æ•°ç»„
 	var dirx = [0,0,-1,1];
 	var diry = [-1,1,0,0];
 	
-	//Ê³ÎïÊı×é
+	//é£Ÿç‰©æ•°ç»„
 	var foods = new Array();
 	
-	//ÓÎÏ·×´Ì¬ 0 Î´¿ªÊ¼ 1½øĞĞÖĞ 2 GameOver
+	//æ¸¸æˆçŠ¶æ€ 0 æœªå¼€å§‹ 1è¿›è¡Œä¸­ 2 GameOver
 	var state = 0;
 	
-	//¼¶±ğ
+	//çº§åˆ«
 	var level = 1;
-	//·ÖÊı
+	//åˆ†æ•°
 	var score = 0;
-	//ÓÎÏ·ËÙ¶È
+	//æ¸¸æˆé€Ÿåº¦
 	var speed = 100;
-	//µ±Ç°Ê³Îï
+	//å½“å‰é£Ÿç‰©
 	var currentFood = 0;
 	
 	var headImg = new Image();
 	var bodyImg = new Image();	
 	var foodImgs = new Array();
 	
-	//Ì°³ÔÉßµÄÄ³Ò»½ÚÉíÌå
+	//è´ªåƒè›‡çš„æŸä¸€èŠ‚èº«ä½“
 	function Block(index,x,y){
 		this.index = index;
 		this.x = x;
@@ -57,12 +57,12 @@
 		
 	}
 	
-	//Ì°³ÔÉßµÄÀà£¬±íÊ¾Ò»ÌõÉß£¬´«Èë³õÊ¼µÄÉíÌåÊı×éºÍ³õÊ¼ÔË¶¯·½Ïò
+	//è´ªåƒè›‡çš„ç±»ï¼Œè¡¨ç¤ºä¸€æ¡è›‡ï¼Œä¼ å…¥åˆå§‹çš„èº«ä½“æ•°ç»„å’Œåˆå§‹è¿åŠ¨æ–¹å‘
 	function Snake(blocks,direction){
 		this.blocks = blocks;
 		this.direction = direction;
 	}
-	//»­³öÕûÌõÉß
+	//ç”»å‡ºæ•´æ¡è›‡
 	Snake.prototype.draw = function(){
 		for(var i=0;i<this.blocks.length;i++){
 			var block = this.blocks[i];
@@ -70,14 +70,14 @@
 		}
 	}
 	
-	//ÏÂÒ»²½
+	//ä¸‹ä¸€æ­¥
 	Snake.prototype.next = function(){
 	
-		//È·¶¨Í·µÄÏÂÒ»¸öÎ»ÖÃ
+		//ç¡®å®šå¤´çš„ä¸‹ä¸€ä¸ªä½ç½®
 		var head = this.blocks[0];
 		var newX = head.x + dirx[this.direction];
 		var newY = head.y + diry[this.direction];
-		//ÅĞ¶ÏÊÇ·ñºÏ·¨¡¢ÊÇ·ñÓĞ³ÔµÄ
+		//åˆ¤æ–­æ˜¯å¦åˆæ³•ã€æ˜¯å¦æœ‰åƒçš„
 		if(newX > width / blockSize - 1)
 			newX = 0;
 			
@@ -94,8 +94,8 @@
 		if(st == 1){
 			state = 2;
 		}else if(st == 2){
-			//³ÔµôÊ³Îï£¬Ôö¼ÓÒ»½Ú
-			//Ôö¼ÓÒ»¸ö
+			//åƒæ‰é£Ÿç‰©ï¼Œå¢åŠ ä¸€èŠ‚
+			//å¢åŠ ä¸€ä¸ª
 			var block = new Block(0,0);
 			this.blocks.push(block);
 			for(var i=this.blocks.length-1;i>0;i--){
@@ -109,12 +109,12 @@
 			}
 			score++;
 			speed = speed--;
-			//È¥µôÊ³Îï
+			//å»æ‰é£Ÿç‰©
 			foods = new Array();
 			currentFood = rand(0,9);
 			putFood();
 		}else {		
-			//ÒÀ´Î¸ú½ø
+			//ä¾æ¬¡è·Ÿè¿›
 			for(var i=this.blocks.length-1;i>0;i--){
 				this.blocks[i].x = this.blocks[i-1].x;
 				this.blocks[i].y = this.blocks[i-1].y;				
@@ -124,19 +124,19 @@
 		}
 	}
 	
-	//¼ì²éÔÚx,yµÄ×´Ì¬
+	//æ£€æŸ¥åœ¨x,yçš„çŠ¶æ€
 	Snake.prototype.check = function(x,y){
 		for(var i=0;i<this.blocks.length;i++){
 			var block = this.blocks[i];
 			if(block.x == x && block.y == y){
-				//ÓĞ×Ô¼º
+				//æœ‰è‡ªå·±
 				return 1;
 			}
 		}
 		for(var i=0;i<foods.length;i++){
 			var food = foods[i];
 			if(food.x == x && food.y == y){
-				//ÓĞÊ³Îï
+				//æœ‰é£Ÿç‰©
 				return 2;
 			}
 		}
@@ -152,7 +152,7 @@
 		game = document.getElementById("game");
 		context = game.getContext('2d');
 		if(!context){
-			alert("³õÊ¼»¯Ê§°Ü£¡");
+			alert("åˆå§‹åŒ–å¤±è´¥ï¼");
 			return;	
 		}	
 		game.width = 500;
@@ -171,7 +171,7 @@
 	function initGame(){
 		state = 0;
 		
-		//³õÊ¼»¯Éß
+		//åˆå§‹åŒ–è›‡
 		var startx = width/blockSize/2;
 		var starty = height/blockSize/2;
 		var blocks = new Array();
@@ -181,7 +181,7 @@
 		}
 		snake = new Snake(blocks,UP);
 		foods = new Array();
-		//·ÅÖÃÊ³Îï
+		//æ”¾ç½®é£Ÿç‰©
 		putFood();
 	}
 	
@@ -197,7 +197,7 @@
 		context.shadowBlur    = 4;
 		context.fillRect  (0,   0, width + 1, height + 1);
 	}
-	//»­ÓÎÏ·
+	//ç”»æ¸¸æˆ
 	function drawGame(){
 		
 		if(state == 0){
@@ -218,17 +218,17 @@
 		}
 	}
 	
-	//ÓÎÏ·Ñ­»·
+	//æ¸¸æˆå¾ªç¯
 	function gameRun(){
 		if(state == 1)
 			snake.next();	
 		drawGame();
 		gameTimer = setTimeout("gameRun()",speed);
 	}
-	//Ëæ»ú·ÅÖÃÊ³Îï
+	//éšæœºæ”¾ç½®é£Ÿç‰©
 	function putFood(){
 		while(true){
-			//Ëæ»úÉú³É
+			//éšæœºç”Ÿæˆ
 			var x = rand(0,width/blockSize-1);
 			var y = rand(0,height/blockSize-1);
 			if(canPutFood(x,y)){
@@ -241,7 +241,7 @@
 		}
 	}
 	
-	//²úÉúËæ»úÊı
+	//äº§ç”Ÿéšæœºæ•°
 	function rand(Min,Max){
         var Range = Max - Min;
         var Rand = Math.random();
@@ -256,15 +256,15 @@
 		}
 	}
 	
-	//ÅĞ¶ÏÄ³¸öÎ»ÖÃÊÇ·ñÄÜ·ÅÖÃÊ³Îï
+	//åˆ¤æ–­æŸä¸ªä½ç½®æ˜¯å¦èƒ½æ”¾ç½®é£Ÿç‰©
 	function canPutFood(x,y){
-		//ÏÈ¿´ÓĞÃ»ÓĞÉß
+		//å…ˆçœ‹æœ‰æ²¡æœ‰è›‡
 		for(var i=0;i<snake.blocks.length;i++){
 			if(snake.blocks[i].x == x && snake.blocks[i].y == y){
 				return false;
 			}
 		}
-		//ÔÙ¿´ÓĞÃ»ÓĞÊ³Îï
+		//å†çœ‹æœ‰æ²¡æœ‰é£Ÿç‰©
 		for(var i=0;i<foods.length;i++){
 			if(foods[i].x == x && foods[i].y == y)
 				return false;
@@ -276,12 +276,12 @@
 		e = e || window.event;
 		var keycode = e.which ? e.which : e.keyCode; 
 		
-		if (keycode == KEY_UP){ //Èç¹û°´ÏÂENTER¼ü 
+		if (keycode == KEY_UP){ //å¦‚æœæŒ‰ä¸‹ENTERé”® 
 			if(snake.direction != DOWN){
 				snake.direction = UP;
 			}
 		}
-		if (keycode == KEY_DOWN){ //Èç¹û°´ÏÂENTER¼ü 
+		if (keycode == KEY_DOWN){ //å¦‚æœæŒ‰ä¸‹ENTERé”® 
 			if(snake.direction != UP){
 				snake.direction = DOWN;
 			}
@@ -291,7 +291,7 @@
 				snake.direction = LEFT;
 			}
 		}
-		if (keycode == KEY_RIGHT){ //Èç¹û°´ÏÂENTER¼ü 
+		if (keycode == KEY_RIGHT){ //å¦‚æœæŒ‰ä¸‹ENTERé”® 
 			if(snake.direction != LEFT){
 				snake.direction = RIGHT;
 			}
@@ -303,13 +303,13 @@
 			else if(state == 2){
 				initGame();
 			}
-			//ÒÑ¾­¿ªÊ¼£¬¾ÍÔİÍ£
+			//å·²ç»å¼€å§‹ï¼Œå°±æš‚åœ
 			else if (state==1) {
 				state=3;
 				clearTimeout(gameTimer);
 				drawGame();
 			}
-			//ÔİÍ£¾ÍÖØĞÂ¿ªÊ¼
+			//æš‚åœå°±é‡æ–°å¼€å§‹
 			else if(state==3) {
 				state=1;
 				gameRun();
@@ -321,9 +321,9 @@
 	function drawStartScreen(){
 		drawBackground();
 		context.fillStyle    = '#00f';
-		context.font         = '30px ËÎÌå';
+		context.font         = '30px å®‹ä½“';
 		context.textBaseline = 'top';
-		context.fillText  ('°´¿Õ¸ñ¿ªÊ¼ÓÎÏ·', width/2 - 110, height/2);
+		context.fillText  ('æŒ‰ç©ºæ ¼å¼€å§‹æ¸¸æˆ', width/2 - 110, height/2);
 	}
 	
 	function drawResumeScreen(){
@@ -337,16 +337,16 @@
 	function drawGameOverScreen(){
 		//drawBackground();
 		context.fillStyle    = '#00f';
-		context.font         = '30px ËÎÌå';
+		context.font         = '30px å®‹ä½“';
 		context.textBaseline = 'top';
-		context.fillText  ('ÓÎÏ·½áÊø£¬¿Õ¸ñ¼ÌĞø', width/2 - 140, height/2);
+		context.fillText  ('æ¸¸æˆç»“æŸï¼Œç©ºæ ¼ç»§ç»­', width/2 - 140, height/2);
 	}
 	
 	function drawScore(){
 		context.fillStyle    = '#f0f';
-		context.font         = '12px bold ËÎÌå';
+		context.font         = '12px bold å®‹ä½“';
 		context.textBaseline = 'top';
-		context.fillText  ('ÓÎÏ·µÃ·Ö:' + score + "/100£¬°´¿Õ¸ñ"+(state==1?"ÔİÍ£":"¼ÌĞø")+"ÓÎÏ·", 5, 5);
+		context.fillText  ('æ¸¸æˆå¾—åˆ†:' + score + "/100ï¼ŒæŒ‰ç©ºæ ¼"+(state==1?"æš‚åœ":"ç»§ç»­")+"æ¸¸æˆ", 5, 5);
 	}
 	
 	document.addEventListener( "keyup" ,getKey, false ); 
@@ -358,6 +358,6 @@
 </head> 
 <body onload="init()"> 
 <div id="msg"></div> 
-<canvas id="game">ÄúµÄä¯ÀÀÆ÷²»Ö§³ÖHTML5µÄCanvasÔªËØ£¬ÎŞ·¨ÓÎÏ·£¡</canvas> 
+<canvas id="game">æ‚¨çš„æµè§ˆå™¨ä¸æ”¯æŒHTML5çš„Canvaså…ƒç´ ï¼Œæ— æ³•æ¸¸æˆï¼</canvas> 
 </body> 
 </html> 
