@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+	<head>
+		<title>
+			Ext.dd 示例
+		</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="../../lite-ext/base/css/core.css">
+		<style type="text/css">
+			h1 {
+				font-size:20px;
+				width:500px;
+				margin:30px auto;
+				text-align:center;
+			}
+			#zone,#zone2 {
+				width:800px;
+				margin:20px auto;
+				padding:10px;
+				border:1px solid green;
+				
+			}
+			.item {
+				margin:10px;
+				border:1px solid red;
+				float:left;
+				width:50px;
+				height:50px;
+				cursor:pointer;
+			}
+			
+			.item-hover {
+				background:#A6B3AD;
+			}
+			
+			.item-replace { 
+				border:2px dotted black; 
+			}
+			
+		</style>
+	</head>
+	<body>
+		<h1>拖放数字框交换顺序</h1>
+		<div id="zone" class="clearfix" unselectable="on">
+			<div class="item" unselectable="on">
+				1
+			</div>
+			<div class="item" unselectable="on">
+				2
+			</div>
+			<div class="item" unselectable="on">
+				3
+			</div>
+			<div class="item" unselectable="on">
+				4
+			</div>
+			<div class="item" unselectable="on">
+				5
+			</div>
+		</div>
+		
+		<h1>拖放数字框交换顺序-2(占位符功能)</h1>
+		<div id="zone2" class="clearfix" unselectable="on">
+			<div class="item" unselectable="on">
+				1
+			</div>
+			<div class="item" unselectable="on">
+				2
+			</div>
+			<div class="item" unselectable="on">
+				3
+			</div>
+			<div class="item" unselectable="on">
+				4
+			</div>
+			<div class="item" unselectable="on">
+				5
+			</div>
+		</div>
+		<script type="text/javascript" src="../../lite-ext/base/javascript/ext-core-min.js">
+</script>
+<script type="text/javascript" src="Layer-min.js">
+
+</script>
+<script type="text/javascript" src="../../lite-ext/base/javascript/dd-min.js">
+
+</script>
+<script type="text/javascript" src="dd-sample.js">
+
+</script>
+	</body>
+</html>

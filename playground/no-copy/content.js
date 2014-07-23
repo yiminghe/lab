@@ -4,8 +4,7 @@
  * @声明：我支持开放
  */
 KISSY.ready(function(S) {
-    var KE = KISSYEDITOR,
-        t = "textarea",
+    var t = "textarea",
         m = "禁止copy!",
         Event = S.Event,
         doc = document,
@@ -39,15 +38,18 @@ KISSY.ready(function(S) {
             //return;
 
             //保存原来的选择区域
-            var s = new KE.Selection(doc),r = s.getRanges()[0];
+            var s = document.getSelection();
+            var r = s.getRangeAt(0);
             //警告
             // clip.html("禁止copy！");
             clip[0].focus();
             clip[0].select();
             //异步
             setTimeout(function() {
-                r.select();
-            }, 0);
+                s = document.getSelection();
+                s.removeAllRanges();
+                s.addRange(r);
+            }, 10);
         //}
     });
     body.appendChild(document.createTextNode("我是内容，你可以copy我看看！"));

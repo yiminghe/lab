@@ -82,8 +82,11 @@
             hack.select();
             setTimeout(function() {
                 if (userSelection.select) userSelection.select();
-                else
+                else {
+                    userSelection = document.getSelection();
+                    userSelection.removeAllRanges();
                     userSelection.addRange(savedRange);
+                }
             }, 10);
 
         };

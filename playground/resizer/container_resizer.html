@@ -33,9 +33,7 @@ body {
 </style>
 <!--<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy-min.js"></script>-->
 <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>-->
-<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy-min.js" charset="utf-8"></script>
-<script src='https://github.com/yiminghe/kissy/raw/master/src/dd/ddm.js' charset="utf-8"></script>
-<script src='https://github.com/yiminghe/kissy/raw/master/src/dd/draggable.js' charset="utf-8"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.6/kissy-min.js" charset="utf-8"></script>
 </head>
 
 <body>
@@ -45,7 +43,7 @@ body {
 
 <script>
 (function(S){
-	 S.use('core',function(){
+	 S.use('core,dd',function(){
 		var Event = S.Event,DOM = S.DOM;
 		var demo = S.one('#demo');
 		var ptext = S.one('p');

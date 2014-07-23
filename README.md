@@ -1,12 +1,9 @@
-introduction:
------------------------------------
-my lab about funny stuff
+## introduction:
+my lab about funny stuff: http://yiminghe.me/lab/playground/
 
 
-contact:
-----------------------------------
+## contact:
 yiminghe@gmail.com
 
-blog:
----------------------------------
-<a href='http://yiminghe.javaeye.com'>http://yiminghe.javaeye.com</a>
+## blog:
+http://yiminghe.me

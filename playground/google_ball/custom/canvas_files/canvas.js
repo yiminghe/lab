@@ -165,6 +165,7 @@ $(function() {
 		this.velocity = new Vector(0.0, 0.0, 0.0);
 		
 		this.update = function() {
+		    
 			var dx = this.targetPos.x - this.curPos.x;
 			var ax = dx * this.springStrength;
 			this.velocity.x += ax;

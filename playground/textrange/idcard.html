@@ -42,7 +42,7 @@
         idd.on("keyup", function() {
             var pos1,error = false;
             var range1,range2;
-            var o = this[0];
+            var o = this;
             if (!o.value.match(/^(([0-9]{0,18})|([0-9]{17,17}x))$/i)) error = true;
             //出错处理光标保存逻辑
             if (error) {
@@ -64,7 +64,7 @@
                 }
 
                 //恢复光标位置
-                if (!o.selectionStart) {
+                if (!('selectionStart' in o)) {
                     range2 = o.createTextRange();
                     range2.collapse(true);
                     range2.move('character', pos1 - 1);

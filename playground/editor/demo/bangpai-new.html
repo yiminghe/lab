@@ -166,13 +166,15 @@
     <label for="editor2">Editor Instance 2:</label>
     <textarea id="editor2" style="width:100%;height:400px;margin:0 auto;"></textarea>
 </div>
-<script src="http://github.com/kissyteam/kissy/raw/master/build/kissy-min.js"></script>
-<script src="../build/editor-all-pkg-min.js?t=20100827a"></script>
-<script src="../build/biz/bangpai/editor-plugin-pkg-min.js"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.7/kissy.js"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.7/uibase/uibase-pkg.js"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.7/dd/dd-pkg.js"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.1.7/overlay/overlay-pkg.js"></script>
+<script src="../build/editor-all-pkg.js?t=20100827a"></script>
+<script src="../build/biz/ext/editor-plugin-pkg-min.js"></script>
 <script>
 // just for test
-var base = location.href.replace(/^(.*kissy-editor\/).*$/i, '$1'),S = KISSY;
-S.Config.base = base;
+var base = '../',S = KISSY;
 S.ready(function() {
 
 
@@ -180,7 +182,7 @@ S.ready(function() {
 
         var KE = S.Editor;
 
-        KE.Config.base = base + "build/";
+        KE.Config.base = base + "build/plugins/";
 
         window.editor = KE("#editor", {
             attachForm:true,
@@ -296,11 +298,11 @@ S.ready(function() {
                 }
             }
         }).use("htmldataprocessor,enterkey,clipboard," +
-                "bangpai-sourcearea,sourcearea,preview," +
+                "sourcearea,preview," +
                 "separator," +
-                "undo,separator,removeformat,font,forecolor,separator," +
-                "list,indent,justify,separator,link,image,bangpai-video,bangpai-music,smiley," +
-                "separator,table,resize,draft,bangpai-upload,maximize"
+                "undo,separator,removeformat,font,color,separator," +
+                "list,indent,justify,separator,link,image,smiley," +
+                "separator,table,resize,draft,maximize"
                 , function() {
             var self = this,
                     htmlDataProcessor = self.htmlDataProcessor,
@@ -406,9 +408,9 @@ S.ready(function() {
         }).use(
                 "sourcearea,preview," +
                         "separator," +
-                        "undo,separator,removeformat,font,forecolor,separator," +
-                        "list,indent,justify,separator,link,bangpai-video,bangpai-music,smiley," +
-                        "separator,table,resize,draft,bangpai-upload,maximize"
+                        "undo,separator,removeformat,font,color,separator," +
+                        "list,indent,justify,separator,link,smiley," +
+                        "separator,table,resize,draft,maximize"
                 , function() {
             var self = this,
                     htmlDataProcessor = self.htmlDataProcessor,
