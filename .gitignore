@@ -1,10 +1,16 @@
+bower_components/
+config.js
+mx_modules/
+nohup.out
 *.iml
+*.cfg
 .idea/
 .ipr
 .iws
 *~
 ~*
 *.diff
+*.log
 *.patch
 *.bak
 .DS_Store
@@ -13,6 +19,7 @@ Thumbs.db
 .*proj
 .svn/
 *.swp
-*.class
 out/
 node_modules/
+build/
+dist/
