@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script>
+        function filterNode(childNodes) {
+            var ret = [];
+            for (var i = 0; i < childNodes.length; i++) {
+                if (childNodes[i].nodeType === 1) {
+                    ret.push(childNodes[i]);
+                }
+            }
+            return ret;
+        }
+
+        function preorder() {
+            var root = {};
+
+            function traverse(node, virtualNode) {
+                console.log('encounter ', node.className);
+                virtualNode.dom = node;
+                var childNodes = filterNode(node.childNodes);
+                var len = childNodes.length;
+                virtualNode.children = [];
+                for (var i = 0; i < len; i++) {
+                    var v = {};
+                    virtualNode.children.push(v);
+                    traverse(childNodes[i], v);
+                }
+            }
+
+            traverse(document.body, root);
+            return root;
+        }
+
+        function postorder() {
+            var root = {};
+
+            function traverse(node, virtualNode) {
+                var childNodes = filterNode(node.childNodes);
+                var len = childNodes.length;
+                virtualNode.children = [];
+                for (var i = 0; i < len; i++) {
+                    var v = {};
+                    virtualNode.children.push(v);
+                    traverse(childNodes[i], v);
+                }
+                console.log('encounter ', node.className);
+                virtualNode.dom = node;
+            }
+
+            traverse(document.body, root);
+            return root;
+        }
+
+        window.onload = function () {
+            console.log('preorder traverse');
+            console.log(preorder());
+
+            console.log('postorder traverse');
+            console.log(postorder());
+        };
+    </script>
+</head>
+<body class="body">
+
+<div class="table-container">
+    <div class="left">
+    </div>
+    <div class="right">
+    </div>
+</div>
+
+<br class="br"/>
+</body>
+
+</html>

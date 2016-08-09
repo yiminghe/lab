@@ -1,0 +1,71 @@
+<script>
+    function Parent() {
+        this.num = 1;
+    }
+
+    Parent.prototype.getNum = function () {
+        console.log(this.num);
+    };
+
+    // es3
+    console.log('es3');
+    function Noop() {
+    }
+    Noop.prototype = Parent.prototype;
+
+    function Child() {
+        Child.superclass.constructor.apply(this, arguments);
+        this.childNum = 2;
+    }
+
+    Child.superclass = Parent.prototype;
+    Child.prototype = new Noop();
+    Child.prototype.constructor = Child;
+    Child.prototype.getChildNum = function () {
+        console.log(this.childNum);
+    };
+
+    var child = new Child();
+    child.getNum();
+    child.getChildNum();
+
+    // es5
+    console.log('es5');
+    function ChildEs5() {
+        Child.superclass.constructor.apply(this, arguments);
+        this.childNum = 2;
+    }
+    ChildEs5.superclass = Parent.prototype;
+    ChildEs5.prototype = Object.create(Parent.prototype, {
+        constructor: {
+            value: Child
+        },
+        getChildNum: {
+            value: function () {
+                console.log(this.childNum);
+            }
+        }
+    });
+    var childEs5 = new ChildEs5();
+    childEs5.getNum();
+    childEs5.getChildNum();
+
+    // es2015
+    console.log('es2015');
+
+    class ChildEs2015 extends Parent {
+        constructor() {
+            super();
+            this.childNum = 2;
+        }
+
+        getChildNum() {
+            console.log(this.childNum);
+        }
+    }
+
+    var childEs2015 = new ChildEs2015();
+    childEs2015.getNum();
+    childEs2015.getChildNum();
+
+</script>

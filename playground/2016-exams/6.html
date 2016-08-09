@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script>
+        (function () {
+            const documentElement = document.documentElement;
+            console.log(documentElement.clientWidth);
+            const scale = 1 / window.devicePixelRatio;
+            const _baseFontSize = 100;
+            const _psdWidth = 750;
+            documentElement.style.fontSize = `${_baseFontSize / _psdWidth * documentElement.clientWidth * window.devicePixelRatio}px`;
+            document.write(`<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=${scale},maximum-scale=${scale},minimum-scale=${scale}"/>`);
+            console.log(documentElement.clientWidth);
+        })();
+    </script>
+</head>
+<body>
+<div style="display: flex;flex-direction: row">
+    <div style="height:100px; width: 3.75rem; background: red; font-size:0.14rem" id="t">
+        宽度 3.75rem
+    </div>
+    <div style="height:100px; width: 3.75rem; background: yellow;">
+
+    </div>
+</div>
+<script>
+    console.log(document.getElementById('t').offsetWidth);
+</script>
+</body>
+</html>
