@@ -13,16 +13,26 @@
         {
             id: 3,
             sale: 8,
-            price: 10
+            price: 9,
         },
         {
             id: 4,
+            sale: 8,
+            price: 10
+        },
+        {
+            id: 5,
             sale: 20,
             price: 24,
         },
+        {
+            id: 6,
+            sale: 20,
+            price: 20,
+        },
     ];
 
-    for (var i = 5; i < 12; i++) {
+    for (var i = 7; i < 12; i++) {
         goods.push({
             id: i,
             sale: 20,
@@ -32,9 +42,10 @@
 
     function comparator(a1, a2) {
         if (a1.sale !== a2.sale) {
-            return a1.sale - a2.sale;
+            // avoid overflow
+            return a1.sale < a2.sale ? 1 : -1;
         }
-        return a1.price - a2.price;
+        return a1.price === a2.price ? 0 : a1.price < a2.price ? -1 : 1;
     }
 
     // chrome quick sort unstable
