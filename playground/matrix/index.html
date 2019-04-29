@@ -1,0 +1,87 @@
+<script src="./m3.js"></script>
+<div style="margin:10px;">
+<canvas width="300"
+  height="300"	
+  style="width:300px;height:300px;" id='c'/>
+</div>
+<button id="s">draw by pointer</button>
+<button id="s2">draw by setTransform matrix</button>
+<button id="clean">clean</button>
+<script>
+	const c = document.getElementById('c');
+	var ctx = c.getContext('2d');
+
+	function clean(){
+		ctx.clearRect(0, 0, 300, 300);	
+	}
+
+	function drawPointer(pointer,color){
+		ctx.beginPath();
+		ctx.moveTo(0,0);
+		ctx.lineTo(pointer[0], pointer[1]);
+		ctx.strokeStyle = color || 'green';
+		ctx.lineWidth = 1;
+		ctx.stroke();
+		ctx.closePath();
+	}
+
+
+	function drawMatrix(matrix1,pointer,color){
+		ctx.save();
+		const args=[matrix1[0],matrix1[1],matrix1[3],matrix1[4],matrix1[6],matrix1[7]];
+		console.log('transform args',args);
+		
+		ctx.beginPath();
+		ctx.moveTo(0,0);
+		ctx.setTransform.apply(ctx,args);
+		ctx.lineTo(pointer[0], pointer[1]);
+		ctx.strokeStyle = color || 'green';
+		ctx.lineWidth = 1;
+		ctx.stroke();
+		ctx.closePath();
+		ctx.restore();
+	}
+
+	function getRet(){
+		const p=[100,100];
+		let matrix = m3.identity();
+		matrix = m3.translate(matrix,100,100);
+		matrix = m3.rotate(matrix,m3.degToRad(45));
+		console.log('matrix', matrix);
+		let pointer = m3.transformPoint(matrix,[...p]);
+		console.log('draw pointer', pointer);	
+
+		let matrix2 = m3.identity();
+		matrix2 = m3.rotate(matrix2,m3.degToRad(45));
+		matrix2 = m3.translate(matrix2,100,100);
+		console.log('matrix2', matrix2);
+		let pointer2 = m3.transformPoint(matrix2,[...p]);
+		console.log('draw pointer2', pointer2);	
+
+		return {
+	      matrix,
+		  pointer,
+		  matrix2,
+		  pointer2,
+		  p,
+		};
+	}
+
+	document.getElementById('s').onclick=() => {
+		clean();
+		const {pointer,pointer2}=getRet();
+		drawPointer(pointer);
+		drawPointer(pointer2,'red');
+	};
+
+	document.getElementById('clean').onclick=() => {
+		clean();
+	};
+
+	document.getElementById('s2').onclick=() => {
+		clean();
+		const {matrix,matrix2,p}=getRet();
+		drawMatrix(matrix, p);
+		drawMatrix(matrix2, p,'red');
+	};
+</script>
