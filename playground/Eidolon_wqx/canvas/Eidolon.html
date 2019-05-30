@@ -42,6 +42,8 @@ current level:<select id="level">
 &nbsp;&nbsp;
 fps: <span id="fps"></span>
 &nbsp;&nbsp;&nbsp;<a href="http://yiminghe.javaeye.com" target="_blank">contact and suggestion<a>
+
+    &nbsp;&nbsp;&nbsp;<a target="_self" id="version"><a>
     <p>
         press "p" to start or pause .
         press up,down,left ,right to control
@@ -55,11 +57,21 @@ fps: <span id="fps"></span>
       (function () {
         window.fpsNode = $one('#fps');
 
+        const version = $one('#version');
+        const webgl = location.href.indexOf('webgl') !== -1;
+        if (webgl) {
+          version.href = location.href.slice(0, location.href.indexOf('?'));
+          version.innerHTML = 'switch render to canvas 2d';
+        } else {
+          version.href = location.href + '?webgl';
+          version.innerHTML = 'switch render to canvas webgl';
+        }
+
         function $one(id) {
           return document.querySelector(id);
         }
 
-        var g = EidolonGame("game");
+        var g = EidolonGame("game", {}, location.href.indexOf('webgl') !== -1);
         $one("#zoom").value = 3;
         $one("#zoom").addEventListener("change", function (e) {
           var c = $one("#zoom").value;

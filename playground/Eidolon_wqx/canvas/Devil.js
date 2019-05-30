@@ -100,10 +100,14 @@ class Devil extends Creature {
       }
       if (nx > 0 && nx < 16 && ny > 0 && ny < 10) {
         if (game.isLevelMapEmpty(nx, ny)) {
+          if(pos.x===nx&&pos.y===ny){
+            return;
+          }
           this.set("pos", {
             x: nx,
             y: ny
-          })
+          });
+          return true;
         } else {
           this.think();
         }

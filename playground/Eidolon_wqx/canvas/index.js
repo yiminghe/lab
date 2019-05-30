@@ -1,20 +1,21 @@
 ﻿import Base from './Base.js';
-import GraphicUtils from './GraphicUtils.js';
+import Canvas2d from './Canvas2d.js';
 import MapConfig from './MapConfig.js';
 import Eidolon from './Eidolon.js';
 import { DIRECTIONS, DIRECTIONS_MAP } from "./utils.js";
 import Devil from './Devil.js';
 import Heart from './Heart.js';
+import CanvasWebgl from './webgl/CanvasWebgl.js';
 
 /*
-    游戏引擎
+  游戏引擎
 */
-
 class Game extends Base {
   constructor(values) {
     super(values);
     this.lastFps = 60;
     this.tick = this.tick.bind(this);
+    this.drawStaticScene = this.drawStaticScene.bind(this);
     /*
     对应属性变化处理
     */
@@ -58,7 +59,6 @@ class Game extends Base {
   _lifeChange(e) {
     console.log("after life change");
     var life = e.newVal;
-    console.log(life)
     this.updateLife(life);
   }
 
@@ -117,19 +117,6 @@ class Game extends Base {
   开始游戏
   */
   start() {
-    this.get("map").drawMap(this.get("level"));
-    var eidolon = this.get("eidolon");
-    var devil = this.get("devil");
-    eidolon.draw();
-    devil.draw();
-    eidolon.drawAtPos({
-      x: 18,
-      y: 3
-    });
-    this.updateLife(this.get("max_life"));
-    this.get("ctx").drawHeart(18, 7);
-    this.updateEats(0);
-    this.get("heart").show();
     this.startLife();
   }
 
@@ -138,13 +125,13 @@ class Game extends Base {
   */
   startLife() {
     this.pause(true);
+    this.drawStaticScene(true);
     var eidolon = this.get("eidolon");
     var devil = this.get("devil");
     devil.reset("direction");
     eidolon.reset("direction");
     devil.reset("pos");
     eidolon.reset("pos");
-    //强制重绘，防止开始地死亡不出发posChange
     eidolon.draw();
     devil.draw();
   }
@@ -161,6 +148,7 @@ class Game extends Base {
   恶魔回调，吃精灵
   */
   die() {
+    this.startLife();
     //全部死光，才reset eats
     if (this.get("life") - 1 === 0) {
       alert("Game over!");
@@ -170,7 +158,6 @@ class Game extends Base {
     } else {
       this.set("life", this.get("life") - 1);
     }
-    this.startLife();
   }
 
   /*
@@ -178,12 +165,13 @@ class Game extends Base {
   */
   eat() {
     if (this.get("eats") + 1 === this.get("max_eat")) {
-
       this.set("level", this.get("level") + 1);
       alert("next level : " + (this.get("level") + 1));
       this.startLife();
+      this.set("eats", 0);
+    } else {
+      this.set("eats", this.get("eats") + 1);
     }
-    this.set("eats", this.get("eats") + 1);
   }
 
   clearLoop() {
@@ -193,11 +181,35 @@ class Game extends Base {
     this.timeout = null;
   }
 
+  drawStaticScene(init) {
+    const ctx = this.get('ctx');
+    ctx.start();
+    this.get("map").drawMap(this.get("level"));
+    const heart = this.get("heart");
+    const eidolon = this.get("eidolon");
+    const devil = this.get("devil");
+    if (init) {
+      heart.show();
+    } else {
+      heart.draw();
+    }
+    ctx.drawEidolon(18, 3);
+    ctx.drawHeart(18, 7);
+    this.updateEats(this.get('eats'));
+    this.updateLife(this.get('life'));
+  }
+
   process() {
-    var eidolon = this.get("eidolon");
-    var devil = this.get("devil");
-    devil.move();
-    eidolon.move();
+    const ctx = this.get('ctx');
+    ctx.tick(this.drawStaticScene);
+    const eidolon = this.get("eidolon");
+    const devil = this.get("devil");
+    if(!devil.move()){
+      ctx.tick(()=>devil.draw());
+    }
+    if(!eidolon.move()){
+      ctx.tick(()=>eidolon.draw());
+    }
   }
 
   /*
@@ -240,7 +252,7 @@ Game.ATTRS = {
       return this.get("ctx").ZOOM;
     },
     setter(z) {
-      this.get("ctx").ZOOM = z;
+      this.get("ctx").setZoom(z);
     }
   },
   //地图
@@ -316,8 +328,8 @@ Game.ATTRS = {
   }
 };
 
-function EidolonGame(id, cfg) {
-  var ctx = new GraphicUtils();
+function EidolonGame(id, cfg, webgl = false) {
+  var ctx = webgl ? new CanvasWebgl() : new Canvas2d();
   if (ctx.initCanvas(id)) {
     cfg = cfg || {};
     cfg.ctx = ctx;

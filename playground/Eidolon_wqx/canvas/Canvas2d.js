@@ -1,15 +1,15 @@
 /*
     底层图形引擎，绑定canvas，多块游戏的话要多个实例
 */
-function GraphicUtils() {
+function Canvas2d() {
 }
 
-GraphicUtils.prototype = {
+Canvas2d.prototype = {
   /*
       缩放倍数
   */
   ZOOM: 3,
-  constructor: GraphicUtils,
+  constructor: 2,
   initCanvas(id) {
     var canvas = document.getElementById(id);
     if (canvas.getContext) {
@@ -21,6 +21,13 @@ GraphicUtils.prototype = {
   },
   getCanvas() {
     return this.ctx;
+  },
+  setZoom(z) {
+    this.ZOOM = z;
+  },
+  start() {
+  },
+  tick() {
   },
   unDraw(XX, YY, l) {
     var ZOOM = this.ZOOM;
@@ -128,4 +135,4 @@ GraphicUtils.prototype = {
   }
 };
 
-export default GraphicUtils;
+export default Canvas2d;
