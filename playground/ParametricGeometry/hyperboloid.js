@@ -52,7 +52,7 @@ var guis = {
 
     // x^2+y^2-z^2=4
 
-    function generateGeometry() {
+    function generateGeometryX() {
 
       updateGroupGeometry(mesh,
         [ new ParametricGeometry((u, v, p) => {
@@ -79,6 +79,29 @@ var guis = {
           }, data.slices, data.stacks) ]
       );
 
+    }
+
+    function getParametricGeometry(n) {
+      return new ParametricGeometry((u, v, p) => {
+        v *= 2 * Math.PI;
+        u = (10*u + 2);
+        const x = u * Math.sin(v);
+        const y = u * Math.cos(v);
+        let z = Math.sqrt(u * u - 4);
+        if (n) {
+          z = -z;
+        }
+        p.set(x, y, z);
+      }, data.slices, data.stacks);
+    }
+
+    function generateGeometry() {
+      updateGroupGeometry(mesh,
+        [
+          getParametricGeometry(),
+          getParametricGeometry(true),
+        ]
+      );
     }
 
     var folder = gui.addFolder('THREE.ParametricGeometry');
@@ -147,7 +170,7 @@ scene.add(axesHelper);
 
 // var gridHelper = new GridHelper(100, 10);
 // scene.add(gridHelper);
-group.rotation.x+=Math.PI/2;
+group.rotation.x += Math.PI / 2;
 
 
 var render = function () {
