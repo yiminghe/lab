@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<script src="https://gw.alipayobjects.com/os/lib/react/16.10.2/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://gw.alipayobjects.com/os/lib/react-dom/16.10.2/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://gw.alipayobjects.com/os/lib/pixi.js/5.1.5/dist/pixi.js" crossorigin="anonymous"></script>
+<script src="https://gw.alipayobjects.com/os/lib/babel/standalone/7.6.4/babel.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+</body>
+
+<script type="text/babel">
+window.doIt = ({ Lib }) => {
+  const { Sprite } = Lib;
+
+  class Stage extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.buttonPositions = [ 175, 75,
+        600 - 145, 75,
+        600 / 2 - 20, 400 / 2 + 10,
+        175, 400 - 75,
+        600 - 115, 400 - 95 ];
+
+      this.state = { touchButton: -1 };
+    }
+
+    render() {
+      return (<>
+        <Sprite texture={this.props.resources.background.texture}/>
+        {new Array(5).fill(1).map((_v, i) => {
+          const touchdown = () => {
+            console.log('touch');
+            this.setState({ 'touchButton': i });
+          };
+
+          const touchend = () => {
+            console.log('touched');
+            this.setState({ 'touchButton': -1 });
+          };
+
+          return <Sprite
+            onTouchStart={touchdown}
+            onMouseDown={touchdown}
+            onMouseUp={touchend}
+            onTouchEnd={touchend}
+            texture={this.state.touchButton === i ? this.props.resources.buttonDown.texture : this.props.resources.button.texture}
+            anchorX={0.5}
+            anchorY={0.5}
+            interactive
+            x={this.buttonPositions[i * 2]}
+            y={this.buttonPositions[i * 2 + 1]}
+          />
+        })}
+      </>);
+    }
+  }
+
+  class Demo extends React.Component {
+    saveRoot = (root) => {
+      this.root = root;
+    }
+
+    componentDidMount() {
+      const app = new PIXI.Application({
+        width: 620,
+        height: 400,
+      });
+      this.root.appendChild(app.view);
+
+      app.loader.add('background', ('./button_test_BG.jpeg'))
+        .add('button', ('./button.png'))
+        .add('buttonDown', ('./buttonDown.png'))
+        .load((loader, resources) => {
+          Lib.render(<Stage resources={resources}/>, app.stage);
+        });
+    }
+
+    render() {
+      return <div ref={this.saveRoot}/>
+    }
+  }
+
+  ReactDOM.render(<Demo/>, document.getElementById('root'));
+};
+
+if (window.PIXI_LIB) {
+  window.doIt({ Lib: window.PIXI_LIB });
+}
+</script>
+<script type="module">
+import * as Lib from './lib.js';
+if(window.doIt){
+  window.doIt({Lib});
+} else {
+  window.PIXI_LIB=Lib;
+}
+</script>
