@@ -12,10 +12,18 @@
 <body>
 <div id="root"></div>
 </body>
-
+<script>
+var bootstrap={biz:null,lib:null};
+Promise.all([
+  new Promise((resolve)=>bootstrap.lib=resolve),
+  new Promise((resolve)=>bootstrap.biz=resolve),
+]).then(([lib,biz])=>{
+  biz(lib);
+})
+</script>
 <script type="text/babel">
-window.doIt = ({ Lib }) => {
-  const { Sprite } = Lib;
+bootstrap.biz((lib) => {
+  const { Sprite } = lib;
 
   class Stage extends React.Component {
     constructor(props) {
@@ -77,7 +85,7 @@ window.doIt = ({ Lib }) => {
         .add('button', ('./button.png'))
         .add('buttonDown', ('./buttonDown.png'))
         .load((loader, resources) => {
-          Lib.render(<Stage resources={resources}/>, app.stage);
+          lib.render(<Stage resources={resources}/>, app.stage);
         });
     }
 
@@ -87,17 +95,9 @@ window.doIt = ({ Lib }) => {
   }
 
   ReactDOM.render(<Demo/>, document.getElementById('root'));
-};
-
-if (window.PIXI_LIB) {
-  window.doIt({ Lib: window.PIXI_LIB });
-}
+});
 </script>
 <script type="module">
-import * as Lib from './lib.js';
-if(window.doIt){
-  window.doIt({Lib});
-} else {
-  window.PIXI_LIB=Lib;
-}
+import * as lib from './lib.js';
+bootstrap.lib(lib);
 </script>
