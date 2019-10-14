@@ -29,30 +29,39 @@ bootstrap.biz((lib) => {
     constructor(props) {
       super(props);
 
-      this.buttonPositions = [ 175, 75,
+      this.buttonPositions = [
+        0,0,
+        175, 75,
         600 - 145, 75,
         600 / 2 - 20, 400 / 2 + 10,
         175, 400 - 75,
         600 - 115, 400 - 95 ];
 
-      this.state = { touchButton: -1 };
+      this.state = {
+        buttons:[1,2,3,4,5],
+        touchButton: -1 };
     }
 
     render() {
       return (<>
-        <Sprite texture={this.props.resources.background.texture}/>
-        {new Array(5).fill(1).map((_v, i) => {
+        <Sprite texture={this.props.resources.background.texture} />
+        {this.state.buttons.map((i) => {
           const touchdown = () => {
-            console.log('touch');
             this.setState({ 'touchButton': i });
           };
 
           const touchend = () => {
-            console.log('touched');
-            this.setState({ 'touchButton': -1 });
+            const buttons=this.state.buttons.concat();
+            const index=buttons.indexOf(i);
+            buttons.splice(index,1);
+            this.setState({
+            'touchButton': -1,
+             buttons,
+             });
           };
 
           return <Sprite
+            key={i}
             onTouchStart={touchdown}
             onMouseDown={touchdown}
             onMouseUp={touchend}
@@ -80,6 +89,8 @@ bootstrap.biz((lib) => {
         height: 400,
       });
       this.root.appendChild(app.view);
+
+      window.app=app;
 
       app.loader.add('background', ('./button_test_BG.jpeg'))
         .add('button', ('./button.png'))

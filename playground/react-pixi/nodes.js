@@ -61,6 +61,10 @@ function SpriteInit(inst, props, oldProps) {
     inst.interactive = props.interactive;
   }
 
+  if ('zIndex' in props) {
+    inst.zIndex = props.zIndex;
+  }
+
   if ('anchorX' in props) {
     inst.anchor.x = props.anchorX;
   }

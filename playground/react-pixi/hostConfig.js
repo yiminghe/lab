@@ -1,5 +1,12 @@
 import { PIXI_NODE } from "./types.js";
 
+function withLog(log, fn) {
+  return (...args) => {
+    console.log(log);
+    return fn(...args)
+  };
+}
+
 function appendChild(parent, child) {
   parent.addChild(child);
 }
@@ -13,18 +20,18 @@ function removeChild(parent, child) {
   parent.removeChild(child);
 }
 
-export default {
+const hostConfig = {
   now: Date.now,
 
-  getPublicInstance(inst) {
+  getPublicInstance: (inst) => {
     return inst;
   },
 
-  getRootHostContext() {
+  getRootHostContext: () => {
     return {};
   },
 
-  shouldSetTextContent() {
+  shouldSetTextContent: () => {
     return false;
   },
 
@@ -34,8 +41,8 @@ export default {
   resetAfterCommit() {
   },
 
-  getChildHostContext() {
-    return {};
+  getChildHostContext(parentContext) {
+    return parentContext;
   },
 
   createInstance(type, newProps, container) {
@@ -68,13 +75,13 @@ export default {
     newProps.pixiUpdate(node, newProps, oldProps);
   },
 
-  appendInitialChild:appendChild,
+  appendInitialChild: appendChild,
 
-  appendChild,
+  appendChild: appendChild,
 
-  insertBefore,
+  insertBefore: insertBefore,
 
-  removeChild,
+  removeChild: removeChild,
 
   finalizeInitialChildren() {
   },
@@ -85,5 +92,44 @@ export default {
 
   removeChildFromContainer: removeChild,
 
+  cloneHiddenInstance(inst) {
+    return inst;
+  },
+
+  cloneInstance(inst) {
+    return inst;
+  },
+
+  createContainerChildSet(container) {
+    container.removeChildren();
+    return container;
+  },
+
+  appendChildToContainerChildSet(childSet,child){
+    childSet.addChild(child);
+  },
+
+  finalizeContainerChildren(){
+
+  },
+
+  replaceContainerChildren(){
+
+  },
+
   supportsMutation: true,
+
+  supportsPersistence: false,
 };
+
+// hostConfig.supportsMutation = false;
+// hostConfig.supportsPersistence = true;
+
+  // Object.keys(hostConfig).forEach(k => {
+  //   const v = hostConfig[k];
+  //   if (typeof v === 'function') {
+  //     hostConfig[k] = withLog(k, v);
+  //   }
+  // });
+
+export default hostConfig;
