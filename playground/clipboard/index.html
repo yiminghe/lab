@@ -1,0 +1,24 @@
+<div id='t'>
+  paste:
+  <input />
+</div>
+
+
+<script>
+  (function () {
+    const t = document.getElementById('t');
+
+    t.addEventListener('paste', (e) => {
+      const data = e.clipboardData;
+      const items = data.items;
+
+      for (const item of items) {
+        console.log('****************************');
+        console.log('item.kind:', item.kind);
+        console.log('item.type:', item.type);
+        console.log('item string:', data.getData(item.type))
+        console.log('item.getAsFile:', item.getAsFile());
+      }
+    }, false);
+  })();
+</script>
