@@ -1,6 +1,8 @@
-<div id='t'>
+<div>
   paste:
-  <input />
+  <textarea style="width:400px;height:300px" id="t"></textarea>
+
+  <button id="copy">copy</button>
 </div>
 
 
@@ -8,7 +10,26 @@
   (function () {
     const t = document.getElementById('t');
 
+
+    document.getElementById('copy').addEventListener('click',(e)=>{
+      t.select();
+      document.execCommand('copy');
+    });
+
+    t.addEventListener('copy', (e) => {
+      e.preventDefault();
+
+      e.clipboardData.setData('text/plaing','i am plain text');
+      e.clipboardData.setData('text/html','i am plain html');
+      e.clipboardData.setData('test/custom','i am custom data');
+
+      console.log('onCopy');
+    });
+
     t.addEventListener('paste', (e) => {
+      e.preventDefault();
+
+      console.log('onPaste');
       const data = e.clipboardData;
       const items = data.items;
 
