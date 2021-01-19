@@ -19,11 +19,13 @@
     t.addEventListener('copy', (e) => {
       e.preventDefault();
 
-      e.clipboardData.setData('text/plaing','i am plain text');
+     //Promise.resolve().then(()=>{
+      e.clipboardData.setData('text/plain','i am plain text');
       e.clipboardData.setData('text/html','i am plain html');
       e.clipboardData.setData('test/custom','i am custom data');
 
       console.log('onCopy');
+     //});
     });
 
     t.addEventListener('paste', (e) => {
