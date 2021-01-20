@@ -3,6 +3,8 @@
   <textarea style="width:400px;height:300px" id="t"></textarea>
 
   <button id="copy">copy</button>
+
+  <button id="read">read</button>
 </div>
 
 
@@ -11,7 +13,7 @@
     const t = document.getElementById('t');
 
 
-    document.getElementById('copy').addEventListener('click',(e)=>{
+    document.getElementById('copy').addEventListener('click', (e) => {
       t.select();
       document.execCommand('copy');
     });
@@ -19,22 +21,35 @@
     t.addEventListener('copy', (e) => {
       e.preventDefault();
 
-     //Promise.resolve().then(()=>{
-      e.clipboardData.setData('text/plain','i am plain text');
-      e.clipboardData.setData('text/html','i am plain html');
-      e.clipboardData.setData('test/custom','i am custom data');
+      //Promise.resolve().then(()=>{
+      e.clipboardData.setData('text/plain', 'i am plain text');
+      e.clipboardData.setData('text/html', 'i am plain html');
+      e.clipboardData.setData('test/custom', 'i am custom data');
 
       console.log('onCopy');
-     //});
+      //});
     });
 
-    t.addEventListener('paste', (e) => {
-      e.preventDefault();
+    async function blobToString(blob) {
+      if (!blob) {
+        return blob;
+      }
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.addEventListener("load", () => {
+          const result = fileReader.result;
+          if (typeof result === "string") {
+            resolve(result);
+          } else {
+            reject("could not convert blob to string");
+          }
+        });
+        fileReader.readAsText(blob);
+      });
+    }
 
-      console.log('onPaste');
-      const data = e.clipboardData;
+    function logTransferItems(data) {
       const items = data.items;
-
       for (const item of items) {
         console.log('****************************');
         console.log('item.kind:', item.kind);
@@ -42,6 +57,27 @@
         console.log('item string:', data.getData(item.type))
         console.log('item.getAsFile:', item.getAsFile());
       }
+    }
+
+    t.addEventListener('paste', (e) => {
+      e.preventDefault();
+
+      console.log('onPaste');
+      const data = e.clipboardData;
+      logTransferItems(data);
+    }, false);
+
+    document.getElementById('read').addEventListener('click', () => {
+      console.log('read');
+      navigator.clipboard.read().then(async (data) => {
+        console.log('item length', data.length);
+        const [d] = data;
+        for (const type of d.types) {
+          console.log('****************************');
+          console.log('item.type:', type);
+          console.log('getType', await blobToString(await d.getType(type)));
+        }
+      });
     }, false);
   })();
 </script>
