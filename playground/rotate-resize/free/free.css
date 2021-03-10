@@ -1,0 +1,89 @@
+:root {
+    --control-color: #5188f1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.internal {
+    border: 1px solid var(--control-color);
+}
+
+.handler {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1px solid var(--control-color);
+    margin-left: -4px;
+    margin-top: -4px;
+    background: white;
+
+}
+
+.rotate {
+    left: 50%;
+    top: -15px;
+}
+
+.rotate::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 7px;
+    border-left: 1px solid var(--control-color);
+    height: 10px;
+    left: 3px;
+}
+
+.l {
+    left: 0;
+}
+
+.c {
+    left: 50%;
+}
+
+.r {
+    left: 100%;
+}
+
+.t {
+    top: 0;
+}
+
+.m {
+    top: 50%;
+}
+
+.b {
+    top: 100%;
+}
+
+.rotate-guide {
+    pointer-events: none;
+    border-radius: 50%;
+    border: 1px dashed var(--control-color);
+}
+
+.resize-guide {
+    pointer-events: none;
+    width: 0;
+    border-left: 1px dashed var(--control-color);
+    height: 2000px;
+}

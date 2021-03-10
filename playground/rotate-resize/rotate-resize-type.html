@@ -7,14 +7,14 @@
     <script src="../../vendors/react.development.js" crossorigin="anonymous"></script>
     <script src="../../vendors/react-dom.development.js" crossorigin="anonymous"></script>
     <script src="../../vendors/system.js" crossorigin="anonymous"></script>
-    <script src="../../vendors/pixi.js" crossorigin="anonymous"></script>
     <script src="../../vendors/systemjs-babel.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div id="root"></div>
     <script>
-         System.import(`./main.jsx`);
+        const type = location.search.slice(1);
+         System.import(`./${type}/${type}.jsx`);
     </script>
 </body>
 
