@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <script src="../../vendors/react.development.js" crossorigin="anonymous"></script>
+    <script src="../../vendors/react-dom.development.js" crossorigin="anonymous"></script>
+    <script src="../../vendors/system.js" crossorigin="anonymous"></script>
+    <script src="../../vendors/systemjs-babel.js" crossorigin="anonymous"></script>
+    <style>
+        .content {
+            user-select: none;
+            margin: 100px auto;
+            width: 600px;
+            border: 1px solid red;
+            min-height: 100px;
+            max-height: 300px;
+            cursor: text;
+            position: relative;
+            padding: 96px 72px;
+            overflow: auto;
+        }
+
+        .m,
+        .c {
+            display: none;
+            position: absolute;
+            height: 66px;
+            left: 509.5px;
+            top: 123px;
+            width: 600px;
+            background-color: blue;
+        }
+
+        .c {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root" class="content"></div>
+    <div class="c"></div>
+    <div class="m"></div>
+    <script>
+        System.import(`./main.jsx`);
+    </script>
+</body>
+
+</html>
