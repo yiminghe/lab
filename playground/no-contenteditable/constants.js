@@ -4,6 +4,7 @@ export const cursorStyle = {
     position: 'absolute',
     width: '2px',
     backgroundColor: 'black',
+    zIndex: -1,
 };
 
 export const textAreaStyle = {

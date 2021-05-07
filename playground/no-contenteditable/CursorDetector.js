@@ -1,19 +1,17 @@
 import { findSortedIndexWithInRange } from './findSortedIndex.js';
 import { cursorStyle } from './constants.js';
 
-const m = document.querySelector('.m');
-const c = document.querySelector('.c');
-
 function constrain(v, min, max) {
     return Math.min(max, Math.max(v, min));
 }
 
 export default class CursorDetector {
     constructor(props) {
+        this.selection = null;
         this.props = props;
         const { content, textArea } = props;
         content.addEventListener('mousedown', this.onMouseDown);
-        textArea.addEventListener('blur', this.blur);
+        //textArea.addEventListener('blur', this.blur);
         this.cursor = document.createElement('div');
         Object.assign(this.cursor.style, cursorStyle);
         this.visible = true;
@@ -62,32 +60,48 @@ export default class CursorDetector {
         let { clientX, clientY } = event;
 
         const { content } = this.props;
-        const ps = content.querySelectorAll('.p');
+        const ps = content.querySelectorAll('.p:first-child,.p:last-child');
         const psRects = [].map.call(ps, p => p.getClientRects()[0]);
         const firstRect = psRects[0];
         const lastRect = psRects[psRects.length - 1];
 
-        clientY = constrain(clientY, firstRect.top, lastRect.bottom,);
-        clientX = constrain(clientX, firstRect.left, lastRect.right,);
+        clientY = constrain(clientY, firstRect.top + 1, lastRect.bottom - 1,);
+        clientX = constrain(clientX, firstRect.left + 1, lastRect.right - 1,);
 
-        const pRet = findSortedIndexWithInRange(0, psRects.length, (offset) => {
-            const rect = psRects[offset];
-            if (clientY < rect.top) {
-                return 1;
-            }
-            if (clientY > rect.bottom) {
-                return -1;
-            }
-            return 0;
-        });
+        const p = document.elementFromPoint(clientX, clientY);
+        const voidElement = p.closest('[data-void]');
 
-        let pIndex = pRet.index;
-
-        if (!pRet.result && pIndex) {
-            pIndex -= 1;
+        if (voidElement) {
+            return {
+                selection: {
+                    element: voidElement
+                }
+            };
         }
 
-        const p = ps[pIndex];
+        // ff:
+        if (document.caretPositionFromPoint) {
+
+            const { offsetNode, offset } = document.caretPositionFromPoint(clientX, clientY);
+            const range = document.createRange();
+            range.setStart(offsetNode, offset);
+            range.setEnd(offsetNode, offset);
+            // ff : auto wrap will not return two
+            const rects = range.getClientRects();
+            const rect = rects[0];
+            return {
+                rect,
+                offsetNode,
+                offset,
+            };
+        }
+
+
+
+        if (!p) {
+            return {};
+        }
+
         if (p.innerHTML === '\ufeff') {
             const textNode = p.firstChild;
             let range = document.createRange();
@@ -102,6 +116,9 @@ export default class CursorDetector {
         } else {
             const textNodes = [].filter.call(p.childNodes, (n) => n.nodeType === 3);
 
+            if (!textNodes.length) {
+                throw new Error('invalid target', p);
+            }
             const textNodeRet = findSortedIndexWithInRange(0, textNodes.length, (index) => {
                 const textNode = textNodes[index];
                 let range = document.createRange();
@@ -132,21 +149,6 @@ export default class CursorDetector {
                 range.setStart(textNode, offset);
                 range.setEnd(textNode, offset);
                 const rect = range.getClientRects()[0];
-                // Object.assign(m.style, {
-                //     display: 'block',
-                //     left: rect.left + 'px',
-                //     top: rect.top + 'px',
-                //     width: 1 + 'px',
-                //     height: rect.height + 'px',
-                // });
-
-                // Object.assign(c.style, {
-                //     display: 'block',
-                //     left: clientX + 'px',
-                //     top: clientY + 'px',
-                //     width: 1 + 'px',
-                //     height: rect.height + 'px',
-                // });
 
                 if (clientY < rect.top) {
                     return 1;
@@ -172,17 +174,24 @@ export default class CursorDetector {
                 const range = document.createRange();
                 range.setStart(textNode, index - 1);
                 range.setEnd(textNode, index - 1);
-                const lowRect = range.getClientRects()[0];
-                if (Math.abs(lowRect.left - clientX) < Math.abs(rect.left - clientX)) {
-                    rect = lowRect;
-                    index -= 1;
+                // chrome: auto wrap will return two
+                const lowRects = range.getClientRects();
+                let minDistance = Math.abs(rect.left - clientX);
+                let lowIndex = index - 1;
+                for (const lowRect of lowRects) {
+                    const distance = Math.abs(lowRect.left - clientX);
+                    if (distance < minDistance) {
+                        rect = lowRect;
+                        minDistance = distance;
+                        index = lowIndex;
+                    }
                 }
             }
-            
+
             return {
                 rect,
-                textNode,
-                index,
+                offsetNode: textNode,
+                offset: index,
             };
         }
     }
@@ -194,8 +203,19 @@ export default class CursorDetector {
         });
         this.focus();
         const ret = this.findTextIndex(event);
-        const { rect, textNode } = ret;
-        const p = textNode.parentNode;
+        if (ret.selection) {
+            this.selection = ret.selection;
+            this.blur();
+        }
+        if (!ret.offsetNode) {
+            return;
+        }
+        const { rect, offsetNode } = ret;
+        this.selection = {
+            offsetNode,
+            offset: ret.offsetNode,
+        };
+        const p = offsetNode.parentNode;
         const pRect = p.getClientRects()[0];
         const left = rect.left - pRect.left;
         const top = rect.top - pRect.top;
