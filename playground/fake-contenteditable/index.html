@@ -9,7 +9,7 @@
     <script src="../../vendors/system.js" crossorigin="anonymous"></script>
     <script src="../../vendors/systemjs-babel.js" crossorigin="anonymous"></script>
     <style>
-        #content {
+        .content {
             word-break: break-all;
             user-select: none;
             margin: 100px auto;
@@ -22,28 +22,14 @@
             padding: 96px 72px;
             overflow: auto;
         }
-
-        .m,
-        .c {
-            display: none;
-            position: absolute;
-            height: 66px;
-            left: 509.5px;
-            top: 123px;
-            width: 600px;
-            background-color: blue;
-        }
-
-        .c {
-            background-color: red;
-        }
     </style>
 </head>
 
 <body>
-    <div id="content"></div>
-    <div class="c"></div>
-    <div class="m"></div>
+    <h2>fake contenteditable</h2>
+    <div id="content" class="content"></div>
+    <h2>real contenteditable</h2>
+    <div id="content2" class="content" contenteditable="true"></div>
     <script>
         System.import(`./main.jsx`);
     </script>

@@ -21,7 +21,7 @@ function diffValue(prevValue, value) {
     };
 }
 
-export default class InputDetector {
+export default class Input {
     constructor(props) {
         this.props = props;
         this.composing = false;
