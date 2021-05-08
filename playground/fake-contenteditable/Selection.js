@@ -1,25 +1,6 @@
 import { findSortedIndexWithInRange } from './findSortedIndex.js';
 import { cursorStyle } from './constants.js';
-
-function constrain(v, min, max) {
-    return Math.min(max, Math.max(v, min));
-}
-
-function sameSign(a, b) {
-    return a > 0 && b > 0 || a < 0 && b < 0;
-}
-
-function closest(el, s, limit) {
-    if (el.nodeType === 3) {
-        el = el.parentNode;
-    }
-    if (!limit.contains(el)) return null;
-    do {
-        if (el.matches(s)) return el;
-        el = el.parentElement;
-    } while (el !== limit);
-    return null;
-};
+import { closest, constrain, getEqDatasetQuery, eqDataset, sameSign } from './utils.js';
 
 function caretPositionFromPoint(clientX, clientY) {
     let range, offsetNode, offset;
@@ -158,9 +139,11 @@ export default class Selection {
 
     findTextIndex(event) {
         let { clientX, clientY } = event;
-
+        const { paragraph, string } = this.props.datasetMap;
         const { content } = this.props;
-        const ps = content.querySelectorAll(':scope > [data-paragraph]:first-child,:scope > [data-paragraph]:last-child');
+        const paragraphCssQuery = getEqDatasetQuery(paragraph);
+        const ps = content.querySelectorAll(`:scope > ${paragraphCssQuery}:first-child,
+        :scope > ${paragraphCssQuery}:last-child`);
         const psRects = [].map.call(ps, p => p.getClientRects()[0]);
         const firstRect = psRects[0];
         const lastRect = psRects[psRects.length - 1];
@@ -190,9 +173,11 @@ export default class Selection {
 
         const caretPosition = caretPositionFromPoint(clientX, clientY);
 
+        const { datasetMap } = this.props;
+
         if (caretPosition) {
             let { offsetNode, offset } = caretPosition;
-            if (offsetNode.nodeType !== 3 && offsetNode.dataset.void) {
+            if (offsetNode.nodeType !== 3 && eqDataset(offsetNode, datasetMap.void)) {
                 const offsetBounding = offsetNode.getBoundingClientRect();
                 const center = (offsetBounding.left + offsetBounding.right) / 2;
                 if (clientX > center) {
@@ -202,7 +187,7 @@ export default class Selection {
                     offsetNode = offsetNode.firstChild.firstChild;
                     offset = 0;
                 }
-                console.log('focus inside void');
+                // console.log('focus inside void');
             }
             const range = document.createRange();
             range.setStart(offsetNode, offset);
@@ -233,10 +218,10 @@ export default class Selection {
         } else {
             let textSpan;
 
-            if (p.dataset.string || p.dataset.voidMarker) {
+            if (eqDataset(p, string)) {
                 textSpan = p;
             } else {
-                const textSpans = p.querySelectorAll('[data-string],[data-void-marker]');
+                const textSpans = p.querySelectorAll(getEqDatasetQuery(string));
                 const ret = this.findTextSpan(textSpans, clientX, clientY);
                 textSpan = ret.textSpan;
                 const findRect = ret.rect;
@@ -351,5 +336,18 @@ export default class Selection {
             isCollapsed: true,
         };
         this.draw();
+        this.startX = event.clientX;
+        this.startY = event.clientY;
+        content.addEventListener('mousemove', this.onMouseMove);
+        content.addEventListener('mouseup', this.onMouseUp);
+    }
+
+    onMouseMove(event) {
+
+    }
+
+    onMouseUp() {
+        content.removeEventListener('mousemove', this.onMouseMove);
+        content.removeEventListener('mouseup', this.onMouseUp);
     }
 }
