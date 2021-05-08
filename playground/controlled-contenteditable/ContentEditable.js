@@ -3,13 +3,6 @@ import Selection from './Selection.js';
 import { emptyText, textAreaStyle } from './constants.js';
 import { setDataset } from './utils.js';
 
-function createMarker(datasetMap) {
-    let marker = document.createElement('span');
-    setDataset(marker, datasetMap.string);
-    marker.appendChild(document.createTextNode(emptyText));
-    return marker;
-}
-
 const defaultDatasetMap = {
     string: ['string', 'true'],
     void: ['void', 'true'],
@@ -19,7 +12,7 @@ const defaultDatasetMap = {
 
 export default class ContentEditable {
     constructor(props) {
-        const { data, content } = props;
+        const { container } = props;
         const textArea = document.createElement('textarea');
         textArea.rows = 1;
 
@@ -29,7 +22,7 @@ export default class ContentEditable {
 
         Object.assign(textArea.style, textAreaStyle);
 
-        document.body.appendChild(textArea);
+        this.textArea = textArea;
 
         this.input = new Input({
             textArea,
@@ -45,54 +38,70 @@ export default class ContentEditable {
         });
 
         this.selection = new Selection({
-            content: content,
+            container,
             datasetMap,
             textArea,
         });
+    }
+    constructNode(element, block = true) {
+        const { void: voidDataset, paragraph, inline, string } = this.props.datasetMap;
 
-        this.draw(content, data);
+        if ('text' in element) {
+            const node = document.createElement('span');
+            setDataset(node, string);
+            node.appendChild(document.createTextNode(element.text || emptyText));
+            return node;
+        }
+
+        let children = [];
+
+        if (element.children) {
+            children = [];
+            for (const c of element.children) {
+                children.push(this.constructNode(c, false));
+            }
+        }
+
+        let attributes = {};
+
+        if (element.type === 'paragraph') {
+            attributes['data-' + paragraph[0]] = paragraph[1];
+        } else {
+            attributes['data-' + voidDataset[0]] = voidDataset[1];
+            if (!block) {
+                attributes['data-' + inline[0]] = inline[1];
+            }
+            attributes.style = {
+                marginLeft: '2px',
+                marginRight: '2px',
+            };
+        }
+        if (block) {
+            attributes.style = Object.assign({}, attributes.style, {
+                position: 'relative',
+            });
+        } else {
+            attributes.style = Object.assign({}, attributes.style, {
+                display: 'inline-block',
+            });
+        }
+        return this.props.renderElement({
+            attributes,
+            element,
+            children,
+        });
     }
 
-    draw(content, data) {
-        const { datasetMap } = this.props;
-        for (const p of data) {
-            const line = document.createElement('div');
-            setDataset(line, datasetMap.paragraph);
-            line.style.position = 'relative';
-            for (const c of p) {
-                let node;
-                if (typeof c === 'string') {
-                    node = document.createElement('span');
-                    setDataset(node, datasetMap.string);
-                    node.appendChild(document.createTextNode(c || emptyText));
-                } else if (c.type === 'br') {
-                    node = document.createElement(c.type);
-                } else if (c.type) {
-                    node = document.createElement('div');
-                    if (c.style?.display !== 'block') {
-                        Object.assign(node.style, {
-                            display: 'inline-block',
-                            marginLeft: '2px',
-                            marginRight: '2px',
-                        });
-                        setDataset(node, datasetMap.void);
-                        setDataset(node, datasetMap.inline);
-                    }
-                    setDataset(node, datasetMap.void);
-                    node.appendChild(createMarker(this.props.datasetMap));
-                    const inside = document.createElement(c.type);
-                    const { style, type, ...attr } = c;
-                    Object.assign(inside, attr);
+    render() {
+        document.body.appendChild(this.textArea);
+        const { value, container } = this.props;
+        container.innerHTML = '';
+        this.renderInternal(container, value);
+    }
 
-                    if (style) {
-                        Object.assign(inside.style, style);
-                    }
-                    node.appendChild(inside);
-                    node.appendChild(createMarker(this.props.datasetMap));
-                }
-                line.appendChild(node);
-            }
-            content.appendChild(line);
+    renderInternal(container, value) {
+        for (const element of value) {
+            container.appendChild(this.constructNode(element));
         }
     }
 }

@@ -38,8 +38,8 @@ export default class Selection {
     constructor(props) {
         this.selection = null;
         this.props = props;
-        const { content, textArea } = props;
-        content.addEventListener('mousedown', this.onMouseDown);
+        const { container, textArea } = props;
+        container.addEventListener('mousedown', this.onMouseDown);
         textArea.addEventListener('blur', this.blur);
         this.cursor = document.createElement('div');
         this.cursor.dataset.cursor = true;
@@ -48,12 +48,12 @@ export default class Selection {
     }
 
     closest(el, s) {
-        return closest(el, s, this.props.content)
+        return closest(el, s, this.props.container)
     }
 
     destroy() {
-        const { content, textArea } = props;
-        content.removeEventListener('mousedown', this.onMouseDown);
+        const { container, textArea } = props;
+        container.removeEventListener('mousedown', this.onMouseDown);
         textArea.removeEventListener('blur', this.blur);
     }
 
@@ -86,8 +86,8 @@ export default class Selection {
     }
 
     destroy() {
-        const { content } = props;
-        content.removeEventListener('mousedown', this.onMouseDown);
+        const { container } = props;
+        container.removeEventListener('mousedown', this.onMouseDown);
     }
 
     findTextSpan(textSpans, clientX, clientY) {
@@ -140,9 +140,9 @@ export default class Selection {
     findTextIndex(event) {
         let { clientX, clientY } = event;
         const { paragraph, string } = this.props.datasetMap;
-        const { content } = this.props;
+        const { container } = this.props;
         const paragraphCssQuery = getEqDatasetQuery(paragraph);
-        const ps = content.querySelectorAll(`:scope > ${paragraphCssQuery}:first-child,
+        const ps = container.querySelectorAll(`:scope > ${paragraphCssQuery}:first-child,
         :scope > ${paragraphCssQuery}:last-child`);
         const psRects = [].map.call(ps, p => p.getClientRects()[0]);
         const firstRect = psRects[0];
@@ -338,8 +338,8 @@ export default class Selection {
         this.draw();
         this.startX = event.clientX;
         this.startY = event.clientY;
-        content.addEventListener('mousemove', this.onMouseMove);
-        content.addEventListener('mouseup', this.onMouseUp);
+        container.addEventListener('mousemove', this.onMouseMove);
+        container.addEventListener('mouseup', this.onMouseUp);
     }
 
     onMouseMove(event) {
@@ -347,7 +347,7 @@ export default class Selection {
     }
 
     onMouseUp() {
-        content.removeEventListener('mousemove', this.onMouseMove);
-        content.removeEventListener('mouseup', this.onMouseUp);
+        container.removeEventListener('mousemove', this.onMouseMove);
+        container.removeEventListener('mouseup', this.onMouseUp);
     }
 }
