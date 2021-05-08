@@ -9,6 +9,50 @@ function sameSign(a, b) {
     return a > 0 && b > 0 || a < 0 && b < 0;
 }
 
+function closest(el, s, limit) {
+    if (el.nodeType === 3) {
+        el = el.parentNode;
+    }
+    if (!limit.contains(el)) return null;
+    do {
+        if (el.matches(s)) return el;
+        el = el.parentElement;
+    } while (el !== limit);
+    return null;
+};
+
+function caretPositionFromPoint(clientX, clientY) {
+    let range, offsetNode, offset;
+    if (document.caretRangeFromPoint) {
+        range = document.caretRangeFromPoint(clientX, clientY);
+        offsetNode = range.startContainer;
+        offset = range.startOffset;
+    } else if (document.caretPositionFromPoint) {
+        range = document.caretPositionFromPoint(clientX, clientY);
+        offsetNode = range.offsetNode;
+        offset = range.offset;
+    } else {
+        return null;
+    }
+    return {
+        offsetNode,
+        offset,
+    };
+}
+
+function findMatchRect(rects, clientX) {
+    let minDistance = +Infinity;
+    let rect;
+    for (const lowRect of rects) {
+        const distance = Math.abs(lowRect.left - clientX);
+        if (distance < minDistance) {
+            rect = lowRect;
+            minDistance = distance;
+        }
+    }
+    return rect;
+}
+
 export default class Selection {
     constructor(props) {
         this.selection = null;
@@ -17,8 +61,13 @@ export default class Selection {
         content.addEventListener('mousedown', this.onMouseDown);
         textArea.addEventListener('blur', this.blur);
         this.cursor = document.createElement('div');
+        this.cursor.dataset.cursor = true;
         Object.assign(this.cursor.style, cursorStyle);
         this.visible = true;
+    }
+
+    closest(el, s) {
+        return closest(el, s, this.props.content)
     }
 
     destroy() {
@@ -60,17 +109,14 @@ export default class Selection {
         content.removeEventListener('mousedown', this.onMouseDown);
     }
 
-    findTextNode(textNodes, clientX, clientY) {
+    findTextSpan(textSpans, clientX, clientY) {
         let find;
         let findRect;
         let minDistance = undefined;
         let minHorizon = undefined;
 
-        for (const textNode of textNodes) {
-            let range = document.createRange();
-            range.setStart(textNode, 0);
-            range.setEnd(textNode, textNode.textContent.length);
-            const rects = range.getClientRects();
+        for (const textSpan of textSpans) {
+            const rects = textSpan.getClientRects();
             for (const rect of rects) {
                 let distance;
                 let horizonDistance;
@@ -83,7 +129,7 @@ export default class Selection {
                 const check = () => {
                     minHorizon = horizonDistance;
                     minDistance = distance;
-                    find = textNode;
+                    find = textSpan;
                     findRect = rect;
                 };
                 if (minDistance === undefined) {
@@ -103,8 +149,9 @@ export default class Selection {
                 }
             }
         }
+
         return {
-            textNode: find,
+            textSpan: find,
             rect: findRect,
         };
     }
@@ -113,7 +160,7 @@ export default class Selection {
         let { clientX, clientY } = event;
 
         const { content } = this.props;
-        const ps = content.querySelectorAll('.p:first-child,.p:last-child');
+        const ps = content.querySelectorAll(':scope > [data-paragraph]:first-child,:scope > [data-paragraph]:last-child');
         const psRects = [].map.call(ps, p => p.getClientRects()[0]);
         const firstRect = psRects[0];
         const lastRect = psRects[psRects.length - 1];
@@ -122,7 +169,12 @@ export default class Selection {
         clientX = constrain(clientX, firstRect.left + 1, lastRect.right - 1,);
 
         const p = document.elementFromPoint(clientX, clientY);
-        const voidElement = p.closest('[data-void]');
+
+        if (p.dataset?.cursor) {
+            return {};
+        }
+
+        const voidElement = this.closest(p, '[data-void]');
 
         if (voidElement) {
             return {
@@ -132,25 +184,39 @@ export default class Selection {
             };
         }
 
-        // ff:
-        // if (document.caretPositionFromPoint) {
-
-        //     const { offsetNode, offset } = document.caretPositionFromPoint(clientX, clientY);
-        //     const range = document.createRange();
-        //     range.setStart(offsetNode, offset);
-        //     range.setEnd(offsetNode, offset);
-        //     // ff : auto wrap will not return two
-        //     const rects = range.getClientRects();
-        //     const rect = rects[0];
-        //     return {
-        //         rect,
-        //         offsetNode,
-        //         offset,
-        //     };
-        // }
-
         if (!p) {
             return {};
+        }
+
+        const caretPosition = caretPositionFromPoint(clientX, clientY);
+
+        if (caretPosition) {
+            let { offsetNode, offset } = caretPosition;
+            if (offsetNode.nodeType !== 3 && offsetNode.dataset.void) {
+                const offsetBounding = offsetNode.getBoundingClientRect();
+                const center = (offsetBounding.left + offsetBounding.right) / 2;
+                if (clientX > center) {
+                    offsetNode = offsetNode.lastChild.firstChild;
+                    offset = 1;
+                } else {
+                    offsetNode = offsetNode.firstChild.firstChild;
+                    offset = 0;
+                }
+                console.log('focus inside void');
+            }
+            const range = document.createRange();
+            range.setStart(offsetNode, offset);
+            range.setEnd(offsetNode, offset);
+            // ff : auto wrap will not return two
+            const rect = findMatchRect(range.getClientRects(), clientX);
+            if (!rect) {
+                throw new Error('no rect');
+            }
+            return {
+                rect,
+                offsetNode,
+                offset,
+            };
         }
 
         if (p.textContent === '\ufeff') {
@@ -165,19 +231,23 @@ export default class Selection {
                 offset: 0,
             };
         } else {
-            const textNodes = [].filter.call(p.childNodes, (n) => n.nodeType === 3);
+            let textSpan;
 
-            if (!textNodes.length) {
+            if (p.dataset.string || p.dataset.voidMarker) {
+                textSpan = p;
+            } else {
+                const textSpans = p.querySelectorAll('[data-string],[data-void-marker]');
+                const ret = this.findTextSpan(textSpans, clientX, clientY);
+                textSpan = ret.textSpan;
+                const findRect = ret.rect;
+                clientY = constrain(clientY, findRect.top + 1, findRect.bottom - 1);
+            }
+
+            if (!textSpan) {
                 throw new Error('invalid target', p);
             }
 
-            const { textNode, rect: findRect } = this.findTextNode(textNodes, clientX, clientY);
-
-            if (!textNode) {
-                throw new Error('invalid target', p);
-            }
-
-            clientY = constrain(clientY, findRect.top + 1, findRect.bottom - 1);
+            const textNode = textSpan.firstChild;
 
             const ret = findSortedIndexWithInRange(0, textNode.textContent.length, (offset) => {
                 const range = document.createRange();
@@ -233,8 +303,8 @@ export default class Selection {
 
     draw() {
         if (this.selection.isCollapsed) {
-            const { anchorNode: offsetNode, rect } = this.selection;
-            const p = offsetNode.parentNode;
+            let { anchorNode: offsetNode, rect } = this.selection;
+            const p = this.closest(offsetNode, '[data-paragraph]');
             const pRect = p.getClientRects()[0];
             const left = rect.left - pRect.left;
             const top = rect.top - pRect.top;
