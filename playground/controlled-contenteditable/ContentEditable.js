@@ -65,6 +65,8 @@ export default class ContentEditable {
                     node = document.createElement('span');
                     setDataset(node, datasetMap.string);
                     node.appendChild(document.createTextNode(c || emptyText));
+                } else if (c.type === 'br') {
+                    node = document.createElement(c.type);
                 } else if (c.type) {
                     node = document.createElement('div');
                     if (c.style?.display !== 'block') {
