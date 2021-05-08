@@ -75,9 +75,14 @@ const ce = new ContentEditable({
         }
         return node;
     },
+    content: document.getElementById('content'),
     container: document.getElementById('container'),
 });
 
 ce.render();
 
-ce.renderInternal(document.getElementById('container2'), value);
+ce.renderInternal(document.getElementById('content2'), value);
+
+// ReactDOM.render(<input value="1" onChange={(e)=>{
+//     console.log(e.target.value);
+// }}/>,document.getElementById('content2'));

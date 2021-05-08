@@ -12,7 +12,7 @@ const defaultDatasetMap = {
 
 export default class ContentEditable {
     constructor(props) {
-        const { container } = props;
+        const { container, content } = props;
         const textArea = document.createElement('textarea');
         textArea.rows = 1;
 
@@ -39,6 +39,7 @@ export default class ContentEditable {
 
         this.selection = new Selection({
             container,
+            content,
             datasetMap,
             textArea,
         });
@@ -93,10 +94,10 @@ export default class ContentEditable {
     }
 
     render() {
-        document.body.appendChild(this.textArea);
-        const { value, container } = this.props;
-        container.innerHTML = '';
-        this.renderInternal(container, value);
+        this.props.container.appendChild(this.textArea);
+        const { value, content } = this.props;
+        content.innerHTML = '';
+        this.renderInternal(this.props.content, value);
     }
 
     renderInternal(container, value) {

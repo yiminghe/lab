@@ -44,7 +44,8 @@ export default class Selection {
         this.cursor = document.createElement('div');
         this.cursor.dataset.cursor = true;
         Object.assign(this.cursor.style, cursorStyle);
-        this.visible = true;
+        this.visible = false;
+        container.appendChild(this.cursor);
     }
 
     closest(el, s) {
@@ -140,9 +141,9 @@ export default class Selection {
     findTextIndex(event) {
         let { clientX, clientY } = event;
         const { paragraph, string } = this.props.datasetMap;
-        const { container } = this.props;
+        const { content } = this.props;
         const paragraphCssQuery = getEqDatasetQuery(paragraph);
-        const ps = container.querySelectorAll(`:scope > ${paragraphCssQuery}:first-child,
+        const ps = content.querySelectorAll(`:scope > ${paragraphCssQuery}:first-child,
         :scope > ${paragraphCssQuery}:last-child`);
         const psRects = [].map.call(ps, p => p.getClientRects()[0]);
         const firstRect = psRects[0];
@@ -288,11 +289,11 @@ export default class Selection {
 
     draw() {
         if (this.selection.isCollapsed) {
-            let { anchorNode: offsetNode, rect } = this.selection;
-            const p = this.closest(offsetNode, '[data-paragraph]');
-            const pRect = p.getClientRects()[0];
-            const left = rect.left - pRect.left;
-            const top = rect.top - pRect.top;
+            let { rect } = this.selection;
+            const { container } = this.props;
+            const pRect = container.getClientRects()[0];
+            const left = rect.left - pRect.left + container.scrollLeft;
+            const top = rect.top - pRect.top + container.scrollTop;
             this.blur();
             const cursorPos = {
                 left: left + 'px',
@@ -302,10 +303,9 @@ export default class Selection {
             };
             Object.assign(this.cursor.style, cursorPos);
             Object.assign(this.props.textArea.style, {
-                left: rect.left + 'px',
-                top: rect.top + 'px',
+                left: left + 'px',
+                top: top + 'px',
             });
-            p.appendChild(this.cursor);
             this.focus();
         } else {
             this.blur();

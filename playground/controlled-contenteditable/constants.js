@@ -5,10 +5,11 @@ export const cursorStyle = {
     width: '2px',
     backgroundColor: 'black',
     zIndex: 10,
+    opacity:0,
 };
 
 export const textAreaStyle = {
-    position: 'fixed',
+    position: 'absolute',
     top: '0px',
     left: '0px',
     fontSize: 'inherit',

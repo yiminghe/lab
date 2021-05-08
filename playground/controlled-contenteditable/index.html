@@ -10,9 +10,6 @@
     <script src="../../vendors/systemjs-babel.js" crossorigin="anonymous"></script>
     <style>
         .container {
-            overflow-wrap: break-word;
-            word-break: break-all;
-            white-space: pre-wrap;
             user-select: none;
             margin: 100px auto;
             width: 600px;
@@ -24,14 +21,23 @@
             padding: 96px 72px;
             overflow: auto;
         }
+
+        .content {
+            overflow-wrap: break-word;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 
 <body>
     <h2>controlled contenteditable</h2>
-    <div id="container" class="container"></div>
+    <div id="container" class="container">
+        <div id="content" class="content"></div>
+    </div>
     <h2>real contenteditable</h2>
-    <div id="container2" class="container" contenteditable="true"></div>
+    <div class="container content" id="content2" contenteditable="true">
+    </div>
     <script>
         System.import(`./main.jsx`);
     </script>
