@@ -37,8 +37,27 @@ export default class ContentEditable {
             }
         });
 
+        this.underLayer = document.createElement('div');
+        Object.assign(this.underLayer.style, {
+            position: 'relative',
+            zIndex: 50,
+        });
+        container.insertBefore(this.underLayer, content);
+
+        this.topLayer = document.createElement('div');
+        Object.assign(this.topLayer.style, {
+            position: 'absolute',
+            zIndex: 150,
+            left: '0px',
+            top: '0px',
+        });
+        container.insertBefore(this.underLayer, content);
+        container.appendChild(this.topLayer);
+
         this.selection = new Selection({
             container,
+            underLayer: this.underLayer,
+            topLayer: this.topLayer,
             content,
             datasetMap,
             textArea,
@@ -73,8 +92,13 @@ export default class ContentEditable {
                 attributes['data-' + inline[0]] = inline[1];
             }
             attributes.style = {
+                // fontSize: 0,
+                outlineStyle: 'none',
                 marginLeft: '2px',
                 marginRight: '2px',
+                paddingTop: '1px',
+                paddingLeft: '1px',
+                paddingRight: '1px',
             };
         }
         if (block) {
@@ -94,15 +118,15 @@ export default class ContentEditable {
     }
 
     render() {
-        this.props.container.appendChild(this.textArea);
+        this.underLayer.appendChild(this.textArea);
         const { value, content } = this.props;
         content.innerHTML = '';
         this.renderInternal(this.props.content, value);
     }
 
-    renderInternal(container, value) {
+    renderInternal(content, value) {
         for (const element of value) {
-            container.appendChild(this.constructNode(element));
+            content.appendChild(this.constructNode(element));
         }
     }
 }

@@ -10,6 +10,12 @@ const value = [
         ]
     },
     {
+        type: 'image',
+        url: 'http://alidocs.oss-accelerate.aliyuncs.com/a/RBLvJoVbNSebrvVB/deedb8442f54418e9f312ba8f0fa978b0521.png',
+        width: 286,
+        height: 118,
+    },
+    {
         type: 'paragraph',
         children: [
             {
@@ -63,9 +69,13 @@ const ce = new ContentEditable({
                 width: element.width + 'px',
                 height: element.height + 'px',
             });
-            node.appendChild(children[0]);
+            if (children.length) {
+                node.appendChild(children[0]);
+            }
             node.appendChild(img);
-            node.appendChild(children[0].cloneNode(true));
+            if (children.length) {
+                node.appendChild(children[0].cloneNode(true));
+            }
         } else {
             if (children.length) {
                 for (const c of children) {
