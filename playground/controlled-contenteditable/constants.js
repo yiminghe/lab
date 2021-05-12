@@ -5,7 +5,8 @@ export const cursorStyle = {
     width: '2px',
     backgroundColor: 'black',
     zIndex: 10,
-    opacity:0,
+    opacity: 0,
+    userSelect: 'none',
 };
 
 export const textAreaStyle = {
@@ -21,3 +22,19 @@ export const textAreaStyle = {
     zIndex: -1,
     opacity: 0,
 };
+
+export const selectionOverlayStyle = {
+    position: 'absolute',
+    zIndex: 20,
+    userSelect: 'none',
+};
+
+export const activeOverlayStyle = {
+    backgroundColor: '#76a7fa',
+    opacity: 0.5,
+};
+
+export const inActiveOverlayStyle = {
+    backgroundColor: 'rgb(0, 0, 0)',
+    opacity: 0.15,
+}
