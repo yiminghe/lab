@@ -8,6 +8,7 @@ const defaultDatasetMap = {
     void: ['void', 'true'],
     inline: ['inline', 'true'],
     paragraph: ['paragraph', 'true'],
+    selected: ['selected', 'true'],
 }
 
 export default class ContentEditable {
@@ -46,13 +47,10 @@ export default class ContentEditable {
 
         this.topLayer = document.createElement('div');
         Object.assign(this.topLayer.style, {
-            position: 'absolute',
+            position: 'relative',
             zIndex: 150,
-            left: '0px',
-            top: '0px',
         });
-        container.insertBefore(this.underLayer, content);
-        container.appendChild(this.topLayer);
+        container.insertBefore(this.topLayer, content);
 
         this.selection = new Selection({
             container,
@@ -92,14 +90,11 @@ export default class ContentEditable {
                 attributes['data-' + inline[0]] = inline[1];
             }
             attributes.style = {
-                // fontSize: 0,
                 outlineStyle: 'none',
-                marginLeft: '2px',
-                marginRight: '2px',
-                paddingTop: '1px',
-                paddingLeft: '1px',
-                paddingRight: '1px',
             };
+            if (block) {
+                attributes.style.fontSize = '0px';
+            }
         }
         if (block) {
             attributes.style = Object.assign({}, attributes.style, {
@@ -108,6 +103,8 @@ export default class ContentEditable {
         } else {
             attributes.style = Object.assign({}, attributes.style, {
                 display: 'inline-block',
+                marginLeft: '2px',
+                marginRight: '2px',
             });
         }
         return this.props.renderElement({

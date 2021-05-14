@@ -16,7 +16,7 @@ export function closest(el, s, limit) {
     }
     if (!limit.contains(el)) return null;
     do {
-        if(!el || !el.matches){
+        if (!el || !el.matches) {
             debugger
         }
         if (el.matches(s)) return el;
@@ -82,4 +82,37 @@ export function getChildElement(parent, index) {
 
 export function px(i) {
     return i + 'px';
+}
+
+export function extendSelection(selection) {
+    let { anchorNode, anchorOffset, focusNode, focusOffset } = selection;
+
+    let anchorElement = anchorNode;
+    if (!isTextNode(anchorElement)) {
+        anchorElement = anchorNode.childNodes[anchorOffset];
+    }
+    let focusElement = focusNode;
+    if (!isTextNode(focusElement)) {
+        focusElement = focusNode.childNodes[focusOffset];
+    }
+    return {
+        ...selection,
+        focusElement,
+        anchorElement,
+    };
+}
+
+export function eqSelection(s1, s2) {
+    return s1.focusNode === s2.focusNode &&
+        s1.anchorNode === s2.anchorNode &&
+        s1.focusOffset === s2.focusOffset &&
+        s1.anchorOffset === s2.anchorOffset;
+}
+
+export function isVoidSelected(selection) {
+    if (!selection) {
+        return false;
+    }
+    const { focusNode, focusElement, anchorElement } = extendSelection(selection);
+    return (!isTextNode(focusNode) && focusElement === anchorElement);
 }

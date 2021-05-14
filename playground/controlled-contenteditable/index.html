@@ -27,7 +27,15 @@
             overflow-wrap: break-word;
             word-break: break-all;
             white-space: pre-wrap;
-            z-index:100;
+            z-index: 100;
+        }
+
+        div[data-void] {
+            border: 1px solid transparent;
+        }
+
+        div[data-void][data-selected] {
+            border: 1px solid red;
         }
     </style>
 </head>
