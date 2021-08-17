@@ -1,75 +1,99 @@
-// https://www.cs.tufts.edu/comp/150GA/homeworks/hw1/Johnson%2075.PDF
-// https://byvoid.com/zhs/blog/scc-tarjan/
+import { GraphNode, findElementaryCircuits } from "./findElementaryCircuits.js";
 
+function constructNodes(ids) {
+  const idMap = new Map();
 
-class Node {
-  constructor(id) {
-    this.id = id;
-    this.to = [];
-  }
-
-  addTo(node) {
-    this.to.push(node);
-  }
-}
-
-const nodesMap = new Map();
-
-for (const id of ['b', 'c', 'a', 'd', 'e']) {
-  nodesMap.set(id, new Node(id));
-}
-
-nodesMap.get('a').addTo(nodesMap.get('b'));
-nodesMap.get('b').addTo(nodesMap.get('c'));
-nodesMap.get('c').addTo(nodesMap.get('a'));
-
-nodesMap.get('a').addTo(nodesMap.get('d'));
-nodesMap.get('d').addTo(nodesMap.get('e'));
-// nodesMap.get('e').addTo(nodesMap.get('a'));
-
-function tarjan(root, cls = {}) {
-  let {
-    low = new Map(),
-    dfn = new Map(),
-    count = 0,
-    visited = new Map(),
-    stack = [],
-    sccs = [],
-  } = cls;
-  count++;
-  Object.assign(cls, { low, dfn, count, visited, stack, sccs });
-  ({ count } = cls);
-  low.set(root, count);
-  dfn.set(root, count);
-  visited.set(root, true);
-  stack.push(root)
-
-  for (const next of root.to) {
-    if (!visited.get(next)) {
-      tarjan(next, cls);
-      low.set(root, Math.min(low.get(root), low.get(next)));
-    } else if (stack.indexOf(next) !== -1 && dfn.get(next) < low.get(root)) {
-      low.set(root, dfn.get(next));
+  function node(id) {
+    if (idMap.get(id)) {
+      return idMap.get(id);
     }
+    const n = new GraphNode(id);
+    idMap.set(id, n);
+    return n;
   }
 
-  if (low.get(root) === dfn.get(root) && stack.length > 0) {
-    let s = [...stack];
-    let next;
-    let scc = [];
-    do {
-      next = stack.pop();
-      scc.push(next);
-    } while (next !== root);
-
-    if (scc.length > 1) {
-      sccs.push(scc.reverse());
-    }
+  function edge(n1, n2) {
+    n1.addTo(n2);
   }
 
-  return cls;
+  for (const id of ids) {
+    edge(node(id[0]), node(id[1]));
+  }
+
+  // https://dreampuf.github.io/GraphvizOnline/
+  function toDot() {
+    let edges = ids.map((id) => `\"${id[0]}\" -> \"${id[1]}\"`);
+    return `digraph g {
+      ${edges.join(';\n')}
+      }`;
+  }
+
+  return { nodes: Array.from(idMap.values()), dot: toDot() };
 }
 
-const ret = tarjan(nodesMap.get('b'));
+const defaultData = [
+  ['b', 'c'],
+  [],
+  ['c', 'a'],
+  [],
+  ['a', 'd'],
+  [],
+  ['d', 'e'],
+  [],
+  ['a', 'b'],
+  [],
+  ['e', 'a'],
+  [],
+  ['c', 'e'],
+];
 
-console.log(ret);
+const { useRef, useEffect } = React;
+
+var viz = new Viz();
+
+function App() {
+  const input = useRef();
+  const result = useRef();
+  const span = useRef();
+
+  function run() {
+    let value = input.current.value.trim();
+    value = value.split(/\n+/).map(s => s.trim()).map(s => {
+      const v = s.split('>');
+      return v.map(vv => vv.trim());
+    });
+    const { nodes, dot } = constructNodes(value);
+    viz.renderSVGElement(dot).then(function (el) {
+      if (span.current.firstChild) {
+        span.current.removeChild(span.current.firstChild);
+      }
+      span.current.appendChild(el);
+    });
+    result.current.value = (
+      findElementaryCircuits(nodes).map(v => v.map((n) => n.id)).map(v => v.join(' > ')).join('\n\n'));
+  }
+
+  useEffect(() => {
+    run();
+  }, []);
+
+  return <div>
+    <h2>find all the elementary circuits of a directed graph</h2>
+    <span style={{ verticalAlign: 'top',fontWeight:'bolder' }}>edges:</span>
+    &nbsp;
+    <textarea style={{ width: 200, height: 200, verticalAlign: 'top' }} ref={input} defaultValue={
+      defaultData.map(d => d.length ? `${d[0]} > ${d[1]}` : '').join('\n')
+    }>
+    </textarea>
+    &nbsp;
+    <span ref={span}></span>
+    &nbsp;
+    <span style={{ verticalAlign: 'top',fontWeight:'bolder' }}>circuits:</span>
+    &nbsp;
+    <textarea style={{ width: 200, height: 200, verticalAlign: 'top' }} ref={result} />
+    <br />
+    <button onClick={run}>run</button>
+  </div>;
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
