@@ -7,11 +7,15 @@
   <button id="read">read</button>
 </div>
 
+<div id='result'>
+
+</div>
+
 
 <script>
   (function () {
     const t = document.getElementById('t');
-
+    const result = document.getElementById('result');
 
     document.getElementById('copy').addEventListener('click', (e) => {
       t.select();
@@ -49,6 +53,7 @@
     }
 
     function logTransferItems(data) {
+      result.innerHTML = '';
       const items = data.items;
       for (const item of items) {
         console.log('****************************');
@@ -56,6 +61,18 @@
         console.log('item.type:', item.type);
         console.log('item string:', data.getData(item.type))
         console.log('item.getAsFile:', item.getAsFile());
+        if (item.type.startsWith('image/') && item.kind === 'file') {
+          const file = item.getAsFile();
+          var reader = new FileReader();
+          const preview = document.createElement('img');
+          preview.style.display = 'block';
+          result.appendChild(preview);
+          reader.addEventListener("load", function () {
+            preview.src = reader.result;
+          }, false);
+
+          reader.readAsDataURL(file);
+        }
       }
     }
 
