@@ -1,0 +1,104 @@
+<div>
+  <input id="in" />
+</div>
+<script src="https://unpkg.com/rxjs@7.5.7/dist/bundles/rxjs.umd.js"></script>
+<script>
+  (function () {
+    const {
+      fromEvent,
+      from,
+      map,
+      switchMap,
+      debounceTime,
+      filter,
+      of,
+      delay,
+      concatAll,
+      EMPTY,
+      testing: { TestScheduler },
+    } = rxjs;
+
+    function mockFetch(v) {
+      return from(
+        new Promise((r) => {
+          setTimeout(() => {
+            r(v);
+          }, 100);
+        })
+      );
+    }
+
+    function run(input$, fetch, delay, scheduler) {
+      return input$.pipe(
+        debounceTime(delay, scheduler),
+        map((v) => v.target.value),
+        filter((v) => !!v.trim()),
+        // switch map after debounce
+        switchMap(fetch)
+      );
+    }
+
+    function run2(input$, fetch, delayTime, scheduler) {
+      return input$.pipe(
+        map((v) => v.target.value),
+        filter((v) => !!v.trim()),
+        switchMap((v) => {
+          v = v.trim();
+          // if(!v){
+          //   return of();
+          // }
+          return of(v).pipe(
+            delay(delayTime, scheduler),
+            map(fetch),
+            concatAll()
+          );
+        })
+      );
+    }
+
+    const input = document.getElementById("in");
+    const data$ = run2(fromEvent(input, "keyup"), mockFetch, 500);
+
+    data$.subscribe((v) => {
+      console.log(v);
+    });
+
+    function test(run, keyup, expected) {
+      const scheduler = new TestScheduler((actual, expected) => {
+        if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+          console.log("actual", JSON.stringify(actual));
+          console.log("-".repeat(10));
+          console.log("expected", JSON.stringify(expected));
+          throw new Error("unequal");
+        }
+      });
+
+      const fetch$ = (query) => {
+        return of(query).pipe(delay(40, scheduler));
+      };
+      const keyup$ = scheduler.createHotObservable(keyup, {
+        a: { target: { value: "r" } },
+        b: { target: { value: "rx" } },
+        c: { target: { value: "rxj" } },
+      });
+      const result$ = run(keyup$, fetch$, 20, scheduler);
+      scheduler.expectObservable(result$).toBe(expected, {
+        x: "rx",
+        y: "rxj",
+      });
+      scheduler.flush();
+    }
+
+    test(run, 
+    "^-a-b--c---------|",
+    "-------------y---|");
+
+    test(run, 
+    "^-a-b---c---------|", 
+    "----------x---y---|");
+
+    test(run2, 
+    "^-a-b---c---------|", 
+    "--------------y---|");
+  })();
+</script>
