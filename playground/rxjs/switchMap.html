@@ -1,5 +1,6 @@
 <div>
   <input id="in" />
+  <div id="result"></div>
 </div>
 <script src="https://unpkg.com/rxjs@7.5.7/dist/bundles/rxjs.umd.js"></script>
 <script>
@@ -26,6 +27,20 @@
           }, 100);
         })
       );
+    }
+
+    async function githubFetch(query) {
+      const res = await fetch(
+        `https://api.github.com/search/repositories?q=${query}&sort=stars&order=desc`
+      );
+      const json = await res.json();
+      return {
+        total_count: json.total_count,
+        items: json.items.map((x) => ({
+          name: x.name,
+          full_name: x.full_name,
+        })),
+      };
     }
 
     function run(input$, fetch, delay, scheduler) {
@@ -57,10 +72,17 @@
     }
 
     const input = document.getElementById("in");
-    const data$ = run2(fromEvent(input, "keyup"), mockFetch, 500);
-
+    const data$ = run2(fromEvent(input, "keyup"), githubFetch, 500);
+    const result = document.getElementById("result");
     data$.subscribe((v) => {
-      console.log(v);
+      let o = "<ul>";
+      if (v && v.items) {
+        for (const i of v.items) {
+          o += `<li><a href="https://github.com/${i.full_name}" target="_blank">${i.name}</a></li>`;
+        }
+      }
+      o += "</ul>";
+      result.innerHTML = o;
     });
 
     function test(run, keyup, expected) {
@@ -89,16 +111,10 @@
       scheduler.flush();
     }
 
-    test(run, 
-    "^-a-b--c---------|",
-    "-------------y---|");
+    test(run, "^-a-b--c---------|", "-------------y---|");
 
-    test(run, 
-    "^-a-b---c---------|", 
-    "----------x---y---|");
+    test(run, "^-a-b---c---------|", "----------x---y---|");
 
-    test(run2, 
-    "^-a-b---c---------|", 
-    "--------------y---|");
+    test(run2, "^-a-b---c---------|", "--------------y---|");
   })();
 </script>
