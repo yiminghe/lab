@@ -3,5 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "author": "yiminghe <yiminghe@gmail.com>",
-  "description": "my lab"
+  "description": "my lab",
+  "dependencies": {
+    "prettier": "^3.0.3"
+  }
 }
