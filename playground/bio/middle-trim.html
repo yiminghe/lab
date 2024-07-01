@@ -1,19 +1,19 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8" />
-<title>peng</title>
-</head>
-<body>
-<textarea style="width:90%;height:300px;" id='t'></textarea>
-<br/>
-<button id='run'>去除间隔符</button>
-<script>
-    document.getElementById("run").onclick = function() {
-
-        document.getElementById("t").value = document.getElementById("t").value.replace(/[^\w]*([\w]+)[^\w]+([\w]+)[^\w]*/g, "$1$2");
-
-    };
-</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>peng</title>
+  </head>
+  <body>
+    <textarea style="width: 90%; height: 300px" id="t"></textarea>
+    <br />
+    <button id="run">去除间隔符</button>
+    <script>
+      document.getElementById('run').onclick = function () {
+        document.getElementById('t').value = document
+          .getElementById('t')
+          .value.replace(/[^\w]*([\w]+)[^\w]+([\w]+)[^\w]*/g, '$1$2');
+      };
+    </script>
+  </body>
 </html>

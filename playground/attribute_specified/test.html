@@ -1,74 +1,71 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>attribute Test</title>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <title>attribute Test</title>
+  </head>
+  <body>
+    <div style="border: 1px solid green" id="test">属性操作元素</div>
 
-<div style="border:1px solid green;" id="test">
-    属性操作元素
-</div>
+    <button id="attributes">查看 attributes 长度</button>
 
-<button id="attributes">
-    查看 attributes 长度
-</button>
+    <button id="attribute0">查看 attributes[0].specified</button>
 
-<button id="attribute0">
-    查看 attributes[0].specified
-</button>
+    <button id="add">通过 setAttribute 添加</button>
 
-<button id="add">
-    通过 setAttribute 添加
-</button>
+    <button id="add2">通过 dom.xx=yy 添加</button>
 
-<button id="add2">
-    通过 dom.xx=yy 添加
-</button>
+    <h1>refer :</h1>
 
-<h1> refer :</h1>
-
-<p>
-    <a href="http://www.quirksmode.org/dom/tests/attributes.html" target="_blank">
-       PPK : W3C DOM tests - attributes[]</a>
-</p>
-<p>
-    <a href="http://www.quirksmode.org/dom/w3c_core.html" target="_blank">
-        PPK : W3C DOM Compatibility - Core</a>
-</p>
-<p>
-    <a href="http://www.w3.org/TR/html5/" target="_blank">
-        html5 spec</a>
-</p>
-<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-<script>
-    KISSY.ready(function(S) {
-        var test = S.one("#test")[0],
-                show = test.attributes,
-                attributes = S.one("#attributes"),
-                attribute0 = S.one("#attribute0"),
-                add = S.one("#add"),
-                add2 = S.one("#add2");
+    <p>
+      <a
+        href="http://www.quirksmode.org/dom/tests/attributes.html"
+        target="_blank">
+        PPK : W3C DOM tests - attributes[]</a
+      >
+    </p>
+    <p>
+      <a href="http://www.quirksmode.org/dom/w3c_core.html" target="_blank">
+        PPK : W3C DOM Compatibility - Core</a
+      >
+    </p>
+    <p>
+      <a href="http://www.w3.org/TR/html5/" target="_blank"> html5 spec</a>
+    </p>
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+    <script>
+      KISSY.ready(function (S) {
+        var test = S.one('#test')[0],
+          show = test.attributes,
+          attributes = S.one('#attributes'),
+          attribute0 = S.one('#attribute0'),
+          add = S.one('#add'),
+          add2 = S.one('#add2');
         var id = 1;
-        attributes.on("click", function() {
-            alert(show.length);
+        attributes.on('click', function () {
+          alert(show.length);
         });
-        attribute0.on("click", function() {
-            alert("attributes[0].specified : "+show[0].name+"@"+show[0].specified);
+        attribute0.on('click', function () {
+          alert(
+            'attributes[0].specified : ' +
+              show[0].name +
+              '@' +
+              show[0].specified,
+          );
         });
-        add.on("click", function() {
-            alert("before set attributes :" + show.length);
-            test.setAttribute("p_" + id, "v_" + id);
-            id++;
-            alert("after set attributes :" + show.length);
+        add.on('click', function () {
+          alert('before set attributes :' + show.length);
+          test.setAttribute('p_' + id, 'v_' + id);
+          id++;
+          alert('after set attributes :' + show.length);
         });
-        add2.on("click", function() {
-            alert("before set attributes :" + show.length);
-            test["p_" + id] = "v_" + id;
-            id++;
-            alert("after set attributes :" + show.length);
+        add2.on('click', function () {
+          alert('before set attributes :' + show.length);
+          test['p_' + id] = 'v_' + id;
+          id++;
+          alert('after set attributes :' + show.length);
         });
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

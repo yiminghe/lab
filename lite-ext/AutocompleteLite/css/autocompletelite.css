@@ -1,86 +1,84 @@
 ul.x-combo-list-inner {
-	background:white none repeat scroll 0 0;
-	overflow:auto;
+  background: white none repeat scroll 0 0;
+  overflow: auto;
 }
-	
-ul.x-combo-list-inner li.x-combo-selected  {
-	background:#DFE8F6 none repeat scroll 0 0;
-	border:1px dotted #A3BAE9 !important;
+
+ul.x-combo-list-inner li.x-combo-selected {
+  background: #dfe8f6 none repeat scroll 0 0;
+  border: 1px dotted #a3bae9 !important;
 }
 
 ul.x-combo-list-inner li {
-	border:1px solid #FFFFFF;
-	padding:2px;
+  border: 1px solid #ffffff;
+  padding: 2px;
 }
 
 .x-combo-list {
-	background:#DDECFE none repeat scroll 0 0;
-	border:1px solid #98C0F4;
-	overflow:auto;
-	z-index:99999;
-	position:absolute;
-	cursor:pointer;	
+  background: #ddecfe none repeat scroll 0 0;
+  border: 1px solid #98c0f4;
+  overflow: auto;
+  z-index: 99999;
+  position: absolute;
+  cursor: pointer;
 }
 
-
 .x-form-text {
-	height:19px;
-	background:#FFFFFF url(../images/text-bg.gif) repeat-x scroll 0 0;
-	border:1px solid #B5B8C8;
-	padding:1px 0 1px 0;
-	vertical-align:middle;
+  height: 19px;
+  background: #ffffff url(../images/text-bg.gif) repeat-x scroll 0 0;
+  border: 1px solid #b5b8c8;
+  padding: 1px 0 1px 0;
+  vertical-align: middle;
 }
 
 .x-form-trigger {
-	background:transparent url(../images/trigger.gif) no-repeat scroll 0 0;
-	border-color:#B5B8C8;
-	border-style:solid;
-	border-width:0px 0 1px 0;
-	cursor:pointer;
-	height:22px;
-	width:17px;
-	display:-moz-inline-stack;
-	display:inline-block;
-	zoom:1;
-	*display:inline;
-	vertical-align:middle;
+  background: transparent url(../images/trigger.gif) no-repeat scroll 0 0;
+  border-color: #b5b8c8;
+  border-style: solid;
+  border-width: 0px 0 1px 0;
+  cursor: pointer;
+  height: 22px;
+  width: 17px;
+  display: -moz-inline-stack;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  vertical-align: middle;
 }
 
-.ext-ie .x-form-trigger{
-	top:1px;
+.ext-ie .x-form-trigger {
+  top: 1px;
 }
 .x-trigger-wrap-focus .x-form-trigger {
-	border-bottom:1px solid #7EADD9;
+  border-bottom: 1px solid #7eadd9;
 }
 .x-trigger-wrap-focus .x-form-trigger {
-	background-position:-51px 0;
+  background-position: -51px 0;
 }
 /*
 	inline block 技巧
 	http://foohack.com/2007/11/cross-browser-support-for-inline-block-styling/
 */
 .x-trigger-wrap {
-	display:-moz-inline-stack;
-	display:inline-block;
-	zoom:1;
-	*display:inline;
-	
+  display: -moz-inline-stack;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
 }
 .x-trigger-wrap .x-form-trigger-over {
-	background-position:-68px 0;
+  background-position: -68px 0;
 }
 .x-trigger-wrap-focus .x-form-text {
-	border:1px solid #7EADD9;
+  border: 1px solid #7eadd9;
 }
 
 .x-trigger-wrap .x-form-trigger-click {
-	background-position:-85px 0;
+  background-position: -85px 0;
 }
 
 .x-trigger-wrap .labelTip {
-	color:gray;
-	position:absolute;
-	z-index:99999;
-	left:0;
-	top:0;
+  color: gray;
+  position: absolute;
+  z-index: 99999;
+  left: 0;
+  top: 0;
 }

@@ -1,500 +1,602 @@
 /**
- * mini ¹ºÎï³µÂß¼­
+ * mini ï¿½ï¿½ï¿½ï³µï¿½ß¼ï¿½
  * @creater qiaohua
  * @depends ks-core, TB.Global
  */
-(function(undefined) {
-    var S = KISSY, win = window, doc = document,
+(function (undefined) {
+  var S = KISSY,
+    win = window,
+    doc = document,
+    isIE76 = !'0'[0],
+    isIE6 = isIE76 && !window.XMLHttpRequest,
+    domain = doc.domain,
+    IS_DAILY = !(
+      domain.indexOf('taobao.com') > -1 || domain.indexOf('tmall.com') > -1
+    ),
+    HOSTNAME = IS_DAILY ? '.daily.taobao.net' : '.taobao.com',
+    BUY_HOST = 'http://buy' + HOSTNAME + '/',
+    CARTDATA_API = BUY_HOST + 'auction/cart/trail_mini_cart.htm?',
+    REMOVE_API = BUY_HOST + 'auction/cart/del_mini_cart.htm?',
+    REMOVEING = 'ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½',
+    REMOVE = 'É¾ï¿½ï¿½',
+    MINI_CLS = 'mini-cart-',
+    HD_CLS = MINI_CLS + 'hd',
+    BD_CLS = MINI_CLS + 'bd',
+    IMG_CLS = MINI_CLS + 'img',
+    COUNT_CLS = MINI_CLS + 'count',
+    DEL_CLS = MINI_CLS + 'del',
+    TITLE_CLS = MINI_CLS + 'title',
+    INFO_CLS = MINI_CLS + 'info',
+    FT_CLS = MINI_CLS + 'ft',
+    PRICE_CLS = MINI_CLS + 'price',
+    BT_CLS = MINI_CLS + 'bt',
+    CONTENT_CLS = MINI_CLS + 'content',
+    LOADING_CLS = MINI_CLS + 'loading',
+    READY_CLS = MINI_CLS + 'ready',
+    HOVER_CLS = 'hover',
+    MINI_CART_ID = 'data-cartId',
+    DOT = '.',
+    EMPTY = '',
+    escapeHTML = function (str) {
+      /**
+       * escape
+       * Êµï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½â´¦ï¿½ï¿½
+       */
+      // @see http://www.strictly-software.com//scripts/downloads/encoder.js
+      var arr = str.match(/&#[0-9]{1,5};/g);
 
-        isIE76 = !'0'[0],
-        isIE6 = isIE76 && !window.XMLHttpRequest,
-        domain = doc.domain,
-        IS_DAILY = !(domain.indexOf('taobao.com') > -1 || domain.indexOf('tmall.com') > -1),
-        HOSTNAME = IS_DAILY ? '.daily.taobao.net' : '.taobao.com',
-        BUY_HOST = 'http://buy' + HOSTNAME +'/',
+      if (arr != null) {
+        var m, c, x;
+        for (x = 0; x < arr.length; x++) {
+          m = arr[x];
+          c = m.substring(2, m.length - 1);
+          if (c >= -32768 && c <= 65535) {
+            str = str.replace(m, String.fromCharCode(c));
+          } else {
+            str = str.replace(m, '');
+          }
+        }
+      }
 
-        CARTDATA_API = BUY_HOST + 'auction/cart/trail_mini_cart.htm?',
-        REMOVE_API = BUY_HOST + 'auction/cart/del_mini_cart.htm?',
-        REMOVEING = 'ÕýÔÚÉ¾³ýÖÐ', REMOVE = 'É¾³ý',
-        MINI_CLS = 'mini-cart-',
-        HD_CLS = MINI_CLS + 'hd', BD_CLS = MINI_CLS + 'bd', IMG_CLS = MINI_CLS + 'img',
-        COUNT_CLS = MINI_CLS + 'count', DEL_CLS = MINI_CLS + 'del',
-        TITLE_CLS = MINI_CLS + 'title', INFO_CLS = MINI_CLS + 'info',
-        FT_CLS = MINI_CLS + 'ft', PRICE_CLS = MINI_CLS + 'price', BT_CLS = MINI_CLS + 'bt',
-        CONTENT_CLS = MINI_CLS + 'content', LOADING_CLS = MINI_CLS + 'loading', READY_CLS = MINI_CLS + 'ready',
-        HOVER_CLS = 'hover', MINI_CART_ID = 'data-cartId', DOT = '.', EMPTY = '',
-        escapeHTML = function (str) {
-            /**
-             * escape
-             * ÊµÌå×Ö·ûÌØÊâ´¦Àí
-             */
-            // @see http://www.strictly-software.com//scripts/downloads/encoder.js
-            var arr = str.match(/&#[0-9]{1,5};/g);
-
-            if (arr != null) {
-                var m, c, x;
-                for (x = 0; x < arr.length; x++) {
-                    m = arr[x];
-                    c = m.substring(2, m.length - 1);
-                    if (c >= -32768 && c <= 65535) {
-                        str = str.replace(m, String.fromCharCode(c));
-                    } else {
-                        str = str.replace(m, "");
-                    }
-                }
-            }
-
-            return str.replace('<', '&lt;').replace('>', '&gt;');
-            /*var div = doc.createElement('div'),
+      return str.replace('<', '&lt;').replace('>', '&gt;');
+      /*var div = doc.createElement('div'),
                 text = doc.createTextNode(str);
             div.appendChild(text);
 
             return div.innerHTML;*/
-        },
-        ellipsis = function(el) {
-            el.css({'white-space': 'nowrap', 'overflow': 'hidden'});
-            // if browser support 'text-overflow' property, just use it
-            if ('textOverflow' in doc.documentElement.style ||
-                'OTextOverflow' in doc.documentElement.style) {
-                el.css({
-                    'text-overflow': 'ellipsis',
-                    '-o-text-overflow': 'ellipsis'
-                });
-            } else { //firefox does not support the text-overflow property, so...
-                var obj = el;
-                if (!obj.data('text')) obj.data('text', obj.text());
-                var text = obj.attr('text') || obj.text(),
-                    w = obj.width(),
-                    a = 0,
-                    b = text.length,
-                    c = b,
-                    t = new S.Node(obj[0].cloneNode(true)).insertAfter(obj);
-                obj.text(text);
-                t.text(text).css({
-                        'position': 'absolute',
-                        'width': 'auto',
-                        'visibility': 'hidden',
-                        'overflow': 'hidden'
-                    });
-                if (t.width() > w) {
-                    while ((c = Math.floor((b + a) / 2)) > a) {
-                        t.text(text.substr(0, c) + '¡­');
-                        if (t.width() > w) b = c;
-                        else a = c;
-                    }
-                    obj.text(text.substr(0, c) + '¡­');
-                    if (!obj.attr('title')) obj.attr('title', text);
-                }
-                t.remove();
+    },
+    ellipsis = function (el) {
+      el.css({ 'white-space': 'nowrap', overflow: 'hidden' });
+      // if browser support 'text-overflow' property, just use it
+      if (
+        'textOverflow' in doc.documentElement.style ||
+        'OTextOverflow' in doc.documentElement.style
+      ) {
+        el.css({
+          'text-overflow': 'ellipsis',
+          '-o-text-overflow': 'ellipsis',
+        });
+      } else {
+        //firefox does not support the text-overflow property, so...
+        var obj = el;
+        if (!obj.data('text')) obj.data('text', obj.text());
+        var text = obj.attr('text') || obj.text(),
+          w = obj.width(),
+          a = 0,
+          b = text.length,
+          c = b,
+          t = new S.Node(obj[0].cloneNode(true)).insertAfter(obj);
+        obj.text(text);
+        t.text(text).css({
+          position: 'absolute',
+          width: 'auto',
+          visibility: 'hidden',
+          overflow: 'hidden',
+        });
+        if (t.width() > w) {
+          while ((c = Math.floor((b + a) / 2)) > a) {
+            t.text(text.substr(0, c) + 'ï¿½ï¿½');
+            if (t.width() > w) b = c;
+            else a = c;
+          }
+          obj.text(text.substr(0, c) + 'ï¿½ï¿½');
+          if (!obj.attr('title')) obj.attr('title', text);
+        }
+        t.remove();
+      }
+    },
+    send = function (url) {
+      if (IS_DAILY) return;
+
+      new Image().src =
+        'http://www.atpanel.com/jsclick?minicart=' + url + '&cache=' + S.now();
+    },
+    EMPTY_MSG = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï³µï¿½ï»¹Ã»ï¿½ï¿½ï¿½ÎºÎ±ï¿½ï¿½ï¿½ï¿½ï¿½',
+    TIMEOVER_MSG = 'ÏµÍ³Ä¿Ç°ï¿½ï¿½Ã¦ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½ï¿½Ô¡ï¿½',
+    INVALID_MSG = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï³µï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§Ð§ï¿½ï¿½',
+    isHTTPS = doc.location.href.indexOf('https://') === 0;
+
+  win.MiniCart = {
+    /**
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ Miniï¿½ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½
+     * @creater
+     * @param num {Number}
+     */
+    init: function (num, show) {
+      var self = this;
+
+      // ï¿½ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ê¾
+      num = parseInt(num);
+      if (isNaN(num) || num < 0) return;
+
+      // ï¿½ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½
+      self.cartNum = num;
+      self._rendUI();
+
+      // ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+      if (!show) return;
+      self._bindUI();
+      // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 10s ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      //self.isExpired = true;
+      // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      self._loading = false;
+      // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ trigger
+      //self._clicked = false;
+      // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¸ï¿½ï¿½ï¿½
+      //self._entered = false;
+    },
+    _rendUI: function () {
+      var self = this;
+
+      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½
+      self.trigger = S.one('#site-nav .cart');
+      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï³µa
+      self.elem = new S.Node(self.trigger.children()[0]);
+      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      self.content = new S.Node('<div>')
+        .addClass(CONTENT_CLS)
+        .appendTo(doc.body);
+
+      if (isIE6 && !isHTTPS) {
+        self._shim = new S.Node(
+          '<' +
+            "iframe style='position: absolute; width:0; height: 0;" +
+            'filter:alpha(opacity=0);' +
+            "z-index:9998;'>",
+        ).appendTo(doc.body);
+      }
+    },
+
+    _bindUI: function () {
+      var self = this,
+        trigger = self.trigger,
+        content = self.content,
+        showTimer,
+        hideTimer;
+
+      function clearTimer(timer) {
+        if (timer) {
+          timer.cancel();
+        }
+        return undefined;
+      }
+      function setHideTimer() {
+        hideTimer = S.later(function () {
+          self.hide();
+        }, 320);
+      }
+
+      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½Æ³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï³µÊ±
+      trigger
+        .on('mouseenter', function (ev) {
+          if (TB.Global._OFF) return;
+
+          self._entered = true;
+          // fix ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ëµ½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥Ê±, ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ enter ï¿½Â¼ï¿½
+          var target = new S.Node(ev.target)[0].tagName.toLowerCase();
+          if (target === 'b' || target === 'i') {
+            ev.halt();
+            return;
+          }
+
+          hideTimer = clearTimer(hideTimer);
+          showTimer = S.later(function () {
+            if (content.css('display') === 'none' && !self._clicked) {
+              send('http://www.atpanel.com/jsclick?cache=*&minicart=popup');
+              self.show();
             }
-        },
-        send = function(url) {
-            if (IS_DAILY) return;
-            
-            new Image().src = 'http://www.atpanel.com/jsclick?minicart='+ url + '&cache=' + S.now();
-        },
-        EMPTY_MSG = 'Äú¹ºÎï³µÀï»¹Ã»ÓÐÈÎºÎ±¦±´¡£',
-        TIMEOVER_MSG = 'ÏµÍ³Ä¿Ç°·±Ã¦£¬ÇëÉÔºóÔÙÊÔ¡£',
-        INVALID_MSG = 'Äú¹ºÎï³µÀïµÄ±¦±´¾ùÒÑÊ§Ð§¡£',
-        isHTTPS = (doc.location.href.indexOf("https://") === 0);
+            showTimer = undefined;
+          }, 100);
+        })
+        .on('mouseleave', function () {
+          if (TB.Global._OFF) return;
 
-        win.MiniCart = {
-            /**
-             * ³õÊ¼»¯ Mini¹ºÎï³µ¶ÔÏó
-             * @creater
-             * @param num {Number}
-             */
-            init: function(num, show) {
-                var self = this;
+          self._entered = false;
+          showTimer = clearTimer(showTimer);
+          setHideTimer();
+        })
+        .on('click', function () {
+          if (TB.Global._OFF) return;
+          self._clicked = true;
+          send('topclick');
+        });
 
-                // ¹ºÎï³µÊýÁ¿Îª¸ºÊý ²»ÏÔÊ¾
-                num = parseInt(num);
-                if (isNaN(num) || num < 0) return;
+      content
+        .on('mouseenter', function () {
+          if (TB.Global._OFF) return;
 
-                // ¹ºÎï³µÊýÁ¿
-                self.cartNum = num;
-                self._rendUI();
+          self._entered = true;
+          hideTimer = clearTimer(hideTimer);
+        })
+        .on('mouseleave', function () {
+          if (TB.Global._OFF) return;
 
-                // ²»ÏÔÊ¾¸¡²ã
-                if (!show) return;
-                self._bindUI();
-                // ÊÇ·ñ¹ýÆÚ, ÇëÇó¹ýºóµÄ 10s ÄÚ²»»á¹ýÆÚ
-                //self.isExpired = true;
-                // ÊÇ·ñÕýÔÚÇëÇóÖÐ
-                self._loading = false;
-                // ÊÇ·ñµã»÷ÁË trigger
-                //self._clicked = false;
-                // ÊÇ·ñÊó±ê½øÈëÁË¸¡²ã
-                //self._entered = false;
+          self._entered = false;
+          setHideTimer();
+        })
+        .on('click', function (e) {
+          if (TB.Global._OFF) return;
+
+          var target = new S.Node(e.target),
+            prt;
+
+          if (target[0].tagName.toLowerCase() === 'a') {
+            prt = target.parent();
+
+            // ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½Â¼ï¿½
+            if (prt.hasClass(DEL_CLS)) {
+              e.preventDefault();
+              e.halt();
+
+              if (target.html() === REMOVEING) return;
+
+              send('delete');
+              target.html(REMOVEING);
+              S.getScript(
+                REMOVE_API +
+                  'callback=MiniCart.remove' +
+                  '&del_id=' +
+                  prt.parent().attr(MINI_CART_ID) +
+                  '&t=' +
+                  S.now(),
+                function () {
+                  target.html(REMOVE);
+                  this.parentNode.removeChild(this);
+                },
+              );
+            }
+            // ï¿½ï¿½ï¿½ ï¿½é¿´ï¿½ÒµÄ¹ï¿½ï¿½ï³µï¿½ï¿½Å¥
+            else if (prt.hasClass(BT_CLS)) {
+              send('showmycart');
+            }
+          }
+        });
+    },
+    _hideContent: function () {
+      var self = this;
+      self._entered = false;
+      S.later(function () {
+        if (!self._entered) {
+          self.hide();
+        }
+      }, 2000);
+    },
+    remove: function (data) {
+      var self = this;
+
+      if (!data) return;
+
+      // É¾ï¿½ï¿½ï¿½É¹ï¿½
+      if (data.status) {
+        var content = self.content,
+          allItems = content.one(DOT + BD_CLS);
+
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿, ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        S.each(allItems.children(), function (current) {
+          current = new S.Node(current);
+          if (current.attr(MINI_CART_ID) == data.delCart) {
+            var _update = function () {
+              current.remove
+                ? current.remove()
+                : current[0].parentNode.removeChild(current[0]);
+              self.setData(data);
+
+              // Ê£ï¿½ï¿½Ê±, fix ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ bug
+              if (self.cartNum === 0) self._hideContent();
+            };
+            if (!isIE6)
+              current.animate
+                ? current.animate('opacity: 0', 1, 'easeOut', _update)
+                : _update();
+            else _update();
+            return false;
+          }
+        });
+      } else {
+        alert(data.errMsg);
+      }
+    },
+    show: function () {
+      var self = this,
+        content = self.content,
+        elem = self.elem,
+        _setData = function (msg) {
+          self.setData({
+            status: false,
+            errMsg: msg,
+          });
+          S.log(msg);
+        };
+
+      content
+        .addClass(LOADING_CLS)
+        .offset({ left: self.trigger.offset().left + 0.5 });
+      elem.addClass(HOVER_CLS);
+
+      // Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 10s ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      if ((!self._data || self.isExpired) && !self._loading) {
+        content.html(EMPTY);
+
+        if (self.cartNum < 1) {
+          _setData(EMPTY_MSG);
+          return;
+        }
+        self._loading = true;
+        self._setTimeout(function () {
+          _setData(TIMEOVER_MSG);
+        });
+
+        S.later(function () {
+          if (self._clicked) return;
+
+          S.getScript(
+            CARTDATA_API + 'callback=MiniCart.setData' + '&t=' + S.now(),
+            function () {
+              self._loading = false;
+
+              this.parentNode.removeChild(this);
             },
-            _rendUI: function() {
-                var self = this;
+          );
+        }, 300);
+      } else {
+        // Ã»ï¿½Ð¹ï¿½ï¿½ï¿½Ê±, Ö±ï¿½ï¿½ï¿½ï¿½Ê¾Ö®Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, 10s ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (!self._loading) {
+          content.removeClass(LOADING_CLS);
+        }
+        content.addClass(READY_CLS);
+      }
 
-                // µõ¶¥¹ºÎï³µÈÝÆ÷
-                self.trigger = S.one('#site-nav .cart');
-                // µõ¶¥¹ºÎï³µa
-                self.elem = new S.Node(self.trigger.children()[0]);
-                // ¸¡³ö²ãÈÝÆ÷
-                self.content = new S.Node('<div>').addClass(CONTENT_CLS).appendTo(doc.body);
+      self._shim && self._shim.show();
+    },
+    hide: function () {
+      var self = this;
 
-                if (isIE6 && !isHTTPS) {
-                    self._shim = new S.Node("<" + "iframe style='position: absolute; width:0; height: 0;" +
-                        "filter:alpha(opacity=0);" +
-                        "z-index:9998;'>").appendTo(doc.body);
-                }
-            },
+      self.content.removeClass(LOADING_CLS).removeClass(READY_CLS);
+      self.elem.removeClass(HOVER_CLS);
 
-            _bindUI: function() {
-                var self = this,
-                    trigger = self.trigger,
-                    content = self.content, showTimer, hideTimer;
+      self._shim && self._shim.hide();
 
-                function clearTimer(timer) {
-                    if (timer) {
-                        timer.cancel();
-                    }
-                    return undefined;
-                }
-                function setHideTimer() {
-                    hideTimer = S.later(function() {
-                        self.hide();
-                    }, 320);
-                }
+      if (TB.Global._OFF) {
+        try {
+          S.Event.remove(self.content[0]);
+          S.Event.remove(self.elem[0]);
+        } catch (e) {
+          S.log(e);
+        }
+      }
+    },
 
-                // Êó±êÒÆÈë/ÒÆ³ö µõ¶¥¹ºÎï³µÊ±
-                trigger.on('mouseenter', function(ev) {
-                    if (TB.Global._OFF) return;
-                    
-                    self._entered = true;
-                    // fix Êó±êÒÆÈëµ½Êý×Ö/ÏÂÀ­°´Å¥Ê±, ÖØ¸´´¥·¢ enter ÊÂ¼þ
-                    var target = new S.Node(ev.target)[0].tagName.toLowerCase();
-                    if (target === 'b' || target === 'i' ) {
-                        ev.halt();
-                        return;
-                    }
+    _parseItem: function (data) {
+      var self = this,
+        html = EMPTY,
+        item = data.item,
+        itemLen = item ? item.length : 0,
+        rest = 0;
 
-                    hideTimer = clearTimer(hideTimer);
-                    showTimer = S.later(function() {
-                        if (content.css('display') === 'none' && !self._clicked) {
-                            send('http://www.atpanel.com/jsclick?cache=*&minicart=popup');
-                            self.show();
-                        }
-                        showTimer = undefined;
-                    }, 100);
-                }).on('mouseleave', function() {
-                    if (TB.Global._OFF) return;
-                    
-                    self._entered = false;
-                    showTimer = clearTimer(showTimer);
-                    setHideTimer();
-                }).on('click', function() {
-                    if (TB.Global._OFF) return;
-                    self._clicked = true;
-                    send('topclick');
-                });
+      if (itemLen > 0) {
+        rest = data.num - itemLen;
 
-                content.on('mouseenter', function() {
-                    if (TB.Global._OFF) return;
-                    
-                    self._entered = true;
-                    hideTimer = clearTimer(hideTimer);
-                }).on('mouseleave', function() {
-                    if (TB.Global._OFF) return;
-                    
-                    self._entered = false;
-                    setHideTimer();
-                }).on( 'click', function(e) {
-                    if (TB.Global._OFF) return;
-                    
-                    var target = new S.Node(e.target), prt;
+        html +=
+          '<div class="' +
+          HD_CLS +
+          '">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½:</div>' +
+          '<ul class="' +
+          BD_CLS +
+          '">';
 
-                    if (target[0].tagName.toLowerCase() === 'a') {
-                        prt = target.parent();
-
-                        // µã»÷É¾³ýÊÂ¼þ
-                        if (prt.hasClass(DEL_CLS)) {
-                            e.preventDefault();
-                            e.halt();
-
-                            if (target.html() === REMOVEING) return;
-
-                            send('delete');
-                            target.html(REMOVEING);
-                            S.getScript(REMOVE_API + 'callback=MiniCart.remove' + '&del_id=' + prt.parent().attr(MINI_CART_ID) + '&t=' + S.now(), function() {
-                                target.html(REMOVE);
-                                this.parentNode.removeChild(this);
-                            });
-                        }
-                        // µã»÷ ²é¿´ÎÒµÄ¹ºÎï³µ°´Å¥
-                        else if (prt.hasClass(BT_CLS)) {
-                            send('showmycart');
-                        }
-                    }
-                });
-            },
-            _hideContent: function() {
-                var self = this;
-                self._entered = false;
-                S.later(function() {
-                    if (!self._entered) {
-                        self.hide();
-                    }
-                }, 2000);
-            },
-            remove: function(data) {
-                var self = this;
-
-                if (!data) return;
-
-                // É¾³ý³É¹¦
-                if (data.status) {
-                    var content = self.content,
-                        allItems = content.one(DOT+BD_CLS);
-
-                    // ÏÈÒþ²Ø±»É¾³ýµÄÌõÄ¿, ÔÙ¸üÐÂÊý¾Ý
-                    S.each(allItems.children(), function(current) {
-                        current = new S.Node(current);
-                        if (current.attr(MINI_CART_ID) == data.delCart) {
-                            var _update = function() {
-                                current.remove ? current.remove() : current[0].parentNode.removeChild(current[0]);
-                                self.setData(data);
-
-                                // Ê£¿ÕÊ±, fix ²»ÄÜÖ±½ÓÒþ²Ø¸¡²ã bug
-                                if (self.cartNum === 0) self._hideContent();
-                            };
-                            if (!isIE6) current.animate ? current.animate('opacity: 0', 1, 'easeOut', _update) : _update();
-                            else _update();
-                            return false;
-                        }
-                    });
-                } else {
-                    alert(data.errMsg);
-                }
-            },
-            show: function() {
-                var self = this,
-                    content = self.content,
-                    elem = self.elem,
-                    _setData = function(msg) {
-                        self.setData({
-                            status: false,
-                            errMsg: msg
-                        });
-                        S.log(msg);
-                    };
-
-                content.addClass(LOADING_CLS).offset({left: self.trigger.offset().left+0.5});
-                elem.addClass(HOVER_CLS);
-
-                // Ã»ÓÐÇëÇó¹ý »òÕß 10s ÄÚÃ»ÇëÇó¹ýÁË
-                if  ((!self._data || self.isExpired) && !self._loading) {
-                    content.html(EMPTY);
-
-                    if (self.cartNum < 1) {
-                        _setData(EMPTY_MSG);
-                        return;
-                    }
-                    self._loading = true;
-                    self._setTimeout(function() {
-                        _setData(TIMEOVER_MSG);
-                    });
-
-                    S.later(function() {
-                        if (self._clicked) return;
-
-                        S.getScript(CARTDATA_API + 'callback=MiniCart.setData' + '&t=' + S.now(), function() {
-                            self._loading = false;
-
-                            this.parentNode.removeChild(this);
-                        });
-                    }, 300);
-                } else {
-                    // Ã»ÓÐ¹ýÆÚÊ±, Ö±½ÓÏÔÊ¾Ö®Ç°µÄÄÚÈÝ, 10s ºóÔÙ´ÎÇëÇó
-                    if (!self._loading) {
-                        content.removeClass(LOADING_CLS);
-                    }
-                    content.addClass(READY_CLS);
-                }
-
-                self._shim && self._shim.show();
-            },
-            hide: function() {
-                var self = this;
-
-                self.content.removeClass(LOADING_CLS).removeClass(READY_CLS);
-                self.elem.removeClass(HOVER_CLS);
-
-                self._shim && self._shim.hide();
-
-                if (TB.Global._OFF) {
-                    try {
-                        S.Event.remove(self.content[0]);
-                        S.Event.remove(self.elem[0]);
-                    } catch(e) {
-                        S.log(e);
-                    }
-                }
-            },
-
-            _parseItem: function(data) {
-                var self = this,
-                    html = EMPTY, item = data.item, itemLen = item ? item.length : 0, rest = 0;
-
-                if (itemLen > 0) {
-                    rest = data.num - itemLen;
-
-                    html += '<div class="' + HD_CLS + '">×î½ü¼ÓÈëµÄ±¦±´:</div>'
-                        + '<ul class="' + BD_CLS + '">';
-
-                    S.each(item, function(item) {
-                        var link = 'http://item' + HOSTNAME + '/item.htm?id=' + item.itemId,
-                            title = escapeHTML(item.title)/*,
-                            complete = title*/;
-                        /*if (title.length > 15) {
+        S.each(item, function (item) {
+          var link = 'http://item' + HOSTNAME + '/item.htm?id=' + item.itemId,
+            title = escapeHTML(item.title); /*,
+                            complete = title*/
+          /*if (title.length > 15) {
                             title = title.slice(0, 15) + '...';
                         }*/
-                        html += '<li ' + MINI_CART_ID + '="' + item.cartId + '">'
-                             + '<div class="' + IMG_CLS + '"><a target="_top" href="' + link + '"><img src="' + item.picUrl + '" /></a></div>'
+          html +=
+            '<li ' +
+            MINI_CART_ID +
+            '="' +
+            item.cartId +
+            '">' +
+            '<div class="' +
+            IMG_CLS +
+            '"><a target="_top" href="' +
+            link +
+            '"><img src="' +
+            item.picUrl +
+            '" /></a></div>' +
+            '<div class="' +
+            COUNT_CLS +
+            '">&yen;<strong class="' +
+            PRICE_CLS +
+            '">' +
+            item.price +
+            '</strong></div>' +
+            '<div class="' +
+            DEL_CLS +
+            '"><a href="#">É¾ï¿½ï¿½</a></div>' +
+            '<div class="' +
+            TITLE_CLS +
+            '"><a target="_top" href="' +
+            link +
+            '" title="' +
+            title +
+            '">' +
+            title +
+            '</a></div>' +
+            (item.sku && item.sku.length
+              ? '<div class="' +
+                INFO_CLS +
+                '"><span>' +
+                item.sku.join('</span><span>') +
+                '</span></div>'
+              : EMPTY) +
+            '</li>';
+        });
+        html += '</ul>';
+      }
+      if (rest > 0) {
+        html +=
+          '<div class="' +
+          FT_CLS +
+          '">' +
+          self._parseRest(rest, data.num) +
+          '</div>';
+      }
+      return html;
+    },
+    _parseRest: function (rest, total) {
+      if (rest > 0) {
+        return 'ï¿½ï¿½ï¿½ï³µï¿½ï»¹ï¿½ï¿½' + rest + 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'; //, ï¿½Ü¼ï¿½' + total + 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
+      }
+      return EMPTY;
+    },
+    _parseMsg: function (msg) {
+      var html = EMPTY;
 
-                             + '<div class="' + COUNT_CLS + '">&yen;<strong class="' + PRICE_CLS + '">' + item.price + '</strong></div>'
+      html +=
+        '<div class="' +
+        BT_CLS +
+        '">' +
+        '<a target="_top" href="' +
+        'http://ju.atpanel.com/?url=' +
+        BUY_HOST +
+        'auction/cart/my_cart.htm?from=mini&ad_id=&am_id=&cm_id=&pm_id=150042785330be233161' +
+        '">ï¿½é¿´ï¿½ÒµÄ¹ï¿½ï¿½ï³µ</a>' +
+        (msg || EMPTY) +
+        '</div>';
 
-                             + '<div class="' + DEL_CLS + '"><a href="#">É¾³ý</a></div>'
-                             + '<div class="' + TITLE_CLS + '"><a target="_top" href="' + link + '" title="' + title + '">' + title + '</a></div>'
-                             + (item.sku && item.sku.length ?'<div class="' + INFO_CLS + '"><span>' + item.sku.join('</span><span>') + '</span></div>':EMPTY)
-                             + '</li>';
-                    });
-                    html += '</ul>';
-                }
-                if (rest > 0) {
-                    html += '<div class="' + FT_CLS + '">'
-                         + self._parseRest(rest, data.num)
-                         + '</div>';
-                }
-                return html;
-            },
-            _parseRest: function(rest, total) {
-                if (rest>0) {
-                    return '¹ºÎï³µÀï»¹ÓÐ' + rest + '¼þ±¦±´';//, ×Ü¼Æ' + total + '¼þ±¦±´';
-                }
-                return EMPTY;
-            },
-            _parseMsg: function(msg) {
-                var html = EMPTY;
+      return html;
+    },
 
-                html += '<div class="' + BT_CLS + '">'
-                     + '<a target="_top" href="'+'http://ju.atpanel.com/?url='+ BUY_HOST
-                     + 'auction/cart/my_cart.htm?from=mini&ad_id=&am_id=&cm_id=&pm_id=150042785330be233161'+'">²é¿´ÎÒµÄ¹ºÎï³µ</a>'
-                     + (msg || EMPTY)
-                     + '</div>';
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê®ï¿½ï¿½ï¿½, ï¿½ï¿½Ã»ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ä´ï¿½ï¿½ï¿½, ï¿½ï¿½Ö´ï¿½ï¿½ callback
+    _setTimeout: function (callback) {
+      var self = this;
 
-                return html;
-            },
+      if (self._timeout) return;
+      self._timeout = S.later(function () {
+        callback();
+        self._timeout = undefined;
+      }, 10000);
+    },
+    _clearTimeout: function () {
+      var self = this;
 
-            // ·¢³öÇëÇóµÄÊ®Ãëºó, »¹Ã»ÓÐÖ´ÐÐÏàÓ¦µÄ´úÂë, ¾ÍÖ´ÐÐ callback
-            _setTimeout: function(callback) {
-                var self = this;
+      if (self._timeout) self._timeout.cancel();
+      self._timeout = undefined;
+    },
+    // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    setData: function (data) {
+      var self = this,
+        html = EMPTY,
+        content = self.content;
+      self._clearTimeout();
 
-                if (self._timeout) return;
-                self._timeout = S.later(function() {
-                    callback();
-                    self._timeout = undefined;
-                }, 10000);
-            },
-            _clearTimeout: function() {
-                var self = this;
+      if (!data) return;
 
-                if (self._timeout) self._timeout.cancel();
-                self._timeout = undefined;
-            },
-            // ÉèÖÃ¹ºÎï³µ¸¡²ãÊý¾Ý
-            setData: function(data) {
-                var self = this, html = EMPTY, content = self.content;
-                self._clearTimeout();
-                
-                if (!data) return;
+      if (data.status) {
+        var num = data.num,
+          is_remove = false;
+        // num < 0 Ê±,
+        // Îª -2 Ê±, ï¿½ï¿½Ê¾É¾ï¿½ï¿½ï¿½É¹ï¿½, ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Öµ, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½Öµ
+        if (S.isNumber(num) && num === -2) {
+          num = self.cartNum - 1;
+          is_remove = true;
+        }
+        TB.Global.setCartNum(num);
 
-                if (data.status) {
-                    var num = data.num,
-                        is_remove = false;
-                    // num < 0 Ê±,
-                    // Îª -2 Ê±, ±íÊ¾É¾³ý³É¹¦, µ«È¡²»µ½ÕýÈ·µÄÊýÖµ, µÃÒÀ¿¿¿Í»§¶ËÐÞ¸ÄÊýÖµ
-                    if (S.isNumber(num) && num === -2) {
-                        num = self.cartNum - 1;
-                        is_remove = true;
-                    }
-                    TB.Global.setCartNum(num);
-
-                    self._data = data;
-                    // ¹ºÎï³µÓÐ>0µÄÊýÖµÊ±, ÉèÖÃ¹ºÎï³µÊýÁ¿
-                    if (num > 0) {
-                        if (data.item && data.item.length) {
-                            html = self._parseItem(data) + self._parseMsg(EMPTY);
-                        }
-                        // Êý×Ö´óÓÚ0 , µ«ÊÇÊôÓÚ num -1 Ê±Çé¿öÊ±
-                        else if (is_remove) {
-                            // ¸üÐÂ¸¡²ãÉÏµÄÊý×ÖÐÅÏ¢
-                            var ft = content.one(DOT+FT_CLS),
-                                li_num = content.one(DOT+BD_CLS).all('li').length;
-                            // É¾³ýºó, ÈÔÓÐÉÌÆ·
-                            if (li_num) {
-                                // Ô­±¾ÓÐÎÞÐ§ÉÌÆ·ÌáÊ¾
-                                ft && ft.html(self._parseRest(num - li_num, num));
-                                html = content.html();
-                            }
-                            // É¾³ýºó, ÒÑ¾­Ã»ÓÐÉÌÆ·
-                            else {
-                                html = self._parseMsg(ft ? INVALID_MSG : EMPTY_MSG);
-                                self._hideContent();
-                            }
-                        }
-                        // Ã»ÓÐ·µ»Ø¼ÇÂ¼, µ« data.num >0 , ±íÊ¾¹ºÎï³µÀïÊ§Ð§
-                        else {
-                            html = self._parseMsg(INVALID_MSG);
-                            self._hideContent();
-                        }
-                    } else if (num === 0) {
-                        html = self._parseMsg(EMPTY_MSG);
-                    }/* else {
-                        // ±ÜÃâ³öÏÖ¿Õ°×¸¡²ã, ÏÔÊ¾²é¿´¹ºÎï³µ°´Å¥
+        self._data = data;
+        // ï¿½ï¿½ï¿½ï³µï¿½ï¿½>0ï¿½ï¿½ï¿½ï¿½ÖµÊ±, ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½
+        if (num > 0) {
+          if (data.item && data.item.length) {
+            html = self._parseItem(data) + self._parseMsg(EMPTY);
+          }
+          // ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½0 , ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ num -1 Ê±ï¿½ï¿½ï¿½Ê±
+          else if (is_remove) {
+            // ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+            var ft = content.one(DOT + FT_CLS),
+              li_num = content.one(DOT + BD_CLS).all('li').length;
+            // É¾ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
+            if (li_num) {
+              // Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½Æ·ï¿½ï¿½Ê¾
+              ft && ft.html(self._parseRest(num - li_num, num));
+              html = content.html();
+            }
+            // É¾ï¿½ï¿½ï¿½ï¿½, ï¿½Ñ¾ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Æ·
+            else {
+              html = self._parseMsg(ft ? INVALID_MSG : EMPTY_MSG);
+              self._hideContent();
+            }
+          }
+          // Ã»ï¿½Ð·ï¿½ï¿½Ø¼ï¿½Â¼, ï¿½ï¿½ data.num >0 , ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï³µï¿½ï¿½Ê§Ð§
+          else {
+            html = self._parseMsg(INVALID_MSG);
+            self._hideContent();
+          }
+        } else if (num === 0) {
+          html = self._parseMsg(EMPTY_MSG);
+        } /* else {
+                        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¿Õ°×¸ï¿½ï¿½ï¿½, ï¿½ï¿½Ê¾ï¿½é¿´ï¿½ï¿½ï¿½ï³µï¿½ï¿½Å¥
                         html = self._parseMsg(data.errMsg);
                     }*/
 
-                    // Ã¿µ±ÖØÐÂÇëÇóÒ»´ÎÊ±, ÉèÖÃÎªÔÚ 30s ºó¹ýÆÚ;
-                    self.isExpired = false;
-                    setTimeout(function() {
-                        self.isExpired = true;
-                    }, 30000);
-                } else {
-                    html = self._parseMsg(data.errMsg);
-                }
-                // data.num ·Ç -1 Ê±Õý³£ÏÔÊ¾, Îª -1 Ê±, ÔÚ setCartNum Ê±ÒÑ¾­Òþ²ØÁË
-                if (data.num !== -1) {
-                    content.html(html).removeClass(LOADING_CLS).addClass(READY_CLS);
+        // Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±, ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ 30s ï¿½ï¿½ï¿½ï¿½ï¿½;
+        self.isExpired = false;
+        setTimeout(function () {
+          self.isExpired = true;
+        }, 30000);
+      } else {
+        html = self._parseMsg(data.errMsg);
+      }
+      // data.num ï¿½ï¿½ -1 Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾, Îª -1 Ê±, ï¿½ï¿½ setCartNum Ê±ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      if (data.num !== -1) {
+        content.html(html).removeClass(LOADING_CLS).addClass(READY_CLS);
 
-                    // ellipsis
-                    S.each(S.all(DOT+TITLE_CLS), function(el) {
-                        var el = new S.Node(el),
-                            ct = 280 - el.prev(DOT+COUNT_CLS).width() - 70, // ×Ü¿í¶È - ×ó²àÍ¼Æ¬ - ÓÒ²à¼Û¸ñ
-                            a = el.one('a');
-                        a.width(ct);
-                        ellipsis(a);
-                    });
-                    // ¸üÐÂ¸¡²ãshim  +24/+12 ÊÇ¸¡²ãµÄ padding ºÍ border
-                    self._shim && self._shim.offset(content.offset()).width(content.width()+24).height(content.height()+12);
+        // ellipsis
+        S.each(S.all(DOT + TITLE_CLS), function (el) {
+          var el = new S.Node(el),
+            ct = 280 - el.prev(DOT + COUNT_CLS).width() - 70, // ï¿½Ü¿ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½Í¼Æ¬ - ï¿½Ò²ï¿½Û¸ï¿½
+            a = el.one('a');
+          a.width(ct);
+          ellipsis(a);
+        });
+        // ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½shim  +24/+12 ï¿½Ç¸ï¿½ï¿½ï¿½ï¿½ padding ï¿½ï¿½ border
+        self._shim &&
+          self._shim
+            .offset(content.offset())
+            .width(content.width() + 24)
+            .height(content.height() + 12);
 
-                    // Êó±êÔÚ data µ½À´Ö®Ç°¾ÍÒÆ³ö¸¡²ãÊ±, ÐèÒªÒþ²Ø
-                    if (!self._entered) self.hide();
-                }
-            }
-        };
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ data ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½Ê±, ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+        if (!self._entered) self.hide();
+      }
+    },
+  };
 })();
-
 
 /**
  * NOTE:
- * - ¹ºÎï³µÊýÁ¿>0Ê±, ²ÅÏÔÊ¾¸¡³ö²ã
- * - Êó±êÒÆÈë/ÒÆ³öÊ±¼ä, ÑÓ³Ù 300 ms
- * - ÏÔÊ¾¸¡³ö²ã, ÇëÇóÊý¾Ýºó, Êý¾ÝµÄ¹ýÆÚÊ±¼äÎª 10000 ms, µ±²ãÕýÔÚÏÔÊ¾Ê±, Åöµ½¹ýÆÚ, ²»»á¸üÐÂµ±Ç°²ãÊý¾Ý. Ö»ÓÐÖØÐÂhoverÉÏÈ¥²Å»á¸üÐÂ
- * - É¾³ýÊ±, Êý¾Ý·µ»ØÓÐ¿ÉÄÜ²»³É¹¦
+ * - ï¿½ï¿½ï¿½ï³µï¿½ï¿½ï¿½ï¿½>0Ê±, ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½Æ³ï¿½Ê±ï¿½ï¿½, ï¿½Ó³ï¿½ 300 ms
+ * - ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýºï¿½, ï¿½ï¿½ï¿½ÝµÄ¹ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Îª 10000 ms, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ê±, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hoverï¿½ï¿½È¥ï¿½Å»ï¿½ï¿½ï¿½ï¿½
+ * - É¾ï¿½ï¿½Ê±, ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ü²ï¿½ï¿½É¹ï¿½
  */
-

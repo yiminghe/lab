@@ -3,12 +3,12 @@
     @author:yiminghe@gmail.com
 **/
 .ke-resizer {
-    background: no-repeat right bottom;
-    background-image: url("resizer.png");
-    height: 20px;
-    width: 10px;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    cursor: se-resize;
+  background: no-repeat right bottom;
+  background-image: url('resizer.png');
+  height: 20px;
+  width: 10px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  cursor: se-resize;
 }

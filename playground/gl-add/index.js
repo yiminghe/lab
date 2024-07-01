@@ -1,8 +1,7 @@
 (function () {
   var halfFloatExt;
 
-  function getWebGLErrorMessage(
-    gl, status) {
+  function getWebGLErrorMessage(gl, status) {
     switch (status) {
       case gl.NO_ERROR:
         return 'NO_ERROR';
@@ -32,19 +31,11 @@
     return returnValue;
   }
 
-  const vertexArray = new Float32Array(
-    [
-      -1, 1, 0, 0, 1,
-      -1, -1, 0, 0, 0,
-      1, 1, 0, 1, 1,
-      1, -1, 0, 1, 0
-    ]
-  );
-
-  const triangleVertexIndices = new Uint16Array([
-    0, 1, 2,
-     2, 1, 3
+  const vertexArray = new Float32Array([
+    -1, 1, 0, 0, 1, -1, -1, 0, 0, 0, 1, 1, 0, 1, 1, 1, -1, 0, 1, 0,
   ]);
+
+  const triangleVertexIndices = new Uint16Array([0, 1, 2, 2, 1, 3]);
 
   function init() {
     const canvas = document.createElement('canvas');
@@ -55,7 +46,7 @@
       preserveDrawingBuffer: false,
       depth: false,
       stencil: false,
-      failIfMajorPerformanceCaveat: true
+      failIfMajorPerformanceCaveat: true,
     };
     const gl = canvas.getContext('webgl', WEBGL_ATTRIBUTES);
     gl.getExtension('OES_texture_float');
@@ -63,65 +54,80 @@
     halfFloatExt = gl.getExtension('OES_texture_half_float');
     console.log('=======', halfFloatExt);
     gl.getExtension('EXT_color_buffer_half_float');
-    const buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
-    gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW)
-    const buffer2 = gl.createBuffer()
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer2)
+    gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW);
+    const buffer2 = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer2);
 
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, triangleVertexIndices, gl.STATIC_DRAW)
-    const framebuffer = gl.createFramebuffer()
-    gl.disable(gl.DEPTH_TEST)
-    gl.disable(gl.STENCIL_TEST)
-    gl.disable(gl.BLEND)
-    gl.disable(gl.DITHER)
-    gl.disable(gl.POLYGON_OFFSET_FILL)
-    gl.disable(gl.SAMPLE_COVERAGE)
-    gl.enable(gl.SCISSOR_TEST)
-    gl.enable(gl.CULL_FACE)
-    gl.cullFace(gl.BACK)
+    gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      triangleVertexIndices,
+      gl.STATIC_DRAW,
+    );
+    const framebuffer = gl.createFramebuffer();
+    gl.disable(gl.DEPTH_TEST);
+    gl.disable(gl.STENCIL_TEST);
+    gl.disable(gl.BLEND);
+    gl.disable(gl.DITHER);
+    gl.disable(gl.POLYGON_OFFSET_FILL);
+    gl.disable(gl.SAMPLE_COVERAGE);
+    gl.enable(gl.SCISSOR_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
     return [gl, framebuffer, buffer];
   }
 
-  function add(gl, framebuffer, buffer,o1,o2) {
-    const texture1 = gl.createTexture()
-    gl.bindTexture(gl.TEXTURE_2D, texture1)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.FLOAT, null)
-    gl.bindTexture(gl.TEXTURE_2D, null)
-    gl.bindTexture(gl.TEXTURE_2D, texture1)
-    const input1 = new Float32Array(4)
-    input1[0] = o1
-    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 1, 1, gl.RGBA, gl.FLOAT, input1)
-    gl.bindTexture(gl.TEXTURE_2D, null)
-    const texture2 = gl.createTexture()
-    gl.bindTexture(gl.TEXTURE_2D, texture2)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.FLOAT, null)
-    gl.bindTexture(gl.TEXTURE_2D, null)
-    gl.bindTexture(gl.TEXTURE_2D, texture2)
-    const input2 = new Float32Array(4)
-    input2[0] = o2
-    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 1, 1, gl.RGBA, gl.FLOAT, input2)
-    gl.bindTexture(gl.TEXTURE_2D, null)
+  function add(gl, framebuffer, buffer, o1, o2) {
+    const texture1 = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture1);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.FLOAT, null);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindTexture(gl.TEXTURE_2D, texture1);
+    const input1 = new Float32Array(4);
+    input1[0] = o1;
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 1, 1, gl.RGBA, gl.FLOAT, input1);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    const texture2 = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture2);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.FLOAT, null);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindTexture(gl.TEXTURE_2D, texture2);
+    const input2 = new Float32Array(4);
+    input2[0] = o2;
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 1, 1, gl.RGBA, gl.FLOAT, input2);
+    gl.bindTexture(gl.TEXTURE_2D, null);
 
-    const texture = gl.createTexture()
-    gl.bindTexture(gl.TEXTURE_2D, texture)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, halfFloatExt.HALF_FLOAT_OES, null)
-    gl.bindTexture(gl.TEXTURE_2D, null)
-    const shader = gl.createShader(gl.FRAGMENT_SHADER)
-    gl.shaderSource(shader,
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      1,
+      1,
+      0,
+      gl.RGBA,
+      halfFloatExt.HALF_FLOAT_OES,
+      null,
+    );
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    const shader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(
+      shader,
       `precision highp float;
   precision highp int;
   varying vec2 resultUV;
@@ -157,12 +163,13 @@ uniform sampler2D B;
         float a = getAAtOutCoords();
         float b = getBAtOutCoords();
         setOutput(binaryOperation(a, b));
-      }`
-    )
-    gl.compileShader(shader)
-    console.log(gl.getShaderParameter(shader, gl.COMPILE_STATUS))
-    const shader2 = gl.createShader(gl.VERTEX_SHADER)
-    gl.shaderSource(shader2,
+      }`,
+    );
+    gl.compileShader(shader);
+    console.log(gl.getShaderParameter(shader, gl.COMPILE_STATUS));
+    const shader2 = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(
+      shader2,
       `precision highp float;
     attribute vec3 clipSpacePos;
     attribute vec2 uv;
@@ -171,13 +178,14 @@ uniform sampler2D B;
     void main() {
       gl_Position = vec4(clipSpacePos, 1);
       resultUV = uv;
-    }`)
-    gl.compileShader(shader2)
+    }`,
+    );
+    gl.compileShader(shader2);
     console.log(gl.getShaderParameter(shader2, gl.COMPILE_STATUS));
-    const program = gl.createProgram()
-    gl.attachShader(program, shader2)
-    gl.attachShader(program, shader)
-    gl.linkProgram(program)
+    const program = gl.createProgram();
+    gl.attachShader(program, shader2);
+    gl.attachShader(program, shader);
+    gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       var info = gl.getProgramInfoLog(program);
       throw new Error('Could not compile WebGL program. \n\n' + info);
@@ -185,47 +193,69 @@ uniform sampler2D B;
 
     const clipSpacePosPosition = gl.getAttribLocation(program, 'clipSpacePos');
     console.log('clipSpacePosPosition:', clipSpacePosPosition);
-    gl.enableVertexAttribArray(clipSpacePosPosition)
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-    gl.vertexAttribPointer(clipSpacePosPosition, 3, gl.FLOAT, false, 20, 0)
+    gl.enableVertexAttribArray(clipSpacePosPosition);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.vertexAttribPointer(clipSpacePosPosition, 3, gl.FLOAT, false, 20, 0);
 
-    const uvPosition = gl.getAttribLocation(program, 'uv')
+    const uvPosition = gl.getAttribLocation(program, 'uv');
     console.log('uvPosition:', uvPosition);
-    gl.enableVertexAttribArray(uvPosition)
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-    gl.vertexAttribPointer(uvPosition, 2, gl.FLOAT, false, 20, 12)
+    gl.enableVertexAttribArray(uvPosition);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.vertexAttribPointer(uvPosition, 2, gl.FLOAT, false, 20, 12);
 
-    const ulocation = gl.getUniformLocation(program, 'A')
-    const ulocation1 = gl.getUniformLocation(program, 'B')
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer)
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0)
+    const ulocation = gl.getUniformLocation(program, 'A');
+    const ulocation1 = gl.getUniformLocation(program, 'B');
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(
+      gl.FRAMEBUFFER,
+      gl.COLOR_ATTACHMENT0,
+      gl.TEXTURE_2D,
+      texture,
+      0,
+    );
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
-      console.log('texture failed to attach to framebuffer')
+      console.log('texture failed to attach to framebuffer');
     }
-    gl.viewport(0, 0, 1, 1)
-    gl.scissor(0, 0, 1, 1)
-    gl.useProgram(program)
-    gl.activeTexture(gl.TEXTURE0)
-    gl.bindTexture(gl.TEXTURE_2D, texture1)
-    gl.uniform1i(ulocation, 0)
-    gl.activeTexture(gl.TEXTURE0 + 1)
-    gl.bindTexture(gl.TEXTURE_2D, texture2)
-    gl.uniform1i(ulocation1, 1)
-    gl.drawElements(gl.TRIANGLES, triangleVertexIndices.length, gl.UNSIGNED_SHORT, 0)
+    gl.viewport(0, 0, 1, 1);
+    gl.scissor(0, 0, 1, 1);
+    gl.useProgram(program);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture1);
+    gl.uniform1i(ulocation, 0);
+    gl.activeTexture(gl.TEXTURE0 + 1);
+    gl.bindTexture(gl.TEXTURE_2D, texture2);
+    gl.uniform1i(ulocation1, 1);
+    gl.drawElements(
+      gl.TRIANGLES,
+      triangleVertexIndices.length,
+      gl.UNSIGNED_SHORT,
+      0,
+    );
     return texture;
   }
 
   function decodeOutput(gl, framebuffer, vertexbuffer, texture) {
-    const texture1 = gl.createTexture()
-    gl.bindTexture(gl.TEXTURE_2D, texture1)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, null)
-    gl.bindTexture(gl.TEXTURE_2D, null)
-    const shader = gl.createShader(gl.FRAGMENT_SHADER)
-    gl.shaderSource(shader,
+    const texture1 = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture1);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      1,
+      1,
+      0,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      null,
+    );
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    const shader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(
+      shader,
       `precision highp float;
       precision highp int;
       varying vec2 resultUV;
@@ -291,12 +321,13 @@ uniform sampler2D B;
       void main() {
         float x = getAAtOutCoords();
         gl_FragColor = encode_float(x);
-      }`
-    )
-    gl.compileShader(shader)
-    console.log(gl.getShaderParameter(shader, gl.COMPILE_STATUS))
-    const shader2 = gl.createShader(gl.VERTEX_SHADER)
-    gl.shaderSource(shader2,
+      }`,
+    );
+    gl.compileShader(shader);
+    console.log(gl.getShaderParameter(shader, gl.COMPILE_STATUS));
+    const shader2 = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(
+      shader2,
       `precision highp float;
     attribute vec3 clipSpacePos;
     attribute vec2 uv;
@@ -305,51 +336,67 @@ uniform sampler2D B;
     void main() {
       gl_Position = vec4(clipSpacePos, 1);
       resultUV = uv;
-    }`)
-    gl.compileShader(shader2)
-    console.log(gl.getShaderParameter(shader2, gl.COMPILE_STATUS))
-    const program = gl.createProgram()
-    gl.attachShader(program, shader2)
-    gl.attachShader(program, shader)
-    gl.linkProgram(program)
+    }`,
+    );
+    gl.compileShader(shader2);
+    console.log(gl.getShaderParameter(shader2, gl.COMPILE_STATUS));
+    const program = gl.createProgram();
+    gl.attachShader(program, shader2);
+    gl.attachShader(program, shader);
+    gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       var info = gl.getProgramInfoLog(program);
       throw new Error('Could not compile WebGL program. \n\n' + info);
     }
-    const ulocation = gl.getUniformLocation(program, 'A')
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer)
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture1, 0)
+    const ulocation = gl.getUniformLocation(program, 'A');
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(
+      gl.FRAMEBUFFER,
+      gl.COLOR_ATTACHMENT0,
+      gl.TEXTURE_2D,
+      texture1,
+      0,
+    );
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
-      console.log('texture failed to attach to framebuffer')
+      console.log('texture failed to attach to framebuffer');
     }
-    gl.viewport(0, 0, 1, 1)
-    gl.scissor(0, 0, 1, 1)
-    gl.useProgram(program)
-    gl.activeTexture(gl.TEXTURE0)
-    gl.bindTexture(gl.TEXTURE_2D, texture)
-    gl.uniform1i(ulocation, 0)
-    gl.drawElements(gl.TRIANGLES, triangleVertexIndices.length, gl.UNSIGNED_SHORT, 0)
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer)
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture1, 0)
+    gl.viewport(0, 0, 1, 1);
+    gl.scissor(0, 0, 1, 1);
+    gl.useProgram(program);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.uniform1i(ulocation, 0);
+    gl.drawElements(
+      gl.TRIANGLES,
+      triangleVertexIndices.length,
+      gl.UNSIGNED_SHORT,
+      0,
+    );
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(
+      gl.FRAMEBUFFER,
+      gl.COLOR_ATTACHMENT0,
+      gl.TEXTURE_2D,
+      texture1,
+      0,
+    );
     const output = new Uint8Array(4);
-    gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, output)
+    gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, output);
     //gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer)
     //gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0)
-    return new Float32Array(output.buffer)
+    return new Float32Array(output.buffer);
   }
 
   const [gl, framebuffer, vertexBuffer] = init();
 
-  document.getElementById('add').onclick=()=>{
-    const o1=parseInt(document.getElementById('o1').value.trim());
-    const o2=parseInt(document.getElementById('o2').value.trim());
+  document.getElementById('add').onclick = () => {
+    const o1 = parseInt(document.getElementById('o1').value.trim());
+    const o2 = parseInt(document.getElementById('o2').value.trim());
 
-    const texture = add(gl, framebuffer, vertexBuffer,o1,o2)
-    const output = decodeOutput(gl, framebuffer, vertexBuffer, texture)
-    console.log('output length:',output.length);
-    const element = document.getElementById('output')
-    element.textContent = output[0]
-
+    const texture = add(gl, framebuffer, vertexBuffer, o1, o2);
+    const output = decodeOutput(gl, framebuffer, vertexBuffer, texture);
+    console.log('output length:', output.length);
+    const element = document.getElementById('output');
+    element.textContent = output[0];
   };
-
 })();

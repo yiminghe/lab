@@ -1,158 +1,159 @@
 <!doctype html>
 <html>
-<head>
-	<meta charset='utf-8'/>
-	<title>星级评定</title>
-	<style id="skinCss">
-		ul,li {
-			list-style-type:none;
-			margin:0;
-			padding:0;
-		}
-		ul.rate {
-			width:100px;
-			position:relative;
-			height:19px;
-			/*background:url("star.png") no-repeat scroll left top;*/
-		}
-		
-		ul.rate li {
-			float:left;
-			width:20px;
-			height:19px;
-		}
-		
-		ul.rate li a{
-			position:absolute;
-			display:block;
-			left:0;			
-			height:19px;
-			overflow:hidden;
-			cursor:default;
-		}
-		
-		ul.rate li a img {
-			border:none;
-		}
-		
-		ul.rate.operable li a{
-			cursor:pointer;
-		}
-		
-		ul.rate.operable li a:hover{
-			background-color:red;
-		}
-		
-		a.r1{
-			z-index:4;
-			width:20px;
-		}
-		
-		a.r2{
-			z-index:3;
-			width:40px;
-		}
-		
-		a.r3 {
-			z-index:2;
-			width:60px;
-		}
-			
-		a.r4 {
-			z-index:1;
-			width:80px;
-		}
-		
-		a.r5 {
-			width:100px;
-		}
-	</style>
-</head>
-<body>
-	
-	
-	<ul class="rate operable" id="rateContainer">
-		
-		
-		<li>
-			<a href="rate.htm?rate=1" hidefocus="on" class="r1" title="1星" ><img src="star.png" alt="1星" /></a>
-		</li>
-		
-		<li>
-			<a href="rate.htm?rate=2" hidefocus="on" class="r2" title="2星" ><img src="star.png" alt="2星" /></a>
-		</li>
-		
-		<li>
-			<a href="rate.htm?rate=3" hidefocus="on" class="r3" title="3星" ><img src="star.png" alt="3星" /></a>
-		</li>
-		
-		<li>
-			<a href="rate.htm?rate=4" hidefocus="on" class="r4" title="4星" ><img src="star.png" alt="4星" /></a>
-		</li>
-		
-		<li>
-			<a href="rate.htm?rate=5" hidefocus="on" class="r5" title="5星" ><img src="star.png" alt="5星" /></a>
-		</li>
-		
-		
-	</ul>
-	
-	<div style="margin:50px;">
-	<label>星星颜色：
-		<select id="skin">
-			
-		
-		</select>
-		</label>
-	</div>
-	
-	<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui.js"></script>
-	<script type="text/javascript">
-	
-		YUI().use("node","stylesheet",function(Y){
-			
-			//换肤控制
-			var skin=Y.one("#skin");
-			var skinCss=Y.StyleSheet("#skinCss");
-			var opts="";
-			Y.each(Y.Color.KEYWORDS,function(v,k){
-				opts+="<"+"option value='#"+v+"'"+">"+k+"</option>";
-			});
-			
-			skin.append(opts);  
-			
-			skin.on("change",function(e){
-				
-				var v=this.get("value");
-				//直接操纵external css
-				skinCss.set("ul.rate.operable li a:hover",{
-					"backgroundColor":Y.Color.toHex(v)
-				});
-				
-			});
-			skin.set("value","#f00");
-			
-			
-			var rate=Y.one("#rateContainer");
-			var rateAs=rate.all("a");
-			//js可用，则去除href，注意ie去除后不可hover了
-			if(Y.UA.ie) 
-				rateAs.on("click",function(e){e.preventDefault();});
-			else
-				rateAs.removeAttribute("href");
-			//js可用，则点击后去除绑定事件以及不再可鼠标掠过改变
-			var rateHandler=rate.delegate("click",function(e){				
-				this.setStyles({
-					"backgroundColor":skin.get("value")
-				});
-				rate.removeClass("operable");
-				e.halt();
-				rateHandler.detach();
-				alert("选择了"+this.get("title"));
-			},"a");
-			
-		});
-	
-	</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>星级评定</title>
+    <style id="skinCss">
+      ul,
+      li {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      ul.rate {
+        width: 100px;
+        position: relative;
+        height: 19px;
+        /*background:url("star.png") no-repeat scroll left top;*/
+      }
+
+      ul.rate li {
+        float: left;
+        width: 20px;
+        height: 19px;
+      }
+
+      ul.rate li a {
+        position: absolute;
+        display: block;
+        left: 0;
+        height: 19px;
+        overflow: hidden;
+        cursor: default;
+      }
+
+      ul.rate li a img {
+        border: none;
+      }
+
+      ul.rate.operable li a {
+        cursor: pointer;
+      }
+
+      ul.rate.operable li a:hover {
+        background-color: red;
+      }
+
+      a.r1 {
+        z-index: 4;
+        width: 20px;
+      }
+
+      a.r2 {
+        z-index: 3;
+        width: 40px;
+      }
+
+      a.r3 {
+        z-index: 2;
+        width: 60px;
+      }
+
+      a.r4 {
+        z-index: 1;
+        width: 80px;
+      }
+
+      a.r5 {
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="rate operable" id="rateContainer">
+      <li>
+        <a href="rate.htm?rate=1" hidefocus="on" class="r1" title="1星"
+          ><img src="star.png" alt="1星"
+        /></a>
+      </li>
+
+      <li>
+        <a href="rate.htm?rate=2" hidefocus="on" class="r2" title="2星"
+          ><img src="star.png" alt="2星"
+        /></a>
+      </li>
+
+      <li>
+        <a href="rate.htm?rate=3" hidefocus="on" class="r3" title="3星"
+          ><img src="star.png" alt="3星"
+        /></a>
+      </li>
+
+      <li>
+        <a href="rate.htm?rate=4" hidefocus="on" class="r4" title="4星"
+          ><img src="star.png" alt="4星"
+        /></a>
+      </li>
+
+      <li>
+        <a href="rate.htm?rate=5" hidefocus="on" class="r5" title="5星"
+          ><img src="star.png" alt="5星"
+        /></a>
+      </li>
+    </ul>
+
+    <div style="margin: 50px">
+      <label
+        >星星颜色：
+        <select id="skin"></select>
+      </label>
+    </div>
+
+    <script src="http://yui.yahooapis.com/3.1.0/build/yui/yui.js"></script>
+    <script>
+      YUI().use('node', 'stylesheet', function (Y) {
+        //换肤控制
+        var skin = Y.one('#skin');
+        var skinCss = Y.StyleSheet('#skinCss');
+        var opts = '';
+        Y.each(Y.Color.KEYWORDS, function (v, k) {
+          opts += '<' + "option value='#" + v + "'" + '>' + k + '</option>';
+        });
+
+        skin.append(opts);
+
+        skin.on('change', function (e) {
+          var v = this.get('value');
+          //直接操纵external css
+          skinCss.set('ul.rate.operable li a:hover', {
+            backgroundColor: Y.Color.toHex(v),
+          });
+        });
+        skin.set('value', '#f00');
+
+        var rate = Y.one('#rateContainer');
+        var rateAs = rate.all('a');
+        //js可用，则去除href，注意ie去除后不可hover了
+        if (Y.UA.ie)
+          rateAs.on('click', function (e) {
+            e.preventDefault();
+          });
+        else rateAs.removeAttribute('href');
+        //js可用，则点击后去除绑定事件以及不再可鼠标掠过改变
+        var rateHandler = rate.delegate(
+          'click',
+          function (e) {
+            this.setStyles({
+              backgroundColor: skin.get('value'),
+            });
+            rate.removeClass('operable');
+            e.halt();
+            rateHandler.detach();
+            alert('选择了' + this.get('title'));
+          },
+          'a',
+        );
+      });
+    </script>
+  </body>
 </html>

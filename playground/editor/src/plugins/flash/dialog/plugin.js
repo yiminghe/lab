@@ -1,8 +1,12 @@
-KISSY.Editor.add("flash/dialog", function(editor) {
+KISSY.Editor.add(
+  'flash/dialog',
+  function (editor) {
     var KE = KISSY.Editor;
-    KE.use("flash/dialog/support", function() {
-        editor.addDialog("flash/dialog", new KE.Flash.FlashDialog(editor));
+    KE.use('flash/dialog/support', function () {
+      editor.addDialog('flash/dialog', new KE.Flash.FlashDialog(editor));
     });
-},{
-    attach:false
-});
+  },
+  {
+    attach: false,
+  },
+);

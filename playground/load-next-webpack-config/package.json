@@ -1,0 +1,41 @@
+{
+  "name": "load-next-webpack-config",
+  "version": "0.0.1",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/mjs/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yiminghe/load-next-webpack-config"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "14.2.4",
+    "ts-node": "10.x",
+    "chunks-webpack-plugin": "11.x",
+    "webpack-dev-server": "5.x",
+    "webpack-cli": "5.x",
+    "webpack": "5.x",
+    "@types/webpack": "5.x",
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4"
+  },
+  "scripts": {
+    "lint": "tsc --noEmit && next lint",
+    "serve": "npx http-server ./",
+    "dev": "webpack serve --allowed-hosts=all",
+    "build:app": "rm -rf .next/static && NODE_ENV=production webpack build && ts-node scripts/genPage",
+    "build": "rm -rf dist && tsc -p tsconfig-cjs.json && tsc -p tsconfig-esm.json"
+  },
+  "packageManager": "pnpm@9.4.0"
+}

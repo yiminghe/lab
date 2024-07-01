@@ -1,140 +1,137 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="utf8">
+  <head>
+    <meta charset="utf8" />
     <title></title>
     <script src="http://g.tbcdn.cn/kissy/k/1.4.4/seed.js"></script>
     <style>
-        .container{
-            width: 630px;
-            height:308px;
-            margin: 0 auto;
-            overflow: hidden;
-            border: 1px solid #000;
-        }
-        .item{
-            width: 102px;
-            height: 306px;
-            border: 1px solid #a0a0a0;
-        }
-        .item-child{
-            height: 100px;
-            width: 100px;
-            border: 1px solid #a0a0a0;
-            background: url(http://gd4.alicdn.com/bao/uploaded/i4/TB1z0v4FVXXXXb7XVXXXXXXXXXX_!!0-item_pic.jpg_100x100.jpg);
-        }
-        #curveRange{
-            width: 150px;
-            margin: 10px auto;
-            display: block;
-        }
+      .container {
+        width: 630px;
+        height: 308px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 1px solid #000;
+      }
+      .item {
+        width: 102px;
+        height: 306px;
+        border: 1px solid #a0a0a0;
+      }
+      .item-child {
+        height: 100px;
+        width: 100px;
+        border: 1px solid #a0a0a0;
+        background: url(http://gd4.alicdn.com/bao/uploaded/i4/TB1z0v4FVXXXXb7XVXXXXXXXXXX_!!0-item_pic.jpg_100x100.jpg);
+      }
+      #curveRange {
+        width: 150px;
+        margin: 10px auto;
+        display: block;
+      }
     </style>
-</head>
-<body>
-<p>拖动进度条，元素动态渲染</p>
-<div class="container">
-    <div class="stage">
+  </head>
+  <body>
+    <p>拖动进度条，元素动态渲染</p>
+    <div class="container">
+      <div class="stage">
         <div class="item">
-            <div class="item-child">1</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">1</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">2</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">2</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">3</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">3</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
+      </div>
     </div>
-</div>
 
-<input type="range" id="curveRange" max="30" min="0">
+    <input type="range" id="curveRange" max="30" min="0" />
 
-<script>
-    var S = KISSY;
-    S.config({
-         combine: false,
-         charset: "utf-8",
-         debug: true,
-         packages: [
-              {
-                  name: 'curve',
-                  path: '../',
-                  ignorePackageNameInUri: true
-              }
-         ]}
-    );
+    <script>
+      var S = KISSY;
+      S.config({
+        combine: false,
+        charset: 'utf-8',
+        debug: true,
+        packages: [
+          {
+            name: 'curve',
+            path: '../',
+            ignorePackageNameInUri: true,
+          },
+        ],
+      });
 
-
-    S.use('node, curve/index', function (S, Node, Curve) {
-
+      S.use('node, curve/index', function (S, Node, Curve) {
         var html = '';
-        for(var i = 0 ;i < 7 ;i++){
-            html += '<div class="item">'+
-                    '<div class="item-child">' + (i) + '</div><div class="item-child"></div><div class="item-child"></div>'+
-                    '</div>';
+        for (var i = 0; i < 7; i++) {
+          html +=
+            '<div class="item">' +
+            '<div class="item-child">' +
+            i +
+            '</div><div class="item-child"></div><div class="item-child"></div>' +
+            '</div>';
         }
         S.one('.stage').html(html);
 
-
         var curve = new Curve({
-            container : S.one('.container'),
-            perspective : 600,
-           asyncLoad : true,
-            data : [0, 1, 2, 3, 4, 5, 6],
-            renderTpl:function(data){
-                return '<div class="item">'+
-                        '<div class="item-child">' + data + '</div><div class="item-child"></div><div class="item-child"></div>'+
-                        '</div>';
-            }
+          container: S.one('.container'),
+          perspective: 600,
+          asyncLoad: true,
+          data: [0, 1, 2, 3, 4, 5, 6],
+          renderTpl: function (data) {
+            return (
+              '<div class="item">' +
+              '<div class="item-child">' +
+              data +
+              '</div><div class="item-child"></div><div class="item-child"></div>' +
+              '</div>'
+            );
+          },
         });
-
 
         var first = 0;
         var last = 6;
 
-        curve.on('load', function(e){
-            var num = e.n;
-            var r = [];
+        curve.on('load', function (e) {
+          var num = e.n;
+          var r = [];
 
-            if(e.loadType == 'append'){
-
-                //e.callback([8,9,18,23]);
-                for(var i = 0 ; i< num ; i++){
-                    r.push(++last);
-                }
-                e.callback(r);
-
-            }else if(e.loadType == "prepend"){
-
-                for(var i = 0 ; i< num ; i++){
-                    r.push(--first);
-                }
-                setTimeout(function(){
-                    e.callback(r.reverse())
-                },500);
-
+          if (e.loadType == 'append') {
+            //e.callback([8,9,18,23]);
+            for (var i = 0; i < num; i++) {
+              r.push(++last);
             }
-
+            e.callback(r);
+          } else if (e.loadType == 'prepend') {
+            for (var i = 0; i < num; i++) {
+              r.push(--first);
+            }
+            setTimeout(function () {
+              e.callback(r.reverse());
+            }, 500);
+          }
         });
 
-        var ranger = S.one("#curveRange");
+        var ranger = S.one('#curveRange');
         ranger.attr({
-            'min': curve.range.min - 60,
-            'max': 180,
-            'value': curve.range.min
+          min: curve.range.min - 60,
+          max: 180,
+          value: curve.range.min,
         });
 
-        ranger.on("valuechange", function(){
-            var v = ranger.val();
-            curve.rotate(v);
+        ranger.on('valuechange', function () {
+          var v = ranger.val();
+          curve.rotate(v);
         });
-    });
-</script>
-
-</body>
+      });
+    </script>
+  </body>
 </html>

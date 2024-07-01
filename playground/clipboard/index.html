@@ -1,16 +1,13 @@
 <div>
   paste:
-  <textarea style="width:400px;height:300px" id="t"></textarea>
+  <textarea style="width: 400px; height: 300px" id="t"></textarea>
 
   <button id="copy">copy</button>
 
   <button id="read">read</button>
 </div>
 
-<div id='result'>
-
-</div>
-
+<div id="result"></div>
 
 <script>
   (function () {
@@ -40,12 +37,12 @@
       }
       return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
-        fileReader.addEventListener("load", () => {
+        fileReader.addEventListener('load', () => {
           const result = fileReader.result;
-          if (typeof result === "string") {
+          if (typeof result === 'string') {
             resolve(result);
           } else {
-            reject("could not convert blob to string");
+            reject('could not convert blob to string');
           }
         });
         fileReader.readAsText(blob);
@@ -59,7 +56,7 @@
         console.log('****************************');
         console.log('item.kind:', item.kind);
         console.log('item.type:', item.type);
-        console.log('item string:', data.getData(item.type))
+        console.log('item string:', data.getData(item.type));
         console.log('item.getAsFile:', item.getAsFile());
         if (item.type.startsWith('image/') && item.kind === 'file') {
           const file = item.getAsFile();
@@ -67,34 +64,46 @@
           const preview = document.createElement('img');
           preview.style.display = 'block';
           result.appendChild(preview);
-          reader.addEventListener("load", function () {
-            preview.src = reader.result;
-          }, false);
+          reader.addEventListener(
+            'load',
+            function () {
+              preview.src = reader.result;
+            },
+            false,
+          );
 
           reader.readAsDataURL(file);
         }
       }
     }
 
-    t.addEventListener('paste', (e) => {
-      e.preventDefault();
+    t.addEventListener(
+      'paste',
+      (e) => {
+        e.preventDefault();
 
-      console.log('onPaste');
-      const data = e.clipboardData;
-      logTransferItems(data);
-    }, false);
+        console.log('onPaste');
+        const data = e.clipboardData;
+        logTransferItems(data);
+      },
+      false,
+    );
 
-    document.getElementById('read').addEventListener('click', () => {
-      console.log('read');
-      navigator.clipboard.read().then(async (data) => {
-        console.log('item length', data.length);
-        const [d] = data;
-        for (const type of d.types) {
-          console.log('****************************');
-          console.log('item.type:', type);
-          console.log('getType', await blobToString(await d.getType(type)));
-        }
-      });
-    }, false);
+    document.getElementById('read').addEventListener(
+      'click',
+      () => {
+        console.log('read');
+        navigator.clipboard.read().then(async (data) => {
+          console.log('item length', data.length);
+          const [d] = data;
+          for (const type of d.types) {
+            console.log('****************************');
+            console.log('item.type:', type);
+            console.log('getType', await blobToString(await d.getType(type)));
+          }
+        });
+      },
+      false,
+    );
   })();
 </script>

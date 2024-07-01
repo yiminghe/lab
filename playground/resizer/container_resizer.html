@@ -1,86 +1,90 @@
 <!doctype html>
 <html>
-<head>
-<meta charset='utf-8'/>
-<title>resizer for container</title>
-<style>
-/*{padding:0;margin:0;}*/
-body {
-	font:12px/1.5 tahoma,arial,宋体,sans-serif;
-}
-#demo {
-	width:200px;
-	height:20px;
-	line-height:20px;
-	padding:0 3px;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
-	/*-moz-binding: url('ellipsis.xml#ellipsis'); firefox用了这个以后，虽然能显示ellipsis，但是dom对象不能操作了 */
-	border:1px solid #ccc;
-	position:relative;
-}
-.r-resize {
-	background-color: #ccc;
-	width:5px;
-	height:100%;
-	*height:expression(this.parentNode.offsetHeight);
-	position:absolute;
-	right:0;
-	top:0;
-	cursor:e-resize;
-}
-</style>
-<!--<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy.js"></script>-->
-<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>-->
-<script src="http://a.tbcdn.cn/s/kissy/1.1.6/kissy.js" charset="utf-8"></script>
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <title>resizer for container</title>
+    <style>
+      /*{padding:0;margin:0;}*/
+      body {
+        font:
+          12px/1.5 tahoma,
+          arial,
+          宋体,
+          sans-serif;
+      }
+      #demo {
+        width: 200px;
+        height: 20px;
+        line-height: 20px;
+        padding: 0 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /*-moz-binding: url('ellipsis.xml#ellipsis'); firefox用了这个以后，虽然能显示ellipsis，但是dom对象不能操作了 */
+        border: 1px solid #ccc;
+        position: relative;
+      }
+      .r-resize {
+        background-color: #ccc;
+        width: 5px;
+        height: 100%;
+        *height: expression(this.parentNode.offsetHeight);
+        position: absolute;
+        right: 0;
+        top: 0;
+        cursor: e-resize;
+      }
+    </style>
+    <!--<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy.js"></script>-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>-->
+    <script
+      src="http://a.tbcdn.cn/s/kissy/1.1.6/kissy.js"
+      charset="utf-8"></script>
+  </head>
 
-<body>
+  <body>
+    <div id="demo">
+      文字很多很多，超出框外的文字显示“...”，把鼠标放在框内，可以看到右边有个小方块，可以拖动哦！但是firefox不支持text-overflow，用XUL实现ellipsis效果会导致this层dom对象不能操作了~
+    </div>
+    <p></p>
 
-<div id="demo">文字很多很多，超出框外的文字显示“...”，把鼠标放在框内，可以看到右边有个小方块，可以拖动哦！但是firefox不支持text-overflow，用XUL实现ellipsis效果会导致this层dom对象不能操作了~</div>
-<p></p>
+    <script>
+      (function (S) {
+        S.use('core,dd', function () {
+          var Event = S.Event,
+            DOM = S.DOM;
+          var demo = S.one('#demo');
+          var ptext = S.one('p');
+          var resize;
 
-<script>
-(function(S){
-	 S.use('core,dd',function(){
-		var Event = S.Event,DOM = S.DOM;
-		var demo = S.one('#demo');
-		var ptext = S.one('p');
-		var resize ;
-		
-		function initResize(){
-		    resize =new S.Node('<div class="r-resize">');
-			        demo.append(resize);
-			        
-			        var d=new S.Draggable({
-			            node:resize,
-			            shim:false
-			        });
-			        var width;
-			        d.on("dragstart",function(){
-			            width=demo.width()
-			        });
-			        
-			        d.on("drag",function(ev){
-			            var diff=ev.left-d.startNodePos.left;
-			            demo.width(diff+width);
-			        });
-			   demo.detach("mouseenter",arguments.callee);     
-		}
-		demo.on('mouseenter', initResize);
-		demo.on('mouseenter', function(){
-		    resize.show();
-		});
-		demo.on('mouseleave', function(){
-		    resize.hide();
-		});
-		
-		
-	 });
-	 
-})(KISSY);
+          function initResize() {
+            resize = new S.Node('<div class="r-resize">');
+            demo.append(resize);
 
-</script>
-</body>
+            var d = new S.Draggable({
+              node: resize,
+              shim: false,
+            });
+            var width;
+            d.on('dragstart', function () {
+              width = demo.width();
+            });
+
+            d.on('drag', function (ev) {
+              var diff = ev.left - d.startNodePos.left;
+              demo.width(diff + width);
+            });
+            demo.detach('mouseenter', arguments.callee);
+          }
+          demo.on('mouseenter', initResize);
+          demo.on('mouseenter', function () {
+            resize.show();
+          });
+          demo.on('mouseleave', function () {
+            resize.hide();
+          });
+        });
+      })(KISSY);
+    </script>
+  </body>
 </html>

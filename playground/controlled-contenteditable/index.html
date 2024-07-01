@@ -1,56 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <meta charset='utf-8' />
-    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-    <script src="../../vendors/react.development.js" crossorigin="anonymous"></script>
-    <script src="../../vendors/react-dom.development.js" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <script
+      src="../../vendors/react.development.js"
+      crossorigin="anonymous"></script>
+    <script
+      src="../../vendors/react-dom.development.js"
+      crossorigin="anonymous"></script>
     <script src="../../vendors/system.js" crossorigin="anonymous"></script>
-    <script src="../../vendors/systemjs-babel.js" crossorigin="anonymous"></script>
+    <script
+      src="../../vendors/systemjs-babel.js"
+      crossorigin="anonymous"></script>
     <style>
-        .container {
-            user-select: none;
-            margin: 100px auto;
-            width: 600px;
-            border: 1px solid red;
-            min-height: 100px;
-            max-height: 300px;
-            cursor: text;
-            position: relative;
-            padding: 96px 72px;
-            overflow: auto;
-        }
+      .container {
+        user-select: none;
+        margin: 100px auto;
+        width: 600px;
+        border: 1px solid red;
+        min-height: 100px;
+        max-height: 300px;
+        cursor: text;
+        position: relative;
+        padding: 96px 72px;
+        overflow: auto;
+      }
 
-        .content {
-            position: relative;
-            overflow-wrap: break-word;
-            word-break: break-all;
-            white-space: pre-wrap;
-            z-index: 100;
-        }
+      .content {
+        position: relative;
+        overflow-wrap: break-word;
+        word-break: break-all;
+        white-space: pre-wrap;
+        z-index: 100;
+      }
 
-        div[data-void] {
-            border: 1px solid transparent;
-        }
+      div[data-void] {
+        border: 1px solid transparent;
+      }
 
-        div[data-void][data-selected] {
-            border: 1px solid red;
-        }
+      div[data-void][data-selected] {
+        border: 1px solid red;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <h2>controlled contenteditable</h2>
     <div id="container" class="container">
-        <div id="content" class="content"></div>
+      <div id="content" class="content"></div>
     </div>
     <h2>real contenteditable</h2>
-    <div class="container content" id="content2" contenteditable="true">
-    </div>
+    <div class="container content" id="content2" contenteditable="true"></div>
     <script>
-        System.import(`./main.jsx`);
+      System.import(`./main.jsx`);
     </script>
-</body>
-
+  </body>
 </html>

@@ -1,93 +1,114 @@
 /*=S HTML5 */
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {display:block;}
-audio, canvas, video {display:inline-block;*display:inline;*zoom:1;}
-audio:not([controls]) {display:none;}
-[hidden] {display:none;}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section {
+  display: block;
+}
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+audio:not([controls]) {
+  display: none;
+}
+[hidden] {
+  display: none;
+}
 /*=E HTML5 */
 
-
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .layout {
-    position: relative;
-    margin: 0 auto;
-    width: 964px;
+  position: relative;
+  margin: 0 auto;
+  width: 964px;
 }
 
 .header {
-    position: fixed;
-    top: 0;
-    _position: absolute;
-    width: 964px;
-    height: 40px;
-    z-index: 2;
+  position: fixed;
+  top: 0;
+  _position: absolute;
+  width: 964px;
+  height: 40px;
+  z-index: 2;
 }
 
 .nav {
-    width: 964px;
-    height: 40px;
-    background: url("../images/header_nav.png") no-repeat;
+  width: 964px;
+  height: 40px;
+  background: url('../images/header_nav.png') no-repeat;
 }
 
 .nav a {
-    float:left;
-    width: 240px;
-    height: 40px;
+  float: left;
+  width: 240px;
+  height: 40px;
 }
 
 .main {
-    position: absolute;
-    top: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .mt4 {
-    margin-top: -4px;
+  margin-top: -4px;
 }
 
 .frame {
-    position:absolute;
-    overflow:hidden;
+  position: absolute;
+  overflow: hidden;
 }
 
 .frame01 {
-    top: 40px;
-    height: 1440px;
+  top: 40px;
+  height: 1440px;
 }
 
 .frame02 {
-    top: 1480px;
-    height: 6720px;
+  top: 1480px;
+  height: 6720px;
 }
 
 .frame03 {
-    top: 8200px;
-    height: 15960px;
+  top: 8200px;
+  height: 15960px;
 }
 
 .frame04_01 {
-    top: 24160px;
-    height: 960px;
+  top: 24160px;
+  height: 960px;
 }
 
 .frame04_02 {
-    top: 25120px;
-    height: 7200px;
+  top: 25120px;
+  height: 7200px;
 }
 
 .dummy {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url(../images/blank.gif) repeat;
-    overflow: auto;
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url(../images/blank.gif) repeat;
+  overflow: auto;
+  z-index: 1;
 }

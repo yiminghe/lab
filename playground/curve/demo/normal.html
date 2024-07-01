@@ -1,127 +1,132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="utf8">
+  <head>
+    <meta charset="utf8" />
     <title></title>
     <script src="http://g.tbcdn.cn/kissy/k/1.4.4/seed.js"></script>
     <style>
-        .container {
-            width: 690px;
-            height: 308px;
-            margin: 0 auto;
-            overflow: hidden;
-            border: 1px solid #000;
-        }
+      .container {
+        width: 690px;
+        height: 308px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 1px solid #000;
+      }
 
-        .item {
-            width: 102px;
-            height: 306px;
-            border: 1px solid #a0a0a0;
-        }
+      .item {
+        width: 102px;
+        height: 306px;
+        border: 1px solid #a0a0a0;
+      }
 
-        .item-child {
-            height: 100px;
-            width: 100px;
-            border: 1px solid #a0a0a0;
-            background: url(http://gd4.alicdn.com/bao/uploaded/i4/TB1z0v4FVXXXXb7XVXXXXXXXXXX_!!0-item_pic.jpg_100x100.jpg);
-        }
+      .item-child {
+        height: 100px;
+        width: 100px;
+        border: 1px solid #a0a0a0;
+        background: url(http://gd4.alicdn.com/bao/uploaded/i4/TB1z0v4FVXXXXb7XVXXXXXXXXXX_!!0-item_pic.jpg_100x100.jpg);
+      }
 
-        #curveRange {
-            width: 150px;
-            margin: 10px auto;
-            display: block;
-        }
+      #curveRange {
+        width: 150px;
+        margin: 10px auto;
+        display: block;
+      }
     </style>
-</head>
-<body>
-<p>根据元素个数，限制了滚动范围</p>
+  </head>
+  <body>
+    <p>根据元素个数，限制了滚动范围</p>
 
-<div class="container">
-    <div class="stage">
+    <div class="container">
+      <div class="stage">
         <div class="item">
-            <div class="item-child">1</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">1</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">2</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">2</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">3</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">3</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">5</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">5</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">6</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">6</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">7</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">7</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">8</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">8</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">9</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">9</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
         <div class="item">
-            <div class="item-child">10</div>
-            <div class="item-child"></div>
-            <div class="item-child"></div>
+          <div class="item-child">10</div>
+          <div class="item-child"></div>
+          <div class="item-child"></div>
         </div>
+      </div>
     </div>
-</div>
 
-<input type="range" id="curveRange"/>
+    <input type="range" id="curveRange" />
 
-<script>
-    var S = KISSY;
-    S.config({
-                combine: false,
-                charset: "utf-8",
-                debug: true,
-                packages: [
-                    {
-                        name: 'curve',
-                        path: '../',
-                        ignorePackageNameInUri: true
-                    }
-                ]}
-    );
+    <script>
+      var S = KISSY;
+      S.config({
+        combine: false,
+        charset: 'utf-8',
+        debug: true,
+        packages: [
+          {
+            name: 'curve',
+            path: '../',
+            ignorePackageNameInUri: true,
+          },
+        ],
+      });
 
-    S.use('node, curve/index', function (S, Node, Curve) {
+      S.use('node, curve/index', function (S, Node, Curve) {
         var curve = new Curve({
-            container: S.one('.container'),
-            perspective: 600
+          container: S.one('.container'),
+          perspective: 600,
         });
-        var ranger = S.one("#curveRange");
-        var min = Math.min(Math.round(curve.range.min), Math.round(curve.range.max));
-        var max = Math.max(Math.round(curve.range.min), Math.round(curve.range.max));
+        var ranger = S.one('#curveRange');
+        var min = Math.min(
+          Math.round(curve.range.min),
+          Math.round(curve.range.max),
+        );
+        var max = Math.max(
+          Math.round(curve.range.min),
+          Math.round(curve.range.max),
+        );
         ranger[0].min = min;
         ranger[0].max = max;
         ranger[0].value = Math.round(curve.range.min);
         //console.log(curve.range);
-        ranger.on("input", function () {
-            var v = ranger[0].value;
-            //console.log(v);
-            curve.rotate(v);
+        ranger.on('input', function () {
+          var v = ranger[0].value;
+          //console.log(v);
+          curve.rotate(v);
         });
-    });
-</script>
-
-</body>
+      });
+    </script>
+  </body>
 </html>

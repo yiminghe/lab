@@ -1,42 +1,41 @@
-<iframe src='iframe_body_inner.html' id='if1'></iframe>
-    
-    <button id='b'>¾Û½¹</button>
+<iframe src="iframe_body_inner.html" id="if1"></iframe>
+
+<button id="b">ï¿½Û½ï¿½</button>
 
 <script>
-   var doc=document,   
-   b=doc.getElementById("b"),
-   if1=doc.getElementById("if1"),
-   simpleAdd = doc.addEventListener ?
-            function(el, type, fn, capture) {
-                if (el.addEventListener) {
-                    el.addEventListener(type, fn, !!capture);
-                }
-            } :
-            function(el, type, fn) {
-                if (el.attachEvent) {
-                    el.attachEvent('on' + type, fn);
-                }
-            },
-        simpleRemove = doc.removeEventListener ?
-            function(el, type, fn, capture) {
-                if (el.removeEventListener) {
-                    el.removeEventListener(type, fn, !!capture);
-                }
-            } :
-            function(el, type, fn) {
-                if (el.detachEvent) {
-                    el.detachEvent('on' + type, fn);
-                }
-            };
-            
-    b.setAttribute("disabled","true");        
-   simpleAdd(if1,"load",function(){
-        b.removeAttribute("disabled");     
-        simpleAdd(b,"click",function(){
-            console.log("before click");
-            if1.contentWindow.document.body.focus();
-            console.log("after click");
-        });
-    
-   });
+  var doc = document,
+    b = doc.getElementById('b'),
+    if1 = doc.getElementById('if1'),
+    simpleAdd = doc.addEventListener
+      ? function (el, type, fn, capture) {
+          if (el.addEventListener) {
+            el.addEventListener(type, fn, !!capture);
+          }
+        }
+      : function (el, type, fn) {
+          if (el.attachEvent) {
+            el.attachEvent('on' + type, fn);
+          }
+        },
+    simpleRemove = doc.removeEventListener
+      ? function (el, type, fn, capture) {
+          if (el.removeEventListener) {
+            el.removeEventListener(type, fn, !!capture);
+          }
+        }
+      : function (el, type, fn) {
+          if (el.detachEvent) {
+            el.detachEvent('on' + type, fn);
+          }
+        };
+
+  b.setAttribute('disabled', 'true');
+  simpleAdd(if1, 'load', function () {
+    b.removeAttribute('disabled');
+    simpleAdd(b, 'click', function () {
+      console.log('before click');
+      if1.contentWindow.document.body.focus();
+      console.log('after click');
+    });
+  });
 </script>

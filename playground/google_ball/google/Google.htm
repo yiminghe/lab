@@ -1,585 +1,863 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html onmousemove="google&&google.fade&&google.fade(event)">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<title>Google</title>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Google</title>
 
-<script>window.google = {
-    kEI:"1deFTLuiKJ_qeKLfhVg",
-    kEXPI:"25657,25901,25983",
-    kCSI:{e:"25657,25901,25983",ei:"1deFTLuiKJ_qeKLfhVg",expi:"25657,25901,25983"},ml:function() {
-},pageState:"#",kHL:"en",time:function() {
-    return(new Date).getTime()
-},log:function(b, d, c) {
-    var a = new Image,e = google,g = e.lc,f = e.li;
-    a.onerror = (a.onload = (a.onabort = function() {
-        delete g[f]
-    }));
-    g[f] = a;
-    c = c || "/gen_204?atyp=i&ct=" + b + "&cad=" + d + "&zx=" + google.time();
-    a.src = c;
-    e.li = f + 1
-},lc:[],li:0,j:{en:1,l:function() {
-    google.fl = true
-},e:function() {
-    google.fl = true
-},b:location.hash && location.hash != "#",bv:3,pl:[],mc:0,sc:0.5},Toolbelt:{}};
-(function() {
-    for (var d = 0,c; c = ["ad","bc","p","pa","zd","ac","pc","pah","ph","sa","spf","xx","zc","zz"][d++];)(function(a) {
-        google.j[a] = function() {
-            google.j.pl.push([a,arguments])
+    <script>
+      window.google = {
+        kEI: '1deFTLuiKJ_qeKLfhVg',
+        kEXPI: '25657,25901,25983',
+        kCSI: {
+          e: '25657,25901,25983',
+          ei: '1deFTLuiKJ_qeKLfhVg',
+          expi: '25657,25901,25983',
+        },
+        ml: function () {},
+        pageState: '#',
+        kHL: 'en',
+        time: function () {
+          return new Date().getTime();
+        },
+        log: function (b, d, c) {
+          var a = new Image(),
+            e = google,
+            g = e.lc,
+            f = e.li;
+          a.onerror =
+            a.onload =
+            a.onabort =
+              function () {
+                delete g[f];
+              };
+          g[f] = a;
+          c =
+            c ||
+            '/gen_204?atyp=i&ct=' + b + '&cad=' + d + '&zx=' + google.time();
+          a.src = c;
+          e.li = f + 1;
+        },
+        lc: [],
+        li: 0,
+        j: {
+          en: 1,
+          l: function () {
+            google.fl = true;
+          },
+          e: function () {
+            google.fl = true;
+          },
+          b: location.hash && location.hash != '#',
+          bv: 3,
+          pl: [],
+          mc: 0,
+          sc: 0.5,
+        },
+        Toolbelt: {},
+      };
+      (function () {
+        for (
+          var d = 0, c;
+          (c = [
+            'ad',
+            'bc',
+            'p',
+            'pa',
+            'zd',
+            'ac',
+            'pc',
+            'pah',
+            'ph',
+            'sa',
+            'spf',
+            'xx',
+            'zc',
+            'zz',
+          ][d++]);
+
+        )
+          (function (a) {
+            google.j[a] = function () {
+              google.j.pl.push([a, arguments]);
+            };
+          })(c);
+      })();
+      window.google.sn = 'webhp';
+      window.google.timers = { load: { t: { start: new Date().getTime() } } };
+      try {
+        window.google.pt = window.gtbExternal && window.gtbExternal.pageT();
+      } catch (u) {}
+      window.google.jsrt_kill = 1;
+    </script>
+    <style id="gstyle">
+      body {
+        margin: 0;
+      }
+
+      #gog {
+        padding: 3px 8px 0;
+      }
+
+      td {
+        line-height: 0.8em;
+      }
+
+      .gac_m td {
+        line-height: 17px;
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      body,
+      td,
+      a,
+      p,
+      .h {
+        font-family: arial, sans-serif;
+      }
+
+      .h {
+        color: #36c;
+        font-size: 20px;
+      }
+
+      .q {
+        color: #00c;
+      }
+
+      .ts td {
+        padding: 0;
+      }
+
+      .ts {
+        border-collapse: collapse;
+      }
+
+      em {
+        font-weight: bold;
+        font-style: normal;
+      }
+
+      .lst {
+        width: 496px;
+      }
+
+      .tiah {
+        width: 458px;
+      }
+
+      input {
+        font-family: inherit;
+      }
+
+      #fctr,
+      #ghead,
+      #pmocntr,
+      #sbl,
+      #tba,
+      #tbe,
+      .fade {
+        opacity: 0;
+      }
+
+      #fctr,
+      #ghead,
+      #pmocntr,
+      #sbl,
+      #tba,
+      #tbe,
+      .fade {
+        background: #fff;
+      }
+
+      a.gb1,
+      a.gb2,
+      a.gb3,
+      a.gb4 {
+        color: #11c !important;
+      }
+
+      #gog {
+        background: #fff;
+      }
+
+      #gbar,
+      #guser {
+        font-size: 13px;
+        padding-top: 1px !important;
+      }
+
+      #gbar {
+        float: left;
+        height: 22px;
+      }
+
+      #guser {
+        padding-bottom: 7px !important;
+        text-align: right;
+      }
+
+      .gbh,
+      .gbd {
+        border-top: 1px solid #c9d7f1;
+        font-size: 1px;
+      }
+
+      .gbh {
+        height: 0;
+        position: absolute;
+        top: 24px;
+        width: 100%;
+      }
+
+      #gbs,
+      .gbm {
+        background: #fff;
+        left: 0;
+        position: absolute;
+        text-align: left;
+        visibility: hidden;
+        z-index: 1000;
+      }
+
+      .gbm {
+        border: 1px solid;
+        border-color: #c9d7f1 #36c #36c #a2bae7;
+        z-index: 1001;
+      }
+
+      .gb1 {
+        margin-right: 0.5em;
+      }
+
+      .gb1,
+      .gb3 {
+        zoom: 1;
+      }
+
+      .gb2 {
+        display: block;
+        padding: 0.2em 0.5em;
+      }
+
+      .gb2,
+      .gb3 {
+        text-decoration: none;
+        border-bottom: none;
+      }
+
+      a.gb1,
+      a.gb2,
+      a.gb3,
+      a.gb4 {
+        color: #00c !important;
+      }
+
+      a.gb2:hover {
+        background: #36c;
+        color: #fff !important;
+      }
+
+      body {
+        background: #fff;
+        color: black;
+      }
+
+      input {
+        -moz-box-sizing: content-box;
+      }
+
+      a {
+        color: #11c;
+        text-decoration: none;
+      }
+
+      a:hover,
+      a:active {
+        text-decoration: underline;
+      }
+
+      .fl a {
+        color: #4272db;
+      }
+
+      a:visited {
+        color: #551a8b;
+      }
+
+      a.gb1,
+      a.gb4 {
+        text-decoration: underline;
+      }
+
+      a.gb3:hover {
+        text-decoration: none;
+      }
+
+      #ghead a.gb2:hover {
+        color: #fff !important;
+      }
+
+      .ds {
+        display: -moz-inline-box;
+      }
+
+      .ds {
+        border-bottom: solid 1px #e7e7e7;
+        border-right: solid 1px #e7e7e7;
+        display: inline-block;
+        margin: 3px 0 4px;
+        margin-left: 4px;
+      }
+
+      .sblc {
+        padding-top: 5px;
+      }
+
+      .sblc a {
+        display: block;
+        margin: 2px 0;
+        margin-left: 13px;
+        font-size: 11px;
+      }
+
+      .lsbb {
+        background: #eee;
+        border: solid 1px;
+        border-color: #ccc #999 #999 #ccc;
+        height: 30px;
+        display: block;
+      }
+
+      .lsb {
+        background: url(/images/srpr/nav_logo14.png) bottom;
+        font:
+          15px arial,
+          sans-serif;
+        border: none;
+        color: #000;
+        cursor: pointer;
+        height: 30px;
+        margin: 0;
+        outline: 0;
+        vertical-align: top;
+      }
+
+      .lsb:active {
+        background: #ccc;
+      }
+
+      .lst:focus {
+        outline: none;
+      }
+
+      .ftl,
+      #fll a {
+        margin: 0 12px;
+      }
+
+      #addlang a {
+        padding: 0 3px;
+      }
+
+      .gac_v div {
+        display: none;
+      }
+
+      .gac_v .gac_v2,
+      .gac_bt {
+        display: block !important;
+      }
+    </style>
+    <noscript>
+      <style>
+        #fctr,
+        #ghead,
+        #pmocntr,
+        #sbl,
+        #tba,
+        #tbe,
+        .fade {
+          opacity: 1;
         }
-    })(c)
-})();
-window.google.sn = "webhp";
-window.google.timers = {load:{t:{start:(new Date).getTime()}}};
-try {
-    window.google.pt = window.gtbExternal && window.gtbExternal.pageT();
-} catch(u) {
-}
-window.google.jsrt_kill = 1;</script>
-<style id="gstyle">body {
-    margin: 0
-}
-
-#gog {
-    padding: 3px 8px 0
-}
-
-td {
-    line-height: .8em
-}
-
-.gac_m td {
-    line-height: 17px
-}
-
-form {
-    margin-bottom: 20px
-}
-
-body, td, a, p, .h {
-    font-family: arial, sans-serif
-}
-
-.h {
-    color: #36c;
-    font-size: 20px
-}
-
-.q {
-    color: #00c
-}
-
-.ts td {
-    padding: 0
-}
-
-.ts {
-    border-collapse: collapse
-}
-
-em {
-    font-weight: bold;
-    font-style: normal
-}
-
-.lst {
-    width: 496px
-}
-
-.tiah {
-    width: 458px
-}
-
-input {
-    font-family: inherit
-}
-
-#fctr, #ghead, #pmocntr, #sbl, #tba, #tbe, .fade {
-    opacity: 0;
-}
-
-#fctr, #ghead, #pmocntr, #sbl, #tba, #tbe, .fade {
-    background: #fff;
-}
-
-a.gb1, a.gb2, a.gb3, a.gb4 {
-    color: #11c !important
-}
-
-#gog {
-    background: #fff
-}
-
-#gbar, #guser {
-    font-size: 13px;
-    padding-top: 1px !important
-}
-
-#gbar {
-    float: left;
-    height: 22px
-}
-
-#guser {
-    padding-bottom: 7px !important;
-    text-align: right
-}
-
-.gbh, .gbd {
-    border-top: 1px solid #c9d7f1;
-    font-size: 1px
-}
-
-.gbh {
-    height: 0;
-    position: absolute;
-    top: 24px;
-    width: 100%
-}
-
-#gbs, .gbm {
-    background: #fff;
-    left: 0;
-    position: absolute;
-    text-align: left;
-    visibility: hidden;
-    z-index: 1000
-}
-
-.gbm {
-    border: 1px solid;
-    border-color: #c9d7f1 #36c #36c #a2bae7;
-    z-index: 1001
-}
-
-.gb1 {
-    margin-right: .5em
-}
-
-.gb1, .gb3 {
-    zoom: 1
-}
-
-.gb2 {
-    display: block;
-    padding: .2em .5em
-}
-
-.gb2, .gb3 {
-    text-decoration: none;
-    border-bottom: none
-}
-
-a.gb1, a.gb2, a.gb3, a.gb4 {
-    color: #00c !important
-}
-
-a.gb2:hover {
-    background: #36c;
-    color: #fff !important
-}
-
-body {
-    background: #fff;
-    color: black
-}
-
-input {
-    -moz-box-sizing: content-box
-}
-
-a {
-    color: #11c;
-    text-decoration: none
-}
-
-a:hover, a:active {
-    text-decoration: underline
-}
-
-.fl a {
-    color: #4272db
-}
-
-a:visited {
-    color: #551a8b
-}
-
-a.gb1, a.gb4 {
-    text-decoration: underline
-}
-
-a.gb3:hover {
-    text-decoration: none
-}
-
-#ghead a.gb2:hover {
-    color: #fff !important
-}
-
-.ds {
-    display: -moz-inline-box
-}
-
-.ds {
-    border-bottom: solid 1px #e7e7e7;
-    border-right: solid 1px #e7e7e7;
-    display: inline-block;
-    margin: 3px 0 4px;
-    margin-left: 4px
-}
-
-.sblc {
-    padding-top: 5px
-}
-
-.sblc a {
-    display: block;
-    margin: 2px 0;
-    margin-left: 13px;
-    font-size: 11px;
-}
-
-.lsbb {
-    background: #eee;
-    border: solid 1px;
-    border-color: #ccc #999 #999 #ccc;
-    height: 30px;
-    display: block
-}
-
-.lsb {
-    background: url(/images/srpr/nav_logo14.png) bottom;
-    font: 15px arial, sans-serif;
-    border: none;
-    color: #000;
-    cursor: pointer;
-    height: 30px;
-    margin: 0;
-    outline: 0;
-    vertical-align: top
-}
-
-.lsb:active {
-    background: #ccc
-}
-
-.lst:focus {
-    outline: none
-}
-
-.ftl, #fll a {
-    margin: 0 12px
-}
-
-#addlang a {
-    padding: 0 3px
-}
-
-.gac_v div {
-    display: none
-}
-
-.gac_v .gac_v2, .gac_bt {
-    display: block !important
-}</style>
-<noscript>
-    <style>#fctr, #ghead, #pmocntr, #sbl, #tba, #tbe, .fade {
-        opacity: 1;
-    }</style>
-</noscript>
-<script>var _gjwl = location;
-function _gjuc() {
-    var b = _gjwl.href.indexOf("#");
-    if (b >= 0) {
-        var a = _gjwl.href.substring(b + 1);
-        if (/(^|&)q=/.test(a) && a.indexOf("#") == -1 && !/(^|&)cad=h($|&)/.test(a)) {
-            _gjwl.replace("/search?" + a.replace(/(^|&)fp=[^&]*/g, "") + "&cad=h");
-            return 1
+      </style>
+    </noscript>
+    <script>
+      var _gjwl = location;
+      function _gjuc() {
+        var b = _gjwl.href.indexOf('#');
+        if (b >= 0) {
+          var a = _gjwl.href.substring(b + 1);
+          if (
+            /(^|&)q=/.test(a) &&
+            a.indexOf('#') == -1 &&
+            !/(^|&)cad=h($|&)/.test(a)
+          ) {
+            _gjwl.replace(
+              '/search?' + a.replace(/(^|&)fp=[^&]*/g, '') + '&cad=h',
+            );
+            return 1;
+          }
         }
-    }
-    return 0
-}
-function _gjp() {
-    !(window._gjwl.hash && window._gjuc()) && setTimeout(_gjp, 500)
-}
-;
-google.y = {};
-google.x = function(e, g) {
-    google.y[e.id] = [e,g];
-    return false
-};
-if (!window.google)window.google = {};
-window.google.crm = {};
-window.google.cri = 0;
-window.clk = function(e, f, g, k, l, b, m) {
-    if (document.images) {
-        var a = encodeURIComponent || escape,c = new Image,h = window.google.cri++;
-        window.google.crm[h] = c;
-        c.onerror = (c.onload = (c.onabort = function() {
-            delete window.google.crm[h]
-        }));
-        if (b && b.substring(0, 6) != "&sig2=")b = "&sig2=" + b;
-        c.src = ["/url?sa=T","","&cd=",a(l),google.j && google.j.pf ? "&sqi=2" : "","&ved=",a(m),e ? "&url=" + a(e.replace(/#.*/, "")).replace(/\+/g, "%2B") : "","&ei=","1deFTLuiKJ_qeKLfhVg",b].join("")
-    }
-    return true
-};
-window.gbar = {qs:function() {
-},tg:function(e) {
-    var o = {id:'gbar'};
-    for (i in e)o[i] = e[i];
-    google.x(o, function() {
-        gbar.tg(o)
-    })
-}};</script>
-<style type="text/css">.gac_od {
-    background: white;
-    margin: 0;
-    z-index: 100;
-    border-top: 0;
-    border-left: 0;
-    border-right: 1px solid #e7e7e7;
-    border-bottom: 1px solid #e7e7e7;
-    margin-top: 1px;
-    padding: 0 !important;
-    position: absolute
-}
+        return 0;
+      }
+      function _gjp() {
+        !(window._gjwl.hash && window._gjuc()) && setTimeout(_gjp, 500);
+      }
+      google.y = {};
+      google.x = function (e, g) {
+        google.y[e.id] = [e, g];
+        return false;
+      };
+      if (!window.google) window.google = {};
+      window.google.crm = {};
+      window.google.cri = 0;
+      window.clk = function (e, f, g, k, l, b, m) {
+        if (document.images) {
+          var a = encodeURIComponent || escape,
+            c = new Image(),
+            h = window.google.cri++;
+          window.google.crm[h] = c;
+          c.onerror =
+            c.onload =
+            c.onabort =
+              function () {
+                delete window.google.crm[h];
+              };
+          if (b && b.substring(0, 6) != '&sig2=') b = '&sig2=' + b;
+          c.src = [
+            '/url?sa=T',
+            '',
+            '&cd=',
+            a(l),
+            google.j && google.j.pf ? '&sqi=2' : '',
+            '&ved=',
+            a(m),
+            e ? '&url=' + a(e.replace(/#.*/, '')).replace(/\+/g, '%2B') : '',
+            '&ei=',
+            '1deFTLuiKJ_qeKLfhVg',
+            b,
+          ].join('');
+        }
+        return true;
+      };
+      window.gbar = {
+        qs: function () {},
+        tg: function (e) {
+          var o = { id: 'gbar' };
+          for (i in e) o[i] = e[i];
+          google.x(o, function () {
+            gbar.tg(o);
+          });
+        },
+      };
+    </script>
+    <style>
+      .gac_od {
+        background: white;
+        margin: 0;
+        z-index: 100;
+        border-top: 0;
+        border-left: 0;
+        border-right: 1px solid #e7e7e7;
+        border-bottom: 1px solid #e7e7e7;
+        margin-top: 1px;
+        padding: 0 !important;
+        position: absolute;
+      }
 
-.gac_id {
-    background: white;
-    margin: 0;
-    z-index: 100;
-    border-top: 1px solid #a2bff0;
-    border-left: 1px solid #a2bff0;
-    border-right: 1px solid #558be3;
-    border-bottom: 1px solid #558be3;
-    display: block;
-    position: relative
-}
+      .gac_id {
+        background: white;
+        margin: 0;
+        z-index: 100;
+        border-top: 1px solid #a2bff0;
+        border-left: 1px solid #a2bff0;
+        border-right: 1px solid #558be3;
+        border-bottom: 1px solid #558be3;
+        display: block;
+        position: relative;
+      }
 
-.gac_m {
-    background: white;
-    margin: 0;
-    z-index: 100;
-    border: 0;
-    cursor: default;
-    display: block;
-    font-size: 17px;
-    line-height: 117%;
-    padding: 0;
-    position: relative
-}
+      .gac_m {
+        background: white;
+        margin: 0;
+        z-index: 100;
+        border: 0;
+        cursor: default;
+        display: block;
+        font-size: 17px;
+        line-height: 117%;
+        padding: 0;
+        position: relative;
+      }
 
-.gac_wd {
-    background: #999;
-    height: 1px;
-    position: absolute;
-    right: -1px;
-    top: 0;
-    width: 1px;
-    z-index: 100
-}
+      .gac_wd {
+        background: #999;
+        height: 1px;
+        position: absolute;
+        right: -1px;
+        top: 0;
+        width: 1px;
+        z-index: 100;
+      }
 
-.gac_m td {
-    line-height: 22px
-}
+      .gac_m td {
+        line-height: 22px;
+      }
 
-.gac_n {
-    padding-top: 1px;
-    padding-bottom: 1px
-}
+      .gac_n {
+        padding-top: 1px;
+        padding-bottom: 1px;
+      }
 
-.gac_b td.gac_c {
-    background: #d5e2ff
-}
+      .gac_b td.gac_c {
+        background: #d5e2ff;
+      }
 
-.gac_b {
-    background: #d5e2ff
-}
+      .gac_b {
+        background: #d5e2ff;
+      }
 
-.gac_k {
-    display: none
-}
+      .gac_k {
+        display: none;
+      }
 
-.gac_b td.gac_k {
-    display: block
-}
+      .gac_b td.gac_k {
+        display: block;
+      }
 
-.gac_a td.gac_f {
-    background: #fff8dd
-}
+      .gac_a td.gac_f {
+        background: #fff8dd;
+      }
 
-.gac_p {
-    padding: 1px 4px 2px 3px
-}
+      .gac_p {
+        padding: 1px 4px 2px 3px;
+      }
 
-.gac_u {
-    padding: 0 0 1px 0;
-    line-height: 117%;
-    text-align: left
-}
+      .gac_u {
+        padding: 0 0 1px 0;
+        line-height: 117%;
+        text-align: left;
+      }
 
-.gac_t {
-    width: 100%;
-    text-align: left;
-    font-size: 17px
-}
+      .gac_t {
+        width: 100%;
+        text-align: left;
+        font-size: 17px;
+      }
 
-.gac_za {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    text-align: right;
-    font-size: 12px;
-    padding-right: 5px
-}
+      .gac_za {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        text-align: right;
+        font-size: 12px;
+        padding-right: 5px;
+      }
 
-.gac_bt {
-    width: 510px;
-    text-align: center;
-    padding: 8px 0 7px;
-    position: relative
-}
+      .gac_bt {
+        width: 510px;
+        text-align: center;
+        padding: 8px 0 7px;
+        position: relative;
+      }
 
-.gac_sb {
-    font-size: 15px;
-    height: 28px;
-    margin: 0.2em
-}
+      .gac_sb {
+        font-size: 15px;
+        height: 28px;
+        margin: 0.2em;
+      }
 
-.gac_z {
-    white-space: nowrap;
-    color: #c00
-}
+      .gac_z {
+        white-space: nowrap;
+        color: #c00;
+      }
 
-.gac_s {
-    height: 3px;
-    font-size: 1px
-}
+      .gac_s {
+        height: 3px;
+        font-size: 1px;
+      }
 
-.gac_c {
-    white-space: nowrap;
-    overflow: hidden;
-    text-align: left;
-    padding-left: 7px;
-    padding-right: 3px
-}
+      .gac_c {
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: left;
+        padding-left: 7px;
+        padding-right: 3px;
+      }
 
-.gac_e {
-    text-align: right;
-    padding: 0 3px 0 5px;
-    white-space: nowrap
-}
+      .gac_e {
+        text-align: right;
+        padding: 0 3px 0 5px;
+        white-space: nowrap;
+      }
 
-.gac_d {
-    font-size: 13px
-}
+      .gac_d {
+        font-size: 13px;
+      }
 
-.gac_h {
-    color: green
-}
+      .gac_h {
+        color: green;
+      }
 
-.gac_j {
-    display: block
-}
+      .gac_j {
+        display: block;
+      }
 
-.gac_l {
-    line-height: 18px
-}
+      .gac_l {
+        line-height: 18px;
+      }
 
-.gac_x {
-    display: block;
-    line-height: 16px
-}
+      .gac_x {
+        display: block;
+        line-height: 16px;
+      }
 
-.gac_i {
-    color: #666
-}
+      .gac_i {
+        color: #666;
+      }
 
-.gac_w img {
-    width: 40px;
-    height: 40px
-}
+      .gac_w img {
+        width: 40px;
+        height: 40px;
+      }
 
-.gac_w {
-    width: 1px
-}
+      .gac_w {
+        width: 1px;
+      }
 
-.gac_r {
-    color: red
-}
+      .gac_r {
+        color: red;
+      }
 
-.gac_v {
-    padding-bottom: 5px
-}</style>
-</head>
-<body onload="try{!google.j.b&amp;&amp;document.f.q.focus()}catch(e){};if(document.images)new Image().src='/images/srpr/nav_logo14.png'" alink="#ff0000" bgcolor="#ffffff" link="#0000cc" text="#000000" vlink="#551a8b"><textarea id="csi" style="display: none;">1</textarea>
-<script>if (google.j.b)document.body.style.visibility = 'hidden';</script>
-<iframe name="wgjf" style="display: none;" src="../../../../../../../Desktop/g"
-        onload="google.j.l()" onerror="google.j.e()"></iframe>
-<textarea id="wgjc" style="display: none;"></textarea><textarea id="wwcache" style="display: none;"></textarea><textarea id="csi" style="display: none;"></textarea><textarea id="hcache" style="display: none;"></textarea><span id="main"><div style="opacity: 1;" id="ghead">
-    <div id="gog">
-        <div id="gbar">
-            <nobr><b class="gb1">Web</b> <a href="http://www.google.com/imghp?hl=en&amp;tab=wi" onclick="gbar.qs(this)" class="gb1">Images</a> <a href="http://video.google.com/?hl=en&amp;tab=wv" onclick="gbar.qs(this)" class="gb1">Videos</a> <a href="http://maps.google.com/maps?hl=en&amp;tab=wl" onclick="gbar.qs(this)" class="gb1">Maps</a> <a href="http://news.google.com/nwshp?hl=en&amp;tab=wn" onclick="gbar.qs(this)" class="gb1">News</a> <a href="http://www.google.com/prdhp?hl=en&amp;tab=wf" onclick="gbar.qs(this)" class="gb1">Shopping</a> <a href="http://mail.google.com/mail/?hl=en&amp;tab=wm" class="gb1">Gmail</a> <a href="http://www.google.com/intl/en/options/" onclick="this.blur();gbar.tg(event);return !1" aria-haspopup="true" class="gb3"><u>more</u>
+      .gac_v {
+        padding-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body
+    onload="try{!google.j.b&amp;&amp;document.f.q.focus()}catch(e){};if(document.images)new Image().src='/images/srpr/nav_logo14.png'"
+    alink="#ff0000"
+    bgcolor="#ffffff"
+    link="#0000cc"
+    text="#000000"
+    vlink="#551a8b">
+    <textarea id="csi" style="display: none">1</textarea>
+    <script>
+      if (google.j.b) document.body.style.visibility = 'hidden';
+    </script>
+    <iframe
+      name="wgjf"
+      style="display: none"
+      src="../../../../../../../Desktop/g"
+      onload="google.j.l()"
+      onerror="google.j.e()"></iframe>
+    <textarea id="wgjc" style="display: none"></textarea
+    ><textarea id="wwcache" style="display: none"></textarea
+    ><textarea id="csi" style="display: none"></textarea
+    ><textarea id="hcache" style="display: none"></textarea
+    ><span id="main"
+      ><div style="opacity: 1" id="ghead">
+        <div id="gog">
+          <div id="gbar">
+            <nobr
+              ><b class="gb1">Web</b>
+              <a
+                href="http://www.google.com/imghp?hl=en&amp;tab=wi"
+                onclick="gbar.qs(this)"
+                class="gb1"
+                >Images</a
+              >
+              <a
+                href="http://video.google.com/?hl=en&amp;tab=wv"
+                onclick="gbar.qs(this)"
+                class="gb1"
+                >Videos</a
+              >
+              <a
+                href="http://maps.google.com/maps?hl=en&amp;tab=wl"
+                onclick="gbar.qs(this)"
+                class="gb1"
+                >Maps</a
+              >
+              <a
+                href="http://news.google.com/nwshp?hl=en&amp;tab=wn"
+                onclick="gbar.qs(this)"
+                class="gb1"
+                >News</a
+              >
+              <a
+                href="http://www.google.com/prdhp?hl=en&amp;tab=wf"
+                onclick="gbar.qs(this)"
+                class="gb1"
+                >Shopping</a
+              >
+              <a
+                href="http://mail.google.com/mail/?hl=en&amp;tab=wm"
+                class="gb1"
+                >Gmail</a
+              >
+              <a
+                href="http://www.google.com/intl/en/options/"
+                onclick="this.blur();gbar.tg(event);return !1"
+                aria-haspopup="true"
+                class="gb3"
+                ><u>more</u>
                 <small>▼</small>
-            </a>
-                <div class="gbm" id="gbi"><a href="http://books.google.com/bkshp?hl=en&amp;tab=wp" onclick="gbar.qs(this)" class="gb2">Books</a> <a href="http://www.google.com/finance?hl=en&amp;tab=we" onclick="gbar.qs(this)" class="gb2">Finance</a> <a href="http://translate.google.com/?hl=en&amp;tab=wT" onclick="gbar.qs(this)" class="gb2">Translate</a> <a href="http://scholar.google.com/schhp?hl=en&amp;tab=ws" onclick="gbar.qs(this)" class="gb2">Scholar</a> <a href="http://blogsearch.google.com/?hl=en&amp;tab=wb" onclick="gbar.qs(this)" class="gb2">Blogs</a>
-                    <div class="gb2">
-                        <div class="gbd"></div>
-                    </div>
-                    <a href="http://www.youtube.com/?hl=en&amp;tab=w1" onclick="gbar.qs(this)" class="gb2">YouTube</a> <a href="http://www.google.com/calendar/render?hl=en&amp;tab=wc" class="gb2">Calendar</a> <a href="http://picasaweb.google.com/home?hl=en&amp;tab=wq" onclick="gbar.qs(this)" class="gb2">Photos</a> <a href="http://docs.google.com/?hl=en&amp;tab=wo" class="gb2">Documents</a> <a href="http://www.google.com/reader/?hl=en&amp;tab=wy" class="gb2">Reader</a> <a href="http://sites.google.com/?hl=en&amp;tab=w3" class="gb2">Sites</a> <a href="http://groups.google.com/grphp?hl=en&amp;tab=wg" onclick="gbar.qs(this)" class="gb2">Groups</a>
-                    <div class="gb2">
-                        <div class="gbd"></div>
-                    </div>
-                    <a href="http://www.google.com/intl/en/options/" class="gb2">even more »</a></div>
+              </a>
+              <div class="gbm" id="gbi">
+                <a
+                  href="http://books.google.com/bkshp?hl=en&amp;tab=wp"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >Books</a
+                >
+                <a
+                  href="http://www.google.com/finance?hl=en&amp;tab=we"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >Finance</a
+                >
+                <a
+                  href="http://translate.google.com/?hl=en&amp;tab=wT"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >Translate</a
+                >
+                <a
+                  href="http://scholar.google.com/schhp?hl=en&amp;tab=ws"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >Scholar</a
+                >
+                <a
+                  href="http://blogsearch.google.com/?hl=en&amp;tab=wb"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >Blogs</a
+                >
+                <div class="gb2">
+                  <div class="gbd"></div>
+                </div>
+                <a
+                  href="http://www.youtube.com/?hl=en&amp;tab=w1"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >YouTube</a
+                >
+                <a
+                  href="http://www.google.com/calendar/render?hl=en&amp;tab=wc"
+                  class="gb2"
+                  >Calendar</a
+                >
+                <a
+                  href="http://picasaweb.google.com/home?hl=en&amp;tab=wq"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >Photos</a
+                >
+                <a href="http://docs.google.com/?hl=en&amp;tab=wo" class="gb2"
+                  >Documents</a
+                >
+                <a
+                  href="http://www.google.com/reader/?hl=en&amp;tab=wy"
+                  class="gb2"
+                  >Reader</a
+                >
+                <a href="http://sites.google.com/?hl=en&amp;tab=w3" class="gb2"
+                  >Sites</a
+                >
+                <a
+                  href="http://groups.google.com/grphp?hl=en&amp;tab=wg"
+                  onclick="gbar.qs(this)"
+                  class="gb2"
+                  >Groups</a
+                >
+                <div class="gb2">
+                  <div class="gbd"></div>
+                </div>
+                <a href="http://www.google.com/intl/en/options/" class="gb2"
+                  >even more »</a
+                >
+              </div>
             </nobr>
+          </div>
+          <div id="guser" width="100%">
+            <nobr
+              ><span id="gbn" class="gbi"></span
+              ><span id="gbf" class="gbf"></span
+              ><span id="gbe"
+                ><a
+                  href="http://www.google.com/url?sa=p&amp;pref=ig&amp;pval=3&amp;q=http://www.google.com/ig%3Fhl%3Den%26source%3Diglk&amp;usg=AFQjCNFA18XPfgb7dKnXfKz7x7g1GDH1tg"
+                  class="gb4"
+                  >iGoogle</a
+                >
+                | </span
+              ><a href="http://www.google.com/preferences?hl=en" class="gb4"
+                >Search settings</a
+              >
+              |
+              <a
+                href="https://www.google.com/accounts/Login?hl=en&amp;continue=http://www.google.com/"
+                class="gb4"
+                >Sign in</a
+              ></nobr
+            >
+          </div>
+          <div class="gbh" style="left: 0pt; opacity: 1"></div>
+          <div class="gbh" style="right: 0pt; opacity: 1"></div>
         </div>
-        <div id="guser" width="100%">
-            <nobr><span id="gbn" class="gbi"></span><span id="gbf" class="gbf"></span><span id="gbe"><a href="http://www.google.com/url?sa=p&amp;pref=ig&amp;pval=3&amp;q=http://www.google.com/ig%3Fhl%3Den%26source%3Diglk&amp;usg=AFQjCNFA18XPfgb7dKnXfKz7x7g1GDH1tg" class="gb4">iGoogle</a> | </span><a href="http://www.google.com/preferences?hl=en" class="gb4">Search settings</a> | <a href="https://www.google.com/accounts/Login?hl=en&amp;continue=http://www.google.com/" class="gb4">Sign in</a></nobr>
-        </div>
-        <div class="gbh" style="left: 0pt; opacity: 1;"></div>
-        <div class="gbh" style="right: 0pt; opacity: 1;"></div>
-    </div>
-</div> <center><span id="body"><center><br id="lgpd" clear="all">
-    <div id="lga">
-        <style>body {
-            overflow: hidden
-        }
+      </div>
+      <center>
+        <span id="body"
+          ><center>
+            <br id="lgpd" clear="all" />
+            <div id="lga">
+              <style>
+                body {
+                  overflow: hidden;
+                }
 
-        #hplogo {
-            position: relative;
-            width: 0;
-            margin: 0 auto;
-            right: 190px;
-            height: 160px
-        }
+                #hplogo {
+                  position: relative;
+                  width: 0;
+                  margin: 0 auto;
+                  right: 190px;
+                  height: 160px;
+                }
 
-        .particle {
-            position: absolute;
-            z-index: -1
-        }
+                .particle {
+                  position: absolute;
+                  z-index: -1;
+                }
 
-        .circle {
-            -moz-border-radius: 160px;
-            -webkit-border-radius: 160px;
-            -khtml-border-radius: 160px;
-            border-radius: 160px
-        }
+                .circle {
+                  -moz-border-radius: 160px;
+                  -webkit-border-radius: 160px;
+                  -khtml-border-radius: 160px;
+                  border-radius: 160px;
+                }
 
-        #cpf, #sbl, #fctr {
-            background: transparent
-        }</style>
-        <noscript>
-            <style>#hplogo {
-                right: 0;
-                width: auto;
-                background: url(/intl/en_ALL/images/srpr/logo1w.png) no-repeat center
-            }</style>
-        </noscript>
-        <div id="hplogo">
-            <!--
+                #cpf,
+                #sbl,
+                #fctr {
+                  background: transparent;
+                }
+              </style>
+              <noscript>
+                <style>
+                  #hplogo {
+                    right: 0;
+                    width: auto;
+                    background: url(/intl/en_ALL/images/srpr/logo1w.png)
+                      no-repeat center;
+                  }
+                </style>
+              </noscript>
+              <div id="hplogo">
+                <!--
             <div style="background-color: rgb(237, 157, 51); height: 18.0977px; width: 18.0977px; left: 201.772px; top: 78.3177px;" class="particle circle"></div>
             <div style="background-color: rgb(212, 77, 97); height: 18.076px; width: 18.076px; left: 347.8px; top: 83.2286px;" class="particle circle"></div>
             <div style="background-color: rgb(79, 122, 242); height: 18.0816px; width: 18.0816px; left: 256.189px; top: 68.734px;" class="particle circle"></div>
@@ -711,371 +989,660 @@ window.gbar = {qs:function() {
             <div style="background-color: rgb(71, 121, 247); height: 10.0915px; width: 10.0915px; left: 16.9975px; top: 16.634px;" class="particle circle"></div>
             <div style="background-color: rgb(75, 120, 241); height: 10.0873px; width: 10.0873px; left: 231.663px; top: 93.0938px;" class="particle circle"></div>
         -->
-        </div>
-        <script>(function() {
-            try {
-                if (!google.doodle)google.doodle = {};
-                var a = 200,g = -200,j = -200,k,l,m,n = 0,o = 0,p = 0,q = 35,r,s = [],t,u,v;
-                google.doodle.init = function() {
-                    if (!v && window.location.href.indexOf("#") == -1) {
+              </div>
+              <script>
+                (function () {
+                  try {
+                    if (!google.doodle) google.doodle = {};
+                    var a = 200,
+                      g = -200,
+                      j = -200,
+                      k,
+                      l,
+                      m,
+                      n = 0,
+                      o = 0,
+                      p = 0,
+                      q = 35,
+                      r,
+                      s = [],
+                      t,
+                      u,
+                      v;
+                    google.doodle.init = function () {
+                      if (!v && window.location.href.indexOf('#') == -1) {
                         v = true;
-                        if (t = document.getElementById("hplogo")) {
-                            google.j && google.j.en && w(100, x, function() {
-                                return google.rein && google.dstr
+                        if ((t = document.getElementById('hplogo'))) {
+                          google.j &&
+                            google.j.en &&
+                            w(100, x, function () {
+                              return google.rein && google.dstr;
                             });
-                            w(100, y, function() {
-                                return google.listen
-                            });
-                            w(100, z, function() {
-                                return google.browser
-                            })
+                          w(100, y, function () {
+                            return google.listen;
+                          });
+                          w(100, z, function () {
+                            return google.browser;
+                          });
                         }
-                    }
-                };
-                var w = function(b, c, d) {
-                    if (d())c(); else b < 200 && window.setTimeout(function() {
-                        w(b + 1, c, d)
-                    }, b)
-                },x = function() {
-                    if (!google.doodle.n) {
-                        google.doodle.n = true;
-                        google.rein.push(google.doodle.init);
-                        google.dstr.push(A)
-                    }
-                },y = function() {
-                    google.listen(document, "mousemove", B)
-                },B = function(b) {
-                    a = 200;
-                    g = b.clientX - t.offsetLeft;
-                    j = b.clientY - t.offsetTop
-                },C = function() {
-                    return[u ? window.screenLeft : window.screenX,u ? window.screenTop : window.screenY,document.body.clientWidth]
-                },z = function() {
-                    u = google.browser.engine.IE && google.browser.engine.version != "9.0";
-                    s = [D(202, 78, 9, "ed9d33"),D(348, 83, 9, "d44d61"),D(256, 69, 9, "4f7af2"),D(214, 59, 9, "ef9a1e"),D(265, 36, 9, "4976f3"),D(300, 78, 9, "269230"), D(294, 59, 9, "1f9e2c"),D(45, 88, 9, "1c48dd"),D(268, 52, 9, "2a56ea"),D(73, 83, 9, "3355d8"),D(294, 6, 9, "36b641"),D(235, 62, 9, "2e5def"),D(353, 42, 8, "d53747"),D(336, 52, 8, "eb676f"),D(208, 41, 8, "f9b125"),D(321, 70, 8, "de3646"),D(8, 60, 8, "2a59f0"),D(180, 81, 8, "eb9c31"),D(146, 65, 8, "c41731"),D(145, 49, 8, "d82038"),D(246, 34, 8, "5f8af8"),D(169, 69, 8, "efa11e"),D(273, 99, 8, "2e55e2"),D(248, 120, 8, "4167e4"),D(294, 41, 8, "0b991a"),D(267, 114, 8, "4869e3"),D(78, 67, 8, "3059e3"),D(294, 23, 8, "10a11d"),D(117, 83, 8, "cf4055"),D(137, 80, 8, "cd4359"),D(14, 71, 8, "2855ea"),D(331, 80, 8, "ca273c"),D(25, 82, 8, "2650e1"),D(233, 46, 8, "4a7bf9"),D(73, 13, 8, "3d65e7"),D(327, 35, 6, "f47875"),D(319, 46, 6, "f36764"),D(256, 81, 6, "1d4eeb"),D(244, 88, 6, "698bf1"),D(194, 32, 6, "fac652"),D(97, 56, 6, "ee5257"),D(105, 75, 6, "cf2a3f"),D(42, 4, 6, "5681f5"),D(10, 27, 6, "4577f6"),D(166, 55, 6, "f7b326"),D(266, 88, 6, "2b58e8"),D(178, 34, 6, "facb5e"),D(100, 65, 6, "e02e3d"),D(343, 32, 6, "f16d6f"),D(59, 5, 6, "507bf2"),D(27, 9, 6, "5683f7"),D(233, 116, 6, "3158e2"),D(123, 32, 6, "f0696c"),D(6, 38, 6, "3769f6"),D(63, 62, 6, "6084ef"), D(6, 49, 6, "2a5cf4"),D(108, 36, 6, "f4716e"),D(169, 43, 6, "f8c247"),D(137, 37, 6, "e74653"),D(318, 58, 6, "ec4147"),D(226, 100, 5, "4876f1"),D(101, 46, 5, "ef5c5c"),D(226, 108, 5, "2552ea"),D(17, 17, 5, "4779f7"),D(232, 93, 5, "4b78f1")];
-                    var b = C();
-                    k = b[0];
-                    l = b[1];
-                    m = b[2];
-                    E()
-                },A = function() {
-                    google.unlisten(document, "mousemove", B);
-                    r && window.clearTimeout(r);
-                    if (s)for (var b = 0,c; c = s[b++];)c.m()
-                },E = function() {
-                    var b = C(),c = b[0],d = b[1];
-                    b = b[2];
-                    n = c - k;
-                    o = d - l;
-                    p = b - m;
-                    k = c;
-                    l = d;
-                    m = b;
-                    a = Math.max(0, a - 2);
-                    c = true;
-                    for (d = 0; b = s[d++];) {
-                        b.update();
-                        if (c)c = b.i
-                    }
-                    q = c ? 250 : 35;
-                    r = window.setTimeout(E, q)
-                },D = function(b, c, d, h) {
-                    return new F(b, c, d, h)
-                },F = function(b, c, d, h) {
-                    this.x = this.o = b;
-                    this.y = this.p = c;
-                    this.k = this.h = d;
-                    b = 100;
-                    this.a = b * (Math.random() - 0.5);
-                    this.c = b * (Math.random() - 0.5);
-                    this.l = 3 + Math.random() * 98;
-                    this.r = 0.1 + Math.random() * 0.4;
-                    this.e = 0;
-                    this.g = 1;
-                    this.i = false;
-                    this.d = document.createElement("div");
-                    this.d.className = "particle";
-                    this.style = this.d.style;
-                    h = "#" + h;
-                    if (u) {
-                        this.d.innerHTML = ".";
-                        this.style.fontFamily = "Monospace";
-                        this.style.color = h;
-                        this.style.fontSize = "100px";
-                        this.style.lineHeight = 0;
-                        this.style.cursor = "default"
-                    } else {
-                        this.d.className += " circle";
-                        this.style.backgroundColor = h
-                    }
-                    t.appendChild(this.d);
-                    this.m = function() {
-                        t.removeChild(this.d)
+                      }
                     };
-                    this.update = function() {
-                        this.x += this.a;
-                        this.y += this.c;
-                        this.a = Math.min(50, Math.max(-50, (this.a + (n + p) / this.h) * 0.92));
-                        this.c = Math.min(50, Math.max(-50, (this.c + o / this.h) * 0.92));
-                        var e = g - this.x,f = j - this.y,i = Math.sqrt(e * e + f * f);
-                        e /= i;
-                        f /= i;
-                        if (i < a) {
+                    var w = function (b, c, d) {
+                        if (d()) c();
+                        else
+                          b < 200 &&
+                            window.setTimeout(function () {
+                              w(b + 1, c, d);
+                            }, b);
+                      },
+                      x = function () {
+                        if (!google.doodle.n) {
+                          google.doodle.n = true;
+                          google.rein.push(google.doodle.init);
+                          google.dstr.push(A);
+                        }
+                      },
+                      y = function () {
+                        google.listen(document, 'mousemove', B);
+                      },
+                      B = function (b) {
+                        a = 200;
+                        g = b.clientX - t.offsetLeft;
+                        j = b.clientY - t.offsetTop;
+                      },
+                      C = function () {
+                        return [
+                          u ? window.screenLeft : window.screenX,
+                          u ? window.screenTop : window.screenY,
+                          document.body.clientWidth,
+                        ];
+                      },
+                      z = function () {
+                        u =
+                          google.browser.engine.IE &&
+                          google.browser.engine.version != '9.0';
+                        s = [
+                          D(202, 78, 9, 'ed9d33'),
+                          D(348, 83, 9, 'd44d61'),
+                          D(256, 69, 9, '4f7af2'),
+                          D(214, 59, 9, 'ef9a1e'),
+                          D(265, 36, 9, '4976f3'),
+                          D(300, 78, 9, '269230'),
+                          D(294, 59, 9, '1f9e2c'),
+                          D(45, 88, 9, '1c48dd'),
+                          D(268, 52, 9, '2a56ea'),
+                          D(73, 83, 9, '3355d8'),
+                          D(294, 6, 9, '36b641'),
+                          D(235, 62, 9, '2e5def'),
+                          D(353, 42, 8, 'd53747'),
+                          D(336, 52, 8, 'eb676f'),
+                          D(208, 41, 8, 'f9b125'),
+                          D(321, 70, 8, 'de3646'),
+                          D(8, 60, 8, '2a59f0'),
+                          D(180, 81, 8, 'eb9c31'),
+                          D(146, 65, 8, 'c41731'),
+                          D(145, 49, 8, 'd82038'),
+                          D(246, 34, 8, '5f8af8'),
+                          D(169, 69, 8, 'efa11e'),
+                          D(273, 99, 8, '2e55e2'),
+                          D(248, 120, 8, '4167e4'),
+                          D(294, 41, 8, '0b991a'),
+                          D(267, 114, 8, '4869e3'),
+                          D(78, 67, 8, '3059e3'),
+                          D(294, 23, 8, '10a11d'),
+                          D(117, 83, 8, 'cf4055'),
+                          D(137, 80, 8, 'cd4359'),
+                          D(14, 71, 8, '2855ea'),
+                          D(331, 80, 8, 'ca273c'),
+                          D(25, 82, 8, '2650e1'),
+                          D(233, 46, 8, '4a7bf9'),
+                          D(73, 13, 8, '3d65e7'),
+                          D(327, 35, 6, 'f47875'),
+                          D(319, 46, 6, 'f36764'),
+                          D(256, 81, 6, '1d4eeb'),
+                          D(244, 88, 6, '698bf1'),
+                          D(194, 32, 6, 'fac652'),
+                          D(97, 56, 6, 'ee5257'),
+                          D(105, 75, 6, 'cf2a3f'),
+                          D(42, 4, 6, '5681f5'),
+                          D(10, 27, 6, '4577f6'),
+                          D(166, 55, 6, 'f7b326'),
+                          D(266, 88, 6, '2b58e8'),
+                          D(178, 34, 6, 'facb5e'),
+                          D(100, 65, 6, 'e02e3d'),
+                          D(343, 32, 6, 'f16d6f'),
+                          D(59, 5, 6, '507bf2'),
+                          D(27, 9, 6, '5683f7'),
+                          D(233, 116, 6, '3158e2'),
+                          D(123, 32, 6, 'f0696c'),
+                          D(6, 38, 6, '3769f6'),
+                          D(63, 62, 6, '6084ef'),
+                          D(6, 49, 6, '2a5cf4'),
+                          D(108, 36, 6, 'f4716e'),
+                          D(169, 43, 6, 'f8c247'),
+                          D(137, 37, 6, 'e74653'),
+                          D(318, 58, 6, 'ec4147'),
+                          D(226, 100, 5, '4876f1'),
+                          D(101, 46, 5, 'ef5c5c'),
+                          D(226, 108, 5, '2552ea'),
+                          D(17, 17, 5, '4779f7'),
+                          D(232, 93, 5, '4b78f1'),
+                        ];
+                        var b = C();
+                        k = b[0];
+                        l = b[1];
+                        m = b[2];
+                        E();
+                      },
+                      A = function () {
+                        google.unlisten(document, 'mousemove', B);
+                        r && window.clearTimeout(r);
+                        if (s) for (var b = 0, c; (c = s[b++]); ) c.m();
+                      },
+                      E = function () {
+                        var b = C(),
+                          c = b[0],
+                          d = b[1];
+                        b = b[2];
+                        n = c - k;
+                        o = d - l;
+                        p = b - m;
+                        k = c;
+                        l = d;
+                        m = b;
+                        a = Math.max(0, a - 2);
+                        c = true;
+                        for (d = 0; (b = s[d++]); ) {
+                          b.update();
+                          if (c) c = b.i;
+                        }
+                        q = c ? 250 : 35;
+                        r = window.setTimeout(E, q);
+                      },
+                      D = function (b, c, d, h) {
+                        return new F(b, c, d, h);
+                      },
+                      F = function (b, c, d, h) {
+                        this.x = this.o = b;
+                        this.y = this.p = c;
+                        this.k = this.h = d;
+                        b = 100;
+                        this.a = b * (Math.random() - 0.5);
+                        this.c = b * (Math.random() - 0.5);
+                        this.l = 3 + Math.random() * 98;
+                        this.r = 0.1 + Math.random() * 0.4;
+                        this.e = 0;
+                        this.g = 1;
+                        this.i = false;
+                        this.d = document.createElement('div');
+                        this.d.className = 'particle';
+                        this.style = this.d.style;
+                        h = '#' + h;
+                        if (u) {
+                          this.d.innerHTML = '.';
+                          this.style.fontFamily = 'Monospace';
+                          this.style.color = h;
+                          this.style.fontSize = '100px';
+                          this.style.lineHeight = 0;
+                          this.style.cursor = 'default';
+                        } else {
+                          this.d.className += ' circle';
+                          this.style.backgroundColor = h;
+                        }
+                        t.appendChild(this.d);
+                        this.m = function () {
+                          t.removeChild(this.d);
+                        };
+                        this.update = function () {
+                          this.x += this.a;
+                          this.y += this.c;
+                          this.a = Math.min(
+                            50,
+                            Math.max(-50, (this.a + (n + p) / this.h) * 0.92),
+                          );
+                          this.c = Math.min(
+                            50,
+                            Math.max(-50, (this.c + o / this.h) * 0.92),
+                          );
+                          var e = g - this.x,
+                            f = j - this.y,
+                            i = Math.sqrt(e * e + f * f);
+                          e /= i;
+                          f /= i;
+                          if (i < a) {
                             this.a -= e * this.l;
                             this.c -= f * this.l;
                             this.e += (0.005 - this.e) * 0.4;
                             this.g = Math.max(0, this.g * 0.9 - 0.01);
                             this.a *= 1 - this.g;
-                            this.c *= 1 - this.g
-                        } else {
+                            this.c *= 1 - this.g;
+                          } else {
                             this.e += (this.r - this.e) * 0.005;
-                            this.g = Math.min(1, this.g + 0.03)
-                        }
-                        e = this.o - this.x;
-                        f = this.p - this.y;
-                        i = Math.sqrt(e * e + f * f);
-                        this.a += e * this.e;
-                        this.c += f * this.e;
-                        this.k = this.h + i / 8;
-                        this.i = i < 0.3 && this.a < 0.3 && this.c < 0.3;
-                        if (!this.i) {
-                            if (!u)this.style.width = this.style.height = this.k * 2 + "px";
-                            this.style.left = this.x - (u ? 20 : 0) + "px";
-                            this.style.top = this.y + "px"
-                        }
-                    }
-                }
-            } catch(G) {
-                google.ml(G, false, {_sn:"PAR"})
+                            this.g = Math.min(1, this.g + 0.03);
+                          }
+                          e = this.o - this.x;
+                          f = this.p - this.y;
+                          i = Math.sqrt(e * e + f * f);
+                          this.a += e * this.e;
+                          this.c += f * this.e;
+                          this.k = this.h + i / 8;
+                          this.i = i < 0.3 && this.a < 0.3 && this.c < 0.3;
+                          if (!this.i) {
+                            if (!u)
+                              this.style.width = this.style.height =
+                                this.k * 2 + 'px';
+                            this.style.left = this.x - (u ? 20 : 0) + 'px';
+                            this.style.top = this.y + 'px';
+                          }
+                        };
+                      };
+                  } catch (G) {
+                    google.ml(G, false, { _sn: 'PAR' });
+                  }
+                })();
+                google.doodle.init();
+              </script>
+            </div>
+            <form action="/search" name="f" onsubmit="google.fade=null">
+              <table cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr valign="top">
+                    <td width="25%">&nbsp;</td>
+                    <td align="center" nowrap="nowrap">
+                      <input name="hl" value="en" type="hidden" /><input
+                        name="source"
+                        value="hp"
+                        type="hidden" />
+                      <div class="ds" style="height: 32px; margin: 4px 0pt">
+                        <input
+                          autocomplete="off"
+                          onblur="google&amp;&amp;google.fade&amp;&amp;google.fade()"
+                          maxlength="2048"
+                          name="q"
+                          class="lst"
+                          title="Google Search"
+                          size="57"
+                          style="
+                            background: none repeat scroll 0% 0%
+                              rgb(255, 255, 255);
+                            border-width: 1px;
+                            border-style: solid;
+                            border-color: rgb(204, 204, 204) rgb(153, 153, 153)
+                              rgb(153, 153, 153) rgb(204, 204, 204);
+                            color: rgb(0, 0, 0);
+                            font:
+                              18px arial,
+                              sans-serif bold;
+                            height: 25px;
+                            margin: 0pt;
+                            padding: 5px 8px 0pt 6px;
+                            vertical-align: top;
+                          " />
+                      </div>
+                      <br style="line-height: 0pt" /><span class="ds"
+                        ><span class="lsbb"
+                          ><input
+                            name="btnG"
+                            value="Google Search"
+                            class="lsb"
+                            onclick="this.checked=1"
+                            type="submit" /></span></span
+                      ><span class="ds"
+                        ><span class="lsbb"
+                          ><input
+                            name="btnI"
+                            value="I'm Feeling Lucky"
+                            class="lsb"
+                            onclick="this.checked=1"
+                            type="submit" /></span
+                      ></span>
+                    </td>
+                    <td
+                      style="opacity: 1"
+                      class="sblc"
+                      id="sbl"
+                      align="left"
+                      nowrap="nowrap"
+                      width="25%">
+                      <a href="http://www.google.com/advanced_search?hl=en"
+                        >Advanced Search</a
+                      ><a href="http://www.google.com/language_tools?hl=en"
+                        >Language Tools</a
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <input value="f" name="aq" type="hidden" /><input
+                value=""
+                name="aqi"
+                type="hidden" /><input
+                value=""
+                name="aql"
+                type="hidden" /><input value="" name="oq" type="hidden" /><input
+                value=""
+                name="gs_rfai"
+                type="hidden" /><input value="1" name="pbx" type="hidden" />
+            </form>
+            <div style="font-size: 83%; min-height: 3.5em"><br /></div>
+            <div id="res"></div></center
+        ></span>
+        <span id="footer"
+          ><center style="opacity: 1" id="fctr">
+            <div style="font-size: 10pt">
+              <div id="fll" style="margin: 19px auto; text-align: center">
+                <a href="http://www.google.com/intl/en/ads/"
+                  >Advertising&nbsp;Programs</a
+                ><a href="http://www.google.com/services/">Business Solutions</a
+                ><a href="http://www.google.com/intl/en/about.html"
+                  >About Google</a
+                >
+              </div>
+            </div>
+            <p style="color: rgb(118, 118, 118); font-size: 8pt">
+              © 2010 -
+              <a href="http://www.google.com/intl/en/privacy.html">Privacy</a>
+            </p>
+          </center></span
+        >
+        <script>
+          function _gjp() {
+            !(location.hash && _gjuc()) && setTimeout(_gjp, 500);
+          }
+          google.j[1] = {
+            cc: [],
+            co: ['ghead', 'body', 'footer', 'xjsi'],
+            pc: [],
+            nb: 0,
+            css: document.getElementById('gstyle').innerHTML,
+            main:
+              '<div id=ghead></div>' +
+              '<span id=body></span>' +
+              '<span id=footer></span>' +
+              '<span id=xjsi></span>',
+          };
+        </script>
+        <script>
+          function wgjp() {
+            var xjs = document.createElement('script');
+            xjs.src = '/extern_chrome/5673716d440c1f33.js';
+            (document.getElementById('xjsd') || document.body).appendChild(xjs);
+          }
+        </script>
+      </center>
+      <div
+        id="cpf"
+        style="
+          display: block;
+          margin: 0pt 8px;
+          position: relative;
+          height: 231px;
+          opacity: 1;
+        "
+        class="fade">
+        <a
+          href="javascript:void(0)"
+          style="
+            bottom: 0pt;
+            display: inline;
+            font-family: arial, san-serif;
+            font-size: small;
+            left: 0pt;
+            position: absolute;
+          "
+          >Change background image</a
+        >
+      </div>
+      <div id="xjsd">
+        <script src="Google_files/oCCcQHbp7jA.js"></script>
+        <script src="Google_files/5673716d440c1f33.html"></script>
+        <script src="Google_files/oCCcQHbp7jA.html"></script>
+      </div>
+      <div id="xjsi">
+        <script>
+          if (google.y) google.y.first = [];
+          if (google.y) google.y.first = [];
+          if (!google.xjs) {
+            google.dstr = [];
+            google.rein = [];
+            window.setTimeout(function () {
+              var a = document.createElement('script');
+              a.src =
+                '/extern_js/f/CgJlbhICdXMrMEU4ASwrMFo4ACwrMA44ASwrMBc4BywrMCc4BCwrMDw4ACwrMFE4ACwrMFk4CywrMAo4fEAvLCswFjgdLCswGTggLCswJTjPiAEsKzAqOAssKzArOBEsKzA1OAQsKzBAOBMsKzBBOAUsKzBOOAYsKzBUOAEsKzAdOFIsKzBcOA8sKzAYOAUsKzAmOA4sgAIXkAIa/oCCcQHbp7jA.js';
+              (document.getElementById('xjsd') || document.body).appendChild(a);
+              if (google.timers && google.timers.load.t)
+                google.timers.load.t.xjsls = new Date().getTime();
+            }, 0);
+            google.xjs = 1;
+          }
+          (function () {
+            function e() {
+              if (typeof window.innerHeight == 'number')
+                return window.innerHeight;
+              else if (
+                document.documentElement &&
+                document.documentElement.clientHeight
+              )
+                return document.documentElement.clientHeight;
+              else if (document.body && document.body.clientHeight)
+                return document.body.clientHeight;
+              return 0;
             }
-            ;
-        })();
-        google.doodle.init()</script>
-    </div>
-    <form action="/search" name="f" onsubmit="google.fade=null">
-        <table cellpadding="0" cellspacing="0">
-            <tbody>
-            <tr valign="top">
-                <td width="25%">&nbsp;</td>
-                <td align="center" nowrap="nowrap"><input name="hl" value="en" type="hidden"><input name="source" value="hp" type="hidden">
-                    <div class="ds" style="height: 32px; margin: 4px 0pt;"><input autocomplete="off" onblur="google&amp;&amp;google.fade&amp;&amp;google.fade()" maxlength="2048" name="q" class="lst" title="Google Search" size="57" style="background: none repeat scroll 0% 0% rgb(255, 255, 255); border-width: 1px; border-style: solid; border-color: rgb(204, 204, 204) rgb(153, 153, 153) rgb(153, 153, 153) rgb(204, 204, 204); color: rgb(0, 0, 0); font: 18px arial,sans-serif bold; height: 25px; margin: 0pt; padding: 5px 8px 0pt 6px; vertical-align: top;"></div>
-                    <br style="line-height: 0pt;"><span class="ds"><span class="lsbb"><input name="btnG" value="Google Search" class="lsb" onclick="this.checked=1" type="submit"></span></span><span class="ds"><span class="lsbb"><input name="btnI" value="I'm Feeling Lucky" class="lsb" onclick="this.checked=1" type="submit"></span></span></td>
-                <td style="opacity: 1;" class="sblc" id="sbl" align="left" nowrap="nowrap" width="25%"><a href="http://www.google.com/advanced_search?hl=en">Advanced Search</a><a href="http://www.google.com/language_tools?hl=en">Language Tools</a></td>
-            </tr>
-            </tbody>
-        </table>
-        <input value="f" name="aq" type="hidden"><input value="" name="aqi" type="hidden"><input value="" name="aql" type="hidden"><input value="" name="oq" type="hidden"><input value="" name="gs_rfai" type="hidden"><input value="1" name="pbx" type="hidden"></form>
-    <div style="font-size: 83%; min-height: 3.5em;"><br></div>
-    <div id="res"></div>
-</center></span> <span id="footer"><center style="opacity: 1;" id="fctr">
-    <div style="font-size: 10pt;">
-        <div id="fll" style="margin: 19px auto; text-align: center;"><a href="http://www.google.com/intl/en/ads/">Advertising&nbsp;Programs</a><a href="http://www.google.com/services/">Business Solutions</a><a href="http://www.google.com/intl/en/about.html">About Google</a></div>
-    </div>
-    <p style="color: rgb(118, 118, 118); font-size: 8pt;">© 2010 - <a href="http://www.google.com/intl/en/privacy.html">Privacy</a></p></center></span>
-    <script>function _gjp() {
-        !(location.hash && _gjuc()) && setTimeout(_gjp, 500);
-    }
-    google.j[1] = {cc:[],co:['ghead','body','footer','xjsi'],pc:[],nb:0,css:document.getElementById('gstyle').innerHTML,main:'<div id=ghead></div>' + '<span id=body></span>' + '<span id=footer></span>' + '<span id=xjsi></span>'};</script>
-    <script>function wgjp() {
-        var xjs = document.createElement('script');
-        xjs.src = '/extern_chrome/5673716d440c1f33.js';
-        (document.getElementById('xjsd') || document.body).appendChild(xjs)
-    }
-    ;</script>
-</center><div id="cpf" style="display: block; margin: 0pt 8px; position: relative; height: 231px; opacity: 1;" class="fade"><a href="javascript:void(0)" style="bottom: 0pt; display: inline; font-family: arial,san-serif; font-size: small; left: 0pt; position: absolute;">Change background image</a></div><div id="xjsd">
-    <script src="Google_files/oCCcQHbp7jA.js"></script>
-    <script src="Google_files/5673716d440c1f33.html"></script>
-    <script src="Google_files/oCCcQHbp7jA.html"></script>
-</div><div id="xjsi">
-    <script>if (google.y)google.y.first = [];
-    if (google.y)google.y.first = [];
-    if (!google.xjs) {
-        google.dstr = [];
-        google.rein = [];
-        window.setTimeout(function() {
-            var a = document.createElement("script");
-            a.src = "/extern_js/f/CgJlbhICdXMrMEU4ASwrMFo4ACwrMA44ASwrMBc4BywrMCc4BCwrMDw4ACwrMFE4ACwrMFk4CywrMAo4fEAvLCswFjgdLCswGTggLCswJTjPiAEsKzAqOAssKzArOBEsKzA1OAQsKzBAOBMsKzBBOAUsKzBOOAYsKzBUOAEsKzAdOFIsKzBcOA8sKzAYOAUsKzAmOA4sgAIXkAIa/oCCcQHbp7jA.js";
-            (document.getElementById("xjsd") || document.body).appendChild(a);
-            if (google.timers && google.timers.load.t)google.timers.load.t.xjsls = (new Date).getTime();
-        }, 0);
-        google.xjs = 1
-    }
-    (function() {
-        function e() {
-            if (typeof window.innerHeight == "number")return window.innerHeight; else if (document.documentElement && document.documentElement.clientHeight)return document.documentElement.clientHeight; else if (document.body && document.body.clientHeight)return document.body.clientHeight;
-            return 0
-        }
 
-        function f(a, b, c) {
-            var d = a.offsetHeight ? c - a.offsetHeight : c + 10,i = b - d - 10,g = Math.max(i, 0);
-            a.style.height = g + "px";
-            return g
-        }
+            function f(a, b, c) {
+              var d = a.offsetHeight ? c - a.offsetHeight : c + 10,
+                i = b - d - 10,
+                g = Math.max(i, 0);
+              a.style.height = g + 'px';
+              return g;
+            }
 
-        function h() {
-            if (google.sn != "webhp")return;
-            var a = document.getElementById("cpf");
-            if (!a)return;
-            f(a,
-                    e(), document.body.offsetHeight);
-            var b = window.onresize;
-            window.onresize = function() {
+            function h() {
+              if (google.sn != 'webhp') return;
+              var a = document.getElementById('cpf');
+              if (!a) return;
+              f(a, e(), document.body.offsetHeight);
+              var b = window.onresize;
+              window.onresize = function () {
                 f(a, e(), document.body.offsetHeight);
-                if (b)b()
-            };
-            a.style.display = "block";
-            var c = a.getElementsByTagName("a")[0];
-            if (!c.onclick)c.onclick = function() {
-                var d = "https://www.google.com/accounts/ServiceLogin?continue\x3dhttp://www.google.com/webhp%3Fcplp%3D\x26hl\x3den\x26service\x3dig\x26ltmpl\x3daddphoto";
-                document.location = d.replace("cplp%3D", "cplp%3D" + (new Date).getTime())
+                if (b) b();
+              };
+              a.style.display = 'block';
+              var c = a.getElementsByTagName('a')[0];
+              if (!c.onclick)
+                c.onclick = function () {
+                  var d =
+                    'https://www.google.com/accounts/ServiceLogin?continue\x3dhttp://www.google.com/webhp%3Fcplp%3D\x26hl\x3den\x26service\x3dig\x26ltmpl\x3daddphoto';
+                  document.location = d.replace(
+                    'cplp%3D',
+                    'cplp%3D' + new Date().getTime(),
+                  );
+                };
             }
-        }
 
-        function j(a) {
-            window.onresize = a;
-            var b = document.getElementById("cpf");
-            if (!b)return;
-            b.style.display = "none"
-        }
+            function j(a) {
+              window.onresize = a;
+              var b = document.getElementById('cpf');
+              if (!b) return;
+              b.style.display = 'none';
+            }
 
-        if (!window.google.cpld) {
-            if (google.rein)google.rein.push(h);
-            if (google.dstr) {
+            if (!window.google.cpld) {
+              if (google.rein) google.rein.push(h);
+              if (google.dstr) {
                 var k = window.onresize;
-                google.dstr.push(function() {
-                    j(k)
-                })
+                google.dstr.push(function () {
+                  j(k);
+                });
+              }
+              h();
+              window.google.cpld = true;
             }
-            h();
-            window.google.cpld = true
-        }
-        ;
-    })();
-    ;
-    google.neegg = 1;
-    google.y.first.push(function() {
-        var form = document.f || document.f || document.gs;
-        google.ac.i(form, form.q, '', '', '', {o:1,sw:1,l:1});
-        (function() {
-            var h,i,j = 1,k = google.time(),l = [];
-            google.rein.push(function() {
+          })();
+          google.neegg = 1;
+          google.y.first.push(function () {
+            var form = document.f || document.f || document.gs;
+            google.ac.i(form, form.q, '', '', '', { o: 1, sw: 1, l: 1 });
+            (function () {
+              var h,
+                i,
+                j = 1,
+                k = google.time(),
+                l = [];
+              google.rein.push(function () {
                 j = 1;
-                k = google.time()
-            });
-            google.dstr.push(function() {
-                google.fade = null
-            });
-            function m(a, f) {
+                k = google.time();
+              });
+              google.dstr.push(function () {
+                google.fade = null;
+              });
+              function m(a, f) {
                 var b = [];
-                for (var c = 0,e; e = a[c++];) {
-                    var d = document.getElementById(e);
-                    d && b.push(d)
+                for (var c = 0, e; (e = a[c++]); ) {
+                  var d = document.getElementById(e);
+                  d && b.push(d);
                 }
-                for (var c = 0,g; g = f[c++];)b = b.concat(n(g[0], g[1]));
-                for (var c = 0; b[c]; c++)b[c] = [b[c],"opacity",0,1,0,""];
-                return b
-            }
+                for (var c = 0, g; (g = f[c++]); ) b = b.concat(n(g[0], g[1]));
+                for (var c = 0; b[c]; c++)
+                  b[c] = [b[c], 'opacity', 0, 1, 0, ''];
+                return b;
+              }
 
-            function n(a, f) {
-                var b = [],c = new RegExp("(^|\\s)" + f + "($|\\s)");
-                for (var e = 0,d,g = document.getElementsByTagName(a); d =
-                        g[e++];)c.test(d.className) && b.push(d);
-                return b
-            }
+              function n(a, f) {
+                var b = [],
+                  c = new RegExp('(^|\\s)' + f + '($|\\s)');
+                for (
+                  var e = 0, d, g = document.getElementsByTagName(a);
+                  (d = g[e++]);
 
-            google.fade = function(a) {
+                )
+                  c.test(d.className) && b.push(d);
+                return b;
+              }
+
+              google.fade = function (a) {
                 if (google.fx && j) {
-                    a = a || window.event;
-                    var f = 1,b = google.time() - k;
-                    if (a && a.type == "mousemove") {
-                        var c = a.clientX,e = a.clientY;
-                        f = (h || i) && (h != c || i != e) && b > 600;
-                        h = c;
-                        i = e
-                    }
-                    if (f) {
-                        j = 0;
-                        google.fx.animate(600, m(["fctr","ghead","pmocntr","sbl","tba","tbe"], [
-                            ["span","fade"],
-                            ["div","fade"],
-                            ["div","gbh"]
-                        ]));
-                        for (var d = 0; d <
-                                l.length; ++d)if (typeof l[d] == "function")l[d]()
-                    }
+                  a = a || window.event;
+                  var f = 1,
+                    b = google.time() - k;
+                  if (a && a.type == 'mousemove') {
+                    var c = a.clientX,
+                      e = a.clientY;
+                    f = (h || i) && (h != c || i != e) && b > 600;
+                    h = c;
+                    i = e;
+                  }
+                  if (f) {
+                    j = 0;
+                    google.fx.animate(
+                      600,
+                      m(
+                        ['fctr', 'ghead', 'pmocntr', 'sbl', 'tba', 'tbe'],
+                        [
+                          ['span', 'fade'],
+                          ['div', 'fade'],
+                          ['div', 'gbh'],
+                        ],
+                      ),
+                    );
+                    for (var d = 0; d < l.length; ++d)
+                      if (typeof l[d] == 'function') l[d]();
+                  }
                 }
-            };
-            google.addFadeNotifier = function(a) {
+              };
+              google.addFadeNotifier = function (a) {
                 l.push(a);
-                if (!j)a()
-            };
+                if (!j) a();
+              };
+            })();
+            google.mc = [
+              [14, {}],
+              [
+                92,
+                {
+                  avgTtfc: 1000,
+                  focus: true,
+                  hpt: 250,
+                  p_dym: 'Did you mean:',
+                  p_gs: 'Google Search',
+                  p_sif: 'Search instead for',
+                  p_srf: 'Showing results for',
+                  rpt: 41,
+                  slowXfer: 5000,
+                  tdur: 50,
+                },
+              ],
+            ];
+            google.med('init');
+            google.History && google.History.initialize('/');
+          });
+          if (google.j && google.j.en && google.j.xi) {
+            window.setTimeout(google.j.xi, 0);
+            google.fade = null;
+          }
+        </script>
+      </div>
+      <script>
+        (function () {
+          var b, d, e, f;
+
+          function g(a, c) {
+            if (a.removeEventListener) {
+              a.removeEventListener('load', c, false);
+              a.removeEventListener('error', c, false);
+            } else {
+              a.detachEvent('onload', c);
+              a.detachEvent('onerror', c);
+            }
+          }
+
+          function h(a) {
+            f = new Date().getTime();
+            ++d;
+            a = a || window.event;
+            var c = a.target || a.srcElement;
+            g(c, h);
+          }
+
+          var i = document.getElementsByTagName('img');
+          b = i.length;
+          d = 0;
+          for (var j = 0, k; j < b; ++j) {
+            k = i[j];
+            if (k.complete || typeof k.src != 'string' || !k.src) ++d;
+            else if (k.addEventListener) {
+              k.addEventListener('load', h, false);
+              k.addEventListener('error', h, false);
+            } else {
+              k.attachEvent('onload', h);
+              k.attachEvent('onerror', h);
+            }
+          }
+          e = b - d;
+          function l() {
+            if (!google.timers.load.t) return;
+            google.timers.load.t.ol = new Date().getTime();
+            google.timers.load.t.iml = f;
+            google.kCSI.imc = d;
+            google.kCSI.imn = b;
+            google.kCSI.imp = e;
+            google.timers.load.t.xjs &&
+              google.report &&
+              google.report(google.timers.load, google.kCSI);
+          }
+
+          if (window.addEventListener)
+            window.addEventListener('load', l, false);
+          else if (window.attachEvent) window.attachEvent('onload', l);
+          google.timers.load.t.prt = f = new Date().getTime();
         })();
-        ;
-        google.mc = [
-            [14,{}],
-            [92,{"avgTtfc":1000,"focus":true,"hpt":250,"p_dym":"Did you mean:","p_gs":"Google Search","p_sif":"Search instead for","p_srf":"Showing results for","rpt":41,"slowXfer":5000,"tdur":50}]
-        ];
-        google.med('init');
-        google.History && google.History.initialize('/')
-    });
-    if (google.j && google.j.en && google.j.xi) {
-        window.setTimeout(google.j.xi, 0);
-        google.fade = null;
-    }</script>
-</div><script>(function() {
-    var b,d,e,f;
-
-    function g(a, c) {
-        if (a.removeEventListener) {
-            a.removeEventListener("load", c, false);
-            a.removeEventListener("error", c, false)
-        } else {
-            a.detachEvent("onload", c);
-            a.detachEvent("onerror", c)
-        }
-    }
-
-    function h(a) {
-        f = (new Date).getTime();
-        ++d;
-        a = a || window.event;
-        var c = a.target || a.srcElement;
-        g(c, h)
-    }
-
-    var i = document.getElementsByTagName("img");
-    b = i.length;
-    d = 0;
-    for (var j = 0,k; j < b; ++j) {
-        k = i[j];
-        if (k.complete || typeof k.src != "string" || !k.src)++d; else if (k.addEventListener) {
-            k.addEventListener("load", h, false);
-            k.addEventListener("error",
-                    h, false)
-        } else {
-            k.attachEvent("onload", h);
-            k.attachEvent("onerror", h)
-        }
-    }
-    e = b - d;
-    function l() {
-        if (!google.timers.load.t)return;
-        google.timers.load.t.ol = (new Date).getTime();
-        google.timers.load.t.iml = f;
-        google.kCSI.imc = d;
-        google.kCSI.imn = b;
-        google.kCSI.imp = e;
-        google.timers.load.t.xjs && google.report && google.report(google.timers.load, google.kCSI)
-    }
-
-    if (window.addEventListener)window.addEventListener("load", l, false); else if (window.attachEvent)window.attachEvent("onload", l);
-    google.timers.load.t.prt = (f = (new Date).getTime());
-})();
-</script><div style="visibility: hidden; left: 229px; top: 241px; min-width: 496px;" class="gac_od">
-    <div class="gac_id">
-        <table class="gac_m" cellpadding="0" cellspacing="0"></table>
-    </div>
-</div></span>
-
-</body>
+      </script>
+      <div
+        style="visibility: hidden; left: 229px; top: 241px; min-width: 496px"
+        class="gac_od">
+        <div class="gac_id">
+          <table class="gac_m" cellpadding="0" cellspacing="0"></table>
+        </div></div
+    ></span>
+  </body>
 </html>

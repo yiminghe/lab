@@ -27,18 +27,11 @@ function tarjan(root, nodesSet, cls) {
   } else {
     cls.count++;
   }
-  const {
-    low,
-    dfn,
-    visited,
-    stack,
-    count,
-    sccs,
-  } = cls;
+  const { low, dfn, visited, stack, count, sccs } = cls;
   low.set(root, count);
   dfn.set(root, count);
   visited.add(root);
-  stack.push(root)
+  stack.push(root);
 
   for (const next of root.to) {
     if (!nodesSet.has(next)) {
@@ -88,7 +81,10 @@ export class FindGraphCircuits {
     const { nodesIndexMap } = this;
     for (const scc of sccs) {
       const sccMinNode = this.findMinNode(scc);
-      if (!minNode || nodesIndexMap.get(sccMinNode) < nodesIndexMap.get(minNode)) {
+      if (
+        !minNode ||
+        nodesIndexMap.get(sccMinNode) < nodesIndexMap.get(minNode)
+      ) {
         minNode = sccMinNode;
         minScc = scc;
       }

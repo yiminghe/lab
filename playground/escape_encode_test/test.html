@@ -1,49 +1,55 @@
-﻿
-<!doctype html>
+﻿<!doctype html>
 <html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-<title>Test for escape and encodeURIComponent</title>
-<style type="text/css">
-    td { padding: 5px 10px; width: 120px; text-align: center; }
-    .diff { background: #fcc; }
-</style>
-</head>
-<body>
-<table>
-    <caption>Test for escape and encodeURIComponent</caption>
-    <thead>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Test for escape and encodeURIComponent</title>
+    <style>
+      td {
+        padding: 5px 10px;
+        width: 120px;
+        text-align: center;
+      }
+      .diff {
+        background: #fcc;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <caption>
+        Test for escape and encodeURIComponent
+      </caption>
+      <thead>
         <th>Raw</th>
         <th>escape(s)</th>
         <th>encodeURIComponent(s)</th>
         <th>encodeURI(s)</th>
-    </thead>
-    <tbody id="J_Data">
-        <script type="text/javascript">
+      </thead>
+      <tbody id="J_Data">
+        <script>
+          for (var i = 32; i < 128; ++i) {
+            output(String.fromCharCode(i));
+          }
+          output('中');
 
-            for (var i = 32; i < 128; ++i) {
-                output(String.fromCharCode(i));
+          function output(s) {
+            s1 = escape(s);
+            s2 = encodeURIComponent(s);
+            s3 = encodeURI(s);
+
+            if (s1 != s2 || s1 != s3) {
+              document.write('<tr class="diff">');
+            } else {
+              document.write('<tr>');
             }
-            output('中');
-
-            function output(s) {
-                s1 = escape(s);
-                s2 = encodeURIComponent(s);
-                s3 = encodeURI(s);
-
-                if(s1 != s2 || s1 != s3) {
-                    document.write('<tr class="diff">');
-                } else {
-                    document.write('<tr>');
-                }
-                document.write('<td>' + s + '</td>');
-                document.write('<td>' + s1 + '</td>');
-                document.write('<td>' + s2 + '</td>');
-                document.write('<td>' + s3 + '</td>');
-                document.write('</tr>');
-            }
+            document.write('<td>' + s + '</td>');
+            document.write('<td>' + s1 + '</td>');
+            document.write('<td>' + s2 + '</td>');
+            document.write('<td>' + s3 + '</td>');
+            document.write('</tr>');
+          }
         </script>
-    </tbody>
-</table>
-</body>
+      </tbody>
+    </table>
+  </body>
 </html>

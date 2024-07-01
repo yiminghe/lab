@@ -1,71 +1,81 @@
 <style>
-    html, body {
-        padding: 0;
-        margin: 0;
-    }
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+  }
 </style>
 <h2>rotate/scale/translate</h2>
-<canvas id='c' width='800' height='500' style="border: 1px solid red"></canvas>
+<canvas id="c" width="800" height="500" style="border: 1px solid red"></canvas>
 <h2>matrix</h2>
-<canvas id='c2' width='800' height='500' style="border: 1px solid green"></canvas>
+<canvas
+  id="c2"
+  width="800"
+  height="500"
+  style="border: 1px solid green"></canvas>
 <h2>setTransform + matrix</h2>
-<canvas id='c3' width='800' height='500' style="border: 1px solid black"></canvas>
+<canvas
+  id="c3"
+  width="800"
+  height="500"
+  style="border: 1px solid black"></canvas>
 <script src="matrix.js"></script>
 <script>
-    // hilo from taobao
-    (function () {
-        var c = document.getElementById('c');
-        var c2 = document.getElementById('c2');
-        var context = c.getContext('2d');
-        var context2 = c2.getContext('2d');
-        var c3 = document.getElementById('c3');
-        var context3 = c3.getContext('2d');
-        var points = [
-            {
-                x: 1, y: 1
-            },
-            {
-                x: 100,
-                y: 1
-            },
-            {
-                x: 100,
-                y: 200
-            },
-            {
-                x: 1,
-                y: 200
-            }
-        ];
-        var x = 100;
-        var y = 100;
-        var rotate = 45;
-        var scaleX = 1.5;
-        var scaleY = 1.5;
-        rotate = 29;
-        scaleX = 2;
-        scaleY = 2;
-        x = 110;
-        y = 0;
+  // hilo from taobao
+  (function () {
+    var c = document.getElementById('c');
+    var c2 = document.getElementById('c2');
+    var context = c.getContext('2d');
+    var context2 = c2.getContext('2d');
+    var c3 = document.getElementById('c3');
+    var context3 = c3.getContext('2d');
+    var points = [
+      {
+        x: 1,
+        y: 1,
+      },
+      {
+        x: 100,
+        y: 1,
+      },
+      {
+        x: 100,
+        y: 200,
+      },
+      {
+        x: 1,
+        y: 200,
+      },
+    ];
+    var x = 100;
+    var y = 100;
+    var rotate = 45;
+    var scaleX = 1.5;
+    var scaleY = 1.5;
+    rotate = 29;
+    scaleX = 2;
+    scaleY = 2;
+    x = 110;
+    y = 0;
 
-        function bench(name, fn) {
-            var start = Date.now();
-            for (var i = 0; i < 200; i++) {
-                fn();
-            }
-            console.log(name + ' end: ' + (Date.now() - start));
-        }
+    function bench(name, fn) {
+      var start = Date.now();
+      for (var i = 0; i < 200; i++) {
+        fn();
+      }
+      console.log(name + ' end: ' + (Date.now() - start));
+    }
 
-        bench('canvas api: ', function () {
-            drawContext(c,context, points, x, y, rotate, scaleX, scaleY);
-        });
-        bench('matrix api: ', function () {
-            drawMatrix(c2,context2, points, x, y, rotate, scaleX, scaleY);
-        });
-        bench('matrix transform api: ', function () {
-            drawTransform(c3,context3, points, x, y, rotate, scaleX, scaleY);
-        });
-//        drawContext(context, points, x, y, rotate, scaleX, scaleY);
-//       draw(context2, points, x, y, rotate, scaleX, scaleY);
-    })();
+    bench('canvas api: ', function () {
+      drawContext(c, context, points, x, y, rotate, scaleX, scaleY);
+    });
+    bench('matrix api: ', function () {
+      drawMatrix(c2, context2, points, x, y, rotate, scaleX, scaleY);
+    });
+    bench('matrix transform api: ', function () {
+      drawTransform(c3, context3, points, x, y, rotate, scaleX, scaleY);
+    });
+    //        drawContext(context, points, x, y, rotate, scaleX, scaleY);
+    //       draw(context2, points, x, y, rotate, scaleX, scaleY);
+  })();
 </script>

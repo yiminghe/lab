@@ -1,285 +1,316 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<link href="http://assets.taobaocdn.com/tbsp/reset-grids.css?t=20090602.css" rel="stylesheet"/>
-<!--[if lt IE 8]>
-<link href="../build/theme/cool/editor-pkg-min-mhtml.css" rel="stylesheet"/>
-<![endif]-->
-<!--[if gte IE 8]><!-->
-<link href="../build/theme/cool/editor-pkg-min-datauri.css" rel="stylesheet"/>
-<!--<![endif]-->
-<title>wordcount sample</title>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="http://assets.taobaocdn.com/tbsp/reset-grids.css?t=20090602.css"
+      rel="stylesheet" />
+    <!--[if lt IE 8]>
+      <link
+        href="../build/theme/cool/editor-pkg-min-mhtml.css"
+        rel="stylesheet" />
+    <![endif]-->
+    <!--[if gte IE 8]><!-->
+    <link
+      href="../build/theme/cool/editor-pkg-min-datauri.css"
+      rel="stylesheet" />
+    <!--<![endif]-->
+    <title>wordcount sample</title>
+  </head>
+  <body>
+    <div style="width: 90%; margin: 20px auto">
+      <textarea id="test" style="width: 99%; height: 200px"></textarea>
+    </div>
+    <div style="width: 90%; margin: 20px auto">
+      <textarea id="test2" style="width: 99%; height: 200px"></textarea>
+    </div>
+    <script src="https://github.com/yiminghe/kissy/raw/master/build/kissy.js"></script>
+    <script src="../build/editor-all-pkg.js?t=20100827a"></script>
+    <script src="../build/biz/bangpai/editor-plugin-pkg.js"></script>
+    <script src="word-count.js"></script>
+    <script>
+      KISSY.ready(function (S) {
+        S.use('editor', function (S) {
+          var KE = KISSY.Editor;
 
-<div style="width:90%;margin:20px auto;">
-    <textarea id="test" style="width:99%;height:200px;"></textarea>
-</div>
-<div style="width:90%;margin:20px auto;">
-    <textarea id="test2" style="width:99%;height:200px;"></textarea>
-</div>
-<script src="https://github.com/yiminghe/kissy/raw/master/build/kissy.js"></script>
-<script src="../build/editor-all-pkg.js?t=20100827a"></script>
-<script src="../build/biz/bangpai/editor-plugin-pkg.js"></script>
-<script src="word-count.js"></script>
-<script type="text/javascript">
-KISSY.ready(function(S) {
-    S.use('editor', function(S) {
-        var KE = KISSY.Editor;
-
-        window.editor = KE("#test", {
-            attachForm:true,
-            baseZIndex:10000,
-
-            pluginConfig: {
-                "image":{
-                    upload:{
-                        serverUrl:"http://bangpai.daily.taobao.net/json/batchImageUpload.htm",
-                        serverParams:{
-                            uuid:'15C334D00AE80EAB01860BED4D75037F',groupId:'646005',threadId:'106407650',
-                            cookie:document.cookie,
-                            waterMark:function() {
-                                return S.one("#ke_img_up_watermark_1")[0].checked;
-                            }
-                        },
-                        fileInput:"imgFile",
-                        sizeLimit:1000,//k
-                        extraHtml:"<p style='margin-top:5px;'><input type='checkbox' checked='checked' id='ke_img_up_watermark_1' style='vertical-align:middle;'> 图片加水印，防止别人盗用</p>"
-                    }
-                },
-                "font-size":{
-                    items:[
-                        {
-                            value:"14px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:14px'>标准</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>14px</span>"
-                        },
-                        {
-                            value:"16px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:16px'>大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>16px</span>"
-                        },
-                        {
-                            value:"18px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:18px'>特大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>18px</span>"
-                        },
-                        {
-                            value:"20px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:20px'>极大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>20px</span>"
-                        }
-                    ],
-                    width:"115px"
-                }
-                ,"font-family":{
-                    items:[
-                        {name:"宋体",value:"SimSun"},
-                        {name:"黑体",value:"SimHei"},
-                        {name:"楷体",value:"KaiTi_GB2312"},
-                        {name:"微软雅黑",value:"Microsoft YaHei"},
-                        {name:"Times New Roman",value:"Times New Roman"},
-                        {name:"Arial",value:"Arial"},
-                        {name:"Verdana",value:"Verdana"}
-                    ]
-                }
-                ,"bangpai-video":{
-                    urlCfg:[
-                        {
-                            reg:/tudou\.com/i,
-                            url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
-                                    "url=@url@&callback=@callback@"//"&rand=@rand@"
-                        }
-                    ]
-                },
-                "draft":{
-                    interval:5,
-                    limit:10,
-                    helpHtml:  "<div " +
-                            "style='width:200px;'>" +
-                            "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容," +
-                            "如果发现内容丢失" +
-                            "请选择恢复编辑历史</div></div>"
-                },
-                "resize":{
-                    direction:["y"]
-                }
-            }
-        }).use("htmldataprocessor,enterkey,clipboard," +
-                "sourcearea,bangpai-sourcearea,preview," +
-                "separator," +
-                "undo,separator,removeformat,font,forecolor,separator," +
-                "list,indent,justify,separator,link,image,bangpai-video,bangpai-music,smiley," +
-                "separator,table,resize,draft,maximize"
-                , function() {
-            var self = this,
-                    htmlDataProcessor = self.htmlDataProcessor,
-                    dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
-            if (dataFilter) {
-                dataFilter.addRules({
-                    attributes:{
-                        style:function(value) {
-                            value = value.replace(/background-color\s*:[^;]+(;|$)/g, "")
-                                    .replace(/background\s*:[^;]+(;|$)/g, "");
-                            if (!value) return false;
-                            return value;
-                        }
-                    }
-                });
-            }
-        });
-
-
-    });
-
-
-    KISSY.use('editor', function(S) {
-        var KE = KISSY.Editor;
-
-        window.editor2 = KE("#test2", {
-            attachForm:true,
-            baseZIndex:10000,
+          window.editor = KE('#test', {
+            attachForm: true,
+            baseZIndex: 10000,
 
             pluginConfig: {
-                "image":{
-                    upload:{
-                        serverUrl:"http://bangpai.daily.taobao.net/json/batchImageUpload.htm",
-                        serverParams:{
-                            uuid:'15C334D00AE80EAB01860BED4D75037F',groupId:'646005',threadId:'106407650',
-                            cookie:document.cookie,
-                            waterMark:function() {
-                                return S.one("#ke_img_up_watermark_1")[0].checked;
-                            }
-                        },
-                        fileInput:"imgFile",
-                        sizeLimit:1000,//k
-                        extraHtml:"<p style='margin-top:5px;'><input type='checkbox' checked='checked' id='ke_img_up_watermark_1' style='vertical-align:middle;'> 图片加水印，防止别人盗用</p>"
-                    }
+              image: {
+                upload: {
+                  serverUrl:
+                    'http://bangpai.daily.taobao.net/json/batchImageUpload.htm',
+                  serverParams: {
+                    uuid: '15C334D00AE80EAB01860BED4D75037F',
+                    groupId: '646005',
+                    threadId: '106407650',
+                    cookie: document.cookie,
+                    waterMark: function () {
+                      return S.one('#ke_img_up_watermark_1')[0].checked;
+                    },
+                  },
+                  fileInput: 'imgFile',
+                  sizeLimit: 1000, //k
+                  extraHtml:
+                    "<p style='margin-top:5px;'><input type='checkbox' checked='checked' id='ke_img_up_watermark_1' style='vertical-align:middle;'> 图片加水印，防止别人盗用</p>",
                 },
-                "font-size":{
-                    items:[
-                        {
-                            value:"14px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:14px'>标准</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>14px</span>"
-                        },
-                        {
-                            value:"16px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:16px'>大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>16px</span>"
-                        },
-                        {
-                            value:"18px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:18px'>特大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>18px</span>"
-                        },
-                        {
-                            value:"20px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:20px'>极大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>20px</span>"
-                        }
-                    ],
-                    width:"115px"
-                }
-                ,"font-family":{
-                    items:[
-                        {name:"宋体",value:"SimSun"},
-                        {name:"黑体",value:"SimHei"},
-                        {name:"楷体",value:"KaiTi_GB2312"},
-                        {name:"微软雅黑",value:"Microsoft YaHei"},
-                        {name:"Times New Roman",value:"Times New Roman"},
-                        {name:"Arial",value:"Arial"},
-                        {name:"Verdana",value:"Verdana"}
-                    ]
-                }
-                ,"bangpai-video":{
-                    urlCfg:[
-                        {
-                            reg:/tudou\.com/i,
-                            url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
-                                    "url=@url@&callback=@callback@"//"&rand=@rand@"
-                        }
-                    ]
-                },
-                "draft":{
-                    interval:5,
-                    limit:10,
-                    helpHtml:  "<div " +
-                            "style='width:200px;'>" +
-                            "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容," +
-                            "如果发现内容丢失" +
-                            "请选择恢复编辑历史</div></div>"
-                },
-                "resize":{
-                    direction:["y"]
-                }
-            }
-        }).use("htmldataprocessor,enterkey,clipboard," +
-                "sourcearea,bangpai-sourcearea,preview," +
-                "separator," +
-                "undo,separator,removeformat,font,forecolor,separator," +
-                "list,indent,justify,separator,link,image,bangpai-video,bangpai-music,smiley," +
-                "separator,table,resize,draft,maximize"
-                , function() {
-            var self = this,
-                    htmlDataProcessor = self.htmlDataProcessor,
-                    dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
-            if (dataFilter) {
+              },
+              'font-size': {
+                items: [
+                  {
+                    value: '14px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:14px'>标准</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>14px</span>",
+                  },
+                  {
+                    value: '16px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:16px'>大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>16px</span>",
+                  },
+                  {
+                    value: '18px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:18px'>特大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>18px</span>",
+                  },
+                  {
+                    value: '20px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:20px'>极大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>20px</span>",
+                  },
+                ],
+                width: '115px',
+              },
+              'font-family': {
+                items: [
+                  { name: '宋体', value: 'SimSun' },
+                  { name: '黑体', value: 'SimHei' },
+                  { name: '楷体', value: 'KaiTi_GB2312' },
+                  { name: '微软雅黑', value: 'Microsoft YaHei' },
+                  { name: 'Times New Roman', value: 'Times New Roman' },
+                  { name: 'Arial', value: 'Arial' },
+                  { name: 'Verdana', value: 'Verdana' },
+                ],
+              },
+              'bangpai-video': {
+                urlCfg: [
+                  {
+                    reg: /tudou\.com/i,
+                    url:
+                      'http://bangpai.daily.taobao.net/json/getTudouVideo.htm?' +
+                      'url=@url@&callback=@callback@', //"&rand=@rand@"
+                  },
+                ],
+              },
+              draft: {
+                interval: 5,
+                limit: 10,
+                helpHtml:
+                  '<div ' +
+                  "style='width:200px;'>" +
+                  "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容," +
+                  '如果发现内容丢失' +
+                  '请选择恢复编辑历史</div></div>',
+              },
+              resize: {
+                direction: ['y'],
+              },
+            },
+          }).use(
+            'htmldataprocessor,enterkey,clipboard,' +
+              'sourcearea,bangpai-sourcearea,preview,' +
+              'separator,' +
+              'undo,separator,removeformat,font,forecolor,separator,' +
+              'list,indent,justify,separator,link,image,bangpai-video,bangpai-music,smiley,' +
+              'separator,table,resize,draft,maximize',
+            function () {
+              var self = this,
+                htmlDataProcessor = self.htmlDataProcessor,
+                dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
+              if (dataFilter) {
                 dataFilter.addRules({
-                    attributes:{
-                        style:function(value) {
-                            value = value.replace(/background-color\s*:[^;]+(;|$)/g, "")
-                                    .replace(/background\s*:[^;]+(;|$)/g, "");
-                            if (!value) return false;
-                            return value;
-                        }
-                    }
+                  attributes: {
+                    style: function (value) {
+                      value = value
+                        .replace(/background-color\s*:[^;]+(;|$)/g, '')
+                        .replace(/background\s*:[^;]+(;|$)/g, '');
+                      if (!value) return false;
+                      return value;
+                    },
+                  },
                 });
-            }
+              }
+            },
+          );
         });
-    });
 
+        KISSY.use('editor', function (S) {
+          var KE = KISSY.Editor;
 
+          window.editor2 = KE('#test2', {
+            attachForm: true,
+            baseZIndex: 10000,
 
+            pluginConfig: {
+              image: {
+                upload: {
+                  serverUrl:
+                    'http://bangpai.daily.taobao.net/json/batchImageUpload.htm',
+                  serverParams: {
+                    uuid: '15C334D00AE80EAB01860BED4D75037F',
+                    groupId: '646005',
+                    threadId: '106407650',
+                    cookie: document.cookie,
+                    waterMark: function () {
+                      return S.one('#ke_img_up_watermark_1')[0].checked;
+                    },
+                  },
+                  fileInput: 'imgFile',
+                  sizeLimit: 1000, //k
+                  extraHtml:
+                    "<p style='margin-top:5px;'><input type='checkbox' checked='checked' id='ke_img_up_watermark_1' style='vertical-align:middle;'> 图片加水印，防止别人盗用</p>",
+                },
+              },
+              'font-size': {
+                items: [
+                  {
+                    value: '14px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:14px'>标准</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>14px</span>",
+                  },
+                  {
+                    value: '16px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:16px'>大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>16px</span>",
+                  },
+                  {
+                    value: '18px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:18px'>特大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>18px</span>",
+                  },
+                  {
+                    value: '20px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:20px'>极大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>20px</span>",
+                  },
+                ],
+                width: '115px',
+              },
+              'font-family': {
+                items: [
+                  { name: '宋体', value: 'SimSun' },
+                  { name: '黑体', value: 'SimHei' },
+                  { name: '楷体', value: 'KaiTi_GB2312' },
+                  { name: '微软雅黑', value: 'Microsoft YaHei' },
+                  { name: 'Times New Roman', value: 'Times New Roman' },
+                  { name: 'Arial', value: 'Arial' },
+                  { name: 'Verdana', value: 'Verdana' },
+                ],
+              },
+              'bangpai-video': {
+                urlCfg: [
+                  {
+                    reg: /tudou\.com/i,
+                    url:
+                      'http://bangpai.daily.taobao.net/json/getTudouVideo.htm?' +
+                      'url=@url@&callback=@callback@', //"&rand=@rand@"
+                  },
+                ],
+              },
+              draft: {
+                interval: 5,
+                limit: 10,
+                helpHtml:
+                  '<div ' +
+                  "style='width:200px;'>" +
+                  "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容," +
+                  '如果发现内容丢失' +
+                  '请选择恢复编辑历史</div></div>',
+              },
+              resize: {
+                direction: ['y'],
+              },
+            },
+          }).use(
+            'htmldataprocessor,enterkey,clipboard,' +
+              'sourcearea,bangpai-sourcearea,preview,' +
+              'separator,' +
+              'undo,separator,removeformat,font,forecolor,separator,' +
+              'list,indent,justify,separator,link,image,bangpai-video,bangpai-music,smiley,' +
+              'separator,table,resize,draft,maximize',
+            function () {
+              var self = this,
+                htmlDataProcessor = self.htmlDataProcessor,
+                dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
+              if (dataFilter) {
+                dataFilter.addRules({
+                  attributes: {
+                    style: function (value) {
+                      value = value
+                        .replace(/background-color\s*:[^;]+(;|$)/g, '')
+                        .replace(/background\s*:[^;]+(;|$)/g, '');
+                      if (!value) return false;
+                      return value;
+                    },
+                  },
+                });
+              }
+            },
+          );
+        });
 
-    KISSY.wordcount.bind('#test',  100, editor);
-    KISSY.wordcount.bind('#test2',  50, editor2);
-
-});
-</script>
-
-</body>
+        KISSY.wordcount.bind('#test', 100, editor);
+        KISSY.wordcount.bind('#test2', 50, editor2);
+      });
+    </script>
+  </body>
 </html>

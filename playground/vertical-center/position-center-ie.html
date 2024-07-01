@@ -1,49 +1,48 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>position for ie 垂直居中</title>
-<style type="text/css">
-#box4_wrapper {
-	border:1px solid red;
-   height: 200px;
-   width: 800px;
-   overflow: hidden;
-   display: table;
-	*position: relative;
-		*display:block;
-}
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>position for ie 垂直居中</title>
+    <style>
+      #box4_wrapper {
+        border: 1px solid red;
+        height: 200px;
+        width: 800px;
+        overflow: hidden;
+        display: table;
+        *position: relative;
+        *display: block;
+      }
 
-#box4_outer {
-	display: table-cell;
-	vertical-align: middle;
-   *position: absolute;
-   *top: 50%;
-   *display:block;
-}
+      #box4_outer {
+        display: table-cell;
+        vertical-align: middle;
+        *position: absolute;
+        *top: 50%;
+        *display: block;
+      }
 
-#box4_inner {
-	width:100px;
-	border:1px solid black;
-	*border:1px solid green;
-   *position: relative;
-   *top: -50%;
-   margin: 0 auto;
-   background: #eee
-}
-</style>
-</head>
+      #box4_inner {
+        width: 100px;
+        border: 1px solid black;
+        *border: 1px solid green;
+        *position: relative;
+        *top: -50%;
+        margin: 0 auto;
+        background: #eee;
+      }
+    </style>
+  </head>
 
-<body>
-	<p> ie6,7 relative,absolute 实现居中 ,其他 display-table 居中</p>
-	<div id="box4_wrapper">
-	   <div id="box4_outer">
-	      <div id="box4_inner">
-	         这是一种无 hack 的方式<br />
-	         虽然环保，但是臃肿:(
-	      </div>
-	   </div>
-	</div>
-</body>
+  <body>
+    <p>ie6,7 relative,absolute 实现居中 ,其他 display-table 居中</p>
+    <div id="box4_wrapper">
+      <div id="box4_outer">
+        <div id="box4_inner">
+          这是一种无 hack 的方式<br />
+          虽然环保，但是臃肿:(
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
-

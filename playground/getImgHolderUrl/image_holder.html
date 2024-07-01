@@ -1,87 +1,92 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
-<head>
-<title>µÃµ½Õ¼Î»Í¼Æ¬µÄÕæÊµµØÖ·</title>
-<link href="holder.css" media="screen" rel="stylesheet" type="text/css" /> 
-</head>
-<body>
-	<h1>±³¾°Í¼Æ¬±íÏÖ:</h1>
-	
-<div class="holder" id="hol">
-</div>
-<br/>
-<br/>
-<br/>
-<p style="display:none" id="imp">
-	image ±êÇ©±íÏÖ£º<br/>
-<img id="im" src="" alt="semantic??" />
-</p>
-<button id="run">
-	µÃµ½Í¼Æ¬ÕæÊµµØÖ·
-</button>
+  <head>
+    <title>ï¿½Ãµï¿½Õ¼Î»Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Ö·</title>
+    <link href="holder.css" media="screen" rel="stylesheet" />
+  </head>
+  <body>
+    <h1>ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½:</h1>
 
-<script>
-var GET_COMPUTED_STYLE = GET_COMPUTED_STYLE = 'getComputedStyle',
-    OWNER_DOCUMENT = 'ownerDocument',
-    DEFAULT_VIEW = 'defaultView',
-    DOCUMENT_ELEMENT = 'documentElement',
-    CURRENT_STYLE = 'currentStyle';
-/*Just From Yui2 ,ÎÒÊÇ³­µÄ£¡*/
-    
-var myGetComputedStyle = function () {
-    if (window[GET_COMPUTED_STYLE]) { // W3C DOM method
-        return function (el, property) {
-            property = (property === 'float') ? property = 'cssFloat' : (property);
+    <div class="holder" id="hol"></div>
+    <br />
+    <br />
+    <br />
+    <p style="display: none" id="imp">
+      image ï¿½ï¿½Ç©ï¿½ï¿½ï¿½Ö£ï¿½<br />
+      <img id="im" src="" alt="semantic??" />
+    </p>
+    <button id="run">ï¿½Ãµï¿½Í¼Æ¬ï¿½ï¿½Êµï¿½ï¿½Ö·</button>
+
+    <script>
+      var GET_COMPUTED_STYLE = (GET_COMPUTED_STYLE = 'getComputedStyle'),
+        OWNER_DOCUMENT = 'ownerDocument',
+        DEFAULT_VIEW = 'defaultView',
+        DOCUMENT_ELEMENT = 'documentElement',
+        CURRENT_STYLE = 'currentStyle';
+      /*Just From Yui2 ,ï¿½ï¿½ï¿½Ç³ï¿½ï¿½Ä£ï¿½*/
+
+      var myGetComputedStyle = (function () {
+        if (window[GET_COMPUTED_STYLE]) {
+          // W3C DOM method
+          return function (el, property) {
+            property =
+              property === 'float' ? (property = 'cssFloat') : property;
             var value = el.style[property],
-                computed;
+              computed;
             if (!value) {
-                computed = el[OWNER_DOCUMENT][DEFAULT_VIEW][GET_COMPUTED_STYLE](el, null);
-                if (computed) { // test computed before touching for safari
-                    value = computed[property];
-                }
+              computed = el[OWNER_DOCUMENT][DEFAULT_VIEW][GET_COMPUTED_STYLE](
+                el,
+                null,
+              );
+              if (computed) {
+                // test computed before touching for safari
+                value = computed[property];
+              }
             }
             return value;
-        };
-    } else if (document.documentElement[CURRENT_STYLE]) {
-        return function (el, property) {
+          };
+        } else if (document.documentElement[CURRENT_STYLE]) {
+          return function (el, property) {
             var value;
             switch (property) {
-            case 'opacity':
+              case 'opacity':
                 // IE opacity uses filter
                 value = 100;
-                try { // will error if no DXImageTransform
-                    value = el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
-                } catch(e) {
-                    try { // make sure its in the document
-                        value = el.filters('alpha').opacity;
-                    } catch(err) {
-                        YAHOO.log('getStyle: IE filter failed', 'error', 'Dom');
-                    }
+                try {
+                  // will error if no DXImageTransform
+                  value =
+                    el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
+                } catch (e) {
+                  try {
+                    // make sure its in the document
+                    value = el.filters('alpha').opacity;
+                  } catch (err) {
+                    YAHOO.log('getStyle: IE filter failed', 'error', 'Dom');
+                  }
                 }
                 return value / 100;
-            case 'float':
+              case 'float':
                 // fix reserved word
                 property = 'styleFloat'; // fall through
-            default:
+              default:
                 value = el[CURRENT_STYLE] ? el[CURRENT_STYLE][property] : null;
-                return (el.style[property] || value);
+                return el.style[property] || value;
             }
+          };
         }
-    }
-}();
-document.getElementById("run").onclick = function () {
-    var url = myGetComputedStyle(document.getElementById("hol"), "backgroundImage");
-    url=(url.replace(/url\("?([^"]+)"?\)/i, "$1"));
-    alert(url);
-    var im=document.getElementById("im");
-    var imp=document.getElementById("imp");
-    im.src=url;
-    imp.style.display="";
-};
-
-
-
-</script>
-
-</body>
+      })();
+      document.getElementById('run').onclick = function () {
+        var url = myGetComputedStyle(
+          document.getElementById('hol'),
+          'backgroundImage',
+        );
+        url = url.replace(/url\("?([^"]+)"?\)/i, '$1');
+        alert(url);
+        var im = document.getElementById('im');
+        var imp = document.getElementById('imp');
+        im.src = url;
+        imp.style.display = '';
+      };
+    </script>
+  </body>
 </html>

@@ -1,109 +1,109 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>vml round test</title>
-<style>
-    .round {
+  <head>
+    <meta charset="utf-8" />
+    <title>vml round test</title>
+    <style>
+      .round {
         width: 200px;
         height: 200px;
         border-radius: 200px;
         -moz-border-radius: 200px;
         -webkit-border-radius: 200px;
         background-color: red;
-    }
+      }
 
-    .round-wrapper {
+      .round-wrapper {
         width: 200px;
         height: 200px;
         background-color: yellow;
-    }
+      }
 
-    .round-opacity {
+      .round-opacity {
         opacity: 0.5;
-    }
-</style>
-</head>
-<body>
-
-<br/><br/><br/><br/><br/><br/><br/>
-<div class="round-wrapper">
-    <div class="round round-opacity">
+      }
+    </style>
+  </head>
+  <body>
+    <br /><br /><br /><br /><br /><br /><br />
+    <div class="round-wrapper">
+      <div class="round round-opacity">
         半透明圆形半透明圆形半透明圆形半透明圆形
+      </div>
     </div>
-</div>
 
-<button id="action"> 白色圆形</button>
-<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-<script>
-    //KISSY.ready(function(S) {
-    var S = KISSY;
-    function attr(el, cs) {
+    <button id="action">白色圆形</button>
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+    <script>
+      //KISSY.ready(function(S) {
+      var S = KISSY;
+      function attr(el, cs) {
         for (var c in cs) {
-            if (cs.hasOwnProperty(c)) {
-                //ie8 need
-                el[c] = cs[c];
-            }
+          if (cs.hasOwnProperty(c)) {
+            //ie8 need
+            el[c] = cs[c];
+          }
         }
-    }
+      }
 
-    var UA = S.UA,
-            DOM = S.DOM,
-            ieEngine = document['documentMode'] || UA.ie;
-    if (ieEngine < 9) {
-        document.namespaces.add("v", "urn:schemas-microsoft-com:vml");
+      var UA = S.UA,
+        DOM = S.DOM,
+        ieEngine = document['documentMode'] || UA.ie;
+      if (ieEngine < 9) {
+        document.namespaces.add('v', 'urn:schemas-microsoft-com:vml');
         var css = document.createStyleSheet();
         //ie8 : no v\\:*
-        css.addRule("v\\:roundrect", "behavior: url(#default#VML);display:inline-block;");
-    }
-    function roundIt(el, opacity) {
+        css.addRule(
+          'v\\:roundrect',
+          'behavior: url(#default#VML);display:inline-block;',
+        );
+      }
+      function roundIt(el, opacity) {
         if (ieEngine < 9) {
-            opacity = opacity || 1;
-            if (el.css("position") == "static")
-                el.css("position", "relative");
-            var width = el[0].offsetWidth + "px",
-                    height = el[0].offsetHeight + "px",
-                    bgColor = el.css("backgroundColor"),
-                    rect = S.get("roundrect", el[0]);
+          opacity = opacity || 1;
+          if (el.css('position') == 'static') el.css('position', 'relative');
+          var width = el[0].offsetWidth + 'px',
+            height = el[0].offsetHeight + 'px',
+            bgColor = el.css('backgroundColor'),
+            rect = S.get('roundrect', el[0]);
 
-            if (rect) {
-                rect.fillcolor = bgColor
-            } else {
-                rect=document.createElement('v:roundrect');
-                attr(rect, {
-                    arcsize:width,
-                    //strokecolor:"#000",
-                    //strokeweight:"1px",
-                    stroked:false,
-                    fillcolor:bgColor
-                });
-                DOM.css(rect, {
-                    position:"absolute",
-                    top:"0px",
-                    left:"0px",
-                    width:width,
-                    height:height,
-                    antialias:true,
-                    zIndex:-1,
-                    opacity:opacity
-                });
-                el[0].appendChild(rect);
-            }
-            //rect.outerHTML =rect.outerHTML ;
-            el.css("backgroundColor", "transparent");
+          if (rect) {
+            rect.fillcolor = bgColor;
+          } else {
+            rect = document.createElement('v:roundrect');
+            attr(rect, {
+              arcsize: width,
+              //strokecolor:"#000",
+              //strokeweight:"1px",
+              stroked: false,
+              fillcolor: bgColor,
+            });
+            DOM.css(rect, {
+              position: 'absolute',
+              top: '0px',
+              left: '0px',
+              width: width,
+              height: height,
+              antialias: true,
+              zIndex: -1,
+              opacity: opacity,
+            });
+            el[0].appendChild(rect);
+          }
+          //rect.outerHTML =rect.outerHTML ;
+          el.css('backgroundColor', 'transparent');
         }
-    }
+      }
 
+      roundIt(S.one('.round-opacity'), 0.5);
 
-    roundIt(S.one(".round-opacity"), 0.5);
+      var action = S.one('#action');
+      action.on('click', function () {
+        S.all('.round').css('backgroundColor', 'white');
+        roundIt(S.one('.round-opacity'), 0.5);
+      });
 
-    var action = S.one("#action");
-    action.on("click", function() {
-        S.all(".round").css("backgroundColor", "white");
-        roundIt(S.one(".round-opacity"), 0.5);
-    });
-
-    //});
-</script>
-</body>
+      //});
+    </script>
+  </body>
 </html>

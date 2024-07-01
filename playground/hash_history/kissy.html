@@ -1,29 +1,24 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>hashchange history</title>
-</head>
-<body>
-<button onclick="window.location.hash='#t'+(+new Date())">
-    设置hash
-</button>
-<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-<script>
-    var S = KISSY,
-            Node = S.Node,
-            UA = S.UA;
+  <head>
+    <meta charset="utf-8" />
+    <title>hashchange history</title>
+  </head>
+  <body>
+    <button onclick="window.location.hash='#t'+(+new Date())">设置hash</button>
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+    <script>
+      var S = KISSY,
+        Node = S.Node,
+        UA = S.UA;
 
-    S.ready(function() {
-
-
+      S.ready(function () {
         function notifyHashChange() {
-            //debugger
-            alert("hash change : " + window.location.hash);
+          //debugger
+          alert('hash change : ' + window.location.hash);
         }
 
-
-        S.Event.on(window, "hashchange", notifyHashChange);
+        S.Event.on(window, 'hashchange', notifyHashChange);
         /*
          setTimeout(function() {
          KISSY.Event.remove(window, "hashchange", t);
@@ -33,7 +28,7 @@
          KISSY.Event.on(window, "hashchange", t);
          }, 10000);
          */
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

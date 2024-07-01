@@ -5,7 +5,7 @@ const db = new Dexie('SaveImage');
 
 // Declare tables, IDs and indexes
 db.version(1).stores({
-  images: '++id, img'
+  images: '++id, img',
 });
 
 export default db;

@@ -1,36 +1,29 @@
 ﻿<!doctype html>
 <html>
-    <head>
-        
-        <meta charset="UTF-8" />
-				<title>radio strange in ie6</title>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
-    </head>
-    <body>
-    	
-    	<p>ie6下复制的radio也会选中</p>
-    	<button id="test">选中radio后并复制</button>
-    	
-    	
-    	
-<div id="dialog" title="模板选择" >	
-	
-	 <input type="radio" name="template" value="2"/> <!--id="testRadio"-->
-	  
-	 
-</div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>radio strange in ie6</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <p>ie6下复制的radio也会选中</p>
+    <button id="test">选中radio后并复制</button>
 
-<div id="d2">
-</div>
-<script>
-$(function(){
-	 $("#dialog input:radio").attr("checked", false);
-   $("#test").click(function(){
-   			$("#test").remove();
-    		$("input").attr("checked",true);
-    		$("#d2").html($("#dialog").html());
-   });
-});
-</script>
-</body>
+    <div id="dialog" title="模板选择">
+      <input type="radio" name="template" value="2" />
+      <!--id="testRadio"-->
+    </div>
+
+    <div id="d2"></div>
+    <script>
+      $(function () {
+        $('#dialog input:radio').attr('checked', false);
+        $('#test').click(function () {
+          $('#test').remove();
+          $('input').attr('checked', true);
+          $('#d2').html($('#dialog').html());
+        });
+      });
+    </script>
+  </body>
 </html>

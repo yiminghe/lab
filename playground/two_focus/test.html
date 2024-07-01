@@ -1,56 +1,54 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>保留焦点</title>
-</head>
-<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <title>保留焦点</title>
+  </head>
+  <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+  <body>
+    <h1>iframe1</h1>
+    <div style="border: 1px solid green">
+      <iframe src="f1.html" width="100" height="100" id="f1"></iframe>
+    </div>
 
-<h1>iframe1</h1>
-<div style="border:1px solid green;">
-    <iframe src="f1.html" width="100" height="100" id="f1"></iframe>
-</div>
-
-<h1>iframe2</h1>
-<div style="border:1px solid red;">
-    <iframe src="f2.html" width="100" height="100" id="f2"></iframe>
-</div>
-<br/><br/><br/><br/>
-<script>
-
-    KISSY.use("node", function(S, Node) {
-
-        var f1 = Node.one("#f1"),
-                f2 = Node.one("#f2");
-        var n=!!f1[0].contentWindow + !!f2[0].contentWindow;
-        function notify(){
-            n++;
-            if(n==2) perform();
+    <h1>iframe2</h1>
+    <div style="border: 1px solid red">
+      <iframe src="f2.html" width="100" height="100" id="f2"></iframe>
+    </div>
+    <br /><br /><br /><br />
+    <script>
+      KISSY.use('node', function (S, Node) {
+        var f1 = Node.one('#f1'),
+          f2 = Node.one('#f2');
+        var n = !!f1[0].contentWindow + !!f2[0].contentWindow;
+        function notify() {
+          n++;
+          if (n == 2) perform();
         }
-        if(n==2) perform();
-        f1.on("load",notify);
+        if (n == 2) perform();
+        f1.on('load', notify);
 
-        function perform(){
+        function perform() {
+          alert('选择一段 iframe1 文本内容后，点击切换按钮');
 
-            alert("选择一段 iframe1 文本内容后，点击切换按钮");
+          new Node(f1[0].contentWindow.document.body).on(
+            'keydown',
+            function (ev) {
+              ev.halt();
+            },
+          );
 
-            new Node(f1[0].contentWindow.document.body).on("keydown",function(ev){
-                    ev.halt();
-            });
+          var b = new Node("<span style='border:1px solid green;'>").appendTo(
+            document.body,
+          );
+          b.html('切换');
+          b.unselectable();
 
-            var b=new Node("<span style='border:1px solid green;'>").appendTo(document.body);
-            b.html("切换");
-            b.unselectable();
-
-            b.on("click",function(){
-               //f2[0].contentWindow.focus();
-            });
-
+          b.on('click', function () {
+            //f2[0].contentWindow.focus();
+          });
         }
-
-    });
-
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

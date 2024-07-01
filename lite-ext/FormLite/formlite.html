@@ -1,81 +1,72 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<title>
-			表单示例
-		</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="text/javascript" src="../base/javascript/ext-core.js">
-</script>
-		<script type="text/javascript" src="../TipLite/javascript/tiplite.js">
-</script>
-		<script type="text/javascript" src="javascript/formlite.js">
-</script>
-		<link rel="stylesheet" type='text/css' href="css/formlite.css" />
-		<link rel="stylesheet" type="text/css" href="../TipLite/css/tiplite.css" />
-		<style type='text/css'>
-/*<![CDATA[*/
+  <head>
+    <title>表单示例</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../base/javascript/ext-core.js"></script>
+    <script src="../TipLite/javascript/tiplite.js"></script>
+    <script src="javascript/formlite.js"></script>
+    <link rel="stylesheet" href="css/formlite.css" />
+    <link rel="stylesheet" href="../TipLite/css/tiplite.css" />
+    <style>
+      /*<![CDATA[*/
 
-		#center {
-		width:650px;
-		float:left;
-		overflow:hidden;
-		background:#F7F7F7 url(images/xqyzc.gif) no-repeat scroll left top;
-		padding-top:40px;
-		}
+      #center {
+        width: 650px;
+        float: left;
+        overflow: hidden;
+        background: #f7f7f7 url(images/xqyzc.gif) no-repeat scroll left top;
+        padding-top: 40px;
+      }
 
-		/*firefox legend 不能设置宽度*/
-		legend span{
-		background:transparent url(images/bar_blue.gif) no-repeat scroll 0 0;
-		color:#FFFFFF;
-		margin:0;
-		padding:0;
-		height:28px;
-		padding:2px 8px 0 24px;
-		width:163px;
-		text-align:left;
-		display:block;
-		}
+      /*firefox legend 不能设置宽度*/
+      legend span {
+        background: transparent url(images/bar_blue.gif) no-repeat scroll 0 0;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+        height: 28px;
+        padding: 2px 8px 0 24px;
+        width: 163px;
+        text-align: left;
+        display: block;
+      }
 
+      fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px dashed #acacac;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+      }
 
-		fieldset {
-		border:none;
-		margin:0;
-		padding:0;
-		border-bottom:1px dashed #ACACAC;
-		margin-bottom:10px;
-		padding-bottom:10px;
-		}
+      /*firefox legend 不能移动位置*/
+      fieldset div.fields {
+        padding-left: 20px;
+        position: relative;
+      }
 
-		/*firefox legend 不能移动位置*/
-		fieldset div.fields {    
-		padding-left:20px;
-		position:relative;
-		}
+      #main_body {
+        width: 950px;
+      }
+      #side {
+        width: 245px;
+        float: right;
+      }
 
-
-		#main_body {
-		width:950px;
-		}
-		#side {
-		width:245px;
-		float:right;
-		}
-
-
-		/*]]>*/
-		</style>
-	</head>
-	<body>
-		<div id='wrap'>
-			<!--
+      /*]]>*/
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <!--
 for jsp include
 <%@include file="w3c/header.jsp"%>
 -->
-			<div id='main_body' class='clearfix'>
-				<div id='center'>
-					<!--
+      <div id="main_body" class="clearfix">
+        <div id="center">
+          <!--
 		
 		for jsp error
 		 <p>&nbsp;
@@ -83,203 +74,335 @@ for jsp include
 	   </p>
 	   
 	   -->
-					<form action="" method="post" enctype='multipart/form-data' id='compnay_register_form'>
-						<input type='hidden' name="employerRegion" id="employerRegion" />
-						<fieldset>
-							<legend><span>公司基本信息</span></legend>
-							<div class="fields">
-								<p>
-									<label class='input_label' for="employerName">公司名称 :<em class='required'>(必填)</em></label><input type="text" class='input_margin' name="employerName" id="employerName" /> <!--
+          <form
+            action=""
+            method="post"
+            enctype="multipart/form-data"
+            id="compnay_register_form">
+            <input type="hidden" name="employerRegion" id="employerRegion" />
+            <fieldset>
+              <legend><span>公司基本信息</span></legend>
+              <div class="fields">
+                <p>
+                  <label class="input_label" for="employerName"
+                    >公司名称 :<em class="required">(必填)</em></label
+                  ><input
+                    type="text"
+                    class="input_margin"
+                    name="employerName"
+                    id="employerName" />
+                  <!--
 			
 			如果用户不支持javascript ,默认显示的feedback,支持的话，在javascript中设置，每个规则都有对应的出错串
 			
 			-->
-									 <span class='feedback'>公司名称无效</span>
-								</p>
-								<p>
-									<label class='input_label' for="employerRegion2">所属地区 :<em class='required'>(必填)</em></label> <input type="text" class='input_margin' name="employerRegion2" id="employerRegion2" /><span class='feedback'>所属地区无效</span>
-								</p>
-								<p>
-									<label class='input_label' for="employerType">公司性质 :</label> <select name="employerType" id="employerType">
-										<option value="">
-											--请选择--
-										</option>
-									</select>
-								</p>
-								<p>
-									<label class='input_label' for="employerScale">公司规模 :</label> <select name="employerScale" id="employerScale">
-										<option value="">
-											--请选择--
-										</option>
-									</select>
-								</p>
-								<p>
-									<label class='input_label' for="employerDesc">公司简介 :</label> 
-									<textarea class='input_margin' name="employerDesc" id="employerDesc" style='height:100px' cols="55" rows="5">
-</textarea>
-								</p>
-								<p>
-									<!--
+                  <span class="feedback">公司名称无效</span>
+                </p>
+                <p>
+                  <label class="input_label" for="employerRegion2"
+                    >所属地区 :<em class="required">(必填)</em></label
+                  >
+                  <input
+                    type="text"
+                    class="input_margin"
+                    name="employerRegion2"
+                    id="employerRegion2" /><span class="feedback"
+                    >所属地区无效</span
+                  >
+                </p>
+                <p>
+                  <label class="input_label" for="employerType"
+                    >公司性质 :</label
+                  >
+                  <select name="employerType" id="employerType">
+                    <option value="">--请选择--</option>
+                  </select>
+                </p>
+                <p>
+                  <label class="input_label" for="employerScale"
+                    >公司规模 :</label
+                  >
+                  <select name="employerScale" id="employerScale">
+                    <option value="">--请选择--</option>
+                  </select>
+                </p>
+                <p>
+                  <label class="input_label" for="employerDesc"
+                    >公司简介 :</label
+                  >
+                  <textarea
+                    class="input_margin"
+                    name="employerDesc"
+                    id="employerDesc"
+                    style="height: 100px"
+                    cols="55"
+                    rows="5"></textarea>
+                </p>
+                <p>
+                  <!--
 				
 				若要显示悬浮提醒，class 加上 tip_input ,value 设置 需要提醒的词语
 				
 				
 				-->
-									 <label class='input_label' for="webSite">公司网址 :</label> <input class='input_margin tip_input' type="text" name="webSite" id="webSite" title='一点悬浮提醒,没有填写时出现' />
-								</p>
-								<p>
-									<label class='input_label' for="employerAddress">公司地址 :</label> <input class='input_margin' type="text" name="employerAddress" id="employerAddress" />
-								</p>
-								<p>
-									<label class='input_label' for="zipCode">邮政编码 :</label> <input class='input_margin' type="text" name="zipCode" id="zipCode" />
-								</p>
-								<p>
-									<label class='input_label' for="fax">传真号码 :</label> <input class='input_margin' type="text" name="fax" id="fax" />
-								</p>
-								<p>
-									<label class='input_label' for="contactName">联系人姓名 :<em class='required'>(必填)</em></label> <input class='input_margin' type="text" style='width:50px;' name="contactName" id="contactName" /> <label class='gender' for="contactGender">联系人性别 :</label> <select name="contactGender" id="contactGender">
-										<option value="">
-											--请选择--
-										</option>
-									</select><span class='feedback'>姓名无效</span>
-								</p>
-								<p>
-									<label class='input_label' for="contactPosition">联系人职位 :</label> <input type="text" class='input_margin' name="contactPosition" id="contactPosition" />
-								</p>
-								<p>
-									<label class='input_label' for="contactMobile">联系人手机号码 :</label> <input type="text" class='input_margin' name="contactMobile" id="contactMobile" />
-								</p>
-								<p>
-									<label class='input_label' for="contactPhone">联系人电话号码 :<em class='required'>(必填)</em></label> <input type="text" class='input_margin' name="contactPhone" id="contactPhone" /><span class='feedback'>电话号码无效</span>
-								</p>
-								<p>
-									<label class='input_label' for="contactEmail">联系人电子邮箱 :<em class='required'>(必填)</em></label> <input type="text" class='input_margin' name="contactEmail" id="contactEmail" /><span class='feedback'>电子邮箱无效</span>
-								</p>
-							</div>
-						</fieldset>
-						<fieldset>
-							<legend><span>公司登陆信息</span></legend>
-							<div class="fields">
-								<p>
-									<label class='input_label' for="employerId">用户名 :<em class='required'>(必填)</em></label> <input type="text" class='input_margin' name="employerId" id="employerId" /><span class='feedback'>用户名无效</span>
-								</p>
-								<p>
-									<label class='input_label' for="loginPassword">密码 :<em class='required'>(必填)</em></label> <input class='input_margin' name="loginPassword" id="loginPassword" type='password' /><span class='feedback'>密码无效</span>
-								</p>
-								<p>
-									<label class='input_label' for="loginPassword2">确认密码 :<em class='required'>(必填)</em></label> <input class='input_margin' name="loginPassword2" id="loginPassword2" type='password' /><span class='feedback'>确认密码不相等</span>
-								</p>
-							</div>
-						</fieldset>
-						<fieldset>
-							<legend><span>公司资质信息</span></legend>
-							<div class="fields">
-								<p>
-									<label class='input_label' for="businessLicenceFile">营业执照扫图文件 :</label> <input class='input_margin' type='file' name="businessLicenceFile" id="businessLicenceFile" /><br />
-									(也可在注册完成之后发传真到051085496305)
-								</p>
-								<p>
-									<label class='input_label' for="businessLicenceNo">营业执照编号 :</label><input class='input_margin' type="text" name="businessLicenceNo" id="businessLicenceNo" />
-								</p>
-							</div>
-						</fieldset>
-						<div class='submit-area'>
-							<a href='xx.html' target='_blank'>注册前请仔细阅读企业会员协议</a> <input type="image" src="images/sign_up2.gif" />
-						</div>
-					</form>
-				</div>
-			</div>
-		</div><script type="text/javascript">
-//<![CDATA[
-		Ext.onReady(function() {
+                  <label class="input_label" for="webSite">公司网址 :</label>
+                  <input
+                    class="input_margin tip_input"
+                    type="text"
+                    name="webSite"
+                    id="webSite"
+                    title="一点悬浮提醒,没有填写时出现" />
+                </p>
+                <p>
+                  <label class="input_label" for="employerAddress"
+                    >公司地址 :</label
+                  >
+                  <input
+                    class="input_margin"
+                    type="text"
+                    name="employerAddress"
+                    id="employerAddress" />
+                </p>
+                <p>
+                  <label class="input_label" for="zipCode">邮政编码 :</label>
+                  <input
+                    class="input_margin"
+                    type="text"
+                    name="zipCode"
+                    id="zipCode" />
+                </p>
+                <p>
+                  <label class="input_label" for="fax">传真号码 :</label>
+                  <input class="input_margin" type="text" name="fax" id="fax" />
+                </p>
+                <p>
+                  <label class="input_label" for="contactName"
+                    >联系人姓名 :<em class="required">(必填)</em></label
+                  >
+                  <input
+                    class="input_margin"
+                    type="text"
+                    style="width: 50px"
+                    name="contactName"
+                    id="contactName" />
+                  <label class="gender" for="contactGender">联系人性别 :</label>
+                  <select name="contactGender" id="contactGender">
+                    <option value="">--请选择--</option></select
+                  ><span class="feedback">姓名无效</span>
+                </p>
+                <p>
+                  <label class="input_label" for="contactPosition"
+                    >联系人职位 :</label
+                  >
+                  <input
+                    type="text"
+                    class="input_margin"
+                    name="contactPosition"
+                    id="contactPosition" />
+                </p>
+                <p>
+                  <label class="input_label" for="contactMobile"
+                    >联系人手机号码 :</label
+                  >
+                  <input
+                    type="text"
+                    class="input_margin"
+                    name="contactMobile"
+                    id="contactMobile" />
+                </p>
+                <p>
+                  <label class="input_label" for="contactPhone"
+                    >联系人电话号码 :<em class="required">(必填)</em></label
+                  >
+                  <input
+                    type="text"
+                    class="input_margin"
+                    name="contactPhone"
+                    id="contactPhone" /><span class="feedback"
+                    >电话号码无效</span
+                  >
+                </p>
+                <p>
+                  <label class="input_label" for="contactEmail"
+                    >联系人电子邮箱 :<em class="required">(必填)</em></label
+                  >
+                  <input
+                    type="text"
+                    class="input_margin"
+                    name="contactEmail"
+                    id="contactEmail" /><span class="feedback"
+                    >电子邮箱无效</span
+                  >
+                </p>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend><span>公司登陆信息</span></legend>
+              <div class="fields">
+                <p>
+                  <label class="input_label" for="employerId"
+                    >用户名 :<em class="required">(必填)</em></label
+                  >
+                  <input
+                    type="text"
+                    class="input_margin"
+                    name="employerId"
+                    id="employerId" /><span class="feedback">用户名无效</span>
+                </p>
+                <p>
+                  <label class="input_label" for="loginPassword"
+                    >密码 :<em class="required">(必填)</em></label
+                  >
+                  <input
+                    class="input_margin"
+                    name="loginPassword"
+                    id="loginPassword"
+                    type="password" /><span class="feedback">密码无效</span>
+                </p>
+                <p>
+                  <label class="input_label" for="loginPassword2"
+                    >确认密码 :<em class="required">(必填)</em></label
+                  >
+                  <input
+                    class="input_margin"
+                    name="loginPassword2"
+                    id="loginPassword2"
+                    type="password" /><span class="feedback"
+                    >确认密码不相等</span
+                  >
+                </p>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend><span>公司资质信息</span></legend>
+              <div class="fields">
+                <p>
+                  <label class="input_label" for="businessLicenceFile"
+                    >营业执照扫图文件 :</label
+                  >
+                  <input
+                    class="input_margin"
+                    type="file"
+                    name="businessLicenceFile"
+                    id="businessLicenceFile" /><br />
+                  (也可在注册完成之后发传真到051085496305)
+                </p>
+                <p>
+                  <label class="input_label" for="businessLicenceNo"
+                    >营业执照编号 :</label
+                  ><input
+                    class="input_margin"
+                    type="text"
+                    name="businessLicenceNo"
+                    id="businessLicenceNo" />
+                </p>
+              </div>
+            </fieldset>
+            <div class="submit-area">
+              <a href="xx.html" target="_blank">注册前请仔细阅读企业会员协议</a>
+              <input type="image" src="images/sign_up2.gif" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      //<![CDATA[
+      Ext.onReady(function () {
+        //所有需要验证的表单域
+        //fieldId:表单域id
+        //regs:每个表单域必须符合的规则集合
+        //validator 验证函数，返回出错值
+        //tip : 空文本框时一点提示悬挂
 
-		//所有需要验证的表单域
-		//fieldId:表单域id
-		//regs:每个表单域必须符合的规则集合
-		//validator 验证函数，返回出错值
-		//tip : 空文本框时一点提示悬挂
+        var checkFields = [
+          { fieldId: 'employerDesc', tip: '一点悬浮提醒,没有填写时出现' },
+          { fieldId: 'webSite', tip: '一点悬浮提醒,没有填写时出现' },
 
-		var checkFields=
-		[
-		{fieldId:'employerDesc',tip:'一点悬浮提醒,没有填写时出现'},
-		{fieldId:'webSite',tip:'一点悬浮提醒,没有填写时出现'},
+          {
+            fieldId: 'employerName',
+            regs: [
+              { reg: /.+/, info: '必填哦' },
+              { reg: /[^\d]+/, info: '不能有数字哦' },
+            ],
+          },
 
-		{fieldId:'employerName',regs:[{reg:/.+/,info:'必填哦'},{reg:/[^\d]+/,info:'不能有数字哦'}]},
+          { fieldId: 'employerRegion2', regs: [{ reg: /.+/, info: '必填哦' }] },
 
-		{fieldId:'employerRegion2',regs:[{reg:/.+/,info:'必填哦'}]},
+          { fieldId: 'contactName', regs: [{ reg: /.+/, info: '必填哦' }] },
 
-		{fieldId:'contactName',regs:[{reg:/.+/,info:'必填哦'}]},
+          { fieldId: 'contactPhone', regs: [{ reg: /.+/, info: '必填哦' }] },
 
-		{fieldId:'contactPhone',regs:[{reg:/.+/,info:'必填哦'}]},
+          { fieldId: 'contactEmail', regs: [{ reg: /.+/, info: '必填哦' }] },
 
-		{fieldId:'contactEmail',regs:[{reg:/.+/,info:'必填哦'}]},
+          {
+            fieldId: 'employerId',
+            //模拟 ajax 发送请求验证是否重名
+            validator: function () {
+              if (this.checkTimer) {
+                return;
+              }
+              function check() {
+                //已经出错，不管
+                if (!formValidator.isFieldValid(this)) return;
+                var img = Ext.DomHelper.insertAfter(
+                  this,
+                  {
+                    tag: 'img',
+                    style: 'padding-left:10px',
+                    src: '../GridLite/images/loading.gif',
+                    title: '正在检查是否可用...',
+                  },
+                  true,
+                );
 
-		{fieldId:'employerId',
-		//模拟 ajax 发送请求验证是否重名
-		validator:function(){
-			if(this.checkTimer) {
-				return;
-			}
-			function check(){
-				//已经出错，不管
-				if(!formValidator.isFieldValid(this)) return;
-				var img=Ext.DomHelper.insertAfter(this,{
-					tag:"img",
-					style:"padding-left:10px",
-					src:"../GridLite/images/loading.gif",
-					title:"正在检查是否可用..."
-				},true);
-				
-				//模拟ajax,随机正负例
-				(function(){
-					img.remove();
-					this.checkTimer=null;
-					if(Math.random()>0.5){
-						formValidator.showError(this,"重名!");
-					}else{
-						formValidator.hideError(this);
-					}
-					
-				}).defer(3000,this);
-			}
-			this.checkTimer=check.defer(500,this);
-			return '';
-		},
-		regs:[{reg:/.+/,info:'必填哦'}]},
+                //模拟ajax,随机正负例
+                (function () {
+                  img.remove();
+                  this.checkTimer = null;
+                  if (Math.random() > 0.5) {
+                    formValidator.showError(this, '重名!');
+                  } else {
+                    formValidator.hideError(this);
+                  }
+                }).defer(3000, this);
+              }
+              this.checkTimer = check.defer(500, this);
+              return '';
+            },
+            regs: [{ reg: /.+/, info: '必填哦' }],
+          },
 
-		{fieldId:'loginPassword',regs:[{reg:/.+/,info:'必填哦'}]},
+          { fieldId: 'loginPassword', regs: [{ reg: /.+/, info: '必填哦' }] },
 
-		{fieldId:'loginPassword2',validator:function(){
-			return this.dom.value!= Ext.get('loginPassword').getValue() ?'密码不一致':'';
-		}
-		}
-		];
+          {
+            fieldId: 'loginPassword2',
+            validator: function () {
+              return this.dom.value != Ext.get('loginPassword').getValue()
+                ? '密码不一致'
+                : '';
+            },
+          },
+        ];
 
-		var formValidator = new Ext.ux.FormLite(
-		{
-			//所需验证的表单id
-			formId:'compnay_register_form',
-			//现在为 tip 报错，默认为side ，旁边错误信息显示
-			//msgType:'tip',
-			//所有需要检测的表单字段配置
-			checkFields:checkFields
-		}
-		);
+        var formValidator = new Ext.ux.FormLite({
+          //所需验证的表单id
+          formId: 'compnay_register_form',
+          //现在为 tip 报错，默认为side ，旁边错误信息显示
+          //msgType:'tip',
+          //所有需要检测的表单字段配置
+          checkFields: checkFields,
+        });
 
+        //当验证失败时，触发invalid,参数 失败的表单字段
+        formValidator.on('invalid', function (errorFields) {
+          for (var i = 0; i < errorFields.length; i++) {
+            //alert('出错表单 id :'+errorFields[i].id);
+          }
+        });
+      });
 
-		//当验证失败时，触发invalid,参数 失败的表单字段
-		formValidator.on('invalid',function(errorFields) {
-			
-			for(var i=0;i<errorFields.length;i++) {
-				//alert('出错表单 id :'+errorFields[i].id);
-			}
-
-		});
-
-		});
-
-
-		//]]>
-		</script>
-	</body>
+      //]]>
+    </script>
+  </body>
 </html>

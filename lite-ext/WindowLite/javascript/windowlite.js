@@ -39,1132 +39,1268 @@
   v3.2.1(20100109) 延迟shim,shadow到显示时创建     
 */
 Ext.namespace('Ext.ux');
-Ext.ux.WindowLite = function(config) {
-    config = config || {};
-    if (!config.id) config.id = 'ID' + Ext.id() + '_';
-    config.closeAction = config.closeAction || 'hide';
-    Ext.apply(this, {
-        initialConfig: config
-    });
-    Ext.apply(this, config);
-    this.buttonAlign = this.buttonAlign || 'right';
-    this.addEvents('hide',
-    'beforehide', 'beforeclose', 'show','beforeshow',
-    'close', "resize", "ghost", "unghost"
-    , "maximize", "restore",
+Ext.ux.WindowLite = function (config) {
+  config = config || {};
+  if (!config.id) config.id = 'ID' + Ext.id() + '_';
+  config.closeAction = config.closeAction || 'hide';
+  Ext.apply(this, {
+    initialConfig: config,
+  });
+  Ext.apply(this, config);
+  this.buttonAlign = this.buttonAlign || 'right';
+  this.addEvents(
+    'hide',
+    'beforehide',
+    'beforeclose',
+    'show',
+    'beforeshow',
+    'close',
+    'resize',
+    'ghost',
+    'unghost',
+    'maximize',
+    'restore',
     //便于手动更新 win.body Ext.Element 节点，之后触发 changecontent事件即可.
-    "changecontent");
-    Ext.ux.WindowLite.superclass.constructor.call(this);
-    this.el = Ext.DomHelper.append(Ext.get(config.containerId) || document.body, {
-        tag: 'div',
-        cls: 'windowContainer',
-        style: {
-            'visibility': 'hidden',
-            'left': '-9999px',
-            'top': '-9999px'
-        },
-        cn: [
+    'changecontent',
+  );
+  Ext.ux.WindowLite.superclass.constructor.call(this);
+  this.el = Ext.DomHelper.append(
+    Ext.get(config.containerId) || document.body,
+    {
+      tag: 'div',
+      cls: 'windowContainer',
+      style: {
+        visibility: 'hidden',
+        left: '-9999px',
+        top: '-9999px',
+      },
+      cn: [
         // start header
         {
-            tag: 'div',
-            cls: 'window-header-l',
-            cn: [{
-                tag: 'div',
-                cls: 'window-header-r',
-                cn: [{
-                    tag: 'div',
-                    cls: 'window-header-c',
-                    cn: [{
-                        tag: 'div',
-                        cls: 'window-header-text',
-                        style: 'zoom:1',
-                        cn: [{
-                            tag: 'a',
-                            cls: 'x-tool x-tool-close',
-                            style: this.closable ? 'display:block;': 'display:none;',
-                            href: '#close',
-                            html: 'close',
-                            title: 'close window'
+          tag: 'div',
+          cls: 'window-header-l',
+          cn: [
+            {
+              tag: 'div',
+              cls: 'window-header-r',
+              cn: [
+                {
+                  tag: 'div',
+                  cls: 'window-header-c',
+                  cn: [
+                    {
+                      tag: 'div',
+                      cls: 'window-header-text',
+                      style: 'zoom:1',
+                      cn: [
+                        {
+                          tag: 'a',
+                          cls: 'x-tool x-tool-close',
+                          style: this.closable
+                            ? 'display:block;'
+                            : 'display:none;',
+                          href: '#close',
+                          html: 'close',
+                          title: 'close window',
                         },
                         {
-                            tag: 'a',
-                            cls: 'x-tool x-tool-maximize',
-                            style: this.maximizable ? 'display:block;': 'display:none;',
-                            href: '#maximize',
-                            html: 'maximize',
-                            title: 'maximize window'
+                          tag: 'a',
+                          cls: 'x-tool x-tool-maximize',
+                          style: this.maximizable
+                            ? 'display:block;'
+                            : 'display:none;',
+                          href: '#maximize',
+                          html: 'maximize',
+                          title: 'maximize window',
                         },
                         {
-                            tag: 'a',
-                            cls: 'x-tool x-tool-restore',
-                            style: 'display:none;',
-                            href: '#restore',
-                            html: 'restore',
-                            title: 'restore window'
+                          tag: 'a',
+                          cls: 'x-tool x-tool-restore',
+                          style: 'display:none;',
+                          href: '#restore',
+                          html: 'restore',
+                          title: 'restore window',
                         },
                         {
-                            tag: 'a',
-                            cls: 'x-tool x-tool-minimize',
-                            style: 'display:none;',
-                            href: '#minimize',
-                            html: 'minimize',
-                            title: 'minimize window'
+                          tag: 'a',
+                          cls: 'x-tool x-tool-minimize',
+                          style: 'display:none;',
+                          href: '#minimize',
+                          html: 'minimize',
+                          title: 'minimize window',
                         },
                         {
-                            tag: 'span',
-                            html: this.title || '&nbsp;'
-                        }]
-                    }]
-                }]
-            }]
+                          tag: 'span',
+                          html: this.title || '&nbsp;',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
         //end header
         {
-            tag: 'div',
-            cls: 'window-body',
-            cn: [
+          tag: 'div',
+          cls: 'window-body',
+          cn: [
             //start body-content
             {
-                tag: 'div',
-                cls: 'window-body-ml',
-                cn: [{
-                    tag: 'div',
-                    cls: 'window-body-mr',
-                    cn: [{
-                        tag: 'div',
-                        cls: 'window-body-mc'
-                    }]
-                }]
+              tag: 'div',
+              cls: 'window-body-ml',
+              cn: [
+                {
+                  tag: 'div',
+                  cls: 'window-body-mr',
+                  cn: [
+                    {
+                      tag: 'div',
+                      cls: 'window-body-mc',
+                    },
+                  ],
+                },
+              ],
             },
             //end body-content
             //start bottom
             {
-                tag: 'div',
-                cls: 'window-body-bl',
-                cn: [{
-                    tag: 'div',
-                    cls: 'window-body-br',
-                    cn: [{
-                        tag: 'div',
-                        cls: 'window-body-bc nobutton',
-                        style: 'text-align:' + this.buttonAlign
-                    }]
-                }]
-            }
-            //end bottom
-            ]
-        }
-        //end body
-        ]
-        //end container cn
-    },
-    true);
-    //标题头
-    this.header = this.el.child('div.window-header-l');
-    //主体：内容+按钮栏
-    this.main = this.el.child('div.window-body');
-    //标题头内容
-    this.title = this.header.child('div.window-header-text span');
-    //右上角按钮组
-    this._toolsSection = this.header.child('div.window-header-text');
-    //右上角关闭
-    this._closebarA = this.header.child('a.x-tool-close');
-    //右上角最大化
-    this._maximizeA = this.header.child('a.x-tool-maximize');
-    //右上角恢复大小
-    this._restoreA = this.header.child('a.x-tool-restore');
-    //右上角最小化
-    this._minimizeA = this.header.child('a.x-tool-minimize');
-    //内容
-    this.body = this.el.child('div.window-body-mc');
-    //按钮栏
-    this.bottom = this.el.child('div.window-body-bc');
-    this._tools = [];
-    if (this.tools) {
-        Ext.each(this.tools,
-        function(el) {
-            var t = Ext.DomHelper.insertAfter(this._restoreA, {
-                tag: 'a',
-                cls: el.cls
+              tag: 'div',
+              cls: 'window-body-bl',
+              cn: [
+                {
+                  tag: 'div',
+                  cls: 'window-body-br',
+                  cn: [
+                    {
+                      tag: 'div',
+                      cls: 'window-body-bc nobutton',
+                      style: 'text-align:' + this.buttonAlign,
+                    },
+                  ],
+                },
+              ],
             },
-            true);
-            t.on("click", el['click'], this);
-            this._tools.push(t);
+            //end bottom
+          ],
         },
-        this);
-    }
-    if (this.items) {
-        this.body.update('');
-        for (var i = 0; i < this.items.length; i++) {
-            this.body.appendChild(this.items[i]);
-        }
-    }
-    //防止this.html 过大，直接搞了
-    else if (this.html) {
-        this.body.update(this.html);
-    }
-    if (this.closable) {
-        this._closebarA.on('click',
-        function(eventExt) {
-            this[this.closeAction]();
-            eventExt.stopEvent();
-        },
-        this);
-        //改做双击关闭
-    }
-    if (this.maximizable) {
-        this._maximizeA.on('click',
-        function(eventExt) {
-            this.maximize();
-            eventExt.stopEvent();
-        },
-        this);
-        this._restoreA.on('click',
-        function(eventExt) {
-            this.restore();
-            eventExt.stopEvent();
-        },
-        this);
-        this.header.on('dblclick',
-        function(evt) {
-            if (this._maximizeA.isDisplayed()) {
-                this.maximize();
-            } else {
-                this.restore();
-            }
-            //this[this.closeAction]();
-            evt.stopEvent();
-        },
-        this);
-    }
-    if (this.minimizable && this.taskbar) {
-        this._minimizeA.setDisplayed(true);
-        this._minimizeA.on('click',
-        function(eventExt) {
-            this.hide();
-            eventExt.stopEvent();
-        },
-        this);
-    }
-    var fobiddenFront = ['a', 'input', 'button'];
-    //单击带领窗口到最前端
-    this.el.on('click',
-    function(evt, target) {
-        var nodeName = target.nodeName.toLowerCase();
-        for (var i = fobiddenFront.length - 1; i--; i >= 0) {
-            if (fobiddenFront[i] == nodeName) return;
-        }
-        this.toFront();
-        //evt.stopEvent();
+        //end body
+      ],
+      //end container cn
     },
-    this);
-    /**
+    true,
+  );
+  //标题头
+  this.header = this.el.child('div.window-header-l');
+  //主体：内容+按钮栏
+  this.main = this.el.child('div.window-body');
+  //标题头内容
+  this.title = this.header.child('div.window-header-text span');
+  //右上角按钮组
+  this._toolsSection = this.header.child('div.window-header-text');
+  //右上角关闭
+  this._closebarA = this.header.child('a.x-tool-close');
+  //右上角最大化
+  this._maximizeA = this.header.child('a.x-tool-maximize');
+  //右上角恢复大小
+  this._restoreA = this.header.child('a.x-tool-restore');
+  //右上角最小化
+  this._minimizeA = this.header.child('a.x-tool-minimize');
+  //内容
+  this.body = this.el.child('div.window-body-mc');
+  //按钮栏
+  this.bottom = this.el.child('div.window-body-bc');
+  this._tools = [];
+  if (this.tools) {
+    Ext.each(
+      this.tools,
+      function (el) {
+        var t = Ext.DomHelper.insertAfter(
+          this._restoreA,
+          {
+            tag: 'a',
+            cls: el.cls,
+          },
+          true,
+        );
+        t.on('click', el['click'], this);
+        this._tools.push(t);
+      },
+      this,
+    );
+  }
+  if (this.items) {
+    this.body.update('');
+    for (var i = 0; i < this.items.length; i++) {
+      this.body.appendChild(this.items[i]);
+    }
+  }
+  //防止this.html 过大，直接搞了
+  else if (this.html) {
+    this.body.update(this.html);
+  }
+  if (this.closable) {
+    this._closebarA.on(
+      'click',
+      function (eventExt) {
+        this[this.closeAction]();
+        eventExt.stopEvent();
+      },
+      this,
+    );
+    //改做双击关闭
+  }
+  if (this.maximizable) {
+    this._maximizeA.on(
+      'click',
+      function (eventExt) {
+        this.maximize();
+        eventExt.stopEvent();
+      },
+      this,
+    );
+    this._restoreA.on(
+      'click',
+      function (eventExt) {
+        this.restore();
+        eventExt.stopEvent();
+      },
+      this,
+    );
+    this.header.on(
+      'dblclick',
+      function (evt) {
+        if (this._maximizeA.isDisplayed()) {
+          this.maximize();
+        } else {
+          this.restore();
+        }
+        //this[this.closeAction]();
+        evt.stopEvent();
+      },
+      this,
+    );
+  }
+  if (this.minimizable && this.taskbar) {
+    this._minimizeA.setDisplayed(true);
+    this._minimizeA.on(
+      'click',
+      function (eventExt) {
+        this.hide();
+        eventExt.stopEvent();
+      },
+      this,
+    );
+  }
+  var fobiddenFront = ['a', 'input', 'button'];
+  //单击带领窗口到最前端
+  this.el.on(
+    'click',
+    function (evt, target) {
+      var nodeName = target.nodeName.toLowerCase();
+      for (var i = fobiddenFront.length - 1; i--; i >= 0) {
+        if (fobiddenFront[i] == nodeName) return;
+      }
+      this.toFront();
+      //evt.stopEvent();
+    },
+    this,
+  );
+  /**
         设置可以拖放，拖放点在标题栏
     **/
-    if (Ext.dd && Ext.dd.DD && this.drag) {
-        this.ddHandler = new Ext.ux.WindowLite.DD(this);
-        this.on("maximize",
-        function() {
-            this.ddHandler.lock();
-            this.header.setStyle({
-                cursor: 'default'
-            });
-        },
-        this);
-        this.on("restore",
-        function() {
-            this.ddHandler.unlock();
-            this.header.setStyle({
-                cursor: 'move'
-            });
-        },
-        this);
-    }
-    /**
+  if (Ext.dd && Ext.dd.DD && this.drag) {
+    this.ddHandler = new Ext.ux.WindowLite.DD(this);
+    this.on(
+      'maximize',
+      function () {
+        this.ddHandler.lock();
+        this.header.setStyle({
+          cursor: 'default',
+        });
+      },
+      this,
+    );
+    this.on(
+      'restore',
+      function () {
+        this.ddHandler.unlock();
+        this.header.setStyle({
+          cursor: 'move',
+        });
+      },
+      this,
+    );
+  }
+  /**
       	设置阴影
       **/
-    if (Ext.Shadow && this.shadow !== false) {
-    	/*延迟到初次窗体显示时创建*/
-    	function createShadow(){
-    		this.un("beforeshow",createShadow,this);
-        this.shadowOffset = config.shadowOffset || 4;
-        this.shadow = new Ext.Shadow({
-            offset: this.shadowOffset,
-            mode: config.shadow || 'sides'
-        });
-        function showShadow() {
-            if (!this._restoreA.isDisplayed() && this.el.isVisible()) {
-                this.shadow.show(this.el);
-            }
+  if (Ext.Shadow && this.shadow !== false) {
+    /*延迟到初次窗体显示时创建*/
+    function createShadow() {
+      this.un('beforeshow', createShadow, this);
+      this.shadowOffset = config.shadowOffset || 4;
+      this.shadow = new Ext.Shadow({
+        offset: this.shadowOffset,
+        mode: config.shadow || 'sides',
+      });
+      function showShadow() {
+        if (!this._restoreA.isDisplayed() && this.el.isVisible()) {
+          this.shadow.show(this.el);
         }
-        function hideShadow() {
-            this.shadow.hide();
-        }
-        this.on("changecontent", showShadow, this);
-        this.on("show", showShadow, this);
-        this.on("unghost", showShadow, this);
-        this.on("resize", showShadow, this);
-        this.on("maximize", hideShadow, this);
-        this.on("restore", showShadow, this);
-        this.on("ghost", hideShadow, this);
-        this.on("hide", hideShadow, this);
-        this.on("close", hideShadow, this);
       }
-      this.on("beforeshow",createShadow,this);
+      function hideShadow() {
+        this.shadow.hide();
+      }
+      this.on('changecontent', showShadow, this);
+      this.on('show', showShadow, this);
+      this.on('unghost', showShadow, this);
+      this.on('resize', showShadow, this);
+      this.on('maximize', hideShadow, this);
+      this.on('restore', showShadow, this);
+      this.on('ghost', hideShadow, this);
+      this.on('hide', hideShadow, this);
+      this.on('close', hideShadow, this);
     }
-    /*
+    this.on('beforeshow', createShadow, this);
+  }
+  /*
     		for ie6 iframe select relationship
 			*/
-    if (Ext.isIE6) {
-    	function createShim(){
-    		this.un("beforeshow",createShim,this);
-        this.shim = this.el.createShim();
+  if (Ext.isIE6) {
+    function createShim() {
+      this.un('beforeshow', createShim, this);
+      this.shim = this.el.createShim();
+      this.shim.hide();
+      function hideIframe() {
         this.shim.hide();
-        function hideIframe() {
-            this.shim.hide();
-        }
-        
-        /*分离，分离，AOP*/
-        this.on("changecontent", this.showIframe, this);
-        this.on("beforeshow", this.showIframe, this);
-        this.on("unghost", this.showIframe, this);
-        this.on("resize", this.showIframe, this);
-        this.on("maximize", this.showIframe, this);
-        this.on("restore", hideIframe, this);
-        this.on("hide", hideIframe, this);
       }
-      this.on("beforeshow",createShim,this);
+
+      /*分离，分离，AOP*/
+      this.on('changecontent', this.showIframe, this);
+      this.on('beforeshow', this.showIframe, this);
+      this.on('unghost', this.showIframe, this);
+      this.on('resize', this.showIframe, this);
+      this.on('maximize', this.showIframe, this);
+      this.on('restore', hideIframe, this);
+      this.on('hide', hideIframe, this);
     }
-    this._getOffsetHeightBodyToContainer();
-    /**
+    this.on('beforeshow', createShim, this);
+  }
+  this._getOffsetHeightBodyToContainer();
+  /**
        设置按钮
     **/
-    if (this.buttons && Object.prototype.toString.apply(this.buttons) == '[object Array]') {
-        for (var i = 0; i < this.buttons.length; i++) {
-            this.addButton(this.buttons[i], false);
-        }
+  if (
+    this.buttons &&
+    Object.prototype.toString.apply(this.buttons) == '[object Array]'
+  ) {
+    for (var i = 0; i < this.buttons.length; i++) {
+      this.addButton(this.buttons[i], false);
     }
-    //body与container的高度差,prototype写死提高效率
-    //this._offsetHeightBodyToContainer =this.el.getComputedHeight()-this.body.getComputedHeight();
-    //利用 body 和 windowContainer 之间关系设置 windowContainer 宽度
-    //this.offsetBodyToContainer=this.body.getOffsetsTo(this.el);
-    //性能考虑，写死掉
-    this.offsetBodyToContainer = [6, 24];
-    if (!this.width) {
-        //没有上限 09-07-30
-        //this.width=this.offsetWidth=this.body.getTextWidth(null,50);
-        //offset 很费时间，html 很多时，请尽量设置宽度 09-08-12
-        //09-11-04 不使用 getTextWidth 会导致 body的innerHtml 重复设置到其他元素，<input checked="checked" name="xx"/>
-        this.width = this.el.getComputedWidth();
-    }
-    //尽量使用setStyle ,el.setWidth 很费时间 09-08-12
-    this.setWidth(this.width,false);
-    if (this.height) {
-        this.setHeight(this.height,false);
-    } else {
-    		this.on("changecontent",this._changeContentHandler,this);
-    }
-    /**
+  }
+  //body与container的高度差,prototype写死提高效率
+  //this._offsetHeightBodyToContainer =this.el.getComputedHeight()-this.body.getComputedHeight();
+  //利用 body 和 windowContainer 之间关系设置 windowContainer 宽度
+  //this.offsetBodyToContainer=this.body.getOffsetsTo(this.el);
+  //性能考虑，写死掉
+  this.offsetBodyToContainer = [6, 24];
+  if (!this.width) {
+    //没有上限 09-07-30
+    //this.width=this.offsetWidth=this.body.getTextWidth(null,50);
+    //offset 很费时间，html 很多时，请尽量设置宽度 09-08-12
+    //09-11-04 不使用 getTextWidth 会导致 body的innerHtml 重复设置到其他元素，<input checked="checked" name="xx"/>
+    this.width = this.el.getComputedWidth();
+  }
+  //尽量使用setStyle ,el.setWidth 很费时间 09-08-12
+  this.setWidth(this.width, false);
+  if (this.height) {
+    this.setHeight(this.height, false);
+  } else {
+    this.on('changecontent', this._changeContentHandler, this);
+  }
+  /**
 	     设置用户调节大小,动态设置css，width height
 	   **/
-    if (Ext.Resizable && this.resizable) {
-        var that = this;
-        this.resizer = new Ext.Resizable(this.el.id, {
-            handles: 'all',
-            transparent: true,
-            pinned: true
-        });
-        //ie6 height:100% bug
-        this.resizer.on("resize", this.resizeAction, this);
+  if (Ext.Resizable && this.resizable) {
+    var that = this;
+    this.resizer = new Ext.Resizable(this.el.id, {
+      handles: 'all',
+      transparent: true,
+      pinned: true,
+    });
+    //ie6 height:100% bug
+    this.resizer.on('resize', this.resizeAction, this);
 
-        if (Ext.isIE6) {
-			//ie6 height100% no effect!!
-            function ie6Fix() {
-            	this.el.repaint();
-              this.resizer.syncHandleHeight();
-            }
-            this.on("changecontent", ie6Fix, this);
-            this.on("show", ie6Fix, this);
-            //this.on("unghost", ie6Fix, this);
-            this.on("resize", ie6Fix, this);
-            //this.on("maximize", ie6Fix, this);
-            this.on("restore", ie6Fix, this);
-        }
-        this.on("maximize",
-        function() {
-            this.resizer.enabled = false;
-        },
-        this);
-        this.on("restore",
-        function(){
-            this.resizer.enabled = true;
-        },
-        this);
-        //this.resizer.on("beforeresize", this.beforeResize,this);
+    if (Ext.isIE6) {
+      //ie6 height100% no effect!!
+      function ie6Fix() {
+        this.el.repaint();
+        this.resizer.syncHandleHeight();
+      }
+      this.on('changecontent', ie6Fix, this);
+      this.on('show', ie6Fix, this);
+      //this.on("unghost", ie6Fix, this);
+      this.on('resize', ie6Fix, this);
+      //this.on("maximize", ie6Fix, this);
+      this.on('restore', ie6Fix, this);
     }
-    /**
+    this.on(
+      'maximize',
+      function () {
+        this.resizer.enabled = false;
+      },
+      this,
+    );
+    this.on(
+      'restore',
+      function () {
+        this.resizer.enabled = true;
+      },
+      this,
+    );
+    //this.resizer.on("beforeresize", this.beforeResize,this);
+  }
+  /**
       设置遮罩层，绝对定位，
      **/
-    if (this.modal) {
-        this.mask = Ext.getBody().createChild({
-            cls: "ext-el-mask"
-        },
-        this.el.dom);
-        this.mask.enableDisplayMode("block");
-        this.mask.hide();
-        
-        function hideMask(){
-	        this.mask.hide();
-	        Ext.getBody().removeClass("x-masked");
-        }
-        
-        function showMask(){
-          Ext.getBody().addClass("x-masked");
-          this.mask.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
-          this.mask.setStyle('z-index', Ext.ux.WindowLite.ZIndex);
-          this.mask.show();
-        }
-        
-        this.on("show",showMask,this);
-        this.on("hide",hideMask,this);
-        this.mask.on('click', this.focus, this);
+  if (this.modal) {
+    this.mask = Ext.getBody().createChild(
+      {
+        cls: 'ext-el-mask',
+      },
+      this.el.dom,
+    );
+    this.mask.enableDisplayMode('block');
+    this.mask.hide();
+
+    function hideMask() {
+      this.mask.hide();
+      Ext.getBody().removeClass('x-masked');
     }
-    //修正extjs中点击窗体ie系列失去焦点问题，但是多窗体会出问题
-    //改做单击窗口搞在最前端
-    //this.el.on('click',this.focus,this);
-    //效率问题，改做初始化直接设置style
-    //this.el.hide();
-    Ext.EventManager.onWindowResize(this.onResize, this);
-    //this._FrameWidthLR=this.body.getFrameWidth("lr");
-    //this._FrameWidthTB=this.body.getFrameWidth("tb");
-    //为了效率，prototype写死
-    /*
+
+    function showMask() {
+      Ext.getBody().addClass('x-masked');
+      this.mask.setSize(
+        Ext.lib.Dom.getViewWidth(true),
+        Ext.lib.Dom.getViewHeight(true),
+      );
+      this.mask.setStyle('z-index', Ext.ux.WindowLite.ZIndex);
+      this.mask.show();
+    }
+
+    this.on('show', showMask, this);
+    this.on('hide', hideMask, this);
+    this.mask.on('click', this.focus, this);
+  }
+  //修正extjs中点击窗体ie系列失去焦点问题，但是多窗体会出问题
+  //改做单击窗口搞在最前端
+  //this.el.on('click',this.focus,this);
+  //效率问题，改做初始化直接设置style
+  //this.el.hide();
+  Ext.EventManager.onWindowResize(this.onResize, this);
+  //this._FrameWidthLR=this.body.getFrameWidth("lr");
+  //this._FrameWidthTB=this.body.getFrameWidth("tb");
+  //为了效率，prototype写死
+  /*
         建造任务栏，如果你想要的话
     */
-    if (this.taskbar && !Ext.ux.WindowLite.TaskBar.registerTaskBar) {
-        Ext.ux.WindowLite.TaskBar.enable();
-    }
-    this.taskbar && Ext.ux.WindowLite.TaskBar.registerTaskBar(this);
+  if (this.taskbar && !Ext.ux.WindowLite.TaskBar.registerTaskBar) {
+    Ext.ux.WindowLite.TaskBar.enable();
+  }
+  this.taskbar && Ext.ux.WindowLite.TaskBar.registerTaskBar(this);
 };
 Ext.extend(Ext.ux.WindowLite, Ext.util.Observable, {
-    _FrameWidthLR: 2,
-    _FrameWidthTB: 2,
-    //带工具条body与container的高度差
-    _offsetHeightBodyToContainerWithButton: 0,
-    //不带工具条body与container的高度差
-    _offsetHeightBodyToContainer: 0,
-    closable: true,
-    _getOffsetHeightBodyToContainer: function() {
-        if (this.bottom.hasClass('nobutton')) {
-            if (!this._offsetHeightBodyToContainer) {
-                this._offsetHeightBodyToContainer = this.el.getComputedHeight() - this.body.getComputedHeight();
-            }
-            return this._offsetHeightBodyToContainer;
-        }
-        if (!this._offsetHeightBodyToContainerWithButton) {
-            this._offsetHeightBodyToContainerWithButton = this.el.getComputedHeight() - this.body.getComputedHeight();
-        }
-        return this._offsetHeightBodyToContainerWithButton;
-    },
-    //带领窗口到所有已有窗口的最前端		
-    toFront: function(noEvents) {
-        if (this.el.getStyle('z-index') < Ext.ux.WindowLite.ZIndex) {
-            this.el.setStyle({
-                'z-index': ++Ext.ux.WindowLite.ZIndex
-            });
-        }
-        if (noEvents !== false) this.fireEvent("show");
-    },
-    setTitle: function(str) {
-        this.title.update(str);
-    },
-    onResize: function() {
-        if (!this.el.isVisible()) return;
-        //mask 重新最大
-        if (this.modal) {
-            this.mask.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
-        }
-        //maxmize 重新最大化
-        if (this._restoreA.isDisplayed()) {
-            this.fitViewport();
-            return;
-        }
-    },
-    /*
+  _FrameWidthLR: 2,
+  _FrameWidthTB: 2,
+  //带工具条body与container的高度差
+  _offsetHeightBodyToContainerWithButton: 0,
+  //不带工具条body与container的高度差
+  _offsetHeightBodyToContainer: 0,
+  closable: true,
+  _getOffsetHeightBodyToContainer: function () {
+    if (this.bottom.hasClass('nobutton')) {
+      if (!this._offsetHeightBodyToContainer) {
+        this._offsetHeightBodyToContainer =
+          this.el.getComputedHeight() - this.body.getComputedHeight();
+      }
+      return this._offsetHeightBodyToContainer;
+    }
+    if (!this._offsetHeightBodyToContainerWithButton) {
+      this._offsetHeightBodyToContainerWithButton =
+        this.el.getComputedHeight() - this.body.getComputedHeight();
+    }
+    return this._offsetHeightBodyToContainerWithButton;
+  },
+  //带领窗口到所有已有窗口的最前端
+  toFront: function (noEvents) {
+    if (this.el.getStyle('z-index') < Ext.ux.WindowLite.ZIndex) {
+      this.el.setStyle({
+        'z-index': ++Ext.ux.WindowLite.ZIndex,
+      });
+    }
+    if (noEvents !== false) this.fireEvent('show');
+  },
+  setTitle: function (str) {
+    this.title.update(str);
+  },
+  onResize: function () {
+    if (!this.el.isVisible()) return;
+    //mask 重新最大
+    if (this.modal) {
+      this.mask.setSize(
+        Ext.lib.Dom.getViewWidth(true),
+        Ext.lib.Dom.getViewHeight(true),
+      );
+    }
+    //maxmize 重新最大化
+    if (this._restoreA.isDisplayed()) {
+      this.fitViewport();
+      return;
+    }
+  },
+  /*
 			用于anim效果
 		*/
-    getProxy: function() {
-        if (!this.proxy) {
-            this.proxy = this.el.createProxy('x-window-proxy');
-            this.proxy.enableDisplayMode('block');
-        }
-        return this.proxy;
-    },
-    focus: function() {
-        if (this.defaultButton) {
-            this.focusButton.defer(10, this, [this.defaultButton]);
-        } else {
-            this._closebarA.focus.defer(10, this._closebarA);
-        }
-    },
-    /*
+  getProxy: function () {
+    if (!this.proxy) {
+      this.proxy = this.el.createProxy('x-window-proxy');
+      this.proxy.enableDisplayMode('block');
+    }
+    return this.proxy;
+  },
+  focus: function () {
+    if (this.defaultButton) {
+      this.focusButton.defer(10, this, [this.defaultButton]);
+    } else {
+      this._closebarA.focus.defer(10, this._closebarA);
+    }
+  },
+  /*
 			iframe与窗体大小同步
 			ie6 shim included
 		*/
-    showIframe: function() {
-        var sh = this.shim;
-        var sw = this.shadow;
-        var elBox=this.el.getBox();
-        sh.setStyle('z-index', parseInt(this.el.getStyle("z-index"), 10) - 2);
-        sh.show();
-        if (sw && sw.isVisible()) {
-            var a = sw.adjusts;
-            elBox.x+=a.l;
-            elBox.y+=a.t;
-            elBox.width+=a.w;
-            elBox.height+=a.h;
-        } else {
-            //最大化 iframe 全屏时 iframe 小点
-            if (this._restoreA.isDisplayed()) {
-                elBox.width -= 5;
-                elBox.height -= 5;
-            }
-        }
-				sh.setBox(elBox);
-    },
+  showIframe: function () {
+    var sh = this.shim;
+    var sw = this.shadow;
+    var elBox = this.el.getBox();
+    sh.setStyle('z-index', parseInt(this.el.getStyle('z-index'), 10) - 2);
+    sh.show();
+    if (sw && sw.isVisible()) {
+      var a = sw.adjusts;
+      elBox.x += a.l;
+      elBox.y += a.t;
+      elBox.width += a.w;
+      elBox.height += a.h;
+    } else {
+      //最大化 iframe 全屏时 iframe 小点
+      if (this._restoreA.isDisplayed()) {
+        elBox.width -= 5;
+        elBox.height -= 5;
+      }
+    }
+    sh.setBox(elBox);
+  },
 
-    autoHeight: function() {
-        this.body.setStyle({
-            height: 'auto'
-        });
-    },
-    //body size change then window size change
-    //注意：先更新宽度，再更新高度,(高度不用指定死了，由儿子决定)
-    //性能考虑，又可以不用更新shadow 09-08-12
-    updateWindowSize: function(noEvents) {
-        this.el.setStyle({
-            'width': (parseInt(this.body.getStyle("width")) + this._FrameWidthLR + this.offsetBodyToContainer[0] * 2) + "px"
-        });
-        //windowContainer 永远是自动高度的，只有body可能固定高度,而resizer会把window设高度，这里强制取消
-        this.el.setStyle({
-            height: 'auto'
-        });
-        if (!noEvents) {
-            this.fireEvent("resize");
+  autoHeight: function () {
+    this.body.setStyle({
+      height: 'auto',
+    });
+  },
+  //body size change then window size change
+  //注意：先更新宽度，再更新高度,(高度不用指定死了，由儿子决定)
+  //性能考虑，又可以不用更新shadow 09-08-12
+  updateWindowSize: function (noEvents) {
+    this.el.setStyle({
+      width:
+        parseInt(this.body.getStyle('width')) +
+        this._FrameWidthLR +
+        this.offsetBodyToContainer[0] * 2 +
+        'px',
+    });
+    //windowContainer 永远是自动高度的，只有body可能固定高度,而resizer会把window设高度，这里强制取消
+    this.el.setStyle({
+      height: 'auto',
+    });
+    if (!noEvents) {
+      this.fireEvent('resize');
+    }
+  },
+  addButton: function (config, noEvents) {
+    //第一次高度变化，其他就不需要了
+
+    var first = false;
+    if (this.bottom.hasClass('nobutton')) {
+      first = true;
+      this.bottom.removeClass('nobutton');
+    }
+    var b = Ext.DomHelper.append(
+      this.bottom,
+      {
+        tag: 'input',
+        style: 'margin:5px;',
+        type: 'button',
+        value: config.text,
+      },
+      true,
+    );
+    b.on('click', config.handler, config.scope || this);
+    if (first && noEvents !== false) {
+      this.fireEvent('resize');
+    }
+    //影响body和窗体高度差
+    this._getOffsetHeightBodyToContainer();
+  },
+  removeButton: function (text) {
+    var b = this.bottom.select("[value='" + text + "']").item(0);
+    if (b) {
+      b.removeAllListeners();
+      b.remove();
+    }
+    //影响body和窗体高度差
+    this._getOffsetHeightBodyToContainer();
+  },
+  removeAllButtons: function (noEvents) {
+    var bs = this.bottom.select("[type='button']");
+    bs.removeAllListeners();
+    bs.remove();
+    this.bottom.addClass('nobutton');
+    if (noEvents !== false) this.fireEvent('resize');
+    //底边拖放条没了
+    if (Ext.isIE6) {
+      this.el.repaint();
+    }
+    //影响body和窗体高度差
+    this._getOffsetHeightBodyToContainer();
+  },
+  focusButton: function (text) {
+    var b = this.bottom.select("[value='" + text + "']").item(0);
+    if (b) {
+      b.focus();
+    }
+  },
+  /*
+   *正中显示,动画效果起始animateTarget
+   */
+  show: function (option) {
+    //显示遮罩层，body内的select,等隐藏掉，防止遮罩层,大小设为屏幕大小.
+    if (typeof option == 'string')
+      option = {
+        animateTarget: option,
+      };
+    option = option || {};
+    var animateTarget = option.animateTarget;
+    if (this.el.isVisible()) {
+      this.toFront();
+      return;
+    }
+    this.fireEvent('beforeshow');
+
+    //设定taskbar了！
+    if (!animateTarget && this.animateTarget) {
+      option.animateTarget = animateTarget = this.animateTarget;
+    }
+    this.el.setStyle('z-index', ++Ext.ux.WindowLite.ZIndex);
+    //直接设置位置
+    if (option.x && option.y) {
+      //指定位置弹出不能超过视窗(即使浏览器有滚动条)，参考windows右键弹出窗口
+      //保证四个角有一个角在x，y，获取最大可能的windowlite显示区域
+      if (option.constrainToView) {
+        var viewSize = Ext.getBody().getViewSize();
+        var middleHeightLine = viewSize.height / 2;
+        var middleWidthLine = viewSize.width / 2;
+        var winScroll = Ext.getBody().getScroll();
+        //如果 x在横坐标中线右边，移动到中线左边，可获得更大的显示位置
+        if (option.x - winScroll.left > middleWidthLine) {
+          var originalX = option.x;
+          var width = parseInt(this.el.getStyle('width'));
+          option.x = option.x - width;
+          if (option.x < 10 + winScroll.left) {
+            option.x = 10 + winScroll.left;
+            width = originalX - option.x;
+            this.setWidth(width, false);
+          }
         }
-    },
-    addButton: function(config, noEvents) {
-        //第一次高度变化，其他就不需要了
-        
-        var first = false;
-        if (this.bottom.hasClass('nobutton')) {
-            first = true;
-            this.bottom.removeClass('nobutton');
+        //如果 y在纵坐标中线下边，移动到中线上边，可获得更大的显示位置
+        if (option.y - winScroll.top > middleHeightLine) {
+          var originalY = option.y;
+          var height = this.getHeight();
+          option.y = option.y - height;
+          if (option.y < 10 + winScroll.top) {
+            option.y = 10 + winScroll.top;
+            height = originalY - option.y;
+            this.setHeight(height, false);
+          }
         }
-        var b = Ext.DomHelper.append(this.bottom, {
-            tag: 'input',
-            style: 'margin:5px;',
-            type: 'button',
-            value: config.text
-        },
-        true);
-        b.on('click', config.handler, config.scope || this);
-        if (first && noEvents !== false) {
-            this.fireEvent("resize");
-        }
-        //影响body和窗体高度差
-        this._getOffsetHeightBodyToContainer();
-    },
-    removeButton: function(text) {
-        var b = this.bottom.select("[value='" + text + "']").item(0);
-        if (b) {
-            b.removeAllListeners();
-            b.remove();
-        }
-        //影响body和窗体高度差
-        this._getOffsetHeightBodyToContainer();
-    },
-    removeAllButtons: function(noEvents) {
-        var bs = this.bottom.select("[type='button']");
-        bs.removeAllListeners();
-        bs.remove();
-        this.bottom.addClass('nobutton');
-        if (noEvents !== false) this.fireEvent("resize");
-        //底边拖放条没了
-        if (Ext.isIE6) {
-            this.el.repaint();
-        }
-        //影响body和窗体高度差
-        this._getOffsetHeightBodyToContainer();
-    },
-    focusButton: function(text) {
-        var b = this.bottom.select("[value='" + text + "']").item(0);
-        if (b) {
-            b.focus();
-        }
-    },
-    /*
-		*正中显示,动画效果起始animateTarget
-		*/
-    show: function(option) {
-        //显示遮罩层，body内的select,等隐藏掉，防止遮罩层,大小设为屏幕大小.
-        if (typeof option == 'string') option = {
-            animateTarget: option
-        };
-        option = option || {};
-        var animateTarget = option.animateTarget;
-        if (this.el.isVisible()) {
-            this.toFront();
-            return;
-        }
-        this.fireEvent("beforeshow");
-        
-        //设定taskbar了！
-        if (!animateTarget && this.animateTarget) {
-            option.animateTarget = animateTarget = this.animateTarget;
-        }
-        this.el.setStyle('z-index', ++Ext.ux.WindowLite.ZIndex);
-        //直接设置位置
-        if (option.x && option.y) {
-            //指定位置弹出不能超过视窗(即使浏览器有滚动条)，参考windows右键弹出窗口
-            //保证四个角有一个角在x，y，获取最大可能的windowlite显示区域
-            if (option.constrainToView) {
-                var viewSize = Ext.getBody().getViewSize();
-                var middleHeightLine = viewSize.height / 2;
-                var middleWidthLine = viewSize.width / 2;
-                var winScroll = Ext.getBody().getScroll();
-                //如果 x在横坐标中线右边，移动到中线左边，可获得更大的显示位置
-                if (option.x - winScroll.left > middleWidthLine) {
-                    var originalX = option.x;
-                    var width = parseInt(this.el.getStyle("width"));
-                    option.x = option.x - width;
-                    if (option.x < (10 + winScroll.left)) {
-                        option.x = 10 + winScroll.left;
-                        width = originalX - option.x;
-                        this.setWidth(width, false);
-                    }
-                }
-                //如果 y在纵坐标中线下边，移动到中线上边，可获得更大的显示位置
-                if (option.y - winScroll.top > middleHeightLine) {
-                    var originalY = option.y;
-                    var height = this.getHeight();
-                    option.y = option.y - height;
-                    if (option.y < (10 + winScroll.top)) {
-                        option.y = 10 + winScroll.top;
-                        height = originalY - option.y;
-                        this.setHeight(height, false);
-                    }
-                }
-            }
-            this.restorePosition = [option.x, option.y];
-        }
-        if (this.restorePosition) {
-            this.el.setXY(this.restorePosition);
-        } else {
-            this.el.center();
-        }
-        if (animateTarget) {
-            this.animateTarget = animateTarget;
-            animateTarget = Ext.get(animateTarget);
-            var proxy = this.getProxy();
-            proxy.setStyle('z-index', Ext.ux.WindowLite.ZIndex);
-            proxy.show();
-            proxy.setBox(animateTarget.getBox());
-            proxy.setOpacity(0);
-            var b = this.el.getBox(false);
-            b.callback = this.afterShow.createDelegate(this, [option]);
-            b.scope = this;
-            b.duration = option.duration || .25;
-            b.easing = 'easeNone';
-            b.opacity = option.opacity || .5;
-            b.block = true;
-            this.el.hide();
-            proxy.shift(b);
-        } else {
-            this.afterShow(option);
-        }
-    },
-    /*
+      }
+      this.restorePosition = [option.x, option.y];
+    }
+    if (this.restorePosition) {
+      this.el.setXY(this.restorePosition);
+    } else {
+      this.el.center();
+    }
+    if (animateTarget) {
+      this.animateTarget = animateTarget;
+      animateTarget = Ext.get(animateTarget);
+      var proxy = this.getProxy();
+      proxy.setStyle('z-index', Ext.ux.WindowLite.ZIndex);
+      proxy.show();
+      proxy.setBox(animateTarget.getBox());
+      proxy.setOpacity(0);
+      var b = this.el.getBox(false);
+      b.callback = this.afterShow.createDelegate(this, [option]);
+      b.scope = this;
+      b.duration = option.duration || 0.25;
+      b.easing = 'easeNone';
+      b.opacity = option.opacity || 0.5;
+      b.block = true;
+      this.el.hide();
+      proxy.shift(b);
+    } else {
+      this.afterShow(option);
+    }
+  },
+  /*
 			根据当前位置，调整windowlite大小，使得windowlite不超过当前浏览器窗口的可见区域.
 		*/
-    constrainToView: function(option, noEvents) {
-        option = option || {};
-        var viewSize = Ext.getBody().getViewSize();
-        var width = parseInt(this.el.getStyle("width"));
-        //提高效率，尽量用css属性
-        var height = this.getHeight();
-        var winScroll = Ext.getBody().getScroll();
-        var elX = option.x || this.el.getX();
-        var elY = option.y || this.el.getY();
-        //本身已经在屏幕以外，大小无论如何调整都不行了
-        var scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
-        var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-        if (elX < viewSize.width) {
-            var diffW = Math.max(width + elX - viewSize.width - winScroll.left, 0);
-            if (diffW > 0) {
-                //浏览器窗口出现了滚动条,width要多剪裁，firefox滚动条占地方
-                if (scrollHeight > viewSize.height) {
-                    diffW += 15;
-                }
-                width = width - diffW - 10;
-            }
-            if (diffW > 0) this.setWidth(width, false);
+  constrainToView: function (option, noEvents) {
+    option = option || {};
+    var viewSize = Ext.getBody().getViewSize();
+    var width = parseInt(this.el.getStyle('width'));
+    //提高效率，尽量用css属性
+    var height = this.getHeight();
+    var winScroll = Ext.getBody().getScroll();
+    var elX = option.x || this.el.getX();
+    var elY = option.y || this.el.getY();
+    //本身已经在屏幕以外，大小无论如何调整都不行了
+    var scrollWidth =
+      document.documentElement.scrollWidth || document.body.scrollWidth;
+    var scrollHeight =
+      document.documentElement.scrollHeight || document.body.scrollHeight;
+    if (elX < viewSize.width) {
+      var diffW = Math.max(width + elX - viewSize.width - winScroll.left, 0);
+      if (diffW > 0) {
+        //浏览器窗口出现了滚动条,width要多剪裁，firefox滚动条占地方
+        if (scrollHeight > viewSize.height) {
+          diffW += 15;
         }
-        if (elY < viewSize.height) {
-            var diffH = Math.max(height + elY - viewSize.height - winScroll.top, 0);
-            //出现在边缘，需要width剪裁
-            if (diffH > 0) {
-                if (scrollWidth > viewSize.width) {
-                    diffH += 15;
-                }
-                height = height - diffH - 10;
-            }
-            if (diffH > 0) this.setHeight(height, false);
+        width = width - diffW - 10;
+      }
+      if (diffW > 0) this.setWidth(width, false);
+    }
+    if (elY < viewSize.height) {
+      var diffH = Math.max(height + elY - viewSize.height - winScroll.top, 0);
+      //出现在边缘，需要width剪裁
+      if (diffH > 0) {
+        if (scrollWidth > viewSize.width) {
+          diffH += 15;
         }
-        if (noEvents !== false) {
-            this.fireEvent("resize");
-        }
-    },
-    constrainHeight: function(noEvents) {
-        if ((this.minHeight || this.maxHeight) && !this.height) {
-            this.body.setStyle({
-                height: 'auto'
-            });
-            var currentHeight = this.body.getComputedHeight();
-            var change = false;
-            if (this.minHeight && currentHeight < this.minHeight) {
-                this.body.setHeight(this.minHeight);
-                change = true;
-            }
-            if (this.maxHeight && currentHeight > this.maxHeight) {
-                this.body.setHeight(this.maxHeight);
-                change = true;
-            }
-            if (change && noEvents !== false) {
-                this.fireEvent("resize");
-            }
-        }
-    },
-    afterShow: function(option) {
-        option = option || {};
-        if (option.animateTarget) this.getProxy().hide();
-        //以前没有调节过！节省效率
-        if (option.constrainToView && option.x && option.y) {}
-        else if (option.constrainToView) {
-            var winScroll = Ext.getBody().getScroll();
-            if (this.el.getY() <= (10 + winScroll.top)) {
-                this.el.setY(10 + winScroll.top);
-            }
-            //09-09-14 不要超出窗口所边界
-            if (this.el.getX() <= (10 + winScroll.left)) {
-                this.el.setX(10 + winScroll.left);
-            }
-        }
-        this.constrainHeight(false);
-        if (option.constrainToView) {
-            this.constrainToView(option, false);
-        }
-        this.el.setStyle({
-            'visibility': 'visible'
-        });
+        height = height - diffH - 10;
+      }
+      if (diffH > 0) this.setHeight(height, false);
+    }
+    if (noEvents !== false) {
+      this.fireEvent('resize');
+    }
+  },
+  constrainHeight: function (noEvents) {
+    if ((this.minHeight || this.maxHeight) && !this.height) {
+      this.body.setStyle({
+        height: 'auto',
+      });
+      var currentHeight = this.body.getComputedHeight();
+      var change = false;
+      if (this.minHeight && currentHeight < this.minHeight) {
+        this.body.setHeight(this.minHeight);
+        change = true;
+      }
+      if (this.maxHeight && currentHeight > this.maxHeight) {
+        this.body.setHeight(this.maxHeight);
+        change = true;
+      }
+      if (change && noEvents !== false) {
+        this.fireEvent('resize');
+      }
+    }
+  },
+  afterShow: function (option) {
+    option = option || {};
+    if (option.animateTarget) this.getProxy().hide();
+    //以前没有调节过！节省效率
+    if (option.constrainToView && option.x && option.y) {
+    } else if (option.constrainToView) {
+      var winScroll = Ext.getBody().getScroll();
+      if (this.el.getY() <= 10 + winScroll.top) {
+        this.el.setY(10 + winScroll.top);
+      }
+      //09-09-14 不要超出窗口所边界
+      if (this.el.getX() <= 10 + winScroll.left) {
+        this.el.setX(10 + winScroll.left);
+      }
+    }
+    this.constrainHeight(false);
+    if (option.constrainToView) {
+      this.constrainToView(option, false);
+    }
+    this.el.setStyle({
+      visibility: 'visible',
+    });
 
-        this.focus();
-        this.fireEvent("show", this);
-    },
-    /*
-		*隐藏窗体           
-		*/
-    hide: function() {
-        if (this.fireEvent("beforehide", this) !== false) {
-            if (this._restoreA.isDisplayed()) {
-                this.restore();
-            }
-            this.restorePosition = this.el.getXY();
-						this.fireEvent("hide", this);
-						this.el.hide(); 
-            if (this.animateTarget) {
-                var animateTarget = Ext.get(this.animateTarget);
-                var proxy = this.getProxy();
-                proxy.setOpacity(.5);
-                proxy.show();
-                var tb = this.el.getBox(false);
-                proxy.setBox(tb);
-                var b = animateTarget.getBox();
-                b.callback = this.afterHide;
-                b.scope = this;
-                b.duration = .25;
-                b.easing = 'easeNone';
-                b.block = true;
-                b.opacity = 0;
-                proxy.shift(b);
-            }
-            //放后，proxy 需要得到当前位置
-            this.el.setLeftTop(-99999, -99999);
-        }
-    },
-    close: function() {
-        if (this._restoreA.isDisplayed()) {
-            this.restore();
-        }
-        if (this.fireEvent("beforeclose", this) !== false) {
-            this.fireEvent("close", this);
-            this.destroy();
-        }
-    },
-    
-    afterHide: function() {
-        this.getProxy().hide();
-    },
-    
-    /*
+    this.focus();
+    this.fireEvent('show', this);
+  },
+  /*
+   *隐藏窗体
+   */
+  hide: function () {
+    if (this.fireEvent('beforehide', this) !== false) {
+      if (this._restoreA.isDisplayed()) {
+        this.restore();
+      }
+      this.restorePosition = this.el.getXY();
+      this.fireEvent('hide', this);
+      this.el.hide();
+      if (this.animateTarget) {
+        var animateTarget = Ext.get(this.animateTarget);
+        var proxy = this.getProxy();
+        proxy.setOpacity(0.5);
+        proxy.show();
+        var tb = this.el.getBox(false);
+        proxy.setBox(tb);
+        var b = animateTarget.getBox();
+        b.callback = this.afterHide;
+        b.scope = this;
+        b.duration = 0.25;
+        b.easing = 'easeNone';
+        b.block = true;
+        b.opacity = 0;
+        proxy.shift(b);
+      }
+      //放后，proxy 需要得到当前位置
+      this.el.setLeftTop(-99999, -99999);
+    }
+  },
+  close: function () {
+    if (this._restoreA.isDisplayed()) {
+      this.restore();
+    }
+    if (this.fireEvent('beforeclose', this) !== false) {
+      this.fireEvent('close', this);
+      this.destroy();
+    }
+  },
+
+  afterHide: function () {
+    this.getProxy().hide();
+  },
+
+  /*
 			销毁窗体,destroy
 		*/
-    destroy: function() {
-        Ext.EventManager.removeResizeListener(this.onResize, this);
-        this.removeAllButtons(false);
-        Ext.destroy(this.title, this._closebarA, this._maximizeA, this._minimizeA, this._restoreA, this._tools, this._toolsSection, this.header, this.body, this.bottom, this.main, this.resizer, this.mask, this.proxy, this.ddHandler, this.shim, this.animateTarget, this.el);
-        this.purgeListeners();
-    },
-    
-    /**
+  destroy: function () {
+    Ext.EventManager.removeResizeListener(this.onResize, this);
+    this.removeAllButtons(false);
+    Ext.destroy(
+      this.title,
+      this._closebarA,
+      this._maximizeA,
+      this._minimizeA,
+      this._restoreA,
+      this._tools,
+      this._toolsSection,
+      this.header,
+      this.body,
+      this.bottom,
+      this.main,
+      this.resizer,
+      this.mask,
+      this.proxy,
+      this.ddHandler,
+      this.shim,
+      this.animateTarget,
+      this.el,
+    );
+    this.purgeListeners();
+  },
+
+  /**
 			设置一个简易的代理窗口，隐藏掉原来的复杂窗口
 		**/
-    ghost: function() {
-        var el = document.createElement('div');
-        el.className = 'x-panel-ghost';
-        el.style.opacity = '.65';
-        el.style['filter'] = 'alpha(opacity=65)';
-        if (this.header) {
-            el.appendChild(this.el.dom.firstChild.cloneNode(true));
-        }
-        Ext.fly(el.appendChild(document.createElement('ul'))).setHeight(this.el.getComputedHeight() - this.header.getComputedHeight());
-        el.style.width = this.el.getComputedWidth() + 'px';
-        ((this.containerId && Ext.get(this.containerId)) || Ext.getBody()).appendChild(el);
-        var ghost = Ext.get(el);
-        this.el.hide();
-        this.fireEvent("ghost");
-        var xy = [this.el.getLeft(true), this.el.getTop(true)];
-        ghost.setLeftTop(xy[0], xy[1]);
-        this.activeGhost = ghost;
-        return ghost;
-    },
-    /**
+  ghost: function () {
+    var el = document.createElement('div');
+    el.className = 'x-panel-ghost';
+    el.style.opacity = '.65';
+    el.style['filter'] = 'alpha(opacity=65)';
+    if (this.header) {
+      el.appendChild(this.el.dom.firstChild.cloneNode(true));
+    }
+    Ext.fly(el.appendChild(document.createElement('ul'))).setHeight(
+      this.el.getComputedHeight() - this.header.getComputedHeight(),
+    );
+    el.style.width = this.el.getComputedWidth() + 'px';
+    (
+      (this.containerId && Ext.get(this.containerId)) ||
+      Ext.getBody()
+    ).appendChild(el);
+    var ghost = Ext.get(el);
+    this.el.hide();
+    this.fireEvent('ghost');
+    var xy = [this.el.getLeft(true), this.el.getTop(true)];
+    ghost.setLeftTop(xy[0], xy[1]);
+    this.activeGhost = ghost;
+    return ghost;
+  },
+  /**
 			删掉简易的代理窗口，恢复原来的复杂窗口
 		**/
-    unghost: function() {
-        this.activeGhost.hide();
-        var l = [this.activeGhost.getLeft(true), this.activeGhost.getTop(true)];
-        this.activeGhost.remove();
-        delete this.activeGhost;
-        this.el.setLeftTop(l[0], l[1]);
-        this.el.show();
-        this.fireEvent("unghost");
-        this.focus();
-    },
-    /*
+  unghost: function () {
+    this.activeGhost.hide();
+    var l = [this.activeGhost.getLeft(true), this.activeGhost.getTop(true)];
+    this.activeGhost.remove();
+    delete this.activeGhost;
+    this.el.setLeftTop(l[0], l[1]);
+    this.el.show();
+    this.fireEvent('unghost');
+    this.focus();
+  },
+  /*
 		  缩放处理
 		*/
-    resizeAction: function(this_, width, height, e) {
-        this.setSize(width, height);
-        this.el.setStyle({
-            height: 'auto'
-        });
-    },
-    /*
+  resizeAction: function (this_, width, height, e) {
+    this.setSize(width, height);
+    this.el.setStyle({
+      height: 'auto',
+    });
+  },
+  /*
 			最大化处理
 		*/
-    maximize: function() {
-        this.restorePosition = [this.el.getLeft(true), this.el.getTop(true)];
-        this.restoreSize = this.el.getSize();
-        //Ext.getBody().maximizeWinlite=Ext.getBody().maximizeWinlite||0;
-        //Ext.getBody().maximizeWinlite++;
-        //Ext.getBody().addClass("x-window-maximized-ct");
-        var scrolls = Ext.getBody().getScroll();
-        this.el.setXY([scrolls.left, scrolls.top]);
-        this.fitViewport(false);
-        this._maximizeA.setDisplayed("none");
-        this._restoreA.setDisplayed(true);
-        this.fireEvent("maximize");
-        this.toFront(false);
-    },
-    fitViewport: function(noEvents) {
-        var maxView = Ext.getBody().getViewSize();
-        //firefox 滚动条也占据 viewwidth .....
-        if (!Ext.isIE && !this.modal) {
-            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-            var scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
-            //4 magic number,滚动条使viewSize减少
-            if (scrollHeight > maxView.height + 4) {
-                maxView.width -= 20;
-            }
-            if (scrollWidth > maxView.width + 4) {
-                maxView.height -= 20;
-            }
-        }
-        this.setSize(maxView.width, maxView.height, noEvents);
-    },
-    setSize: function(width, height, noEvents) {
-        this.setWidth(width, false);
-        this.setHeight(height, false);
-        if (noEvents !== false) {
-            this.fireEvent("resize");
-        }
-    },
-    setWidth: function(width, noEvents) {
-        this.body.setStyle({
-            width: width - this.offsetBodyToContainer[0] * 2 - this._FrameWidthLR + 'px'
-        });
-        this.el.setStyle({
-            width: width + 'px'
-        });
-        if (noEvents !== false) {
-            this.fireEvent("resize");
-        }
-    },
-    setHeight: function(height, noEvents) {
-        this.body.setStyle({
-            height: height - this._getOffsetHeightBodyToContainer() - this._FrameWidthTB + 'px'
-        });
-        this.el.setStyle({
-            height: 'auto'
-        });
-        if (noEvents !== false) {
-            this.fireEvent("resize");
-        }
-    },
-    getHeight: function() {
-        var height = parseInt(this.body.getStyle("height"));
-        if (!height) return this.el.getComputedHeight();
-        return height + this._getOffsetHeightBodyToContainer() + this._FrameWidthTB;
-    },
-    getWidth:function(){
-    		return this.el.getComputedWidth();
-    },
-    /*
+  maximize: function () {
+    this.restorePosition = [this.el.getLeft(true), this.el.getTop(true)];
+    this.restoreSize = this.el.getSize();
+    //Ext.getBody().maximizeWinlite=Ext.getBody().maximizeWinlite||0;
+    //Ext.getBody().maximizeWinlite++;
+    //Ext.getBody().addClass("x-window-maximized-ct");
+    var scrolls = Ext.getBody().getScroll();
+    this.el.setXY([scrolls.left, scrolls.top]);
+    this.fitViewport(false);
+    this._maximizeA.setDisplayed('none');
+    this._restoreA.setDisplayed(true);
+    this.fireEvent('maximize');
+    this.toFront(false);
+  },
+  fitViewport: function (noEvents) {
+    var maxView = Ext.getBody().getViewSize();
+    //firefox 滚动条也占据 viewwidth .....
+    if (!Ext.isIE && !this.modal) {
+      var scrollHeight =
+        document.documentElement.scrollHeight || document.body.scrollHeight;
+      var scrollWidth =
+        document.documentElement.scrollWidth || document.body.scrollWidth;
+      //4 magic number,滚动条使viewSize减少
+      if (scrollHeight > maxView.height + 4) {
+        maxView.width -= 20;
+      }
+      if (scrollWidth > maxView.width + 4) {
+        maxView.height -= 20;
+      }
+    }
+    this.setSize(maxView.width, maxView.height, noEvents);
+  },
+  setSize: function (width, height, noEvents) {
+    this.setWidth(width, false);
+    this.setHeight(height, false);
+    if (noEvents !== false) {
+      this.fireEvent('resize');
+    }
+  },
+  setWidth: function (width, noEvents) {
+    this.body.setStyle({
+      width:
+        width - this.offsetBodyToContainer[0] * 2 - this._FrameWidthLR + 'px',
+    });
+    this.el.setStyle({
+      width: width + 'px',
+    });
+    if (noEvents !== false) {
+      this.fireEvent('resize');
+    }
+  },
+  setHeight: function (height, noEvents) {
+    this.body.setStyle({
+      height:
+        height -
+        this._getOffsetHeightBodyToContainer() -
+        this._FrameWidthTB +
+        'px',
+    });
+    this.el.setStyle({
+      height: 'auto',
+    });
+    if (noEvents !== false) {
+      this.fireEvent('resize');
+    }
+  },
+  getHeight: function () {
+    var height = parseInt(this.body.getStyle('height'));
+    if (!height) return this.el.getComputedHeight();
+    return height + this._getOffsetHeightBodyToContainer() + this._FrameWidthTB;
+  },
+  getWidth: function () {
+    return this.el.getComputedWidth();
+  },
+  /*
     	窗体内容改变，则如果整个窗体height没有设置，则body已设的高度要变化
     */
-    _changeContentHandler:function(){
-    },
-    /*
+  _changeContentHandler: function () {},
+  /*
 			还原窗口
 		*/
-    restore: function(noEvents) {
-        this.el.setLeftTop(this.restorePosition[0], this.restorePosition[1]);
-        this._maximizeA.setDisplayed(true);
-        this._restoreA.setDisplayed(false);
-        this.setSize(this.restoreSize.width, this.restoreSize.height, false);
-        this.restoreSize = null;
-        delete this.restoreSize;
-        if(noEvents!==false)this.fireEvent("restore");
-    }
+  restore: function (noEvents) {
+    this.el.setLeftTop(this.restorePosition[0], this.restorePosition[1]);
+    this._maximizeA.setDisplayed(true);
+    this._restoreA.setDisplayed(false);
+    this.setSize(this.restoreSize.width, this.restoreSize.height, false);
+    this.restoreSize = null;
+    delete this.restoreSize;
+    if (noEvents !== false) this.fireEvent('restore');
+  },
 });
 if (Ext.dd && Ext.dd.DD) {
-    Ext.ux.WindowLite.DD = function(win) {
-        this.win = win;
-        Ext.ux.WindowLite.DD.superclass.constructor.call(this, win.el.id, 'WindowDD-' + win.el.id);
-        this.setHandleElId(win.header.id);
-        win.header.setStyle({
-            cursor: 'move'
-        });
-        this.scroll = false;
-    };
-    Ext.extend(Ext.ux.WindowLite.DD, Ext.dd.DD, {
-        moveOnly: true,
-        headerOffsets: [100, 25],
-        startDrag: function() {
-            var win = this.win;
-            this.proxy = win.ghost();
-            //iframe 拖动时也要跟着
-            if(this.win.shim) {
-            	this.win.shim.setBox(this.proxy.getBox(false));
-            }	
-        },
-        b4Drag: Ext.emptyFn,
-        onDrag: function(e) {
-            if (e.getPageY() > 10) this.alignElWithMouse(this.proxy, e.getPageX(), e.getPageY());
-            if (this.win.shim && e.getPageY() > 10) {
-                this.alignElWithMouse(this.win.shim, e.getPageX(), e.getPageY());
-            }
-        },
-        b4EndDrag: Ext.emptyFn,
-        endDrag: function(e) {
-            this.win.unghost();
-        }
+  Ext.ux.WindowLite.DD = function (win) {
+    this.win = win;
+    Ext.ux.WindowLite.DD.superclass.constructor.call(
+      this,
+      win.el.id,
+      'WindowDD-' + win.el.id,
+    );
+    this.setHandleElId(win.header.id);
+    win.header.setStyle({
+      cursor: 'move',
     });
+    this.scroll = false;
+  };
+  Ext.extend(Ext.ux.WindowLite.DD, Ext.dd.DD, {
+    moveOnly: true,
+    headerOffsets: [100, 25],
+    startDrag: function () {
+      var win = this.win;
+      this.proxy = win.ghost();
+      //iframe 拖动时也要跟着
+      if (this.win.shim) {
+        this.win.shim.setBox(this.proxy.getBox(false));
+      }
+    },
+    b4Drag: Ext.emptyFn,
+    onDrag: function (e) {
+      if (e.getPageY() > 10)
+        this.alignElWithMouse(this.proxy, e.getPageX(), e.getPageY());
+      if (this.win.shim && e.getPageY() > 10) {
+        this.alignElWithMouse(this.win.shim, e.getPageX(), e.getPageY());
+      }
+    },
+    b4EndDrag: Ext.emptyFn,
+    endDrag: function (e) {
+      this.win.unghost();
+    },
+  });
 }
 Ext.ux.WindowLite.ZIndex = 10000;
-Ext.ux.WindowLite.TaskBar = function() {
-    function closeTask(win) {
-        Ext.destroy(taskBarBtns[win.id]);
-        taskBarBtns[win.id] = null;
-        delete taskBarBtns[win.id];
-    }
-    /*
+Ext.ux.WindowLite.TaskBar = function () {
+  function closeTask(win) {
+    Ext.destroy(taskBarBtns[win.id]);
+    taskBarBtns[win.id] = null;
+    delete taskBarBtns[win.id];
+  }
+  /*
         左右滚动标志控制
     */
-    function scrollTaskCheck() {
-        var viewSize = Ext.getBody().getViewSize();
-        if (Ext.isIE6) scrollTaskContainer.setWidth(viewSize.width - 36);
-        //直接页面展示位置比较，不需要考虑滚动多少
-        var scrollWidth = scrollTaskEdge.getOffsetsTo(scrollTaskContainer)[0];
-        if (scrollTaskContainer.dom.scrollLeft > 0) {
-            scrollTaskLeft.show();
-        } else {
-            scrollTaskLeft.hide();
-        }
-        if (scrollWidth > scrollTaskContainer.getComputedWidth()) {
-            scrollTaskRight.show();
-        } else {
-            scrollTaskRight.hide();
-        }
-        scrollTaskLeft.dom.title = "total " + currentTaskBtnStack.length + " windows";
-        scrollTaskRight.dom.title = "total " + currentTaskBtnStack.length + " windows";
+  function scrollTaskCheck() {
+    var viewSize = Ext.getBody().getViewSize();
+    if (Ext.isIE6) scrollTaskContainer.setWidth(viewSize.width - 36);
+    //直接页面展示位置比较，不需要考虑滚动多少
+    var scrollWidth = scrollTaskEdge.getOffsetsTo(scrollTaskContainer)[0];
+    if (scrollTaskContainer.dom.scrollLeft > 0) {
+      scrollTaskLeft.show();
+    } else {
+      scrollTaskLeft.hide();
     }
-
-    function scrollTaskRightAction() {
-        var scrollWidth = scrollTaskEdge.getOffsetsTo(scrollTaskContainer)[0];
-        var diff = Math.min(scrollWidth - scrollTaskContainer.getComputedWidth(), 150);
-        scrollTaskContainer.scroll("l", diff, {
-            duration: 0.5,
-            callback: scrollTaskCheck
-        });
-    };
-
-    function scrollTaskLeftAction() {
-        scrollTaskContainer.scroll("r", 150, {
-            duration: 0.5,
-            callback: scrollTaskCheck
-        });
+    if (scrollWidth > scrollTaskContainer.getComputedWidth()) {
+      scrollTaskRight.show();
+    } else {
+      scrollTaskRight.hide();
     }
-    /*
+    scrollTaskLeft.dom.title =
+      'total ' + currentTaskBtnStack.length + ' windows';
+    scrollTaskRight.dom.title =
+      'total ' + currentTaskBtnStack.length + ' windows';
+  }
+
+  function scrollTaskRightAction() {
+    var scrollWidth = scrollTaskEdge.getOffsetsTo(scrollTaskContainer)[0];
+    var diff = Math.min(
+      scrollWidth - scrollTaskContainer.getComputedWidth(),
+      150,
+    );
+    scrollTaskContainer.scroll('l', diff, {
+      duration: 0.5,
+      callback: scrollTaskCheck,
+    });
+  }
+
+  function scrollTaskLeftAction() {
+    scrollTaskContainer.scroll('r', 150, {
+      duration: 0.5,
+      callback: scrollTaskCheck,
+    });
+  }
+  /*
         task menu status change according to windows
     */
-    function taskBtnStatus(win, show, close) {
-        var taskBarBtn = taskBarBtns[win.id];
-        //如果以前加过这个window task menu
-        var bIndex = currentTaskBtnStack.indexOf(taskBarBtn);
-        if (bIndex != -1) {
-            var del = currentTaskBtnStack.splice(bIndex, 1);
-            if (del[0] && close) {
-                Ext.destroy(del[0]);
-                closeTask(win);
-            }
-        }
-        if (show) {
-            if (currentTaskBtnStack.length != 0) {
-                currentTaskBtnStack[currentTaskBtnStack.length - 1].el.removeClass("x-btn-active3");
-            }
-            taskBarBtn.el.addClass("x-btn-active3");
-            currentTaskBtnStack.push(taskBarBtn);
-        } else {
-            if (!close) taskBarBtn.el.removeClass("x-btn-active3");
-            if (currentTaskBtnStack.length != 0) {
-                currentTaskBtnStack[currentTaskBtnStack.length - 1].el.addClass("x-btn-active3");
-            }
-        }
-        if (currentTaskBtnStack.length != 0) {
-            autoScroll(currentTaskBtnStack[currentTaskBtnStack.length - 1]);
-        }
+  function taskBtnStatus(win, show, close) {
+    var taskBarBtn = taskBarBtns[win.id];
+    //如果以前加过这个window task menu
+    var bIndex = currentTaskBtnStack.indexOf(taskBarBtn);
+    if (bIndex != -1) {
+      var del = currentTaskBtnStack.splice(bIndex, 1);
+      if (del[0] && close) {
+        Ext.destroy(del[0]);
+        closeTask(win);
+      }
     }
-    /*
+    if (show) {
+      if (currentTaskBtnStack.length != 0) {
+        currentTaskBtnStack[currentTaskBtnStack.length - 1].el.removeClass(
+          'x-btn-active3',
+        );
+      }
+      taskBarBtn.el.addClass('x-btn-active3');
+      currentTaskBtnStack.push(taskBarBtn);
+    } else {
+      if (!close) taskBarBtn.el.removeClass('x-btn-active3');
+      if (currentTaskBtnStack.length != 0) {
+        currentTaskBtnStack[currentTaskBtnStack.length - 1].el.addClass(
+          'x-btn-active3',
+        );
+      }
+    }
+    if (currentTaskBtnStack.length != 0) {
+      autoScroll(currentTaskBtnStack[currentTaskBtnStack.length - 1]);
+    }
+  }
+  /*
         增加或删除 taskbar，指定btn自动滚到合适位置
     */
-    function autoScroll(btn) {
-        var scrollWidth = Ext.fly(btn.el.parent("li", true)).getOffsetsTo(scrollTaskContainer)[0];
-        var diff = scrollWidth - scrollTaskContainer.getComputedWidth();
-        //注意diff 是 btn 左边界和 container 右边界的距离差
-        diff += Ext.fly(btn.el.parent("li", true)).getComputedWidth();
-        //把当前元素右边界和最右边靠其，如果scrollLeft已经为0 则没有办法了，原地不动
-        var toValue = Math.max(diff + scrollTaskContainer.dom.scrollLeft, 0);
-        scrollTaskContainer.scrollTo("left", toValue, {
-            duration: 0.5,
-            callback: scrollTaskCheck
-        });
-    }
+  function autoScroll(btn) {
+    var scrollWidth = Ext.fly(btn.el.parent('li', true)).getOffsetsTo(
+      scrollTaskContainer,
+    )[0];
+    var diff = scrollWidth - scrollTaskContainer.getComputedWidth();
+    //注意diff 是 btn 左边界和 container 右边界的距离差
+    diff += Ext.fly(btn.el.parent('li', true)).getComputedWidth();
+    //把当前元素右边界和最右边靠其，如果scrollLeft已经为0 则没有办法了，原地不动
+    var toValue = Math.max(diff + scrollTaskContainer.dom.scrollLeft, 0);
+    scrollTaskContainer.scrollTo('left', toValue, {
+      duration: 0.5,
+      callback: scrollTaskCheck,
+    });
+  }
 
-    function taskBtnClick(win) {
-        var taskBarBtn = taskBarBtns[win.id];
-        if (taskBarBtn.el.hasClass("x-btn-active3")) {
-            win.hide();
-        } else {
-            win.show();
-        }
+  function taskBtnClick(win) {
+    var taskBarBtn = taskBarBtns[win.id];
+    if (taskBarBtn.el.hasClass('x-btn-active3')) {
+      win.hide();
+    } else {
+      win.show();
     }
-    /*
+  }
+  /*
         create task menu for this window
     */
-    function registerTaskBar(win) {
-        if (taskBarBtns[win.id]) {
-            return;
-        }
-        var li = Ext.DomHelper.insertBefore(scrollTaskEdge, {
-            tag: 'li'
-        });
-        var t = win.title.dom.innerHTML;
-        (t.length > 15) && (t = t.substring(0, 12) + "...");
-        var b = Ext.DomHelper.append(li, {
-            tag: 'button',
-            'id': Ext.id(),
-            title: win.title.dom.innerHTML,
-            html: t
-        });
-        var taskBarBtn = taskBarBtns[win.id] = new Ext.ux.ButtonLite({
-            id: b.id,
-            version: '3'
-        });
-        taskBarBtn._button.on("click", taskBtnClick.createCallback(win));
-        win.on("show", taskBtnStatus.createCallback(win, true));
-        win.on("hide", taskBtnStatus.createCallback(win, false));
-        win.on("close", taskBtnStatus.createCallback(win, false, true));
-        win.animateTarget = taskBarBtn.el;
-        //不用显式 autoscroll 了，show 事件中会的
-        //autoScroll(taskBarBtn);
+  function registerTaskBar(win) {
+    if (taskBarBtns[win.id]) {
+      return;
     }
-    var re = {};
-    var taskBarBtns = {};
-    //栈，所有正在显示的window task menu
-    var currentTaskBtnStack = [];
-    //窗口变化，也要检查task bar了
-    var viewSize = Ext.getBody().getViewSize();
-    var taskbar = Ext.fly(Ext.DomHelper.append(Ext.getBody(), {
-        tag: "div",
-        cls: "taskWrap",
-        cn: [{
-            tag: 'a',
-            href: "#",
-            cls: "task-scroll-left"
+    var li = Ext.DomHelper.insertBefore(scrollTaskEdge, {
+      tag: 'li',
+    });
+    var t = win.title.dom.innerHTML;
+    t.length > 15 && (t = t.substring(0, 12) + '...');
+    var b = Ext.DomHelper.append(li, {
+      tag: 'button',
+      id: Ext.id(),
+      title: win.title.dom.innerHTML,
+      html: t,
+    });
+    var taskBarBtn = (taskBarBtns[win.id] = new Ext.ux.ButtonLite({
+      id: b.id,
+      version: '3',
+    }));
+    taskBarBtn._button.on('click', taskBtnClick.createCallback(win));
+    win.on('show', taskBtnStatus.createCallback(win, true));
+    win.on('hide', taskBtnStatus.createCallback(win, false));
+    win.on('close', taskBtnStatus.createCallback(win, false, true));
+    win.animateTarget = taskBarBtn.el;
+    //不用显式 autoscroll 了，show 事件中会的
+    //autoScroll(taskBarBtn);
+  }
+  var re = {};
+  var taskBarBtns = {};
+  //栈，所有正在显示的window task menu
+  var currentTaskBtnStack = [];
+  //窗口变化，也要检查task bar了
+  var viewSize = Ext.getBody().getViewSize();
+  var taskbar = Ext.fly(
+    Ext.DomHelper.append(Ext.getBody(), {
+      tag: 'div',
+      cls: 'taskWrap',
+      cn: [
+        {
+          tag: 'a',
+          href: '#',
+          cls: 'task-scroll-left',
         },
         {
-            tag: 'a',
-            href: "#",
-            cls: "task-scroll-right"
+          tag: 'a',
+          href: '#',
+          cls: 'task-scroll-right',
         },
         {
-            tag: 'div',
-            cls: "tasksContainer",
-            style: (Ext.isIE6 ? {
-                width: (viewSize.width - 36) + "px"
-            }: ''),
-            cn: [{
-                tag: "ul",
-                //cls:"clearfix",
-                cn: [{
-                    tag: 'li'
-                }]
-            }]
-        }]
-    })).child("ul");
-    var scrollTaskEdge = Ext.fly(taskbar).child("li");
-    var scrollTaskContainer = Ext.fly(taskbar).parent();
-    var scrollTaskRight = scrollTaskContainer.prev("a");
-    var scrollTaskLeft = scrollTaskRight.prev("a");
-    scrollTaskRight.on("click", scrollTaskRightAction);
-    scrollTaskLeft.on("click", scrollTaskLeftAction);
-    Ext.EventManager.onWindowResize(scrollTaskCheck);
-    return {
-        'registerTaskBar': registerTaskBar
-    };
+          tag: 'div',
+          cls: 'tasksContainer',
+          style: Ext.isIE6
+            ? {
+                width: viewSize.width - 36 + 'px',
+              }
+            : '',
+          cn: [
+            {
+              tag: 'ul',
+              //cls:"clearfix",
+              cn: [
+                {
+                  tag: 'li',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }),
+  ).child('ul');
+  var scrollTaskEdge = Ext.fly(taskbar).child('li');
+  var scrollTaskContainer = Ext.fly(taskbar).parent();
+  var scrollTaskRight = scrollTaskContainer.prev('a');
+  var scrollTaskLeft = scrollTaskRight.prev('a');
+  scrollTaskRight.on('click', scrollTaskRightAction);
+  scrollTaskLeft.on('click', scrollTaskLeftAction);
+  Ext.EventManager.onWindowResize(scrollTaskCheck);
+  return {
+    registerTaskBar: registerTaskBar,
+  };
 };
-Ext.ux.WindowLite.TaskBar.enable = function() {
-    Ext.ux.WindowLite.TaskBar = Ext.ux.WindowLite.TaskBar();
+Ext.ux.WindowLite.TaskBar.enable = function () {
+  Ext.ux.WindowLite.TaskBar = Ext.ux.WindowLite.TaskBar();
 };

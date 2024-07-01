@@ -1,42 +1,42 @@
 ﻿<!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>Demo - IE7 inline-block</title>
-<style>
-    html,body {
-        margin:0;
-        padding:0;
-    }
-    .para {
+  <head>
+    <meta charset="utf-8" />
+    <title>Demo - IE7 inline-block</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .para {
         margin: 1em 0;
-    }
-    .inline-block-1 {
-        display:inline-block;
-        *display:inline;
-        *zoom:1;
-        border:1px solid red;
+      }
+      .inline-block-1 {
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+        border: 1px solid red;
         /*ie67 合并空白*/
-        *margin-left: .3em;
-    }
-    
-    .inline-block-1:first-child {
+        *margin-left: 0.3em;
+      }
+
+      .inline-block-1:first-child {
         *margin-left: 0;
-    }
-    
-    span {
-        border:1px solid green;
-    }
-</style>
-</head>
-<body>
+      }
 
-<div class="container">
-    
-    <div class='inline-block-1'>  哈哈  </div>  <div class='inline-block-1'><div style='margin-left:20px;'>嘿嘿</div></div>  <span> 哦哦 </span>
-    
-</div>
-
-</body>
-
+      span {
+        border: 1px solid green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="inline-block-1">哈哈</div>
+      <div class="inline-block-1">
+        <div style="margin-left: 20px">嘿嘿</div>
+      </div>
+      <span> 哦哦 </span>
+    </div>
+  </body>
 </html>

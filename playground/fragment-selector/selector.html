@@ -1,42 +1,35 @@
-<table border=1>
-<tr>
-	<td>
-	</td>
-	<td>
-		getElementsByTagName
-	</td>
-	<td>
-		getElementById
-	</td>
-</tr>
-<tr>
-	<td>
-		document.createDocumentFragment()
-	</td>
-	<td>
-		<script>
-		document.write(!!document.createDocumentFragment().getElementsByTagName);
-		</script>
-	</td>
-	<td>
-		<script>
-		document.write(!!document.createDocumentFragment().getElementById);
-		</script>
-	</td>
-</tr>
-<tr>
-	<td>
-		document.createElement('div')
-	</td>
-	<td>
-		<script>
-		document.write(!!document.createElement('div').getElementsByTagName);
-		</script>
-	</td>
-	<td>
-		<script>
-		document.write(!!document.createElement('div').getElementById);
-		</script>
-	</td>
-</tr>
+<table border="1">
+  <tr>
+    <td></td>
+    <td>getElementsByTagName</td>
+    <td>getElementById</td>
+  </tr>
+  <tr>
+    <td>document.createDocumentFragment()</td>
+    <td>
+      <script>
+        document.write(
+          !!document.createDocumentFragment().getElementsByTagName,
+        );
+      </script>
+    </td>
+    <td>
+      <script>
+        document.write(!!document.createDocumentFragment().getElementById);
+      </script>
+    </td>
+  </tr>
+  <tr>
+    <td>document.createElement('div')</td>
+    <td>
+      <script>
+        document.write(!!document.createElement('div').getElementsByTagName);
+      </script>
+    </td>
+    <td>
+      <script>
+        document.write(!!document.createElement('div').getElementById);
+      </script>
+    </td>
+  </tr>
 </table>

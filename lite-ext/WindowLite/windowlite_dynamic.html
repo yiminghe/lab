@@ -1,145 +1,143 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>窗口内容修改示例</title>
-<!-- 以下三个基础库必须 -->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <head>
+    <title>窗口内容修改示例</title>
+    <!-- 以下三个基础库必须 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<script type="text/javascript" src="../base/javascript/ext-core.js"></script>
-<!-- 以下为自定义组件-->
-<script type="text/javascript" src="javascript/windowlite.js"></script>
-<script type="text/javascript" src="javascript/MessageBoxLite.js"></script>
+    <script src="../base/javascript/ext-core.js"></script>
+    <!-- 以下为自定义组件-->
+    <script src="javascript/windowlite.js"></script>
+    <script src="javascript/MessageBoxLite.js"></script>
 
-<!--以下为css -->
+    <!--以下为css -->
 
-<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
+    <link rel="stylesheet" href="../base/css/core.css" />
 
-<!-- 自定义组件的css-->
-<link rel="stylesheet" type="text/css" href="css/aol/windowlite.css" id="skinCss" />
+    <!-- 自定义组件的css-->
+    <link rel="stylesheet" href="css/aol/windowlite.css" id="skinCss" />
 
-<script type="text/javascript">
-//<![CDATA[
+    <script>
+      //<![CDATA[
 
-Ext.onReady(function() {
-	
-	var count=0;
-	var mwindow = new Ext.ux.WindowLite({			
-			//窗体内容的大小，注意不是窗体的大小
-        width:500,
-       
-        //是否支持拖放,请载入 DDCore.js
-        drag:true,
-        title:'请选择职位',
-        
-        //是否允许最大化窗口
-        maximizable:true,
-        
-        shadow:'frame',//默认sides
-				shadowOffset:6,//默认4
-        
-        //是否有关闭按钮,默认true
-        //closable :false,
-        
-        //设置默认焦点按钮
-        //defaultButton:'AlertLite 1',
-        //静态设置按钮       
-        buttons:[{
-        	text:'添加内容',
-        	handler:function(evt) {
-        		Ext.DomHelper.insertFirst(mwindow.body,{
-        			tag:"p",
-        			html:" i am added !" + (++count)
-        		});
-        		//如果窗体没有设置高度，内容变化会导致窗体大小变化，则要通知窗体，设置阴影大小等.
-        		mwindow.fireEvent("changecontent");
-        		evt.stopEvent();
-        	}
-        },
-        {
-        	text:'得到宽度',
-        	handler:function(evt) {
-        		alert(mwindow.getWidth());
-        		evt.stopEvent();
-        	}
+      Ext.onReady(function () {
+        var count = 0;
+        var mwindow = new Ext.ux.WindowLite({
+          //窗体内容的大小，注意不是窗体的大小
+          width: 500,
+
+          //是否支持拖放,请载入 DDCore.js
+          drag: true,
+          title: '请选择职位',
+
+          //是否允许最大化窗口
+          maximizable: true,
+
+          shadow: 'frame', //默认sides
+          shadowOffset: 6, //默认4
+
+          //是否有关闭按钮,默认true
+          //closable :false,
+
+          //设置默认焦点按钮
+          //defaultButton:'AlertLite 1',
+          //静态设置按钮
+          buttons: [
+            {
+              text: '添加内容',
+              handler: function (evt) {
+                Ext.DomHelper.insertFirst(mwindow.body, {
+                  tag: 'p',
+                  html: ' i am added !' + ++count,
+                });
+                //如果窗体没有设置高度，内容变化会导致窗体大小变化，则要通知窗体，设置阴影大小等.
+                mwindow.fireEvent('changecontent');
+                evt.stopEvent();
+              },
+            },
+            {
+              text: '得到宽度',
+              handler: function (evt) {
+                alert(mwindow.getWidth());
+                evt.stopEvent();
+              },
+            },
+          ],
+          //是否模态窗口
+          modal: true,
+          //是否支持用户调节大小
+          resizable: true,
+        });
+
+        var events = [
+          'hide',
+          'beforehide',
+          'beforeclose',
+          'show',
+          'close',
+          'resize',
+          'ghost',
+          'unghost',
+          'maximize',
+          'restore',
+          'changecontent',
+        ];
+        if (false)
+          for (var i = 0; i < events.length; i++) {
+            (function (evt) {
+              mwindow.on(evt, function () {});
+            })(events[i]);
+          }
+
+        Ext.fly('action_a').on('click', function (evt) {
+          var xy = evt.getXY();
+          mwindow.show({
+            animateTarget: 'action_a',
+            x: xy[0],
+            y: xy[1] + 100,
+            constrainToView: true,
+          });
+        });
+        Ext.fly('action_c').on('click', function () {
+          mwindow.hide();
+        });
+        Ext.get('skin').dom.value = 'css/aol/windowlite.css';
+
+        function swapStyleSheet(cssId, url) {
+          var doc = document;
+          var existing = doc.getElementById(cssId);
+          if (existing) {
+            existing.parentNode.removeChild(existing);
+          }
+
+          var ss = doc.createElement('link');
+          ss.setAttribute('rel', 'stylesheet');
+          ss.setAttribute('type', 'text/css');
+          ss.setAttribute('id', cssId);
+          ss.setAttribute('href', url);
+          doc.getElementsByTagName('head')[0].appendChild(ss);
         }
-        ],
-        //是否模态窗口
-        modal:true,
-        //是否支持用户调节大小      	
-        resizable:true
-   });	
-	
-  
-		var events=['hide',
-	    'beforehide', 'beforeclose', 'show',
-	    'close', "resize", "ghost", "unghost"
-	    , "maximize", "restore","changecontent"];
-	if(false)for(var i=0;i<events.length;i++) {
-		
-		(function(evt){mwindow.on(evt,function(){
-		});})(events[i]);
-	}
+        Ext.get('skin').on('change', function () {
+          swapStyleSheet('skinCss', this.getValue());
+        });
+      });
+      //]]>
+    </script>
+  </head>
+  <body>
+    <div style="position: absolute; top: 100px; left: 900px">
+      <button id="action_a">显示</button>
+      <button id="action_b">添加按钮</button>
+      <button id="action_c">隐藏</button>
+    </div>
 
-    Ext.fly('action_a').on('click', function(evt) {
-    	 var xy=evt.getXY();
-    	 mwindow.show({
-    		animateTarget:'action_a',
-    		x:xy[0],
-    		y:xy[1]+100,
-    		constrainToView:true
-    	});
-    	
-    });
-    Ext.fly('action_c').on('click', function() {
-        (mwindow.hide());
-    });
-Ext.get("skin").dom.value="css/aol/windowlite.css";
-	
-	function swapStyleSheet(cssId,url){
-		var doc=document;
-		var existing = doc.getElementById(cssId);
-    if(existing){
-        existing.parentNode.removeChild(existing);
-    }
-    
-    var ss = doc.createElement("link");
-    ss.setAttribute("rel", "stylesheet");
-    ss.setAttribute("type", "text/css");
-    ss.setAttribute("id", cssId);
-    ss.setAttribute("href", url);
-    doc.getElementsByTagName("head")[0].appendChild(ss);
-	}
-	Ext.get("skin").on("change",function(){
-		swapStyleSheet("skinCss",this.getValue());
-	});
-   
+    <div style="margin: 20px">
+      选择皮肤：
 
-       
-});
-//]]>
-
-</script>
-
-</head>
-<body>
-<div style="position:absolute;top:100px;left:900px;">
-<button id='action_a'> 显示</button>
-<button id='action_b'> 添加按钮</button>
-<button id='action_c'> 隐藏</button>
-</div>
-
-
-<div style="margin:20px;">
-	选择皮肤：
-	
-	<select id="skin">
-		
-		<option value="css/aol/windowlite.css">aol</option>
-		<option value="css/windowlite.css">extjs</option>
-	</select>	
-</div>	
-
-
-</body>
-</html> 
+      <select id="skin">
+        <option value="css/aol/windowlite.css">aol</option>
+        <option value="css/windowlite.css">extjs</option>
+      </select>
+    </div>
+  </body>
+</html>

@@ -8,13 +8,13 @@ function isCharacter(c: string) {
 }
 
 interface Value {
-  count:number;
+  count: number;
 }
 
 function count(str: string) {
   var maxCount = 0;
   var maxStart, maxEnd;
-  var tree = new Trie<Value>({count:0});
+  var tree = new Trie<Value>({ count: 0 });
   var start = 0;
   var len = str.length;
   for (var i = 0; i < len; i++) {
@@ -54,6 +54,6 @@ const ret = count(str);
 
 console.log(ret);
 
-ret.trie.visit((word: string,value ) => {
+ret.trie.visit((word: string, value) => {
   console.log(word + ' : ' + value.count);
 });

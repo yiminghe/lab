@@ -1,52 +1,49 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>inline-block 垂直居中</title>
-<style type="text/css">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>inline-block 垂直居中</title>
+    <style>
+      .itm {
+        border: 2px solid #ccc;
+        width: 160px;
+        height: 360px;
+        text-align: center;
+      }
 
-.itm {
-	border:2px solid #ccc;
-	width:160px;
-	height:360px;
-	text-align:center;
-}
+      .blank {
+        width: 0;
+        height: 100%;
+        display: inline-block;
+        vertical-align: middle;
+        *zoom: 1;
+        *display: inline;
+      }
 
-.blank {
-	width:0;
-	height:100%;
-	display:inline-block;
-	vertical-align:middle;
-	*zoom:1;
-	*display:inline;
-}
+      img {
+        border: none;
+      }
+      .center {
+        vertical-align: middle;
+        display: inline-block;
+        vertical-align: middle;
+        *zoom: 1;
+        *display: inline;
+        border: 2px solid red;
+      }
+    </style>
+  </head>
 
-img {
-	border:none;
-}
-.center {
-	vertical-align:middle;
-	display:inline-block;
-	vertical-align:middle;
-	*zoom:1;
-	*display:inline;
-	border:2px solid red;
-}
-</style>
-</head>
-
-<body>
-	<p> inline-block 实现的浏览器通用居中</p>
-<div class="itm">
-<div  class="blank"></div>
-<div class="center">
-	<p>我是凑数的</p>
-	<p>我是凑数的</p>
-	<p>我是凑数的</p>
-	<p>我是凑数的</p>
-	
-	</div>
-</div>
-</body>
+  <body>
+    <p>inline-block 实现的浏览器通用居中</p>
+    <div class="itm">
+      <div class="blank"></div>
+      <div class="center">
+        <p>我是凑数的</p>
+        <p>我是凑数的</p>
+        <p>我是凑数的</p>
+        <p>我是凑数的</p>
+      </div>
+    </div>
+  </body>
 </html>
-

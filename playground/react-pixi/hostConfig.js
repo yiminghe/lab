@@ -1,9 +1,9 @@
-import { PIXI_NODE } from "./types.js";
+import { PIXI_NODE } from './types.js';
 
 function withLog(log, fn) {
   return (...args) => {
     console.log(log);
-    return fn(...args)
+    return fn(...args);
   };
 }
 
@@ -35,11 +35,9 @@ const hostConfig = {
     return false;
   },
 
-  prepareForCommit() {
-  },
+  prepareForCommit() {},
 
-  resetAfterCommit() {
-  },
+  resetAfterCommit() {},
 
   getChildHostContext(parentContext) {
     return parentContext;
@@ -55,23 +53,15 @@ const hostConfig = {
     }
   },
 
-  createTextInstance(text, container) {
-  },
+  createTextInstance(text, container) {},
 
-  commitTextUpdate(node, oldText, newText) {
-  },
+  commitTextUpdate(node, oldText, newText) {},
 
   prepareUpdate(node, type, oldProps, newProps) {
     return true;
   },
 
-  commitUpdate(
-    node,
-    updatePayload,
-    type,
-    oldProps,
-    newProps
-  ) {
+  commitUpdate(node, updatePayload, type, oldProps, newProps) {
     newProps.pixiUpdate(node, newProps, oldProps);
   },
 
@@ -83,8 +73,7 @@ const hostConfig = {
 
   removeChild: removeChild,
 
-  finalizeInitialChildren() {
-  },
+  finalizeInitialChildren() {},
 
   appendChildToContainer: appendChild,
 
@@ -105,17 +94,13 @@ const hostConfig = {
     return container;
   },
 
-  appendChildToContainerChildSet(childSet,child){
+  appendChildToContainerChildSet(childSet, child) {
     childSet.addChild(child);
   },
 
-  finalizeContainerChildren(){
+  finalizeContainerChildren() {},
 
-  },
-
-  replaceContainerChildren(){
-
-  },
+  replaceContainerChildren() {},
 
   supportsMutation: true,
 
@@ -125,11 +110,11 @@ const hostConfig = {
 // hostConfig.supportsMutation = false;
 // hostConfig.supportsPersistence = true;
 
-  // Object.keys(hostConfig).forEach(k => {
-  //   const v = hostConfig[k];
-  //   if (typeof v === 'function') {
-  //     hostConfig[k] = withLog(k, v);
-  //   }
-  // });
+// Object.keys(hostConfig).forEach(k => {
+//   const v = hostConfig[k];
+//   if (typeof v === 'function') {
+//     hostConfig[k] = withLog(k, v);
+//   }
+// });
 
 export default hostConfig;

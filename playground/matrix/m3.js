@@ -34,7 +34,8 @@
  *
  * @module webgl-2d-math
  */
-(function(root, factory) {  // eslint-disable-line
+(function (root, factory) {
+  // eslint-disable-line
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define([], factory);
@@ -42,8 +43,8 @@
     // Browser globals
     root.m3 = factory();
   }
-}(this, function() {
-  "use strict";
+})(this, function () {
+  'use strict';
 
   /**
    * An array or typed array with 9 values.
@@ -92,17 +93,12 @@
     ];
   }
 
-
   /**
    * Creates a 3x3 identity matrix
    * @return {module:webgl2-2d-math.Matrix3} an identity matrix
    */
   function identity() {
-    return [
-      1, 0, 0,
-      0, 1, 0,
-      0, 0, 1,
-    ];
+    return [1, 0, 0, 0, 1, 0, 0, 0, 1];
   }
 
   /**
@@ -114,11 +110,7 @@
    */
   function projection(width, height) {
     // Note: This matrix flips the Y axis so 0 is at the top.
-    return [
-      2 / width, 0, 0,
-      0, -2 / height, 0,
-      -1, 1, 1,
-    ];
+    return [2 / width, 0, 0, 0, -2 / height, 0, -1, 1, 1];
   }
 
   /**
@@ -141,11 +133,7 @@
    * @memberOf module:webgl-2d-math
    */
   function translation(tx, ty) {
-    return [
-      1, 0, 0,
-      0, 1, 0,
-      tx, ty, 1,
-    ];
+    return [1, 0, 0, 0, 1, 0, tx, ty, 1];
   }
 
   /**
@@ -169,11 +157,7 @@
   function rotation(angleInRadians) {
     var c = Math.cos(angleInRadians);
     var s = Math.sin(angleInRadians);
-    return [
-      c, -s, 0,
-      s, c, 0,
-      0, 0, 1,
-    ];
+    return [c, -s, 0, s, c, 0, 0, 0, 1];
   }
 
   /**
@@ -195,11 +179,7 @@
    * @memberOf module:webgl-2d-math
    */
   function scaling(sx, sy) {
-    return [
-      sx, 0, 0,
-      0, sy, 0,
-      0, 0, 1,
-    ];
+    return [sx, 0, 0, 0, sy, 0, 0, 0, 1];
   }
 
   /**
@@ -238,18 +218,15 @@
   function reflect(ix, iy, nx, ny) {
     // I - 2.0 * dot(N, I) * N.
     var d = dot(nx, ny, ix, iy);
-    return [
-      ix - 2 * d * nx,
-      iy - 2 * d * ny,
-    ];
+    return [ix - 2 * d * nx, iy - 2 * d * ny];
   }
 
   function radToDeg(r) {
-    return r * 180 / Math.PI;
+    return (r * 180) / Math.PI;
   }
 
   function degToRad(d) {
-    return d * Math.PI / 180;
+    return (d * Math.PI) / 180;
   }
 
   function transformPoint(m, v) {
@@ -266,15 +243,18 @@
     var t00 = m[1 * 3 + 1] * m[2 * 3 + 2] - m[1 * 3 + 2] * m[2 * 3 + 1];
     var t10 = m[0 * 3 + 1] * m[2 * 3 + 2] - m[0 * 3 + 2] * m[2 * 3 + 1];
     var t20 = m[0 * 3 + 1] * m[1 * 3 + 2] - m[0 * 3 + 2] * m[1 * 3 + 1];
-    var d = 1.0 / (m[0 * 3 + 0] * t00 - m[1 * 3 + 0] * t10 + m[2 * 3 + 0] * t20);
+    var d =
+      1.0 / (m[0 * 3 + 0] * t00 - m[1 * 3 + 0] * t10 + m[2 * 3 + 0] * t20);
     return [
-       d * t00, -d * t10, d * t20,
+      d * t00,
+      -d * t10,
+      d * t20,
       -d * (m[1 * 3 + 0] * m[2 * 3 + 2] - m[1 * 3 + 2] * m[2 * 3 + 0]),
-       d * (m[0 * 3 + 0] * m[2 * 3 + 2] - m[0 * 3 + 2] * m[2 * 3 + 0]),
+      d * (m[0 * 3 + 0] * m[2 * 3 + 2] - m[0 * 3 + 2] * m[2 * 3 + 0]),
       -d * (m[0 * 3 + 0] * m[1 * 3 + 2] - m[0 * 3 + 2] * m[1 * 3 + 0]),
-       d * (m[1 * 3 + 0] * m[2 * 3 + 1] - m[1 * 3 + 1] * m[2 * 3 + 0]),
+      d * (m[1 * 3 + 0] * m[2 * 3 + 1] - m[1 * 3 + 1] * m[2 * 3 + 0]),
       -d * (m[0 * 3 + 0] * m[2 * 3 + 1] - m[0 * 3 + 1] * m[2 * 3 + 0]),
-       d * (m[0 * 3 + 0] * m[1 * 3 + 1] - m[0 * 3 + 1] * m[1 * 3 + 0]),
+      d * (m[0 * 3 + 0] * m[1 * 3 + 1] - m[0 * 3 + 1] * m[1 * 3 + 0]),
     ];
   }
 
@@ -298,5 +278,4 @@
     translate: translate,
     project: project,
   };
-
-}));
+});

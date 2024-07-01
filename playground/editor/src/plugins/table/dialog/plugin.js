@@ -1,11 +1,14 @@
-KISSY.Editor.add("table/dialog", function(editor) {
+KISSY.Editor.add(
+  'table/dialog',
+  function (editor) {
     var S = KISSY,
-        KE = S.Editor;
+      KE = S.Editor;
 
-    KE.use("table/dialog/support", function() {
-        editor.addDialog("table/dialog", new KE.TableUI.Dialog(editor));
+    KE.use('table/dialog/support', function () {
+      editor.addDialog('table/dialog', new KE.TableUI.Dialog(editor));
     });
-
-},{
-    attach:false
-});
+  },
+  {
+    attach: false,
+  },
+);

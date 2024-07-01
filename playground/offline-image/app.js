@@ -3,15 +3,19 @@ import db, { fakeUrl } from './db.js';
 (async function () {
   const img = document.getElementById('img');
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js', {
-      type: 'module',
-    }).then(registration => {
-      console.log(
-        'sevice worker registration successful with scope: ',
-        registration.scope);
-    }).catch(err => {
-      console.log('service worker registration failed: ', err);
-    });
+    navigator.serviceWorker
+      .register('./sw.js', {
+        type: 'module',
+      })
+      .then((registration) => {
+        console.log(
+          'sevice worker registration successful with scope: ',
+          registration.scope,
+        );
+      })
+      .catch((err) => {
+        console.log('service worker registration failed: ', err);
+      });
 
     if (navigator.serviceWorker.controller) {
       img.disabled = false;
@@ -34,9 +38,9 @@ import db, { fakeUrl } from './db.js';
         type: file.type,
       });
       const id = await db.images.add({
-        img: blob
+        img: blob,
       });
       display.src = fakeUrl + id;
-    }
+    };
   });
 })();

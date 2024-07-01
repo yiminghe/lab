@@ -1,39 +1,38 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>Narcissus Runner</title>
-</head>
-<body>
-
-<div>
-    <textarea id="code" style="width:100%;height:300px;">
+  <head>
+    <meta charset="utf-8" />
+    <title>Narcissus Runner</title>
+  </head>
+  <body>
+    <div>
+      <textarea id="code" style="width: 100%; height: 300px">
         function add(x,y){
             return x+y;
         }
         add(1,2);
-    </textarea>
-</div>
+    </textarea
+      >
+    </div>
 
-<h1> see console in firefox pls</h1>
-<div>
-    <button id="run">run</button>
-</div>
+    <h1>see console in firefox pls</h1>
+    <div>
+      <button id="run">run</button>
+    </div>
 
+    <script src="lib/jsdefs.js"></script>
+    <script src="lib/jslex.js"></script>
+    <script src="lib/jsparse.js"></script>
+    <script src="lib/jsdecomp.js"></script>
+    <script src="lib/jsresolve.js"></script>
+    <script src="lib/jsexec.js?t=1"></script>
 
-<script src="lib/jsdefs.js"></script>
-<script src="lib/jslex.js"></script>
-<script src="lib/jsparse.js"></script>
-<script src="lib/jsdecomp.js"></script>
-<script src="lib/jsresolve.js"></script>
-<script src="lib/jsexec.js?t=1"></script>
-
-<script>
-
-    document.getElementById("run").onclick = function() {
-        console.log(Narcissus.interpreter.evaluate(document.getElementById("code").value));
-    };
-
-</script>
-</body>
+    <script>
+      document.getElementById('run').onclick = function () {
+        console.log(
+          Narcissus.interpreter.evaluate(document.getElementById('code').value),
+        );
+      };
+    </script>
+  </body>
 </html>

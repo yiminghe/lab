@@ -12,8 +12,7 @@ function App() {
 
   return (
     <div>
-      <input ref={input} defaultValue="aab"/> .match(/a*b/)
-      &nbsp;
+      <input ref={input} defaultValue="aab" /> .match(/a*b/) &nbsp;
       <button onClick={run}>click and see console</button>
     </div>
   );

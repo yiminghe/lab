@@ -1,82 +1,87 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-	<head>
-		<title>sliderliteVertical</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<script type="text/javascript" src="../base/javascript/ext-core.js"></script>
-		<!-- 以下为自定义组件-->
-		<script type="text/javascript" src="javascript/sliderlite.js" charset="utf-8"></script>
-		
-		<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
-		<link rel="stylesheet" type="text/css" href="css/sliderlite.css" />
-		<style type="text/css">
-			#wrap {
-				width:950px;
-				margin:0 auto;
-			}
-			h2 {
-				font-size:20px;
-				margin:20px auto;
-			}
-			#test,#test2 {
-				margin:0 auto;
-			}
-		</style>
-		<script type="text/javascript">
-		//<![CDATA[
-		Ext.onReady(function(){
-			new Ext.ux.SliderLite({
-				id:'test2',
-				
-				//animParts:[3,3],默认[2,2] 上分2组，下分2组，一共2*2=4 块
-				//anim:'puzzleTo',//轮转类型
-				anim:'scrollVertical',
-				interval:4000 // 轮转间隔 3秒，最少 1秒
-			});
-		});
-		//]]>
-		
-		</script>
-	
-	
-	</head>
-	<body>
-		<div id="wrap">
-	
-		
-		<h2>sliderliteVertical slider</h2>
-		
-		<p style="margin:50px auto;">
-			其他效果：
-			<br/>
-			<a href="sliderliteFade.html">渐隐显示</a><br/>
-			<a href="sliderliteHorizonal.html">水平滑动</a><br/>
-			
-			<a href="sliderlite.html">图片分解效果</a>
-		</p>
-		
-			<div class="sliderLite" style="width:360px;height:190px;" id='test2'>
+  <head>
+    <title>sliderliteVertical</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../base/javascript/ext-core.js"></script>
+    <!-- 以下为自定义组件-->
+    <script src="javascript/sliderlite.js" charset="utf-8"></script>
 
-				<ul class="sliderImages clearfix">
-					<li style="width:360px;">
-						<a href="#" title="im1"><img src="01.jpg" alt="test01" title="" /></a></li>
-					<li style="width:360px;">
-						<a href="#" title="im2"><img src="02.jpg" alt="test02" title="" /></a></li>
-					<li style="width:360px;">
-						<a href="#" title="im3"><img src="03.jpg" alt="test03" title="" /></a></li>
-					<li style="width:360px;">
-						<a href="#" title="im4"><img src="04.jpg" alt="test04" title="" /></a></li>		
-				</ul>
+    <link rel="stylesheet" href="../base/css/core.css" />
+    <link rel="stylesheet" href="css/sliderlite.css" />
+    <style>
+      #wrap {
+        width: 950px;
+        margin: 0 auto;
+      }
+      h2 {
+        font-size: 20px;
+        margin: 20px auto;
+      }
+      #test,
+      #test2 {
+        margin: 0 auto;
+      }
+    </style>
+    <script>
+      //<![CDATA[
+      Ext.onReady(function () {
+        new Ext.ux.SliderLite({
+          id: 'test2',
 
-				<ul class="sliderNumbers clearfix">
-					<li title="num1">1</li>
-					<li title="num2">2</li>
-					<li title="num3">三</li>
-					<li title="num4">四</li>		
-				</ul>
+          //animParts:[3,3],默认[2,2] 上分2组，下分2组，一共2*2=4 块
+          //anim:'puzzleTo',//轮转类型
+          anim: 'scrollVertical',
+          interval: 4000, // 轮转间隔 3秒，最少 1秒
+        });
+      });
+      //]]>
+    </script>
+  </head>
+  <body>
+    <div id="wrap">
+      <h2>sliderliteVertical slider</h2>
 
-			</div>
-	</div>
-	</body>
+      <p style="margin: 50px auto">
+        其他效果：
+        <br />
+        <a href="sliderliteFade.html">渐隐显示</a><br />
+        <a href="sliderliteHorizonal.html">水平滑动</a><br />
+
+        <a href="sliderlite.html">图片分解效果</a>
+      </p>
+
+      <div class="sliderLite" style="width: 360px; height: 190px" id="test2">
+        <ul class="sliderImages clearfix">
+          <li style="width: 360px">
+            <a href="#" title="im1"
+              ><img src="01.jpg" alt="test01" title=""
+            /></a>
+          </li>
+          <li style="width: 360px">
+            <a href="#" title="im2"
+              ><img src="02.jpg" alt="test02" title=""
+            /></a>
+          </li>
+          <li style="width: 360px">
+            <a href="#" title="im3"
+              ><img src="03.jpg" alt="test03" title=""
+            /></a>
+          </li>
+          <li style="width: 360px">
+            <a href="#" title="im4"
+              ><img src="04.jpg" alt="test04" title=""
+            /></a>
+          </li>
+        </ul>
+
+        <ul class="sliderNumbers clearfix">
+          <li title="num1">1</li>
+          <li title="num2">2</li>
+          <li title="num3">三</li>
+          <li title="num4">四</li>
+        </ul>
+      </div>
+    </div>
+  </body>
 </html>

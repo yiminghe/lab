@@ -1,4 +1,4 @@
-import { PIXI_NODE } from "./types.js";
+import { PIXI_NODE } from './types.js';
 
 function SimpleNodeFactory(props) {
   return props.value;
@@ -18,7 +18,7 @@ function SpriteFactory(props) {
 function SpriteInit(inst, props, oldProps) {
   if (oldProps) {
     if (props.texture) {
-      inst.texture = (props.texture);
+      inst.texture = props.texture;
     }
   }
 
@@ -92,7 +92,7 @@ function SpriteInit(inst, props, oldProps) {
 
 function SpriteUpdate(inst, newProps, oldProps) {
   const diff = {};
-  Object.keys(newProps).forEach(k => {
+  Object.keys(newProps).forEach((k) => {
     if (newProps[k] !== oldProps[k]) {
       diff[k] = newProps[k];
     }

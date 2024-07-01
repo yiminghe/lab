@@ -1,86 +1,85 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="gbk"/>
-<script type="text/javascript" src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js" charset="utf-8"></script>
-</head>
-<body>
-<p id="test"><strong>12</strong>423444</i></p>
-<button id="run">
-    run
-</button>
+  <head>
+    <meta charset="gbk" />
+    <script
+      src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"
+      charset="utf-8"></script>
+  </head>
+  <body>
+    <p id="test"><strong>12</strong>423444</p>
+    <button id="run">run</button>
 
-<script type="text/javascript">
-
-    document.getElementById("test").childNodes[1].splitText(2);
-    function getPosition(range, start) {
-
+    <script>
+      document.getElementById('test').childNodes[1].splitText(2);
+      function getPosition(range, start) {
         range = range.duplicate();
         range.collapse(start);
         var parent = range.parentElement(),
-                siblings = parent.childNodes,
-            //���Ҿ����ı��ڵ�
-                startRange,startIndex = -1;
+          siblings = parent.childNodes,
+          //���Ҿ����ı��ڵ�
+          startRange,
+          startIndex = -1;
 
         for (var i = 0; i < siblings.length; i++) {
-            var child = siblings[ i ];
-            if (child.nodeType == 1) {
-                var tr = range.duplicate();
-                tr.moveToElementText(child);
-                var comparisonStart = tr.compareEndPoints('StartToStart', range),
-                        comparisonEnd = tr.compareEndPoints('EndToStart', range);
+          var child = siblings[i];
+          if (child.nodeType == 1) {
+            var tr = range.duplicate();
+            tr.moveToElementText(child);
+            var comparisonStart = tr.compareEndPoints('StartToStart', range),
+              comparisonEnd = tr.compareEndPoints('EndToStart', range);
 
-                if (comparisonStart > 0)
-                    break;
-                else if (!comparisonStart
-                        || comparisonEnd == 1 && comparisonStart == -1)
-                    return { container : parent, offset : i };
-                else if (!comparisonEnd)
-                    return { container : parent, offset : i + 1 };
-                startRange = tr;
-                startIndex = i;
-            }
+            if (comparisonStart > 0) break;
+            else if (
+              !comparisonStart ||
+              (comparisonEnd == 1 && comparisonStart == -1)
+            )
+              return { container: parent, offset: i };
+            else if (!comparisonEnd)
+              return { container: parent, offset: i + 1 };
+            startRange = tr;
+            startIndex = i;
+          }
         }
         if (!startRange) {
-            startRange = range.duplicate();
-            startRange.moveToElementText(parent);
-            startRange.collapse(true);
+          startRange = range.duplicate();
+          startRange.moveToElementText(parent);
+          startRange.collapse(true);
         } else {
-            startRange.collapse(false);
+          startRange.collapse(false);
         }
 
-        startRange.setEndPoint("EndToEnd", range);
-        var totalL = startRange.text.replace(/(\r\n|\r)/g, '\n').length,realL = 0;
+        startRange.setEndPoint('EndToEnd', range);
+        var totalL = startRange.text.replace(/(\r\n|\r)/g, '\n').length,
+          realL = 0;
         for (var j = startIndex + 1; j < siblings.length; j++) {
-            realL = totalL;
-            totalL -= siblings[j].length;
+          realL = totalL;
+          totalL -= siblings[j].length;
 
-            if (totalL <= 0)break;
+          if (totalL <= 0) break;
         }
         if (totalL == 0) {
-            return {
-                container:parent,
-                offset:j + 1
-            };
+          return {
+            container: parent,
+            offset: j + 1,
+          };
         }
         return {
-            container:  siblings[j],
-            offset:realL
+          container: siblings[j],
+          offset: realL,
         };
-
-
-    }
-    document.getElementById("run").onclick = function() {
+      }
+      document.getElementById('run').onclick = function () {
         if (!KISSY.UA.ie) {
-            alert("use ie please");
-            return;
+          alert('use ie please');
+          return;
         }
         var sel = document.selection.createRange();
         var start = getPosition(sel, true);
         var end = getPosition(sel, false);
-        alert("start : " + start.container.nodeName + " : " + start.offset);
-        alert("end : " + end.container.nodeName + " : " + end.offset);
-    };
-</script>
-</body>
+        alert('start : ' + start.container.nodeName + ' : ' + start.offset);
+        alert('end : ' + end.container.nodeName + ' : ' + end.offset);
+      };
+    </script>
+  </body>
 </html>

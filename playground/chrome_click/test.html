@@ -1,17 +1,16 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<style type="text/css">
-    #container {
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      #container {
         padding: 10px;
         border: 1px solid red;
         position: relative;
         height: 200px;
-    }
+      }
 
-   
-    #contents {
+      #contents {
         width: 100%;
         height: 100%;
         border: 1px solid green;
@@ -20,71 +19,61 @@
         left: 20px;
         top: 50px;
         z-index: 10;
-    }
-</style>
-</head>
-<body>
-
-<div id="container">
-    父节点
-    <!--
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      父节点
+      <!--
     <div id="contents">
         子节点
     </div>
     -->
 
-    <div id="contents">
-        子节点
+      <div id="contents">子节点</div>
     </div>
-</div>
-<div id="re">
-
-</div>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy.js"></script>
-<script>
-    KISSY.ready(function(S) {
-        var f = S.one("#container"),
-                c = S.one("#contents"),
-                re = S.one("#re"),fenable = false,
-                cenable = false
-                ;
-        f.on("mousedown", function(ev) {
-            re.append("<p> container mousedown</p>");
-            fenable = true;
-            ev.preventDefault();
+    <div id="re"></div>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy.js"></script>
+    <script>
+      KISSY.ready(function (S) {
+        var f = S.one('#container'),
+          c = S.one('#contents'),
+          re = S.one('#re'),
+          fenable = false,
+          cenable = false;
+        f.on('mousedown', function (ev) {
+          re.append('<p> container mousedown</p>');
+          fenable = true;
+          ev.preventDefault();
         });
-        f.on("mouseup", function() {
-            re.append("<p> container mouseup</p>");
-            fenable = false;
+        f.on('mouseup', function () {
+          re.append('<p> container mouseup</p>');
+          fenable = false;
         });
-        f.on("mousemove", function(ev) {
-            fenable && re.append("<p> container mousemove</p>");
-            ev.preventDefault();
+        f.on('mousemove', function (ev) {
+          fenable && re.append('<p> container mousemove</p>');
+          ev.preventDefault();
         });
-        f.on("click", function() {
-            re.append("<p> container click</p>");
+        f.on('click', function () {
+          re.append('<p> container click</p>');
         });
 
-
-        c.on("mousedown", function(ev) {
-            re.append("<p> contents mousedown</p>");
-            cenable = true;
-
+        c.on('mousedown', function (ev) {
+          re.append('<p> contents mousedown</p>');
+          cenable = true;
         });
-        c.on("mouseup", function() {
-            re.append("<p> contents mouseup</p>");
-            cenable = false;
+        c.on('mouseup', function () {
+          re.append('<p> contents mouseup</p>');
+          cenable = false;
         });
-        c.on("mousemove", function() {
-            cenable && re.append("<p> contents mousemove</p>");
+        c.on('mousemove', function () {
+          cenable && re.append('<p> contents mousemove</p>');
         });
-        c.on("click", function() {
-            re.append("<p> contents click</p>");
-
+        c.on('click', function () {
+          re.append('<p> contents click</p>');
         });
-
-
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

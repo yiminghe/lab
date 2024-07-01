@@ -1,80 +1,70 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-	<head>
-		<title>
-			collapselite测试
-		</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="text/javascript" src="../base/javascript/ext-core.js">
-</script>
-		<script type="text/javascript" src="javascript/collapselite.js">
-</script>
-		<link rel="stylesheet" type="text/css" href="../base/css/core.css" /><!-- 自定义组件的css-->
-		<link rel="stylesheet" type="text/css" href="css/collapselite.css" />
-		<link rel="stylesheet" type="text/css" href="css/panel.css" />
-		<style type="text/css">
-/*<![CDATA[*/
-		body {
-		font-size:13px;
-		}
-		/*]]>*/
-		</style>
-		<script type="text/javascript">
-//<![CDATA[
+  <head>
+    <title>collapselite测试</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../base/javascript/ext-core.js"></script>
+    <script src="javascript/collapselite.js"></script>
+    <link rel="stylesheet" href="../base/css/core.css" />
+    <!-- 自定义组件的css-->
+    <link rel="stylesheet" href="css/collapselite.css" />
+    <link rel="stylesheet" href="css/panel.css" />
+    <style>
+      /*<![CDATA[*/
+      body {
+        font-size: 13px;
+      }
+      /*]]>*/
+    </style>
+    <script>
+      //<![CDATA[
 
-		Ext.onReady(function() {
+      Ext.onReady(function () {
+        //一般定位
+        var c = new Ext.ux.CollapseLite({
+          //标题头
+          title: '一般定位测试头',
+          //内容
+          content: '一般定位测试content',
+          //渲染容器id
+          renderTo: 'test1',
+        });
 
-		//一般定位
-		var c=new Ext.ux.CollapseLite({
-		//标题头
-		title:'一般定位测试头',
-		//内容
-		content:'一般定位测试content',
-		//渲染容器id
-		renderTo:'test1'
-		});
+        c.on('expand', function () {
+          alert('expand occur !');
+        });
 
-		c.on("expand",function(){
-		alert("expand occur !");
-		});     
+        c.on('collapse', function () {
+          alert('collapse occur !');
+        });
 
-		c.on("collapse",function(){
-		alert("collapse occur !");
-		});
-			
-		//一般定位暂时不支持direction r
-		new Ext.ux.CollapseLite({
-		title:'一般定位测试头 - 不支持direction r',
-		content:'一般定位测试content',
-		direction:'r'
-		}); 
+        //一般定位暂时不支持direction r
+        new Ext.ux.CollapseLite({
+          title: '一般定位测试头 - 不支持direction r',
+          content: '一般定位测试content',
+          direction: 'r',
+        });
 
+        //绝对定位
+        new Ext.ux.CollapseLite({
+          title: '绝对定位测试头',
+          content: '绝对定位测试content',
+          style: 'position:absolute;left:100px;top:300px;width:500px;',
+        });
 
-		//绝对定位      
-		new Ext.ux.CollapseLite({
-		title:'绝对定位测试头',
-		content:'绝对定位测试content',
-		style:'position:absolute;left:100px;top:300px;width:500px;'
-		});
-
-
-
-		//绝对定位支持direction r     
-		new Ext.ux.CollapseLite({
-		title:'绝对定位测试头 - 支持direction r',
-		content:'绝对定位测试content',
-		style:'position:absolute;left:100px;top:600px;width:500px;',
-		//收缩方向
-		direction:'r'
-		});
-		 
-		});
-		//]]>
-
-		</script>
-	</head>
-	<body>
-		<div id="test1" style="margin:50px"></div>
-	</body>
+        //绝对定位支持direction r
+        new Ext.ux.CollapseLite({
+          title: '绝对定位测试头 - 支持direction r',
+          content: '绝对定位测试content',
+          style: 'position:absolute;left:100px;top:600px;width:500px;',
+          //收缩方向
+          direction: 'r',
+        });
+      });
+      //]]>
+    </script>
+  </head>
+  <body>
+    <div id="test1" style="margin: 50px"></div>
+  </body>
 </html>

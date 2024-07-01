@@ -1,22 +1,28 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>KISSY Editor Test</title>
-<link href="../build/theme/base.css" rel="stylesheet"/>
-<!--[if lt IE 8]>
-<link href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-mhtml.css" rel="stylesheet"/>
-<![endif]-->
-<!--[if gte IE 8]><!-->
-<link href="../build/theme/cool/editor-pkg-min-datauri.css " rel="stylesheet"/>
-<!--<![endif]-->
-</head>
-<body>
-
-<h1>发帖控制，背景色禁用</h1>
-<div style="width: 90%; margin: 0 auto">
-    <label for="editor">Editor Instance 1:</label>
-    <textarea id="editor" tabindex="0" style="width:100%;height:400px;margin:0 auto;">
+  <head>
+    <meta charset="utf-8" />
+    <title>KISSY Editor Test</title>
+    <link href="../build/theme/base.css" rel="stylesheet" />
+    <!--[if lt IE 8]>
+      <link
+        href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-mhtml.css"
+        rel="stylesheet" />
+    <![endif]-->
+    <!--[if gte IE 8]><!-->
+    <link
+      href="../build/theme/cool/editor-pkg-min-datauri.css "
+      rel="stylesheet" />
+    <!--<![endif]-->
+  </head>
+  <body>
+    <h1>发帖控制，背景色禁用</h1>
+    <div style="width: 90%; margin: 0 auto">
+      <label for="editor">Editor Instance 1:</label>
+      <textarea
+        id="editor"
+        tabindex="0"
+        style="width: 100%; height: 400px; margin: 0 auto">
         <script>alert(1);</script>
         <p style="background:#eee;color:red;">
             我是虾米音乐
@@ -157,292 +163,315 @@
         <p>3</p>
         <p>4</p>
 
-    </textarea>
-</div>
+    </textarea
+      >
+    </div>
 
+    <h1>回复配置</h1>
+    <div style="width: 60%; margin: 50px auto">
+      <label for="editor2">Editor Instance 2:</label>
+      <textarea
+        id="editor2"
+        style="width: 100%; height: 400px; margin: 0 auto"></textarea>
+    </div>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/kissy.js"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/uibase/uibase-pkg.js"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/dd/dd-pkg.js"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/overlay/overlay-pkg.js"></script>
+    <script src="../build/editor-all-pkg.js?t=20100827a"></script>
+    <script src="../build/biz/ext/editor-plugin-pkg.js"></script>
+    <script>
+      // just for test
+      var base = '../',
+        S = KISSY;
+      S.ready(function () {
+        S.use('editor', function () {
+          var KE = S.Editor;
 
-<h1>回复配置</h1>
-<div style="width: 60%; margin: 50px auto">
-    <label for="editor2">Editor Instance 2:</label>
-    <textarea id="editor2" style="width:100%;height:400px;margin:0 auto;"></textarea>
-</div>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/kissy.js"></script>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/uibase/uibase-pkg.js"></script>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/dd/dd-pkg.js"></script>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/overlay/overlay-pkg.js"></script>
-<script src="../build/editor-all-pkg.js?t=20100827a"></script>
-<script src="../build/biz/ext/editor-plugin-pkg.js"></script>
-<script>
-// just for test
-var base = '../',S = KISSY;
-S.ready(function() {
+          KE.Config.base = base + 'build/plugins/';
 
-
-    S.use('editor', function() {
-
-        var KE = S.Editor;
-
-        KE.Config.base = base + "build/plugins/";
-
-        window.editor = KE("#editor", {
-            attachForm:true,
+          window.editor = KE('#editor', {
+            attachForm: true,
             //编辑器内弹窗z-index底线，防止互相覆盖
-            baseZIndex:10000,
+            baseZIndex: 10000,
             pluginConfig: {
-                "image":{
-                    upload:{
-                        //返回格式
-                        //正确：{imgUrl:""}
-                        //错误：{error:""}
-                        //中文 \uxxxx 转义
-                        serverUrl:"/code/upload/upload.jsp",
-                        serverParams:{
-                        },
-                        fileInput:"Filedata",
-                        sizeLimit:1000,//k
-                        extraHtml:"<p style='margin-top:5px;'><input type='checkbox' name='watermark'> 图片加水印，防止别人盗用</p>"
-                    }
+              image: {
+                upload: {
+                  //返回格式
+                  //正确：{imgUrl:""}
+                  //错误：{error:""}
+                  //中文 \uxxxx 转义
+                  serverUrl: '/code/upload/upload.jsp',
+                  serverParams: {},
+                  fileInput: 'Filedata',
+                  sizeLimit: 1000, //k
+                  extraHtml:
+                    "<p style='margin-top:5px;'><input type='checkbox' name='watermark'> 图片加水印，防止别人盗用</p>",
                 },
-                "font-size":{
-                    items:[
-                        {
-                            value:"14px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:14px'>标准</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>14px</span>"
-                        },
-                        {
-                            value:"16px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:16px'>大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>16px</span>"
-                        },
-                        {
-                            value:"18px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:18px'>特大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>18px</span>"
-                        },
-                        {
-                            value:"20px",
-                            attrs:{
-                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                            },
-                            name:"" +
-                                    " <span style='font-size:20px'>极大</span>" +
-                                    "<span style='position:absolute;top:1px;right:3px;'>20px</span>"
-                        }
-                    ],
-                    width:"115px"
-                }
-                ,"font-family":{   items:[
-                    {name:"宋体",value:"SimSun"},
-                    {name:"黑体",value:"SimHei"},
-                    {name:"楷体",value:"KaiTi_GB2312"},
-                    {name:"微软雅黑",value:"Microsoft YaHei"},
-                    {name:"Times New Roman",value:"Times New Roman"},
-                    {name:"Arial",value:"Arial"},
-                    {name:"Verdana",value:"Verdana"}
-                ]
-                }
-                ,"bangpai-upload":{
-                    holder:"#imgup1",
-                    serverUrl:"/code/upload/upload.jsp",
-                    serverParams:{
-                        waterMark:function() {
-                            return S.one("#ke_img_up_watermark_2")[0].checked;
-                        }
+              },
+              'font-size': {
+                items: [
+                  {
+                    value: '14px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
                     },
-                    previewSuffix:"_80x80",
-                    previewWidth:"80px",
-                    sizeLimit:1000//k,
-                    ,numberLimit:15,
-                    extraHtml:"<p style='margin-top:10px;'>" +
-                            "<input type='checkbox' " +
-                            "style='vertical-align:middle;margin:0 5px;' " +
-                            "id='ke_img_up_watermark_2'>" +
-                            "<span style='vertical-align:middle;'>图片加水印，防止别人盗用</span></p>"
+                    name:
+                      '' +
+                      " <span style='font-size:14px'>标准</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>14px</span>",
+                  },
+                  {
+                    value: '16px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:16px'>大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>16px</span>",
+                  },
+                  {
+                    value: '18px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:18px'>特大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>18px</span>",
+                  },
+                  {
+                    value: '20px',
+                    attrs: {
+                      style:
+                        'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                    },
+                    name:
+                      '' +
+                      " <span style='font-size:20px'>极大</span>" +
+                      "<span style='position:absolute;top:1px;right:3px;'>20px</span>",
+                  },
+                ],
+                width: '115px',
+              },
+              'font-family': {
+                items: [
+                  { name: '宋体', value: 'SimSun' },
+                  { name: '黑体', value: 'SimHei' },
+                  { name: '楷体', value: 'KaiTi_GB2312' },
+                  { name: '微软雅黑', value: 'Microsoft YaHei' },
+                  { name: 'Times New Roman', value: 'Times New Roman' },
+                  { name: 'Arial', value: 'Arial' },
+                  { name: 'Verdana', value: 'Verdana' },
+                ],
+              },
+              'bangpai-upload': {
+                holder: '#imgup1',
+                serverUrl: '/code/upload/upload.jsp',
+                serverParams: {
+                  waterMark: function () {
+                    return S.one('#ke_img_up_watermark_2')[0].checked;
+                  },
                 },
-                "bangpai-video":{
-                    urlCfg:[
-                        {
-                            reg:/tudou\.com/i,
-                            url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
-                                    "url=@url@&callback=@callback@"//"&rand=@rand@"
-                        }
-                    ],
-                    sizeLimit:1000//k,
-                    ,numberLimit:15
-                },
-                "draft":{
-                    interval:5,
-                    limit:10,
-                    helpHtml:  "<div " +
-                            "style='width:200px;'>" +
-                            "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容，" +
-                            "如果发现内容丢失，" +
-                            "请选择恢复编辑历史</div></div>"
-                }
-                ,
-                "resize":{
-                    direction:["y"]
-                }
-            }
-        }).use("htmldataprocessor,enterkey,clipboard," +
-                "sourcearea,preview," +
-                "separator," +
-                "undo,separator,removeformat,font,color,separator," +
-                "list,indent,justify,separator,link,image,smiley," +
-                "separator,table,resize,draft,maximize"
-                , function() {
-            var self = this,
-                    htmlDataProcessor = self.htmlDataProcessor,
-                    dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
-            if (dataFilter) {
+                previewSuffix: '_80x80',
+                previewWidth: '80px',
+                sizeLimit: 1000, //k,
+                numberLimit: 15,
+                extraHtml:
+                  "<p style='margin-top:10px;'>" +
+                  "<input type='checkbox' " +
+                  "style='vertical-align:middle;margin:0 5px;' " +
+                  "id='ke_img_up_watermark_2'>" +
+                  "<span style='vertical-align:middle;'>图片加水印，防止别人盗用</span></p>",
+              },
+              'bangpai-video': {
+                urlCfg: [
+                  {
+                    reg: /tudou\.com/i,
+                    url:
+                      'http://bangpai.daily.taobao.net/json/getTudouVideo.htm?' +
+                      'url=@url@&callback=@callback@', //"&rand=@rand@"
+                  },
+                ],
+                sizeLimit: 1000, //k,
+                numberLimit: 15,
+              },
+              draft: {
+                interval: 5,
+                limit: 10,
+                helpHtml:
+                  '<div ' +
+                  "style='width:200px;'>" +
+                  "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容，" +
+                  '如果发现内容丢失，' +
+                  '请选择恢复编辑历史</div></div>',
+              },
+              resize: {
+                direction: ['y'],
+              },
+            },
+          }).use(
+            'htmldataprocessor,enterkey,clipboard,' +
+              'sourcearea,preview,' +
+              'separator,' +
+              'undo,separator,removeformat,font,color,separator,' +
+              'list,indent,justify,separator,link,image,smiley,' +
+              'separator,table,resize,draft,maximize',
+            function () {
+              var self = this,
+                htmlDataProcessor = self.htmlDataProcessor,
+                dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
+              if (dataFilter) {
                 dataFilter.addRules({
-                    attributes:{
-                        style:function(value) {
-                            value = value.replace(/background-color\s*:[^;]+(;|$)/g, "")
-                                    .replace(/background\s*:[^;]+(;|$)/g, "");
-                            if (!value) return false;
-                            return value;
-                        }
-                    }
+                  attributes: {
+                    style: function (value) {
+                      value = value
+                        .replace(/background-color\s*:[^;]+(;|$)/g, '')
+                        .replace(/background\s*:[^;]+(;|$)/g, '');
+                      if (!value) return false;
+                      return value;
+                    },
+                  },
                 });
-            }
-        });
+              }
+            },
+          );
 
-        KE("#editor2", {
-
+          KE('#editor2', {
             pluginConfig: {
-                "image":{
-                    upload:{
-                        serverUrl:"/code/upload/upload.jsp",
-                        serverParams:{
-                        },
-                        fileInput:"Filedata",
-                        sizeLimit:1000//k,
-                        ,extraHtml:"<p style='margin-top:10px;'>" +
-                                "<input type='checkbox' name='waterMark'> " +
-                                "图片加水印，防止别人盗用</p>"
-                    }
+              image: {
+                upload: {
+                  serverUrl: '/code/upload/upload.jsp',
+                  serverParams: {},
+                  fileInput: 'Filedata',
+                  sizeLimit: 1000, //k,
+                  extraHtml:
+                    "<p style='margin-top:10px;'>" +
+                    "<input type='checkbox' name='waterMark'> " +
+                    '图片加水印，防止别人盗用</p>',
                 },
-                "font-size":{
-                    items:[
-                        {
-                            value:"14px",
-                            name:"<span style='font-size:14px'>一般</span>  &nbsp; 14px"
-                        },
-                        {
-                            value:"16px",
-                            name:"<span style='font-size:16px'>较大</span> &nbsp; 16px"
-                        },
+              },
+              'font-size': {
+                items: [
+                  {
+                    value: '14px',
+                    name: "<span style='font-size:14px'>一般</span>  &nbsp; 14px",
+                  },
+                  {
+                    value: '16px',
+                    name: "<span style='font-size:16px'>较大</span> &nbsp; 16px",
+                  },
 
-                        {
-                            value:"20px",
-                            name:"<span style='font-size:20px'>特大</span> &nbsp; 20px"
-                        }
-                    ],
-                    width:"100px"
-                }
-                ,"font-family":["宋体","黑体","微软雅黑","TimeNewRoman","Arial","Verdana"]
-                ,"bangpai-upload":{
-                    serverUrl:"/code/upload/upload.jsp",
-                    serverParams:{
-                        waterMark:function() {
-                            return S.one("#ke_img_up_watermark_2")[0].checked;
-                        }
+                  {
+                    value: '20px',
+                    name: "<span style='font-size:20px'>特大</span> &nbsp; 20px",
+                  },
+                ],
+                width: '100px',
+              },
+              'font-family': [
+                '宋体',
+                '黑体',
+                '微软雅黑',
+                'TimeNewRoman',
+                'Arial',
+                'Verdana',
+              ],
+              'bangpai-upload': {
+                serverUrl: '/code/upload/upload.jsp',
+                serverParams: {
+                  waterMark: function () {
+                    return S.one('#ke_img_up_watermark_2')[0].checked;
+                  },
+                },
+                previewSuffix: '_80x80',
+                previewWidth: '80px',
+                sizeLimit: 1000, //k,
+                numberLimit: 15,
+                extraHtml:
+                  "<p style='margin-top:10px;'>" +
+                  "<input type='checkbox' " +
+                  "style='vertical-align:middle;margin:0 5px;' " +
+                  "id='ke_img_up_watermark_2'>" +
+                  "<span style='vertical-align:middle;'>图片加水印，防止别人盗用</span></p>",
+              },
+              'bangpai-video': {
+                urlCfg: [
+                  {
+                    reg: /tudou\.com/i,
+                    url:
+                      'http://bangpai.daily.taobao.net/json/getTudouVideo.htm?' +
+                      'url=@url@&callback=@callback@', //"&rand=@rand@"
+                  },
+                ],
+                providers: [
+                  {
+                    reg: /taobaocdn\.com/i,
+                    width: 480,
+                    height: 400,
+                    detect: function (url) {
+                      return url;
                     },
-                    previewSuffix:"_80x80",
-                    previewWidth:"80px",
-                    sizeLimit:1000//k,
-                    ,numberLimit:15,
-                    extraHtml:"<p style='margin-top:10px;'>" +
-                            "<input type='checkbox' " +
-                            "style='vertical-align:middle;margin:0 5px;' " +
-                            "id='ke_img_up_watermark_2'>" +
-                            "<span style='vertical-align:middle;'>图片加水印，防止别人盗用</span></p>"
-                },
-                "bangpai-video":{
-                    urlCfg:[
-                        {
-                            reg:/tudou\.com/i,
-                            url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
-                                    "url=@url@&callback=@callback@"//"&rand=@rand@"
-                        }
-                    ],
-                    providers:[
-                        {
-                            reg:/taobaocdn\.com/i,
-                            width:480,
-                            height:400,
-                            detect:function(url) {
-                                return url;
-                            }
-                        }
-                    ]
-                },
-                "draft":{
-                    interval:5,
-                    limit:10,
-                    helpHtml:  "<div " +
-                            "style='width:200px;'>" +
-                            "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容，" +
-                            "如果发现内容丢失，" +
-                            "请选择恢复编辑历史</div></div>"
-                }
-                ,
-                "resize":{
-                    direction:["y"]
-                }
-            }
-        }).use(
-                "sourcearea,preview," +
-                        "separator," +
-                        "undo,separator,removeformat,font,color,separator," +
-                        "list,indent,justify,separator,link,smiley," +
-                        "separator,table,resize,draft,maximize"
-                , function() {
-            var self = this,
-                    htmlDataProcessor = self.htmlDataProcessor,
-                    dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
+                  },
+                ],
+              },
+              draft: {
+                interval: 5,
+                limit: 10,
+                helpHtml:
+                  '<div ' +
+                  "style='width:200px;'>" +
+                  "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容，" +
+                  '如果发现内容丢失，' +
+                  '请选择恢复编辑历史</div></div>',
+              },
+              resize: {
+                direction: ['y'],
+              },
+            },
+          }).use(
+            'sourcearea,preview,' +
+              'separator,' +
+              'undo,separator,removeformat,font,color,separator,' +
+              'list,indent,justify,separator,link,smiley,' +
+              'separator,table,resize,draft,maximize',
+            function () {
+              var self = this,
+                htmlDataProcessor = self.htmlDataProcessor,
+                dataFilter = htmlDataProcessor && htmlDataProcessor.dataFilter;
 
-            if (dataFilter) {
+              if (dataFilter) {
                 dataFilter.addRules({
-                    elements : {
-                        img:function(el) {
-                            if (!el.attributes ||
-                                    !el.attributes['class']
-                                    ||
-                                    el.attributes['class'].indexOf("ke_") == -1)
-                                return false;
-                            return el;
-                        }
+                  elements: {
+                    img: function (el) {
+                      if (
+                        !el.attributes ||
+                        !el.attributes['class'] ||
+                        el.attributes['class'].indexOf('ke_') == -1
+                      )
+                        return false;
+                      return el;
                     },
-                    attributes:{
-                        style:function(value) {
-                            value = value.replace(/background-color\s*:[^;]+(;|$)/g, "")
-                                    .replace(/background\s*:[^;]+(;|$)/g, "");
-                            if (!value) return false;
-                            return value;
-                        }
-                    }
+                  },
+                  attributes: {
+                    style: function (value) {
+                      value = value
+                        .replace(/background-color\s*:[^;]+(;|$)/g, '')
+                        .replace(/background\s*:[^;]+(;|$)/g, '');
+                      if (!value) return false;
+                      return value;
+                    },
+                  },
                 });
-            }
+              }
+            },
+          );
         });
-
-
-    });
-});
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

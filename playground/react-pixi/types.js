@@ -1,1 +1,1 @@
-export const PIXI_NODE='pixi-node';
+export const PIXI_NODE = 'pixi-node';

@@ -1,36 +1,47 @@
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=GB2312">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=GB2312" />
 
-	<script type="text/javascript">
-		var timer, counter = 0, timeout = 0, c = 0;
-		// calculate the closure only once to avoid closure-related expenses per cycle
-		link = function(){
-			if(--c > 0){
-				setTimeout(link, timeout);
-			}else{
-				var fact = (new Date()).getTime() - timer;
-				var expected = counter * timeout;
-				document.getElementById("result").innerHTML = 
-					"Expected: " + expected + "ms, Fact: " + fact + 
-					"ms (" + (fact / counter).toFixed(1) + "ms per operation)";
-			}
-		};
-		// start the chain
-		run = function(){
-			document.getElementById("result").innerHTML = "Running...";
-			c = counter = parseInt(document.getElementById("len").value);
-			timeout = parseInt(document.getElementById("tout").value);
-			timer = (new Date()).getTime();
-			setTimeout(link, timeout);
-		};
-	</script>
-</head><div firebugversion="1.5.3" style="display: none;" 
-id="_firebugConsole"></div><body>
-	<h1>Chain of timeouts</h1>
-	<p>Length of the chain: <input id="len" value="1000" type="text"></p>
-	<p>Timeout in ms: <input id="tout" value="0" type="text"></p>
-	<p>Try following timeouts: 0, 1, 5, 7, 10, 15, 20, 50.</p>
-	<p>0 will effectively measure the expense of setTimeout.</p>
-	<p><button onclick="run()">Run</button></p>
-	<p id="result">Expected: 0ms, Fact: 10625ms (10.6ms per operation)</p>
-</body></html>
+    <script>
+      var timer,
+        counter = 0,
+        timeout = 0,
+        c = 0;
+      // calculate the closure only once to avoid closure-related expenses per cycle
+      link = function () {
+        if (--c > 0) {
+          setTimeout(link, timeout);
+        } else {
+          var fact = new Date().getTime() - timer;
+          var expected = counter * timeout;
+          document.getElementById('result').innerHTML =
+            'Expected: ' +
+            expected +
+            'ms, Fact: ' +
+            fact +
+            'ms (' +
+            (fact / counter).toFixed(1) +
+            'ms per operation)';
+        }
+      };
+      // start the chain
+      run = function () {
+        document.getElementById('result').innerHTML = 'Running...';
+        c = counter = parseInt(document.getElementById('len').value);
+        timeout = parseInt(document.getElementById('tout').value);
+        timer = new Date().getTime();
+        setTimeout(link, timeout);
+      };
+    </script>
+  </head>
+  <div firebugversion="1.5.3" style="display: none" id="_firebugConsole"></div>
+  <body>
+    <h1>Chain of timeouts</h1>
+    <p>Length of the chain: <input id="len" value="1000" type="text" /></p>
+    <p>Timeout in ms: <input id="tout" value="0" type="text" /></p>
+    <p>Try following timeouts: 0, 1, 5, 7, 10, 15, 20, 50.</p>
+    <p>0 will effectively measure the expense of setTimeout.</p>
+    <p><button onclick="run()">Run</button></p>
+    <p id="result">Expected: 0ms, Fact: 10625ms (10.6ms per operation)</p>
+  </body>
+</html>

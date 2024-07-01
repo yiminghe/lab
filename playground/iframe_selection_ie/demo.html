@@ -1,34 +1,38 @@
 ﻿<!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-</head>
-<body>
-    
-    <h1> ie 下 selection 的怪现象</h1>
-    
-    <iframe onload='this.contentWindow.document.write("123456");this.contentWindow.document.body.contentEditable=true;'></iframe>
-    
-    <br/><br/>
-    
-    <a href='javascript:void('')'>点我转移焦点，但是保留 selection</a>
-    
-    <br/><br/>
-    <span tabindex='0'>点我转移焦点，不保留 selection</span>
-    
-    <br/><br/>
-    
-    <span tabindex='0' unselectable='on' id='t'>点我转移焦点到另一个iframe元素，但是保留 selection</span>
-    <br/><br/>
-    <iframe src='inner.html' id='iframe'></iframe>
-    
+  <head>
+    <meta charset="utf-8" />
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+  </head>
+  <body>
+    <h1>ie 下 selection 的怪现象</h1>
+
+    <iframe
+      onload='this.contentWindow.document.write("123456");this.contentWindow.document.body.contentEditable=true;'></iframe>
+
+    <br /><br />
+
+    <a href='javascript:void("")'>点我转移焦点，但是保留 selection</a>
+
+    <br /><br />
+    <span tabindex="0">点我转移焦点，不保留 selection</span>
+
+    <br /><br />
+
+    <span tabindex="0" unselectable="on" id="t"
+      >点我转移焦点到另一个iframe元素，但是保留 selection</span
+    >
+    <br /><br />
+    <iframe src="inner.html" id="iframe"></iframe>
+
     <script>
-        var S=KISSY,DOM=S.DOM,Event=S.Event;
-        Event.on("#t","click",function(e){
-            var iframe=DOM.get("#iframe");
-            iframe.contentWindow.document.getElementById("t").focus();
-        });
+      var S = KISSY,
+        DOM = S.DOM,
+        Event = S.Event;
+      Event.on('#t', 'click', function (e) {
+        var iframe = DOM.get('#iframe');
+        iframe.contentWindow.document.getElementById('t').focus();
+      });
     </script>
-</body>
+  </body>
 </html>

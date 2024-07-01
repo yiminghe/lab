@@ -1,96 +1,96 @@
 #canvas {
-	width:  80%;
-	margin:  20px auto;
-	overflow: auto;
-	
-	padding: 1%;
-	background: #ccc;
-	}
+  width: 80%;
+  margin: 20px auto;
+  overflow: auto;
+
+  padding: 1%;
+  background: #ccc;
+}
 
 /*generic css for all elements*/
 img {
-	display: block; /*needed to avoid alignment with baseline of text*/
+  display: block; /*needed to avoid alignment with baseline of text*/
 }
 
 .line {
-	float: left;
-	width: 100%;
-	display: block;
-	position: relative; /*prevents shifting when changing viewport in IE;thanks to Alan Gresley*/
+  float: left;
+  width: 100%;
+  display: block;
+  position: relative; /*prevents shifting when changing viewport in IE;thanks to Alan Gresley*/
 }
 
 .item {
-	position: relative;
-	float: left;
-	overflow: hidden;
-	left: 100%;
+  position: relative;
+  float: left;
+  overflow: hidden;
+  left: 100%;
 }
 
 .sap-content {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 /*item specific css*/
 #line1 {
-	background-color: #C2DFEB;
+  background-color: #c2dfeb;
 }
 
 #line2 {
-	background-color: #FFF2B7;
+  background-color: #fff2b7;
 }
 
 #item1 {
-	margin-left: -100%;
-	width: 15%;
+  margin-left: -100%;
+  width: 15%;
 
-	background: #ACA42E;
+  background: #aca42e;
 }
 
 #item2 {
-	margin-left: -80%;
-	width: 15%;
+  margin-left: -80%;
+  width: 15%;
 
-	background-color: #2A66B2;
+  background-color: #2a66b2;
 }
 
 #item3 {
-	margin-left: -60%;
-	width: 15%;
-	
-	background-color: transparent;
+  margin-left: -60%;
+  width: 15%;
+
+  background-color: transparent;
 }
 
 #item4 {
-	margin-left: -40%;
-	width: 15%;
+  margin-left: -40%;
+  width: 15%;
 
-	background: #ACA42E;
+  background: #aca42e;
 }
 
 #item5 {
-	margin-left: -20%;
-	width: 15%;
+  margin-left: -20%;
+  width: 15%;
 
-	background: #9F3B57;
+  background: #9f3b57;
 }
 
 #item6 {
-	margin-left: -100%;
-	width: 15%;
+  margin-left: -100%;
+  width: 15%;
 
-	background: #315C83;
+  background: #315c83;
 }
 
 #item7 {
-	margin-left: -80%;
-	width: 35%;
+  margin-left: -80%;
+  width: 35%;
 
-	background: #ACA42E;
+  background: #aca42e;
 }
 
 #item8 {
-	margin-left: -40%;
-	width: 35%;
+  margin-left: -40%;
+  width: 35%;
 
-	background: #9F3B57;
+  background: #9f3b57;
 }

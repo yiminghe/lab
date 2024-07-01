@@ -1,83 +1,81 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>自动补全测试</title>
-<!-- 以下三个基础库必须 -->
+  <head>
+    <title>自动补全测试</title>
+    <!-- 以下三个基础库必须 -->
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="../base/javascript/ext-core.js"></script>
-<script type="text/javascript" src="javascript/JSON.js"></script>
-<script type="text/javascript" src="javascript/localXHR.js"></script>
-<!-- 以下为自定义组件-->
-<script type="text/javascript" src="javascript/autocompletelite.js"></script>
-<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
-<link rel="stylesheet" type="text/css" href="css/autocompletelite.css" />
-<style type='text/css'>
-	body {
-		font-size:13px;
-	}
-	#wrap {
-		margin:0 auto;
-		width:400px;
-	}
-	
-	#formTest {
-		margin-top:100px;
-	}
-	
-</style>
-<script type="text/javascript">
-//<![CDATA[
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../base/javascript/ext-core.js"></script>
+    <script src="javascript/JSON.js"></script>
+    <script src="javascript/localXHR.js"></script>
+    <!-- 以下为自定义组件-->
+    <script src="javascript/autocompletelite.js"></script>
+    <link rel="stylesheet" href="../base/css/core.css" />
+    <link rel="stylesheet" href="css/autocompletelite.css" />
+    <style>
+      body {
+        font-size: 13px;
+      }
+      #wrap {
+        margin: 0 auto;
+        width: 400px;
+      }
 
-Ext.onReady(function() {
-	
-	
-	/*
+      #formTest {
+        margin-top: 100px;
+      }
+    </style>
+    <script>
+      //<![CDATA[
+
+      Ext.onReady(function () {
+        /*
 		从内存中获取数据
 	*/
-	new Ext.ux.AutocompleteLite({
-		//文本框id
-		id:'autoCompleteTest',
-		maxHeight:100,
-		//只要含有 getSuggestions:function(autocompleteLite,query,ahead) {} 方法 的对象 即可，设置自动补全的数据
-		//MemeryStore.getSuggestions : 
-		/*
+        new Ext.ux.AutocompleteLite({
+          //文本框id
+          id: 'autoCompleteTest',
+          maxHeight: 100,
+          //只要含有 getSuggestions:function(autocompleteLite,query,ahead) {} 方法 的对象 即可，设置自动补全的数据
+          //MemeryStore.getSuggestions :
+          /*
 		getSuggestions:function(autocompleteLite,query,ahead,allowEmpty) {
 		var x=[];
 		for(var i=0;i<this.data.length;i++) if((allowEmpty&&query.trim().length==0)||this.data[i].label.indexOf(query)!=-1) x.push(this.data[i]);
 		autocompleteLite.autoComplete(x,ahead);
 	}
 		*/
-		store:new Ext.ux.AutocompleteLite.MemeryStore({data:[{label:'123',value:'1'},
-			{label:'456',value:'2'},
-			{label:'789',value:'3'},{label:'7890',value:'4'}
-			
-			,{label:'7890',value:'4'}
-			,{label:'7890',value:'4'}
-			,{label:'7890',value:'4'}
-			,{label:'7890',value:'4'}
-			,{label:'7890',value:'4'}
-			,{label:'7890',value:'4'}
-			]}),
-		triger:true,
-		editable :true,
-		//是否支持自动在文本框显示第一条补全 ,google 为 false
-		typeahead:true,
-		emptyText:'我想试试实现ext'
-	});
-	
-	
-	/*
+          store: new Ext.ux.AutocompleteLite.MemeryStore({
+            data: [
+              { label: '123', value: '1' },
+              { label: '456', value: '2' },
+              { label: '789', value: '3' },
+              { label: '7890', value: '4' },
+              { label: '7890', value: '4' },
+              { label: '7890', value: '4' },
+              { label: '7890', value: '4' },
+              { label: '7890', value: '4' },
+              { label: '7890', value: '4' },
+              { label: '7890', value: '4' },
+            ],
+          }),
+          triger: true,
+          editable: true,
+          //是否支持自动在文本框显示第一条补全 ,google 为 false
+          typeahead: true,
+          emptyText: '我想试试实现ext',
+        });
+
+        /*
 		Ajax 获取数据
 	*/
-	new Ext.ux.AutocompleteLite({
-		//文本框id
-		id:'autoCompleteTestRemote',
-		maxHeight:200,
-		//fetch.jsp?query=xx
-		//返回数据应该为格式：
-		/*
+        new Ext.ux.AutocompleteLite({
+          //文本框id
+          id: 'autoCompleteTestRemote',
+          maxHeight: 200,
+          //fetch.jsp?query=xx
+          //返回数据应该为格式：
+          /*
 			{data:[
 							{label:'123',value:'1'},
 							{label:'456',value:'2'},
@@ -85,36 +83,35 @@ Ext.onReady(function() {
 						]
 			 }
 		*/
-		store:new Ext.ux.AutocompleteLite.RemoteStore({
-			//此处改为你的jsp，参数query
-			url:'data.html'	
-		}),
-		editable :true,
-		//是否支持自动在文本框显示第一条补全 ,google 为 false
-		typeahead:true,
-		emptyText:'我想试试 实现ext'
-	});
-	
-	
-	
-	
-	new Ext.ux.AutocompleteLite({
-		//文本框id
-		id:'selectMy',
-		maxHeight:200,
-		triger:true,
-		store:new Ext.ux.AutocompleteLite.MemeryStore({data:[{label:'123',value:'1'},
-			{label:'456',value:'2'},
-			{label:'789',value:'3'}]}),
-		
-		//False to prevent the user from typing text directly into the field, just like a traditional select (defaults to true) 
-		editable :false,
-		emptyText:'我想试试实现ext'
-		
-	});
-	
-	
-	/**
+          store: new Ext.ux.AutocompleteLite.RemoteStore({
+            //此处改为你的jsp，参数query
+            url: 'data.html',
+          }),
+          editable: true,
+          //是否支持自动在文本框显示第一条补全 ,google 为 false
+          typeahead: true,
+          emptyText: '我想试试 实现ext',
+        });
+
+        new Ext.ux.AutocompleteLite({
+          //文本框id
+          id: 'selectMy',
+          maxHeight: 200,
+          triger: true,
+          store: new Ext.ux.AutocompleteLite.MemeryStore({
+            data: [
+              { label: '123', value: '1' },
+              { label: '456', value: '2' },
+              { label: '789', value: '3' },
+            ],
+          }),
+
+          //False to prevent the user from typing text directly into the field, just like a traditional select (defaults to true)
+          editable: false,
+          emptyText: '我想试试实现ext',
+        });
+
+        /**
 	dwr emample
 	
 	
@@ -145,34 +142,35 @@ Ext.onReady(function() {
 					});
 					
 		**/
-       
-});
-//]]>
+      });
+      //]]>
+    </script>
+  </head>
+  <body>
+    <div id="wrap">
+      <form id="formTest">
+        输入(附带自动补全)：
+        <input
+          id="autoCompleteTest"
+          title="Google 搜索"
+          name="autoCompleteTest"
+          autocomplete="off"
+          style="width: 130px" />
+        <br />
+        <br />
+        ajax获取数据：输入(附带自动补全)：
+        <input
+          id="autoCompleteTestRemote"
+          title="Google 搜索"
+          name="autoCompleteTestRemote"
+          autocomplete="off"
+          style="width: 130px" />
 
-</script>
-
-</head>
-<body>
-<div id='wrap'>
-<form id='formTest'>
-	输入(附带自动补全)：
-		<input id='autoCompleteTest' title="Google 搜索" name="autoCompleteTest" autocomplete="off" 
-		
-		style='width:130px;'
-		/>
-		<br/>
-		<br/>
-		ajax获取数据：输入(附带自动补全)：
-		<input id='autoCompleteTestRemote' title="Google 搜索" name="autoCompleteTestRemote" autocomplete="off" 
-		
-		style='width:130px;'
-		/>
-		
-		<br/>
-		<br/>
-		仿select(设置 editable:false)：
-	<input	id='selectMy' style='width:130px;' autocomplete="off" />
-</form>
-</div>
-</body>
-</html> 
+        <br />
+        <br />
+        仿select(设置 editable:false)：
+        <input id="selectMy" style="width: 130px" autocomplete="off" />
+      </form>
+    </div>
+  </body>
+</html>

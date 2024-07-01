@@ -1,192 +1,193 @@
 .tabpanel .tabheader {
-	border:1px solid #AECBD4;
-	border-top:none;
-	padding-bottom:2px;
-	background:#DEECFD none repeat scroll 0 0;
-	
+  border: 1px solid #aecbd4;
+  border-top: none;
+  padding-bottom: 2px;
+  background: #deecfd none repeat scroll 0 0;
 }
 
-.tabpanel ul.tabpanel_nav  , .tabpanel .tabpanel_nav li {
-	list-style-image:none;
-	list-style-position:outside;
-	list-style-type:none;
-	margin:0;
-	padding:0;
+.tabpanel ul.tabpanel_nav,
+.tabpanel .tabpanel_nav li {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .tabpanel ul.tabpanel_nav {
-	display:block;
-	/*background:#AECBD4 url(../../images/ebay/tab-strip-bg.gif) repeat-x scroll center;*/
-	background:lightsteelblue none;
-	border-bottom:1px solid #AECBD4;
-	padding-top:1px;
+  display: block;
+  /*background:#AECBD4 url(../../images/ebay/tab-strip-bg.gif) repeat-x scroll center;*/
+  background: lightsteelblue none;
+  border-bottom: 1px solid #aecbd4;
+  padding-top: 1px;
 }
-
 
 .tabpanel .tabpanel_nav li {
-	float:left;
-	padding-left:2px;	
+  float: left;
+  padding-left: 2px;
 }
 
-
-
-.tabpanel_nav a, .tabpanel_nav span, .tabpanel_nav em {
-		display:block;
+.tabpanel_nav a,
+.tabpanel_nav span,
+.tabpanel_nav em {
+  display: block;
 }
 
 .tabpanel .tabpanel_nav li a.tab_left {
-		background:transparent url(../../images/ebay/tab.gif) no-repeat scroll left bottom;
-		padding-left:10px;
-		position:relative;
-		cursor:pointer;		
-		display:block;
-		/*È¥³ýÐéÏß*/
-		/*hide-focus: expression(this.hideFocus=true);  in js for ie 5+ */
-  	outline: none;  /* for firefox 1.5 + */
-		text-decoration:none !important;
+  background: transparent url(../../images/ebay/tab.gif) no-repeat scroll left
+    bottom;
+  padding-left: 10px;
+  position: relative;
+  cursor: pointer;
+  display: block;
+  /*È¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+  /*hide-focus: expression(this.hideFocus=true);  in js for ie 5+ */
+  outline: none; /* for firefox 1.5 + */
+  text-decoration: none !important;
 }
 
 .tabpanel .tabpanel_nav li em.tab_right {
-		background:transparent url(../../images/ebay/tabRight.gif) no-repeat scroll right bottom;
-		padding-right:10px;
+  background: transparent url(../../images/ebay/tabRight.gif) no-repeat scroll
+    right bottom;
+  padding-right: 10px;
 }
 
 .tabpanel .tabpanel_nav li span.tab_inner {
-		
 }
 .tabpanel .tabpanel_nav li span.tab_text {
-		color:#999999;
-		cursor:pointer;
-		font-family:tahoma,arial,helvetica;
-		font-size:12px;
-		font-style:normal;
-		font-variant:normal;
-		font-weight:normal;
-		line-height:normal;
-		padding:4px 0;
-		white-space:nowrap;
+  color: #999999;
+  cursor: pointer;
+  font-family: tahoma, arial, helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: normal;
+  padding: 4px 0;
+  white-space: nowrap;
 }
 
 .tabpanel .tabpanel_nav li.tab_active a.tab_left {
-		background-position:left top;
-		margin-bottom:-1px;
-		cursor:default;
+  background-position: left top;
+  margin-bottom: -1px;
+  cursor: default;
 }
 
 .tabpanel .tabpanel_nav li.tab_active span.tab_text {
-		color:#000000;
-		cursor:default;
-		font-weight:bold;
-		padding-bottom:5px;
+  color: #000000;
+  cursor: default;
+  font-weight: bold;
+  padding-bottom: 5px;
 }
 
 .tabpanel .tabpanel_nav li.tab_active span.tab_inner {
-		
 }
 
 .tabpanel .tabpanel_nav li.tab_active em.tab_right {
-		background-position:right top;
+  background-position: right top;
 }
 
-
-
 .tabpanel .panels {
-	background:#FFFFFF none repeat scroll 0 0;
-	border:1px solid #AECBD4;
-	border-top:none;
+  background: #ffffff none repeat scroll 0 0;
+  border: 1px solid #aecbd4;
+  border-top: none;
 }
 
 .tabpanel .hiddenTab {
-	display:none;
+  display: none;
 }
 
-.tabpanel .panels .panel{	
-	background:transparent url(../../images/ebay/tab-strip-bg.gif) repeat-x scroll 0 0;
-	color:#474747;
-	padding:10px;
+.tabpanel .panels .panel {
+  background: transparent url(../../images/ebay/tab-strip-bg.gif) repeat-x
+    scroll 0 0;
+  color: #474747;
+  padding: 10px;
 }
 
 .tabpanel li.x-tab-strip-closable a.x-tab-strip-close {
-	background-image:url(../../images/tab-close.gif);
-	background-repeat:no-repeat;
-	display:block;
-	height:11px;
-	opacity:0.6;
-	text-indent:-10000px;
-	filter: alpha(opacity=60);
-	position:absolute;
-	right:3px;
-	top:3px;
-	outline:0;
-	width:11px;
-	z-index:2;
+  background-image: url(../../images/tab-close.gif);
+  background-repeat: no-repeat;
+  display: block;
+  height: 11px;
+  opacity: 0.6;
+  text-indent: -10000px;
+  filter: alpha(opacity=60);
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  outline: 0;
+  width: 11px;
+  z-index: 2;
 }
 .tabpanel ul.tabpanel_nav li.x-tab-strip-closable {
-	position:relative;
+  position: relative;
 }
 
 .tabpanel .tabpanel_nav li.x-tab-strip-closable em.tab_right {
-	padding-right:20px;
+  padding-right: 20px;
 }
 .tabpanel li.x-tab-strip-closable a.x-tab-strip-close:hover {
-	opacity:1;
-	filter: alpha(opacity=100);
+  opacity: 1;
+  filter: alpha(opacity=100);
 }
 
-.tabpanel .x-tab-scrolling{
-	position:relative;
+.tabpanel .x-tab-scrolling {
+  position: relative;
 }
-.tabpanel a.x-tab-scroller-left ,.tabpanel a.x-tab-scroller-right{
-	display:none;
+.tabpanel a.x-tab-scroller-left,
+.tabpanel a.x-tab-scroller-right {
+  display: none;
 }
 .tabpanel .x-tab-scrolling a.x-tab-scroller-left {
-	background:transparent url(../../images/scroll-left.gif) no-repeat scroll -18px 0;
-	border-bottom:1px solid #8DB2E3;
-	cursor:pointer;
-	left:0;
-	display:block;
-	position:absolute;
-	top:0;
-	width:18px;
-	z-index:10;
+  background: transparent url(../../images/scroll-left.gif) no-repeat scroll -18px
+    0;
+  border-bottom: 1px solid #8db2e3;
+  cursor: pointer;
+  left: 0;
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 18px;
+  z-index: 10;
 }
 
 .tabpanel .x-tab-scrolling a.x-tab-scroller-left:hover {
-	background-position:0 0;
+  background-position: 0 0;
 }
 
 .tabpanel .x-tab-scrolling a.x-tab-scroller-right {
-	background:transparent url(../../images/scroll-right.gif) no-repeat scroll 0 0;
-	border-bottom:1px solid #8DB2E3;
-	cursor:pointer;
-	right:0;
-	display:block;
-	position:absolute;
-	top:0;
-	width:18px;
-	z-index:10;
+  background: transparent url(../../images/scroll-right.gif) no-repeat scroll 0
+    0;
+  border-bottom: 1px solid #8db2e3;
+  cursor: pointer;
+  right: 0;
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 18px;
+  z-index: 10;
 }
 
 .tabpanel .x-tab-scrolling a.x-tab-scroller-right:hover {
-	background-position:-18px 0;
+  background-position: -18px 0;
 }
 
 .tabpanel .x-tab-list-wrap {
-	overflow:hidden;
+  overflow: hidden;
 }
 
 .tabpanel .x-tab-scrolling .x-tab-list-wrap {
-	margin:0 18px;
+  margin: 0 18px;
 }
 
 .tabpanel .x-tab-list {
-	width:9999px;
+  width: 9999px;
 }
 
-.tabpanel ul.tabpanel_nav li.x-tab-edge{
-	font-size:1px;
-	width:1px;
-	line-height:1px;
-	margin:0;
-	padding-left:0;
+.tabpanel ul.tabpanel_nav li.x-tab-edge {
+  font-size: 1px;
+  width: 1px;
+  line-height: 1px;
+  margin: 0;
+  padding-left: 0;
 }

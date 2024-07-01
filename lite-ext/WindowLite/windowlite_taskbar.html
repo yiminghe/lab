@@ -1,262 +1,244 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html>
-<head>
-<title>窗口测试</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <head>
+    <title>窗口测试</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<script type="text/javascript" src="../base/javascript/ext-core.js"></script>
+    <script src="../base/javascript/ext-core.js"></script>
 
-<!-- 以下为自定义组件-->
-<script type="text/javascript" src="javascript/windowlite.js"></script>
-<script type="text/javascript" src="javascript/MessageBoxLite.js"></script>
-<script type="text/javascript" src="../ButtonLite/javascript/button.js"></script>
-<!--以下为css -->
-<!-- 核心css，必须-->
-<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
+    <!-- 以下为自定义组件-->
+    <script src="javascript/windowlite.js"></script>
+    <script src="javascript/MessageBoxLite.js"></script>
+    <script src="../ButtonLite/javascript/button.js"></script>
+    <!--以下为css -->
+    <!-- 核心css，必须-->
+    <link rel="stylesheet" href="../base/css/core.css" />
 
-<!-- 自定义组件的css-->
-<link rel="stylesheet" type="text/css" href="css/aol/windowlite.css" id="skinCss" />
-<link rel="stylesheet" type="text/css" href="../ButtonLite/css/button.css" />
-<style type="text/css">
-	a.tool-help {
-      background-position:0 -300px;
-  }
-  
-  a.tool-help:hover {
-      background-position:-15px -300px;
-  }
-</style>
+    <!-- 自定义组件的css-->
+    <link rel="stylesheet" href="css/aol/windowlite.css" id="skinCss" />
+    <link rel="stylesheet" href="../ButtonLite/css/button.css" />
+    <style>
+      a.tool-help {
+        background-position: 0 -300px;
+      }
 
-<script type="text/javascript">
-//<![CDATA[
-var num=0;
-Ext.onReady(function() {
-			function newWin(){
-    	
-		    	var table="";//"<table>";
-		    	tbody="";//"<tbody>";
-		    	
-		    	for(var row=0;row<10;row++) {
-		    		var tr="";//"<tr>";
-		    		for(var col=0;col<10;col++) {
-		    			var td="";//"<td>";
-		    			td+=row+"_"+col;//+"</td>";
-		    			tr+=td;
-		    		}
-		    		tbody+=tr+"<br/>";//+"</tr>";
-		    	}
-		    	
-		    	table+=tbody;//+"</tbody>"+"</table>";
-    	
-    	
-    			var mwindow = new Ext.ux.WindowLite({			
-			
-				        width:500,
-				        //height:300,  
-				        //每次都删掉    
-				       	closeAction:'close',
-				        drag:true,
-				        title:'关掉就remove掉了 :' +(num++),
-				        shadow:'frame',
-				        shadowOffset:6,
-				        maximizable:true,
-				        minimizable:true,       
-				        //items:[table],
-				        taskbar:true,
-				        tools:[{
-				        	cls:'x-tool tool-help',
-				        	'click':function(evt){
-				        		alert("help");
-				        		evt.stopEvent();
-				        	}
-				        }],
-				        buttons:[{
-				        	text:'new windowlite',
-				        	handler:function(evt){
-				        		newWin();
-				        		evt.stopEvent();
-				        	}
-				        }
-				        ],
-				       resizable:true
-				   });
-				   
-				    mwindow.show({
-				    	//x,y应该是窗口当前可见区域，不包括滚动区域
-				    	x:100+30*num,
-				    	y:100+30*num,
-				    	constrainToView:true
-				    });
-				    
-				    
-				    //大数据量
-				    (function() {
-					   	Ext.DomHelper.overwrite(mwindow.body,table);
-					   	//手动阴影同步
-					   	mwindow.fireEvent("resize");
-					   	table=null;
-					  }).defer(50);
-    }
+      a.tool-help:hover {
+        background-position: -15px -300px;
+      }
+    </style>
 
-	
-	
-  Ext.fly('action_a').on('click', newWin);
+    <script>
+      //<![CDATA[
+      var num = 0;
+      Ext.onReady(function () {
+        function newWin() {
+          var table = ''; //"<table>";
+          tbody = ''; //"<tbody>";
 
-	Ext.get("skin").dom.value="css/aol/windowlite.css";
-	
-	function swapStyleSheet(cssId,url){
-		var doc=document;
-		var existing = doc.getElementById(cssId);
-    if(existing){
-        existing.parentNode.removeChild(existing);
-    }
-    
-    var ss = doc.createElement("link");
-    ss.setAttribute("rel", "stylesheet");
-    ss.setAttribute("type", "text/css");
-    ss.setAttribute("id", cssId);
-    ss.setAttribute("href", url);
-    doc.getElementsByTagName("head")[0].appendChild(ss);
-	}
-	Ext.get("skin").on("change",function(){
-		swapStyleSheet("skinCss",this.getValue());
-	});
-   
-   
+          for (var row = 0; row < 10; row++) {
+            var tr = ''; //"<tr>";
+            for (var col = 0; col < 10; col++) {
+              var td = ''; //"<td>";
+              td += row + '_' + col; //+"</td>";
+              tr += td;
+            }
+            tbody += tr + '<br/>'; //+"</tr>";
+          }
 
-       
-});
-//]]>
+          table += tbody; //+"</tbody>"+"</table>";
 
-</script>
-<style>
-    
-    .taskWrap {
-        position:fixed;
-        _position:absolute;
-        top:0;
-        left:0;
-        width:100%;
-        height:30px;
-        background:#000000 url(./images/taskbar/taskbar-start-panel-bg.gif) repeat-x scroll left top;
-    }
-    
-    .task-scroll-left {
-        background:transparent url(./images/taskbar/scroll-left.gif) no-repeat scroll -18px 0;
-        display:block;
-        left:1px;
-        position:absolute;
-        top:0;
-        height:30px;
-        width:18px;
-        z-index:10;
-    }
-    
-    .task-scroll-left:hover {
-        background-position:0 0;
-    }
-    
-    .task-scroll-right {
-        background:transparent url(./images/taskbar/scroll-right.gif) no-repeat scroll 0 0;
-        display:block;
-        position:absolute;
-        right:1px;
-        top:0;
-        height:30px;
-        width:18px;
-        z-index:10;
-    }
-    
-    .task-scroll-right:hover {
-        background-position:-18px 0;
-    }
-    
-    .tasksContainer {
-        margin:0 18px;
-        overflow:hidden;
-    }
-    
-    .taskWrap ul ,.taskWrap li {
-        margin:0;
-        padding:0;    
-    }
-    .taskWrap ul {
-       width:9999px;
-       list-style-type:none;
-    }
-    .taskWrap li{
-        float:left;
-        margin-left:4px;
-    }
+          var mwindow = new Ext.ux.WindowLite({
+            width: 500,
+            //height:300,
+            //每次都删掉
+            closeAction: 'close',
+            drag: true,
+            title: '关掉就remove掉了 :' + num++,
+            shadow: 'frame',
+            shadowOffset: 6,
+            maximizable: true,
+            minimizable: true,
+            //items:[table],
+            taskbar: true,
+            tools: [
+              {
+                cls: 'x-tool tool-help',
+                click: function (evt) {
+                  alert('help');
+                  evt.stopEvent();
+                },
+              },
+            ],
+            buttons: [
+              {
+                text: 'new windowlite',
+                handler: function (evt) {
+                  newWin();
+                  evt.stopEvent();
+                },
+              },
+            ],
+            resizable: true,
+          });
 
-</style>
-</head>
-<body>
+          mwindow.show({
+            //x,y应该是窗口当前可见区域，不包括滚动区域
+            x: 100 + 30 * num,
+            y: 100 + 30 * num,
+            constrainToView: true,
+          });
 
+          //大数据量
+          (function () {
+            Ext.DomHelper.overwrite(mwindow.body, table);
+            //手动阴影同步
+            mwindow.fireEvent('resize');
+            table = null;
+          }).defer(50);
+        }
 
+        Ext.fly('action_a').on('click', newWin);
 
-<script>
-    Ext.onReady(function(){
-        
-        
-        
-    });
-</script>
+        Ext.get('skin').dom.value = 'css/aol/windowlite.css';
 
-<br/><br/><br/><br/><br/><br/>
-<button id='action_a'> 显示</button>
+        function swapStyleSheet(cssId, url) {
+          var doc = document;
+          var existing = doc.getElementById(cssId);
+          if (existing) {
+            existing.parentNode.removeChild(existing);
+          }
 
-<div style="margin:20px;">
-	选择皮肤：
-	
-	<select id="skin">
-		
-		<option value="css/aol/windowlite.css">aol</option>
-		<option value="css/windowlite.css">extjs</option>
-	</select>	
-</div>	
+          var ss = doc.createElement('link');
+          ss.setAttribute('rel', 'stylesheet');
+          ss.setAttribute('type', 'text/css');
+          ss.setAttribute('id', cssId);
+          ss.setAttribute('href', url);
+          doc.getElementsByTagName('head')[0].appendChild(ss);
+        }
+        Ext.get('skin').on('change', function () {
+          swapStyleSheet('skinCss', this.getValue());
+        });
+      });
+      //]]>
+    </script>
+    <style>
+      .taskWrap {
+        position: fixed;
+        _position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: #000000 url(./images/taskbar/taskbar-start-panel-bg.gif)
+          repeat-x scroll left top;
+      }
 
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
+      .task-scroll-left {
+        background: transparent url(./images/taskbar/scroll-left.gif) no-repeat
+          scroll -18px 0;
+        display: block;
+        left: 1px;
+        position: absolute;
+        top: 0;
+        height: 30px;
+        width: 18px;
+        z-index: 10;
+      }
 
+      .task-scroll-left:hover {
+        background-position: 0 0;
+      }
 
+      .task-scroll-right {
+        background: transparent url(./images/taskbar/scroll-right.gif) no-repeat
+          scroll 0 0;
+        display: block;
+        position: absolute;
+        right: 1px;
+        top: 0;
+        height: 30px;
+        width: 18px;
+        z-index: 10;
+      }
 
+      .task-scroll-right:hover {
+        background-position: -18px 0;
+      }
 
-</body>
-</html> 
+      .tasksContainer {
+        margin: 0 18px;
+        overflow: hidden;
+      }
+
+      .taskWrap ul,
+      .taskWrap li {
+        margin: 0;
+        padding: 0;
+      }
+      .taskWrap ul {
+        width: 9999px;
+        list-style-type: none;
+      }
+      .taskWrap li {
+        float: left;
+        margin-left: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      Ext.onReady(function () {});
+    </script>
+
+    <br /><br /><br /><br /><br /><br />
+    <button id="action_a">显示</button>
+
+    <div style="margin: 20px">
+      选择皮肤：
+
+      <select id="skin">
+        <option value="css/aol/windowlite.css">aol</option>
+        <option value="css/windowlite.css">extjs</option>
+      </select>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+  </body>
+</html>

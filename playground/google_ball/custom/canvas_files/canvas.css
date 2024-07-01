@@ -1,8 +1,7 @@
-
 /* Yeah, I didn't put in much effort in the style department ~ B */
-.picker{
- display: block;
- margin: 3px;
+.picker {
+  display: block;
+  margin: 3px;
 }
 
 .picker input {
@@ -10,16 +9,16 @@
 }
 
 .lbl {
- position: absolute;
- width: 50px;
- text-align: right;
+  position: absolute;
+  width: 50px;
+  text-align: right;
 }
 
 #c {
-border: 1px solid gray;
-margin-top: 10px;
+  border: 1px solid gray;
+  margin-top: 10px;
 }
 
-#btn{
+#btn {
   width: 150px;
 }

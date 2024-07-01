@@ -1,24 +1,29 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>KISSY Editor Test</title>
-<link href="../build/theme/base.css" rel="stylesheet"/>
-<!--[if lt IE 8]>
-<link href="../build/theme/cool/editor-pkg-min-mhtml.css" rel="stylesheet"/>
-<![endif]-->
-<!--[if gte IE 8]><!-->
-<link href="../build/theme/cool/editor-pkg-min-datauri.css" rel="stylesheet"/>
-<!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <title>KISSY Editor Test</title>
+    <link href="../build/theme/base.css" rel="stylesheet" />
+    <!--[if lt IE 8]>
+      <link
+        href="../build/theme/cool/editor-pkg-min-mhtml.css"
+        rel="stylesheet" />
+    <![endif]-->
+    <!--[if gte IE 8]><!-->
+    <link
+      href="../build/theme/cool/editor-pkg-min-datauri.css"
+      rel="stylesheet" />
+    <!--<![endif]-->
+  </head>
+  <body>
+    <h1>KISSY Editor Demo</h1>
 
-</head>
-<body>
-
-<h1>KISSY Editor Demo</h1>
-
-<div style="width: 90%; margin: 0 auto">
-    <label for="editor">Editor Instance 1:</label>
-    <textarea id="editor" tabindex="1" style="width:100%;height:400px;margin:0 auto;">
+    <div style="width: 90%; margin: 0 auto">
+      <label for="editor">Editor Instance 1:</label>
+      <textarea
+        id="editor"
+        tabindex="1"
+        style="width: 100%; height: 400px; margin: 0 auto">
         <script>alert(1);</script>
         <p>
             我是虾米音乐
@@ -158,41 +163,40 @@
         <p>2</p>
         <p>3</p>
         <p>4</p>
-    </textarea>
+    </textarea
+      >
+    </div>
 
-</div>
+    <div style="width: 60%; margin: 50px auto">
+      <label for="editor2">Editor Instance 2:</label>
+      <textarea
+        id="editor2"
+        style="width: 100%; height: 400px; margin: 0 auto"></textarea>
+    </div>
 
-<div style="width: 60%; margin: 50px auto">
-    <label for="editor2">Editor Instance 2:</label>
-    <textarea id="editor2" style="width:100%;height:400px;margin:0 auto;"></textarea>
-</div>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/kissy.js"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/uibase/uibase-pkg.js"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/dd/dd-pkg.js"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.7/overlay/overlay-pkg.js"></script>
 
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/kissy.js"></script>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/uibase/uibase-pkg.js"></script>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/dd/dd-pkg.js"></script>
-<script src="http://a.tbcdn.cn/s/kissy/1.1.7/overlay/overlay-pkg.js"></script>
+    <script src="../build/editor-core-pkg-advanced.js"></script>
 
-<script  src="../build/editor-core-pkg-advanced.js"></script>
-
-<script  src="../src/plugins/font/plugin.js"></script>
-<script  src="../src/plugins/htmldataprocessor/plugin.js"></script>
-<script  src="../src/plugins/enterkey/plugin.js"></script>
-<script  src="../src/plugins/clipboard/plugin.js"></script>
-<script>
-
-
-    KISSY.ready(function(S) {
+    <script src="../src/plugins/font/plugin.js"></script>
+    <script src="../src/plugins/htmldataprocessor/plugin.js"></script>
+    <script src="../src/plugins/enterkey/plugin.js"></script>
+    <script src="../src/plugins/clipboard/plugin.js"></script>
+    <script>
+      KISSY.ready(function (S) {
         // just for test
         var base = location.href.replace(/^(.*kissy-editor\/).*$/i, '$1');
         S.Config.base = base;
-        S.use('editor', function() {
-            var KE = S.Editor;
-            KE.Config.base = base + "build/";
-            window.editor = KE("#editor");
-            editor.use("font");
+        S.use('editor', function () {
+          var KE = S.Editor;
+          KE.Config.base = base + 'build/';
+          window.editor = KE('#editor');
+          editor.use('font');
         });
-    });
-
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

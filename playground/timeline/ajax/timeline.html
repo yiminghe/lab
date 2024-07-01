@@ -1,30 +1,26 @@
 ﻿<!doctype html>
- <html>
-   <head>
-     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    	<!--
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <!--
     	
-		<script src="timeline_2.3.0/timeline_ajax/simile-ajax-api.js?bundle=true" type="text/javascript"></script>
-		<script src="timeline_2.3.0/timeline_js/timeline-api.js?bundle=true" type="text/javascript"></script>
+		<script src="timeline_2.3.0/timeline_ajax/simile-ajax-api.js?bundle=true" ></script>
+		<script src="timeline_2.3.0/timeline_js/timeline-api.js?bundle=true" ></script>
 		-->
-		
-		
-		<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
-		
-		
-   </head>
-   <body>
-   	
-   	<div id="my-timeline" style="height:500px;"></div>
-<script src="timeline.js"></script>
-<script>
 
-var timeline=createTimeline("my-timeline","http://10.13.3.60:8088/UEDProjectManage/InteractionService.ashx");
-timeline.update({service:"project_time_line"});
+    <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true"></script>
+  </head>
+  <body>
+    <div id="my-timeline" style="height: 500px"></div>
+    <script src="timeline.js"></script>
+    <script>
+      var timeline = createTimeline(
+        'my-timeline',
+        'http://10.13.3.60:8088/UEDProjectManage/InteractionService.ashx',
+      );
+      timeline.update({ service: 'project_time_line' });
 
-//timeline.update(input.slice(0,2));
-
-
-</script>
+      //timeline.update(input.slice(0,2));
+    </script>
   </body>
- </html>
+</html>

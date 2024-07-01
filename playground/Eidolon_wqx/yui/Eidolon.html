@@ -1,87 +1,81 @@
 ﻿<!doctype html>
 <html>
-<head>
-<meta charset="utf-8" />
-<title>精灵岛移植-By yiminghe</title>
-<style>
-	html,body{
-		height:90%;
-		overflow:hidden;
-	}
-</style>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <title>精灵岛移植-By yiminghe</title>
+    <style>
+      html,
+      body {
+        height: 90%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    zoom:<select id="zoom">
+      <option value="3">3</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
 
-zoom:<select id="zoom">
-	
-	<option value="3">3
-	</option>
-	<option value="1">1
-	</option>
-	<option value="2">2
-	</option>
-	<option value="4">4
-	</option>
-	<option value="5">5
-	</option>
-					
-</select>
+    current level:<select id="level">
+      <script>
+        (function () {
+          for (var i = 0; i < 15; i++) {
+            document.writeln(
+              "<option value='" + i + "'>" + (i + 1) + '</option>',
+            );
+          }
+        })();
+      </script>
+    </select>
+    &nbsp;&nbsp;&nbsp;<a href="http://yiminghe.javaeye.com" target="_blank"
+      >contact and suggestion</a
+    >
+    <p>press "p" to start or pause . press up,down,left ,right to control</p>
+    <div style="margin: 10px auto; width: 90%">
+      <canvas id="game" height="800" width="1024"></canvas>
+    </div>
 
-current level:<select id="level">
-	
-	<script type="text/javascript">
-	(function(){
-		for(var i=0;i<15;i++){
-			document.writeln("<option value='"+i+"'>"+(i+1)+"</option>");
-		}
-	})();
-	
-	</script>
-					
-</select>
-&nbsp;&nbsp;&nbsp;<a href="http://yiminghe.javaeye.com" target="_blank">contact and suggestion<a>
-	<p>
-		press "p" to start or pause .
-		press up,down,left ,right to control
-		</p>
-<div style="margin:10px auto;width:90%;">
-	<canvas id="game" height="800" width="1024"></canvas> 
-</div>
-<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui.js"></script>
+    <script src="http://yui.yahooapis.com/3.1.0/build/yui/yui.js"></script>
 
-
-<!--
-<script type="text/javascript" src="eidolon.js"></script>
+    <!--
+<script  src="eidolon.js"></script>
 -->
-<script type="text/javascript">
-YUI({
-	
-     modules: {  
-	         EidolonGame: {  
-	             fullpath: 'eidolon.js',  
-	            requires: ['event', 'base', 'node']  
-	         }  
-	 }
-	//,filter:"DEBUG"
-}).use("node", "event", "base","EidolonGame",
-	function(Y) {
-		var g=Y.EidolonGame("game");
-	    Y.one("#zoom").set("value",3);
-	    Y.one("#zoom").on("change",function(e){
-			var c=Y.one("#zoom").get("value");
-	        g.set("zoom",c);
-	        Y.one("#zoom").blur();
-	    });
-		g.after("levelChange",function(e){
-			Y.one("#level").set("value",e.newVal);
-		},g);
-		Y.one("#level").set("value",0);
-		Y.one("#level").on("change",function(e){
-	        var l=(Y.one("#level").get("value"));
-			Y.one("#level").blur();
-			g.set("level",parseInt(l));
-			g.start();
-	    });
-});
-</script>
-</body>
+    <script>
+      YUI({
+        modules: {
+          EidolonGame: {
+            fullpath: 'eidolon.js',
+            requires: ['event', 'base', 'node'],
+          },
+        },
+        //,filter:"DEBUG"
+      }).use('node', 'event', 'base', 'EidolonGame', function (Y) {
+        var g = Y.EidolonGame('game');
+        Y.one('#zoom').set('value', 3);
+        Y.one('#zoom').on('change', function (e) {
+          var c = Y.one('#zoom').get('value');
+          g.set('zoom', c);
+          Y.one('#zoom').blur();
+        });
+        g.after(
+          'levelChange',
+          function (e) {
+            Y.one('#level').set('value', e.newVal);
+          },
+          g,
+        );
+        Y.one('#level').set('value', 0);
+        Y.one('#level').on('change', function (e) {
+          var l = Y.one('#level').get('value');
+          Y.one('#level').blur();
+          g.set('level', parseInt(l));
+          g.start();
+        });
+      });
+    </script>
+  </body>
+</html>

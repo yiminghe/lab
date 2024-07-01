@@ -1,405 +1,441 @@
-FP.namespace("TSearch");
-FP.add("top-header", function(fp) {
-    var S=KISSY,
-        DOM=S.DOM,
-        Event = fp.Event,
-        Node = fp.Node;
+FP.namespace('TSearch');
+FP.add('top-header', function (fp) {
+  var S = KISSY,
+    DOM = S.DOM,
+    Event = fp.Event,
+    Node = fp.Node;
 
-    fp.TSearch = {
-        config: {
-            form:null,/* DOM.get("#J_TSearchForm"),*/
+  fp.TSearch = {
+    config: {
+      form: null /* DOM.get("#J_TSearchForm"),*/,
 
-            // KISSY.get bug in ie6
-            q: null /*DOM.get("#J_TSearchForm")["q"]*/
-        },
+      // KISSY.get bug in ie6
+      q: null /*DOM.get("#J_TSearchForm")["q"]*/,
+    },
 
-        init: function(config) {
+    init: function (config) {
+      var that = this;
+      KISSY.available('J_TSearchForm', function () {
+        that.config = {
+          form: DOM.get('#J_TSearchForm'),
+          // KISSY.get bug in ie6
+          q: DOM.get('#J_TSearchForm')['q'],
+        };
 
-            var that = this;
-            KISSY.available('J_TSearchForm', function() {
-                that.config = {
-                    form: DOM.get("#J_TSearchForm"),
-                    // KISSY.get bug in ie6
-                    q: DOM.get("#J_TSearchForm")["q"]
-                };
+        config = that.config = fp.merge(that.config, config);
 
-                config = that.config = fp.merge(that.config, config);
+        that.bindEvent(config.q);
+        that.reset(config.form);
+        that.focus(config.q);
+        that.initSuggest(config.q, config.form);
+        //that.initHeaderLinks(); ×ªï¿½Æµï¿½ site-nav.js ï¿½ï¿½
+      });
+    },
 
-                that.bindEvent(config.q);
-                that.reset(config.form);
-                that.focus(config.q);
-                that.initSuggest(config.q, config.form);
-                //that.initHeaderLinks(); ×ªÒÆµ½ site-nav.js ÖÐ
-            });
-        },
-
-        focus: function(q) {
-            if (q.type != "hidden" && q.style.display != "none" && !q.disabled) {
-                q.focus();
-                if (fp.UA.ie) {
-                    // ie crazy cursor bug
-                    q.value = q.value;
-                }
-            }
-        },
-
-        bindEvent: function(q) {
-            
-            var that = this,
-                field = fp.one(q).parent(),
-                qNode = new Node(q),
-                tabs=DOM.query("#J_TSearchTabs li"),
-                form = that.config.form;
-                
-                DOM.addClass(form.parentNode,"ks-switchable-content");
-                DOM.addClass("#J_TSearchTabs","ks-switchable-nav");
-                
-                var tabPanelDiv=DOM.create("<div class='tab-panel'></div>");
-                
-                for(var i=0;i<tabs.length;i++){
-                    form.parentNode.appendChild(tabPanelDiv.cloneNode(true));
-                }                
-                DOM.get(".tab-panel",form.parentNode).appendChild(form);
-                
-                var tab_as=DOM.query("#J_TSearchTabs a"),
-                tabpanels = DOM.query(".tab-panel",DOM.get("#J_TSearchTabs").parentNode),
-                searchType = that.config.form["search_type"];
-
-            var CURRENT = "current",
-                FOCUS = 'focus'
-                SEARCH_TYPE_LIST = ["item", "mall", "shop", "auction", "taoba", "share"],
-                SEARCH_TYPE_ACTION = {
-                    "item": function() {
-                        if (q.value === '') {
-                            form.action = 'http://list.taobao.com/browse/cat-0.htm';
-                        }
-                    },
-                    "mall": function() {
-                        form.action = 'http://list.tmall.com/search_product.htm';
-                    },
-                    "shop": function() {
-                        form.action = 'http://shopsearch.taobao.com/browse/shop_search.htm';
-                    },
-                    "auction": function() {
-                        // a - ÅÄÂô / b - Ò»¿Ú¼Û
-                        form['atype'].value = 'a';
-                    },
-                    "taoba": function() {
-                        form.action = 'http://ba.taobao.com/index.htm';
-                    },
-                    "share": function() {
-                        form['tracelog'].value = 'msearch2fx';
-                        if (q.value === '') {
-                            form.action = 'http://jianghu.taobao.com/square.htm';
-                        } else {
-                            form['keyword'].value = q.value;
-                            form.action = 'http://fx.taobao.com/view/share_search.htm';
-                        }
-                    }
-                },
-                tabType = ['bb', 'sc', 'dp', 'pm', 'tb', 'fx'];
-
-            // util - tsearch tabs switch
-            var switchToTab = function(n) {
-//                fp.__fp_sug.config.resultFormat = 'Ô¼%result%¸ö±¦±´';
-//                if(n == 4){
-//                    fp.__fp_sug.config.resultFormat = 'Ô¼%result%¸öÈÈÌû';
-//                }
-                if (n == 1) {
-                    fp.__fp_sug.dataSource = 'http://suggest.taobao.com/sug?area=b2c&code=utf-8&extras=1&callback=KISSY.Suggest.callback';
-                } else {
-                    fp.__fp_sug.dataSource = 'http://suggest.taobao.com/sug?code=utf-8&extras=1&callback=KISSY.Suggest.callback';
-                }
-                fp.__fp_sug._dataCache = {};
-            };
-
-            // on input focus / blur
-            qNode.on("focus", function(ev) {
-                DOM.addClass(field, "focus");
-            }).on("blur", function(ev) {
-                if (fp.trim(q.value) === '') {
-                    DOM.removeClass(field, "focus");
-                }
-            });
-            
-            
-            Event.on(tab_as,"click",function(e){
-                e.preventDefault();
-            });
-            
-            var searchTab = new S.Tabs(DOM.get("#J_TSearchTabs").parentNode,{
-		        aria:true,
-		        activeTriggerCls:'current',
-		        triggerType:'click'		        
-		    });
-		    
-		    searchTab.on("switch",function(ev){
-		        var n=ev.currentIndex;		        
-		        tabpanels[n].appendChild(form);
-		        switchToTab(n); 
-		        var type=ev.originalEvent.type;
-		        setTimeout(function(){
-		            if(type=="click"){
-		                that.focus(q);
-		                field.addClass(FOCUS);
-		            }else{ 
-		                tabs[n].focus();
-		            }
-		        },0);
-		        
-                searchType.value = SEARCH_TYPE_LIST[n];                
-                if (fp.get('#J_monitorImg')) {
-                    var time = new Date().getTime();
-                    fp.get('#J_monitorImg').src = 'http://www.atpanel.com/jsclick?sysskjc=' + tabType[n] + '&t=' + time;
-                }
-		    });
-
-            var btn = form.getElementsByTagName('button')[0],
-                submitHandler = function() {
-                    if (fp.get('#J_monitorImg')) {
-                        fp.get('#J_monitorImg').src = 'http://www.atpanel.com/jsclick?sysskjc=ssan';
-                    }
-                    SEARCH_TYPE_ACTION[form['search_type'].value]();
-                };
-            
-            if (S.UA.ie <= 8) {
-                Event.on(btn, 'click', submitHandler);
-            }
-            Event.on(form, 'submit', submitHandler);
-
-            setTimeout(function() {
-                // Ä¬ÈÏÑ¡ÖÐ±¦±´Tab
-                searchType.value = 'item';
-                switchToTab(0);
-            }, 0);
-        },
-
-        // reset input in case of browser cache
-        reset: function(form) {
-            setTimeout(function() {
-                form['atype'].value = '';
-                if (form['keyword']) {
-                    form['keyword'].value = '';
-                }
-                if (form['tracelog']) {
-                    form['tracelog'].value = '';
-                }
-            }, 0);
-        },
-
-        // search suggest
-        initSuggest: function(q, form) {
-            var sug = new fp.Suggest(q, 'http://suggest.taobao.com/sug?code=utf-8&extras=1', {
-                resultFormat: 'Ô¼%result%¸ö±¦±´'
-            });
-            fp.__fp_sug=sug;
-
-            // old code copied:
-            // ¶¨ÖÆ1£ºÑ¡ÖÐÌáÊ¾µÄ²¼µã²ÎÊý
-            var ssid = form['ssid'];
-            if (ssid) {
-                // ie no cache
-                setTimeout(function() {
-                    ssid.value = 's5-e';
-                }, 0);
-                // w3c no cache
-                ssid.setAttribute('autocomplete', 'off');
-
-                var func = function() {
-                    if (ssid.value.indexOf('-p1') == -1) {
-                        ssid.value += '-p1';
-                    }
-                };
-
-                try {
-                    if (sug.subscribe) sug.subscribe('onItemSelect', func);
-                    if (sug.on) sug.on('onItemSelect', func);
-                } catch(ex) {
-                }
-            }
-
-            // ¶¨ÖÆ2£ºÖ»ÓÐ item ºÍ mall ¼¤»îÌáÊ¾
-            var searchType = form.elements['search_type'];
-            var getCurrRel = function() {
-                return searchType.value;
-            };
-
-//            var _needUpdate = sug._needUpdate;
-//            sug._needUpdate = function() {
-//                var curRel = getCurrRel();
-//                return (curRel === 'item' || curRel === 'mall') && _needUpdate.call(sug);
-//            };
-
-            sug.on('beforeStart', function() {
-                    var curRel = getCurrRel();
-                    return curRel === 'item' || curRel === 'mall';
-                });
-
-            // Í¬µê¹º½Ó¿Ú
-            sug.on('updateFooter', function(evt) {
-                if(searchType.value === 'taoba'){
-                    return;
-                }
-                var tdgForm, inputs,
-                        DEFAULT = 'data-default';
-
-                // ÎÞ½á¹û¾Í²»ÏÔÊ¾Í¬µê¹º
-                if (!this.content.innerHTML) return;
-
-                // Í¬µê¹º±íµ¥HTML
-                tdgForm = DOM.create('<form method="get" action="http://s.taobao.com/search" target="_top">');
-                tdgForm.innerHTML = '' +
-                        '<input type="hidden" name="q" />' +
-                        '<input type="hidden" value="tdg6" name="from" />' +
-                        '<h5>Í¬µê¹º£º</h5>' +
-                        '<input type="text" data-default="µÚÒ»¼þ±¦±´" value="µÚÒ»¼þ±¦±´" class="tdg-input" tabindex="0" />' +
-                        '<em>+</em>' +
-                        '<input type="text" data-default="ÁíÒ»±¦±´" value="ÁíÒ»±¦±´" class="tdg-input" tabindex="1" />' +
-                        '<em>+</em>' +
-                        '<input type="text" data-default="ÁíÒ»±¦±´" value="ÁíÒ»±¦±´" class="tdg-input" tabindex="2" />' +
-                        '<button class="tdg-btn" type="submit" tabindex="3">ËÑË÷</button>';
-
-                // Í¬µê¹ºÊäÈë¿òÂß¼­
-                inputs = fp.all('.tdg-input', tdgForm);
-                inputs.each(function(input, i) {
-                    input.attr(DEFAULT, input.val());
-                    if (0 === i) {
-                        input.val(evt.query).css('color', '#000');
-                    }
-                });
-
-                // Í¬µê¹ºÊäÈë¿òÊÂ¼þ×¢²á£¬´¦Àíº¯Êý¶¨ÒåÔÚÍâ²¿¼õÉÙÏûºÄ
-                inputs.on('focus', _tdgInputFocusHandler);
-                inputs.on('blur', _tdgInputBlurHandler);
-
-                // Í¬µê¹º±íµ¥Ìá½»´¦Àí
-                Event.on(tdgForm, 'submit', function() {
-                    var queries = [], value;
-                    inputs.each(function(input) {
-                        if ((value = input.val()) !== input.attr(DEFAULT)) {
-                            queries.push(value);
-                        }
-                    });
-                    this['q'].value = queries.join(' + ');
-                });
-
-                // Í¬µê¹ºÊäÈë¿ò¼üÅÌTab²Ù×÷´¦Àí
-                Event.on(this.footer, 'keydown', function(evt) {
-                    var index;
-                    if (9 === evt.keyCode) {
-                        index = parseInt(DOM.attr(evt.target, 'tabindex'), 10);
-                        if (index < 2) {
-                            // if using focus(), may crash in fucking IE, but work fine
-                            try {
-                                inputs[++index].focus();
-                            } catch(ex) {
-                            }
-                        } else if (2 === index) {
-                            DOM.get('button.tdg-btn', this.footer).focus();
-                        } else {
-                            inputs[0].select();
-                        }
-                        evt.halt();
-                    }
-                });
-
-                // HTML×¢ÈëÒ³Ãæ
-                this.footer.appendChild(tdgForm);
-
-                // Í¬µê¹ºÊäÈë¿ò focus ÊÂ¼þ´¦Àí
-                function _tdgInputFocusHandler(evt) {
-                    var target = evt.target.getDOMNode();
-
-                    if (fp.trim(target.value) === DOM.attr(target, DEFAULT)) {
-                        target.value = '';
-                    } else {
-                        target.select();
-                    }
-                    DOM.css(target, {
-                        color: '#000',
-                        borderColor: '#6694E3'
-                    });
-                }
-
-                // Í¬µê¹ºÊäÈë¿ò blur ÊÂ¼þ´¦Àí
-                function _tdgInputBlurHandler(evt) {
-                    var target = evt.target.getDOMNode();
-
-                    if (fp.trim(target.value) === '') {
-                        target.style.cssText = '';
-                        target.value = DOM.attr(target, DEFAULT);
-                    }
-                    DOM.css(target, 'borderColor', '#A6A6A6');
-                }
-            });
-
+    focus: function (q) {
+      if (q.type != 'hidden' && q.style.display != 'none' && !q.disabled) {
+        q.focus();
+        if (fp.UA.ie) {
+          // ie crazy cursor bug
+          q.value = q.value;
         }
+      }
+    },
 
-    };
-});
-/*º£Íâ°æÌÔ¿Ípid*/
-FP.add('global', function(F) {
+    bindEvent: function (q) {
+      var that = this,
+        field = fp.one(q).parent(),
+        qNode = new Node(q),
+        tabs = DOM.query('#J_TSearchTabs li'),
+        form = that.config.form;
 
-    var win = window, doc = document,
-        S = KISSY, DOM = S.DOM,
-        PID_REG = /pid=(mm_\d{0,10}_\d{0,10}_\d{0,10})/i, UNID_REG = /unid=(\d{0,10})/i,
-        DEFAULT_PID_REG = /mm_\d+_\d+_\d+/gmi,
-        SEARCH_FORM_HOOK = 'J_TSearchForm', PID_NAME = 'pid', UNID_NAME = 'unid', A = 'a',
-        pid = 'mm_14507416_2297358_8935934', unid = '',
-        areas = [];
+      DOM.addClass(form.parentNode, 'ks-switchable-content');
+      DOM.addClass('#J_TSearchTabs', 'ks-switchable-nav');
 
-    F.Global = {
-        // »ñÈ¡pid, unid²ÎÊý
-        init: function(containers) {
-            var param = win.location.search, m;
+      var tabPanelDiv = DOM.create("<div class='tab-panel'></div>");
 
-            // »ñÈ¡pid, unid
-            if ((m = param.match(PID_REG)) && m[1]) {
-                pid = m[1];
-                if ((m = param.match(UNID_REG)) && m[1]) {
-                    unid = m[1];
-                }
+      for (var i = 0; i < tabs.length; i++) {
+        form.parentNode.appendChild(tabPanelDiv.cloneNode(true));
+      }
+      DOM.get('.tab-panel', form.parentNode).appendChild(form);
+
+      var tab_as = DOM.query('#J_TSearchTabs a'),
+        tabpanels = DOM.query(
+          '.tab-panel',
+          DOM.get('#J_TSearchTabs').parentNode,
+        ),
+        searchType = that.config.form['search_type'];
+
+      var CURRENT = 'current',
+        FOCUS = 'focus';
+      (SEARCH_TYPE_LIST = [
+        'item',
+        'mall',
+        'shop',
+        'auction',
+        'taoba',
+        'share',
+      ]),
+        (SEARCH_TYPE_ACTION = {
+          item: function () {
+            if (q.value === '') {
+              form.action = 'http://list.taobao.com/browse/cat-0.htm';
             }
-
-            // »ñÈ¡Á´½ÓÌæ»»ÇøÓòÈÝÆ÷
-            if (!containers || !S.isArray(containers)) {
-                areas = [doc];
+          },
+          mall: function () {
+            form.action = 'http://list.tmall.com/search_product.htm';
+          },
+          shop: function () {
+            form.action = 'http://shopsearch.taobao.com/browse/shop_search.htm';
+          },
+          auction: function () {
+            // a - ï¿½ï¿½ï¿½ï¿½ / b - Ò»ï¿½Ú¼ï¿½
+            form['atype'].value = 'a';
+          },
+          taoba: function () {
+            form.action = 'http://ba.taobao.com/index.htm';
+          },
+          share: function () {
+            form['tracelog'].value = 'msearch2fx';
+            if (q.value === '') {
+              form.action = 'http://jianghu.taobao.com/square.htm';
             } else {
-                S.each(containers, function(container, i) {
-                    areas[i] = DOM.get(container) || doc;
-                });
+              form['keyword'].value = q.value;
+              form.action = 'http://fx.taobao.com/view/share_search.htm';
             }
+          },
+        }),
+        (tabType = ['bb', 'sc', 'dp', 'pm', 'tb', 'fx']);
 
-            this.setSearchParam();
-            this.setLinks();
-        },
-
-        // ÉèÖÃËÑË÷ÒýÇæ²ÎÊý
-        setSearchParam: function() {
-            var form = DOM.get('#' + SEARCH_FORM_HOOK),
-                pidInput = form[PID_NAME] || form.appendChild(DOM.create('<input type="hidden" name="' + PID_NAME + '" />')),
-                unidInput = form[UNID_NAME] || form.appendChild(DOM.create('<input type="hidden" name="' + UNID_NAME + '" />'));
-
-            pidInput.value = pid;
-            unidInput.value = unid;
-        },
-
-        // ÉèÖÃÖ¸¶¨Á´½Ó²ÎÊý
-        setLinks: function() {
-            var param = pid + (unid ? '&unid=' + unid : '');
-            // ÉèÖÃsearch8Á´½Ó£¬Çø±ðÓÚµ¥Æ·»òÕßµêÆÌÁ´½Ó
-            S.each(areas, function(area) {
-                var links = S.query(A, area);
-                if (links && links.length !== 0) {
-                    S.each(links, function(link) {
-                        link.href = link.href.replace(DEFAULT_PID_REG, param);
-                    });
-                }
-            });
+      // util - tsearch tabs switch
+      var switchToTab = function (n) {
+        //                fp.__fp_sug.config.resultFormat = 'Ô¼%result%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
+        //                if(n == 4){
+        //                    fp.__fp_sug.config.resultFormat = 'Ô¼%result%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
+        //                }
+        if (n == 1) {
+          fp.__fp_sug.dataSource =
+            'http://suggest.taobao.com/sug?area=b2c&code=utf-8&extras=1&callback=KISSY.Suggest.callback';
+        } else {
+          fp.__fp_sug.dataSource =
+            'http://suggest.taobao.com/sug?code=utf-8&extras=1&callback=KISSY.Suggest.callback';
         }
-    };
+        fp.__fp_sug._dataCache = {};
+      };
+
+      // on input focus / blur
+      qNode
+        .on('focus', function (ev) {
+          DOM.addClass(field, 'focus');
+        })
+        .on('blur', function (ev) {
+          if (fp.trim(q.value) === '') {
+            DOM.removeClass(field, 'focus');
+          }
+        });
+
+      Event.on(tab_as, 'click', function (e) {
+        e.preventDefault();
+      });
+
+      var searchTab = new S.Tabs(DOM.get('#J_TSearchTabs').parentNode, {
+        aria: true,
+        activeTriggerCls: 'current',
+        triggerType: 'click',
+      });
+
+      searchTab.on('switch', function (ev) {
+        var n = ev.currentIndex;
+        tabpanels[n].appendChild(form);
+        switchToTab(n);
+        var type = ev.originalEvent.type;
+        setTimeout(function () {
+          if (type == 'click') {
+            that.focus(q);
+            field.addClass(FOCUS);
+          } else {
+            tabs[n].focus();
+          }
+        }, 0);
+
+        searchType.value = SEARCH_TYPE_LIST[n];
+        if (fp.get('#J_monitorImg')) {
+          var time = new Date().getTime();
+          fp.get('#J_monitorImg').src =
+            'http://www.atpanel.com/jsclick?sysskjc=' +
+            tabType[n] +
+            '&t=' +
+            time;
+        }
+      });
+
+      var btn = form.getElementsByTagName('button')[0],
+        submitHandler = function () {
+          if (fp.get('#J_monitorImg')) {
+            fp.get('#J_monitorImg').src =
+              'http://www.atpanel.com/jsclick?sysskjc=ssan';
+          }
+          SEARCH_TYPE_ACTION[form['search_type'].value]();
+        };
+
+      if (S.UA.ie <= 8) {
+        Event.on(btn, 'click', submitHandler);
+      }
+      Event.on(form, 'submit', submitHandler);
+
+      setTimeout(function () {
+        // Ä¬ï¿½ï¿½Ñ¡ï¿½Ð±ï¿½ï¿½ï¿½Tab
+        searchType.value = 'item';
+        switchToTab(0);
+      }, 0);
+    },
+
+    // reset input in case of browser cache
+    reset: function (form) {
+      setTimeout(function () {
+        form['atype'].value = '';
+        if (form['keyword']) {
+          form['keyword'].value = '';
+        }
+        if (form['tracelog']) {
+          form['tracelog'].value = '';
+        }
+      }, 0);
+    },
+
+    // search suggest
+    initSuggest: function (q, form) {
+      var sug = new fp.Suggest(
+        q,
+        'http://suggest.taobao.com/sug?code=utf-8&extras=1',
+        {
+          resultFormat: 'Ô¼%result%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½',
+        },
+      );
+      fp.__fp_sug = sug;
+
+      // old code copied:
+      // ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      var ssid = form['ssid'];
+      if (ssid) {
+        // ie no cache
+        setTimeout(function () {
+          ssid.value = 's5-e';
+        }, 0);
+        // w3c no cache
+        ssid.setAttribute('autocomplete', 'off');
+
+        var func = function () {
+          if (ssid.value.indexOf('-p1') == -1) {
+            ssid.value += '-p1';
+          }
+        };
+
+        try {
+          if (sug.subscribe) sug.subscribe('onItemSelect', func);
+          if (sug.on) sug.on('onItemSelect', func);
+        } catch (ex) {}
+      }
+
+      // ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½Ö»ï¿½ï¿½ item ï¿½ï¿½ mall ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
+      var searchType = form.elements['search_type'];
+      var getCurrRel = function () {
+        return searchType.value;
+      };
+
+      //            var _needUpdate = sug._needUpdate;
+      //            sug._needUpdate = function() {
+      //                var curRel = getCurrRel();
+      //                return (curRel === 'item' || curRel === 'mall') && _needUpdate.call(sug);
+      //            };
+
+      sug.on('beforeStart', function () {
+        var curRel = getCurrRel();
+        return curRel === 'item' || curRel === 'mall';
+      });
+
+      // Í¬ï¿½ê¹ºï¿½Ó¿ï¿½
+      sug.on('updateFooter', function (evt) {
+        if (searchType.value === 'taoba') {
+          return;
+        }
+        var tdgForm,
+          inputs,
+          DEFAULT = 'data-default';
+
+        // ï¿½Þ½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½Ê¾Í¬ï¿½ê¹º
+        if (!this.content.innerHTML) return;
+
+        // Í¬ï¿½ê¹ºï¿½ï¿½ï¿½ï¿½HTML
+        tdgForm = DOM.create(
+          '<form method="get" action="http://s.taobao.com/search" target="_top">',
+        );
+        tdgForm.innerHTML =
+          '' +
+          '<input type="hidden" name="q" />' +
+          '<input type="hidden" value="tdg6" name="from" />' +
+          '<h5>Í¬ï¿½ê¹ºï¿½ï¿½</h5>' +
+          '<input type="text" data-default="ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" value="ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" class="tdg-input" tabindex="0" />' +
+          '<em>+</em>' +
+          '<input type="text" data-default="ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½" value="ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½" class="tdg-input" tabindex="1" />' +
+          '<em>+</em>' +
+          '<input type="text" data-default="ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½" value="ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½" class="tdg-input" tabindex="2" />' +
+          '<button class="tdg-btn" type="submit" tabindex="3">ï¿½ï¿½ï¿½ï¿½</button>';
+
+        // Í¬ï¿½ê¹ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
+        inputs = fp.all('.tdg-input', tdgForm);
+        inputs.each(function (input, i) {
+          input.attr(DEFAULT, input.val());
+          if (0 === i) {
+            input.val(evt.query).css('color', '#000');
+          }
+        });
+
+        // Í¬ï¿½ê¹ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½×¢ï¿½á£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        inputs.on('focus', _tdgInputFocusHandler);
+        inputs.on('blur', _tdgInputBlurHandler);
+
+        // Í¬ï¿½ê¹ºï¿½ï¿½ï¿½ï¿½ï¿½á½»ï¿½ï¿½ï¿½ï¿½
+        Event.on(tdgForm, 'submit', function () {
+          var queries = [],
+            value;
+          inputs.each(function (input) {
+            if ((value = input.val()) !== input.attr(DEFAULT)) {
+              queries.push(value);
+            }
+          });
+          this['q'].value = queries.join(' + ');
+        });
+
+        // Í¬ï¿½ê¹ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Tabï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        Event.on(this.footer, 'keydown', function (evt) {
+          var index;
+          if (9 === evt.keyCode) {
+            index = parseInt(DOM.attr(evt.target, 'tabindex'), 10);
+            if (index < 2) {
+              // if using focus(), may crash in fucking IE, but work fine
+              try {
+                inputs[++index].focus();
+              } catch (ex) {}
+            } else if (2 === index) {
+              DOM.get('button.tdg-btn', this.footer).focus();
+            } else {
+              inputs[0].select();
+            }
+            evt.halt();
+          }
+        });
+
+        // HTML×¢ï¿½ï¿½Ò³ï¿½ï¿½
+        this.footer.appendChild(tdgForm);
+
+        // Í¬ï¿½ê¹ºï¿½ï¿½ï¿½ï¿½ï¿½ focus ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
+        function _tdgInputFocusHandler(evt) {
+          var target = evt.target.getDOMNode();
+
+          if (fp.trim(target.value) === DOM.attr(target, DEFAULT)) {
+            target.value = '';
+          } else {
+            target.select();
+          }
+          DOM.css(target, {
+            color: '#000',
+            borderColor: '#6694E3',
+          });
+        }
+
+        // Í¬ï¿½ê¹ºï¿½ï¿½ï¿½ï¿½ï¿½ blur ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
+        function _tdgInputBlurHandler(evt) {
+          var target = evt.target.getDOMNode();
+
+          if (fp.trim(target.value) === '') {
+            target.style.cssText = '';
+            target.value = DOM.attr(target, DEFAULT);
+          }
+          DOM.css(target, 'borderColor', '#A6A6A6');
+        }
+      });
+    },
+  };
 });
-//ºáÏò¹ö¶¯ÌõµÄ´¦Àí
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½pid*/
+FP.add('global', function (F) {
+  var win = window,
+    doc = document,
+    S = KISSY,
+    DOM = S.DOM,
+    PID_REG = /pid=(mm_\d{0,10}_\d{0,10}_\d{0,10})/i,
+    UNID_REG = /unid=(\d{0,10})/i,
+    DEFAULT_PID_REG = /mm_\d+_\d+_\d+/gim,
+    SEARCH_FORM_HOOK = 'J_TSearchForm',
+    PID_NAME = 'pid',
+    UNID_NAME = 'unid',
+    A = 'a',
+    pid = 'mm_14507416_2297358_8935934',
+    unid = '',
+    areas = [];
+
+  F.Global = {
+    // ï¿½ï¿½È¡pid, unidï¿½ï¿½ï¿½ï¿½
+    init: function (containers) {
+      var param = win.location.search,
+        m;
+
+      // ï¿½ï¿½È¡pid, unid
+      if ((m = param.match(PID_REG)) && m[1]) {
+        pid = m[1];
+        if ((m = param.match(UNID_REG)) && m[1]) {
+          unid = m[1];
+        }
+      }
+
+      // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½æ»»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      if (!containers || !S.isArray(containers)) {
+        areas = [doc];
+      } else {
+        S.each(containers, function (container, i) {
+          areas[i] = DOM.get(container) || doc;
+        });
+      }
+
+      this.setSearchParam();
+      this.setLinks();
+    },
+
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    setSearchParam: function () {
+      var form = DOM.get('#' + SEARCH_FORM_HOOK),
+        pidInput =
+          form[PID_NAME] ||
+          form.appendChild(
+            DOM.create('<input type="hidden" name="' + PID_NAME + '" />'),
+          ),
+        unidInput =
+          form[UNID_NAME] ||
+          form.appendChild(
+            DOM.create('<input type="hidden" name="' + UNID_NAME + '" />'),
+          );
+
+      pidInput.value = pid;
+      unidInput.value = unid;
+    },
+
+    // ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½
+    setLinks: function () {
+      var param = pid + (unid ? '&unid=' + unid : '');
+      // ï¿½ï¿½ï¿½ï¿½search8ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Æ·ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      S.each(areas, function (area) {
+        var links = S.query(A, area);
+        if (links && links.length !== 0) {
+          S.each(links, function (link) {
+            link.href = link.href.replace(DEFAULT_PID_REG, param);
+          });
+        }
+      });
+    },
+  };
+});
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½
 /*
 KISSY.ready(function(S){
 	var handleHScroll = function(){

@@ -1,85 +1,708 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
- <head>
-  <title>/my/readyState.html</title>
-  <meta name="author" content="Dean Edwards"/>
-  <!-- keeping code tidy!! -->
-  <meta name="copyright" content="&copy; copyright 2004, Dean Edwards"/>
-  <script type="text/javascript">
-  var orderOfEvents = [], i = 0;
-  var loaded = {};
-  function applyStyleSheet(id) {
-  	if (!loaded[id]) {
-  		orderOfEvents[i++] = "styleSheet" + id + " applied";
-  		loaded[id] = true;
-  	}
-  };
-  </script>
-  <style id="styleSheet1">
-   body {test1: expression(applyStyleSheet(1));}
-   pre {border: 1px solid black; background-color: #eee; padding: 1em;}
-  </style>
-  <script type="text/javascript">
-   document.onload = function() {
-    orderOfEvents[i++] = "document.onload";
-   };
-   window.onload = function() {
-    orderOfEvents[i++] = "window.onload";
-   };
-   document.onreadystatechange = function() {
-    orderOfEvents[i++] = "document.onreadystatechange (readyState=" + document.readyState + ")";
-   };
-   window.onreadystatechange = function() {
-    orderOfEvents[i++] = "window.onreadystatechange (readyState=" + document.readyState + ")";
-   };
-   document.onpropertychange = function() {
-    orderOfEvents[i++] = "document.onpropertychange (propertyName=" + event.propertyName + ")";
-   };
-   function results() {
-   	var output = document.getElementById("output");
-   	output.firstChild.nodeValue = orderOfEvents.join("\n\r");
-   };
-   orderOfEvents[i++] = "document start (readyState=" + document.readyState + ")";
-  </script>
-  <style id="styleSheet2">
-   body {test2: expression(applyStyleSheet(2));}
-  </style>
- </head>
- <body>
-  <h1>Test: Order of Events</h1>
-  <img src="http://www.princeton.edu/~lancelot/jpegs/C-30v.jpeg" onload="orderOfEvents[i++]='image.onload'" height="31" width="88"/>
-  <h2>Results</h2>
-  <pre id="output">
-  </pre>
-  <p><button onclick="results()">Show Events</button></p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <script type="text/javascript">
-  orderOfEvents[i++] = "document half-way (readyState=" + document.readyState + ")";
-  </script>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p><p>text text text</p>
-  <script type="text/javascript">
-  orderOfEvents[i++] = "document end (readyState=" + document.readyState + ")";
-  </script>
- </body>
-  <script type="text/javascript">
-  orderOfEvents[i++] = "document after the BODY element (readyState=" + document.readyState + ")";
+  <head>
+    <title>/my/readyState.html</title>
+    <meta name="author" content="Dean Edwards" />
+    <!-- keeping code tidy!! -->
+    <meta name="copyright" content="&copy; copyright 2004, Dean Edwards" />
+    <script>
+      var orderOfEvents = [],
+        i = 0;
+      var loaded = {};
+      function applyStyleSheet(id) {
+        if (!loaded[id]) {
+          orderOfEvents[i++] = 'styleSheet' + id + ' applied';
+          loaded[id] = true;
+        }
+      }
+    </script>
+    <style id="styleSheet1">
+      body {
+        test1: expression(applyStyleSheet(1));
+      }
+      pre {
+        border: 1px solid black;
+        background-color: #eee;
+        padding: 1em;
+      }
+    </style>
+    <script>
+      document.onload = function () {
+        orderOfEvents[i++] = 'document.onload';
+      };
+      window.onload = function () {
+        orderOfEvents[i++] = 'window.onload';
+      };
+      document.onreadystatechange = function () {
+        orderOfEvents[i++] =
+          'document.onreadystatechange (readyState=' +
+          document.readyState +
+          ')';
+      };
+      window.onreadystatechange = function () {
+        orderOfEvents[i++] =
+          'window.onreadystatechange (readyState=' + document.readyState + ')';
+      };
+      document.onpropertychange = function () {
+        orderOfEvents[i++] =
+          'document.onpropertychange (propertyName=' + event.propertyName + ')';
+      };
+      function results() {
+        var output = document.getElementById('output');
+        output.firstChild.nodeValue = orderOfEvents.join('\n\r');
+      }
+      orderOfEvents[i++] =
+        'document start (readyState=' + document.readyState + ')';
+    </script>
+    <style id="styleSheet2">
+      body {
+        test2: expression(applyStyleSheet(2));
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test: Order of Events</h1>
+    <img
+      src="http://www.princeton.edu/~lancelot/jpegs/C-30v.jpeg"
+      onload="orderOfEvents[i++]='image.onload'"
+      height="31"
+      width="88" />
+    <h2>Results</h2>
+    <pre id="output"></pre>
+    <p><button onclick="results()">Show Events</button></p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <script>
+      orderOfEvents[i++] =
+        'document half-way (readyState=' + document.readyState + ')';
+    </script>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <p>text text text</p>
+    <script>
+      orderOfEvents[i++] =
+        'document end (readyState=' + document.readyState + ')';
+    </script>
+  </body>
+  <script>
+    orderOfEvents[i++] =
+      'document after the BODY element (readyState=' +
+      document.readyState +
+      ')';
   </script>
 </html>

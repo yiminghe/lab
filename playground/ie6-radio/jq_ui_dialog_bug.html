@@ -1,57 +1,47 @@
 ﻿<!doctype html>
 <html>
-    <head>
-        
-        <meta charset="UTF-8" />
-				<title>radio bug in ie6</title>
-				<link type="text/css" href="http://jqueryui.com/themes/base/jquery.ui.all.css" rel="stylesheet" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>radio bug in ie6</title>
+    <link
+      href="http://jqueryui.com/themes/base/jquery.ui.all.css"
+      rel="stylesheet" />
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+    <script src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
 
-	<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.draggable.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.resizable.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.dialog.js"></script>
+    <script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+    <script src="http://jqueryui.com/ui/jquery.ui.mouse.js"></script>
+    <script src="http://jqueryui.com/ui/jquery.ui.draggable.js"></script>
+    <script src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+    <script src="http://jqueryui.com/ui/jquery.ui.resizable.js"></script>
+    <script src="http://jqueryui.com/ui/jquery.ui.dialog.js"></script>
+  </head>
+  <body>
+    <p>ie6下 -- 下面按钮不起作用(ie7,8未测试)</p>
+    <button id="test">选中第二个radio</button>
 
-    </head>
-    <body>
-    	
-    	<p>ie6下 -- 下面按钮不起作用(ie7,8未测试)</p>
-    	<button id="test">选中第二个radio</button>
-    	
-    	
-    	
-<div id="dialog" title="模板选择" >
-	
-	 <input type="radio" name="template" value="1" />
-	 <input type="radio" name="template" value="2" id="testRadio" />
-	 <input type="radio" name="template" value="3" />
- 
-</div>
+    <div id="dialog" title="模板选择">
+      <input type="radio" name="template" value="1" />
+      <input type="radio" name="template" value="2" id="testRadio" />
+      <input type="radio" name="template" value="3" />
+    </div>
 
+    <script>
+      $(function () {
+        $('#dialog').dialog({
+          autoOpen: false,
+          height: 300,
+          width: 500,
+          modal: true,
+        });
 
+        $('#test').click(function () {
+          $('#dialog input:radio[value=' + '2' + ']').attr('checked', true);
 
-<script>
-$(function(){
-	$("#dialog").dialog({
-    	autoOpen:false,
-    	height:300,
-    	width:500
-    	,modal:true
-    	
-   });
-  
-   $("#test").click(function(){
-    		$("#dialog input:radio[value=" + "2" + "]").attr("checked", true); 
-    	
-    		$("#dialog").dialog("open");
-       
-   });
-
-});
-</script>
-</body>
+          $('#dialog').dialog('open');
+        });
+      });
+    </script>
+  </body>
 </html>

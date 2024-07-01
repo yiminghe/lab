@@ -41,9 +41,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-require("./jsdefs");
-require("./jslex");
-require("./jsparse");
+require('./jsdefs');
+require('./jslex');
+require('./jsparse');
 
-for (var exp in Narcissus.parser)
-    exports[exp] = Narcissus.parser[exp];
+for (var exp in Narcissus.parser) exports[exp] = Narcissus.parser[exp];

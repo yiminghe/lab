@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-
-<head>
+  <head>
     <meta charset="utf-8" />
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>I am iframe</h1>
     <script>
-        window.postMessage(JSON.stringify({
-            method: 'alert',
-            param: {
-                content: 'ok',
-            },
-        }));
+      window.postMessage(
+        JSON.stringify({
+          method: 'alert',
+          param: {
+            content: 'ok',
+          },
+        }),
+      );
     </script>
-</body>
-
+  </body>
 </html>

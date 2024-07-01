@@ -1,4 +1,4 @@
-import { GraphNode, findElementaryCircuits } from "./findElementaryCircuits.js";
+import { GraphNode, findElementaryCircuits } from './findElementaryCircuits.js';
 
 function constructNodes(ids) {
   const idMap = new Map();
@@ -58,10 +58,13 @@ function App() {
 
   function run() {
     let value = input.current.value.trim();
-    value = value.split(/\n+/).map(s => s.trim()).map(s => {
-      const v = s.split('>');
-      return v.map(vv => vv.trim());
-    });
+    value = value
+      .split(/\n+/)
+      .map((s) => s.trim())
+      .map((s) => {
+        const v = s.split('>');
+        return v.map((vv) => vv.trim());
+      });
     const { nodes, dot } = constructNodes(value);
     viz.renderSVGElement(dot).then(function (el) {
       if (span.current.firstChild) {
@@ -69,31 +72,42 @@ function App() {
       }
       span.current.appendChild(el);
     });
-    result.current.value = (
-      findElementaryCircuits(nodes).map(v => v.map((n) => n.id)).map(v => v.join(' > ')).join('\n\n'));
+    result.current.value = findElementaryCircuits(nodes)
+      .map((v) => v.map((n) => n.id))
+      .map((v) => v.join(' > '))
+      .join('\n\n');
   }
 
   useEffect(() => {
     run();
   }, []);
 
-  return <div>
-    <h2>find all the elementary circuits of a directed graph</h2>
-    <span style={{ verticalAlign: 'top',fontWeight:'bolder' }}>edges:</span>
-    &nbsp;
-    <textarea style={{ width: 200, height: 200, verticalAlign: 'top' }} ref={input} defaultValue={
-      defaultData.map(d => d.length ? `${d[0]} > ${d[1]}` : '').join('\n')
-    }>
-    </textarea>
-    &nbsp;
-    <span ref={span}></span>
-    &nbsp;
-    <span style={{ verticalAlign: 'top',fontWeight:'bolder' }}>circuits:</span>
-    &nbsp;
-    <textarea style={{ width: 200, height: 200, verticalAlign: 'top' }} ref={result} />
-    <br />
-    <button onClick={run}>run</button>
-  </div>;
+  return (
+    <div>
+      <h2>find all the elementary circuits of a directed graph</h2>
+      <span style={{ verticalAlign: 'top', fontWeight: 'bolder' }}>edges:</span>
+      &nbsp;
+      <textarea
+        style={{ width: 200, height: 200, verticalAlign: 'top' }}
+        ref={input}
+        defaultValue={defaultData
+          .map((d) => (d.length ? `${d[0]} > ${d[1]}` : ''))
+          .join('\n')}></textarea>
+      &nbsp;
+      <span ref={span}></span>
+      &nbsp;
+      <span style={{ verticalAlign: 'top', fontWeight: 'bolder' }}>
+        circuits:
+      </span>
+      &nbsp;
+      <textarea
+        style={{ width: 200, height: 200, verticalAlign: 'top' }}
+        ref={result}
+      />
+      <br />
+      <button onClick={run}>run</button>
+    </div>
+  );
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));

@@ -1,96 +1,96 @@
-﻿
-<!DOCTYPE html>
+﻿<!doctype html>
 <html>
-<head>
-
-<meta charset="utf-8" />
-<title>Scrolling shadows by @kizmarh and @leaverou</title>
-<style>
-/**
+  <head>
+    <meta charset="utf-8" />
+    <title>Scrolling shadows by @kizmarh and @leaverou</title>
+    <style>
+      /**
  * Scrolling shadows by @kizmarh and @leaverou
  * Only works in browsers supporting background-attachment: local; & CSS gradients
  * Degrades gracefully
  */
 
-html {
-	background: white;
-	font: 120% sans-serif;
-}
+      html {
+        background: white;
+        font: 120% sans-serif;
+      }
 
-.scrollbox {
-	overflow: auto;
-	width: 200px;
-	max-height: 200px;
-	margin: 50px auto;
+      .scrollbox {
+        overflow: auto;
+        width: 200px;
+        max-height: 200px;
+        margin: 50px auto;
 
-	background:
+        background:
 		/* Shadow covers */
-		-webkit-linear-gradient(white 30%, rgba(255,255,255,0)),
-		-webkit-linear-gradient(rgba(255,255,255,0), white 70%) 0 100%,
-		
-		/*前面的覆盖后面的*/
-		
-		/* Shadows */
-		-webkit-radial-gradient(50% 0, farthest-side, rgba(0,0,0,.2), rgba(0,0,0,0)),
-		-webkit-radial-gradient(50% 100%,farthest-side, rgba(0,0,0,.2), rgba(0,0,0,0)) 0 100%;
-	background-repeat: no-repeat;
-	background-color: white;
-	background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-	
-	/* Opera doesn't support this in the shorthand */
-	background-attachment: local, local, scroll, scroll;
-}
-</style>
+          -webkit-linear-gradient(white 30%, rgba(255, 255, 255, 0)),
+          -webkit-linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+          /*前面的覆盖后面的*/ /* Shadows */ -webkit-radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)),
+          -webkit-radial-gradient(
+              50% 100%,
+              farthest-side,
+              rgba(0, 0, 0, 0.2),
+              rgba(0, 0, 0, 0)
+            ) 0 100%;
+        background-repeat: no-repeat;
+        background-color: white;
+        background-size:
+          100% 40px,
+          100% 40px,
+          100% 14px,
+          100% 14px;
 
-</head>
-<body><h1>CSS-only shadow-scrolling effect.</h1>
+        /* Opera doesn't support this in the shorthand */
+        background-attachment: local, local, scroll, scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CSS-only shadow-scrolling effect.</h1>
 
-<div class="scrollbox">
-	<ul>
-		<li>Not enough content to scroll</li>
-		<li>2</li>
-		<li>3</li>
-		<li>4</li>
-		<li>5</li>
-	</ul>
-</div>
+    <div class="scrollbox">
+      <ul>
+        <li>Not enough content to scroll</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+      </ul>
+    </div>
 
-
-<div class="scrollbox">
-	<ul>
-		<li>Ah! Scroll below!</li>
-		<li>2</li>
-		<li>3</li>
-		<li>4</li>
-		<li>5</li>
-		<li>6</li>
-		<li>7</li>
-		<li>8</li>
-		<li>9</li>
-		<li>10</li>
-		<li>1</li>
-		<li>2</li>
-		<li>3</li>
-		<li>4</li>
-		<li>5</li>
-		<li>6</li>
-		<li>7</li>
-		<li>8</li>
-		<li>9</li>
-		<li>10</li>
-		<li>1</li>
-		<li>2</li>
-		<li>3</li>
-		<li>4</li>
-		<li>5</li>
-		<li>6</li>
-		<li>7</li>
-		<li>8</li>
-		<li>The end!</li>
-		<li>No shadow there.</li>
-	</ul>
-</div>
-
-
-</body>
+    <div class="scrollbox">
+      <ul>
+        <li>Ah! Scroll below!</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>The end!</li>
+        <li>No shadow there.</li>
+      </ul>
+    </div>
+  </body>
 </html>

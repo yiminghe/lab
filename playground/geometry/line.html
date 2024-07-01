@@ -1,6 +1,6 @@
 <p>
-    info:
-    <textarea style='width:600px;height:500px' id='t'>
+  info:
+  <textarea style="width: 600px; height: 500px" id="t">
     {
       a: {
         x:300,
@@ -17,67 +17,70 @@
         y: 100
       }
     }    
-    </textarea>
-    <button id='draw'>draw</button>
-    <canvas width='800' height='600' id='c' style='border:1px solid red;'></canvas>
-    <br>
-    <script>
-        var draw = document.getElementById('draw');
-        var c = document.getElementById('c');
-        var context = c.getContext('2d');
-        draw.onclick = function(){
-            var data =eval('('+document.getElementById('t').value+')');
-            var x0 = data.a.x;
-            var y0 = data.a.y;
-            var x1 = data.b.x;
-            var y1 = data.b.y;
-            var x2 = data.c.x;
-            var y2 = data.c.y;
-            
-            context.clearRect(0,0,c.width,c.height);
-            
-            
-            context.beginPath();
-            context.arc(data.a.x,data.a.y,5,0,360);
-            context.closePath();
-            context.fill();
-            context.beginPath();
-            context.moveTo(data.b.x,data.b.y);
-            context.lineTo(data.c.x,data.c.y);
-            context.closePath();
-            context.stroke();
-            
-            // http://blog.sina.com.cn/s/blog_648868460100o4ar.html
-          
-            
-            var k = -((x1-x0)*(x2-x1)+(y1-y0)*(y2-y1))/((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
-            var xn = k*(x2-x1)+x1;
-            var yn = k*(y2-y1)+y1;
-            
-            context.beginPath();
-            context.moveTo(x0,y0);
-            context.lineTo(xn,yn);
-            context.closePath();
-            context.stroke();
-            
-            context.font = '30px sans-serif'
-            context.fillText('a',x0,y0);
-            context.fillText('b',x1,y1);
-            context.fillText('c',x2,y2);
-            
-            var length1 = Math.sqrt((x0-xn)*(x0-xn)+(y0-yn)*(y0-yn));
-            context.fillText(length1,xn,yn);
-            
-            var bc = [x2-x1,y2-y1];
-            var ab = [x0-x1,y0-y1];
-            // cross product
-            // i*j = k 
-            //(ai+bj)*(xi+yj) = (ay-bx)k
-            var v =(x2-x1)*(y0-y1) - (x0-x1)*(y2-y1);
-            var length2 = v/ Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
-            console.log(length2);
-        };
-    
-    
-    </script>
+    </textarea
+  >
+  <button id="draw">draw</button>
+  <canvas
+    width="800"
+    height="600"
+    id="c"
+    style="border: 1px solid red"></canvas>
+  <br />
+  <script>
+    var draw = document.getElementById('draw');
+    var c = document.getElementById('c');
+    var context = c.getContext('2d');
+    draw.onclick = function () {
+      var data = eval('(' + document.getElementById('t').value + ')');
+      var x0 = data.a.x;
+      var y0 = data.a.y;
+      var x1 = data.b.x;
+      var y1 = data.b.y;
+      var x2 = data.c.x;
+      var y2 = data.c.y;
+
+      context.clearRect(0, 0, c.width, c.height);
+
+      context.beginPath();
+      context.arc(data.a.x, data.a.y, 5, 0, 360);
+      context.closePath();
+      context.fill();
+      context.beginPath();
+      context.moveTo(data.b.x, data.b.y);
+      context.lineTo(data.c.x, data.c.y);
+      context.closePath();
+      context.stroke();
+
+      // http://blog.sina.com.cn/s/blog_648868460100o4ar.html
+
+      var k =
+        -((x1 - x0) * (x2 - x1) + (y1 - y0) * (y2 - y1)) /
+        ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+      var xn = k * (x2 - x1) + x1;
+      var yn = k * (y2 - y1) + y1;
+
+      context.beginPath();
+      context.moveTo(x0, y0);
+      context.lineTo(xn, yn);
+      context.closePath();
+      context.stroke();
+
+      context.font = '30px sans-serif';
+      context.fillText('a', x0, y0);
+      context.fillText('b', x1, y1);
+      context.fillText('c', x2, y2);
+
+      var length1 = Math.sqrt((x0 - xn) * (x0 - xn) + (y0 - yn) * (y0 - yn));
+      context.fillText(length1, xn, yn);
+
+      var bc = [x2 - x1, y2 - y1];
+      var ab = [x0 - x1, y0 - y1];
+      // cross product
+      // i*j = k
+      //(ai+bj)*(xi+yj) = (ay-bx)k
+      var v = (x2 - x1) * (y0 - y1) - (x0 - x1) * (y2 - y1);
+      var length2 = v / Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      console.log(length2);
+    };
+  </script>
 </p>

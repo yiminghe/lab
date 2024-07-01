@@ -1,66 +1,78 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html>
-	<head>
-		<title>简易tooltip</title>
-			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-			 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
-		<style>
-		.tooltip {
-			background:none repeat scroll 0 0 #444466;
-			border:1px solid white;
-			color:white;
-			font-weight:bold;
-			left:-999em;
-			width:150px;
-			padding:2px 4px;
-			position:absolute;
-			text-decoration:none;
-			margin-top:0.5em;
-			margin-left:-1em;
-			display:inline;
-			/*
+  <head>
+    <title>简易tooltip</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+    <style>
+      .tooltip {
+        background: none repeat scroll 0 0 #444466;
+        border: 1px solid white;
+        color: white;
+        font-weight: bold;
+        left: -999em;
+        width: 150px;
+        padding: 2px 4px;
+        position: absolute;
+        text-decoration: none;
+        margin-top: 0.5em;
+        margin-left: -1em;
+        display: inline;
+        /*
 			display:inline-block;
 			ie inline-block ...
 			*zoom:1;
 			*display:inline;*/
-			
-		}
-		
-			.tooltip .title {
-				font-size:1.5em;
-				text-align:center;
-			}
-			.tooltip .content {
-				padding:5px;
-			}
-			.tool:hover .tooltip ,.tool.over .tooltip {
-				left:auto;
-				
-			}
-			
-			#s {
-				display:block;
-				margin:10px;
-				border:1px solid green;
-				width:80px;
-			}
-			
-			#s:hover,#s.over {
-				background:yellow;
-			}
-		</style>
-	</head>
-	<body>
-		<p>
-			很简单的tooltip,<div id="s" class="tool" href="#"><a href="#">掠过我</a><div class="tooltip">
-<div class="title">我是标题</div><div class="content">我是具体内容,我是具体内容</div>
-</div></div>就知道了
-		</p>
-<script>
-	if($.browser.msie &&$.browser.version=="6.0")
-		$(".tool").hover(function(){$(this).addClass("over");},function(){$(this).removeClass("over");});
-</script>
-	</body>
+      }
+
+      .tooltip .title {
+        font-size: 1.5em;
+        text-align: center;
+      }
+      .tooltip .content {
+        padding: 5px;
+      }
+      .tool:hover .tooltip,
+      .tool.over .tooltip {
+        left: auto;
+      }
+
+      #s {
+        display: block;
+        margin: 10px;
+        border: 1px solid green;
+        width: 80px;
+      }
+
+      #s:hover,
+      #s.over {
+        background: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      很简单的tooltip,
+      <div id="s" class="tool" href="#">
+        <a href="#">掠过我</a>
+        <div class="tooltip">
+          <div class="title">我是标题</div>
+          <div class="content">我是具体内容,我是具体内容</div>
+        </div>
+      </div>
+      就知道了
+    </div>
+    <script>
+      if ($.browser.msie && $.browser.version == '6.0')
+        $('.tool').hover(
+          function () {
+            $(this).addClass('over');
+          },
+          function () {
+            $(this).removeClass('over');
+          },
+        );
+    </script>
+  </body>
 </html>

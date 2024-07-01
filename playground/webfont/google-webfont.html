@@ -1,38 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 <html>
-	<head>
-		<title>web font test</title>
-		<style type="text/css">
-			
-			p {
-				font-size:30px;
-			}
-			
-			.wf-active p {
-		        font-family: 'Tangerine', serif;
-				font-size:30px;
-		      }
-		 
-		</style>
-	</head>
-	<body>
-		
-		<p>
-		
-		Font looks better
-		
-		</p>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js">
-	</script>	
-	<script type="text/javascript">
-	WebFont.load({
+  <head>
+    <title>web font test</title>
+    <style>
+      p {
+        font-size: 30px;
+      }
+
+      .wf-active p {
+        font-family: 'Tangerine', serif;
+        font-size: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Font looks better</p>
+    <script src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
+    <script>
+      WebFont.load({
         google: {
-          families: [ 'Tangerine', 'Cantarell' ]
-        }
+          families: ['Tangerine', 'Cantarell'],
+        },
       });
- 
-	</script>	
-	</body>
+    </script>
+  </body>
 </html>

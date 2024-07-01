@@ -1,23 +1,29 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>KISSY Editor Test</title>
-<link href="../build/theme/base.css" rel="stylesheet"/>
-<!--[if lt IE 8]>
-<link href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-mhtml.css" rel="stylesheet"/>
-<![endif]-->
-<!--[if gte IE 8]><!-->
-<link href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-datauri.css" rel="stylesheet"/>
-<!--<![endif]-->
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <title>KISSY Editor Test</title>
+    <link href="../build/theme/base.css" rel="stylesheet" />
+    <!--[if lt IE 8]>
+      <link
+        href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-mhtml.css"
+        rel="stylesheet" />
+    <![endif]-->
+    <!--[if gte IE 8]><!-->
+    <link
+      href="http://a.tbcdn.cn/s/kissy/1.1.5/editor/theme/cool/editor-pkg-min-datauri.css"
+      rel="stylesheet" />
+    <!--<![endif]-->
+  </head>
+  <body>
+    <h1>KISSY Editor Demo</h1>
 
-<h1>KISSY Editor Demo</h1>
-
-<div style="width: 90%; margin: 0 auto">
-    <label for="editor">Editor Instance 1:</label>
-    <textarea id="editor" tabindex="1" style="width:100%;height:400px;margin:0 auto;">
+    <div style="width: 90%; margin: 0 auto">
+      <label for="editor">Editor Instance 1:</label>
+      <textarea
+        id="editor"
+        tabindex="1"
+        style="width: 100%; height: 400px; margin: 0 auto">
         <script>alert(1);</script>
         <p>
             我是虾米音乐
@@ -157,139 +163,143 @@
         <p>2</p>
         <p>3</p>
         <p>4</p>
-    </textarea>
+    </textarea
+      >
+    </div>
 
-</div>
+    <div style="width: 60%; margin: 50px auto">
+      <label for="editor2">Editor Instance 2:</label>
+      <textarea
+        id="editor2"
+        style="width: 100%; height: 400px; margin: 0 auto"></textarea>
+    </div>
 
-<div style="width: 60%; margin: 50px auto">
-    <label for="editor2">Editor Instance 2:</label>
-    <textarea id="editor2" style="width:100%;height:400px;margin:0 auto;"></textarea>
-</div>
-
-<script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy.js"></script>
-<script>
-
-
-    KISSY.ready(function(S) {
+    <script src="http://a.tbcdn.cn/s/kissy/1.1.5/kissy.js"></script>
+    <script>
+      KISSY.ready(function (S) {
         // just for test
         var base = location.href.replace(/^(.*kissy-editor\/).*$/i, '$1');
         //S.Config.base = base;
         S.add({
-            "core-editor":{
-                requires:["core"],
-                path:"editor/editor-all-pkg.js?t" + new Date()
-            },
-            "bangpai-plugins":{
-                requires:["core-editor"],
-                path:"editor/biz/bangpai/editor-plugin-pkg.js?t" + new Date()
-            }
+          'core-editor': {
+            requires: ['core'],
+            path: 'editor/editor-all-pkg.js?t' + new Date(),
+          },
+          'bangpai-plugins': {
+            requires: ['core-editor'],
+            path: 'editor/biz/bangpai/editor-plugin-pkg.js?t' + new Date(),
+          },
         });
 
-        S.use('core-editor', function() {
+        S.use('core-editor', function () {
+          S.use('bangpai-plugins', function () {
+            var KE = S.Editor;
+            //KE.Config.base = base + "build/";
 
-            S.use("bangpai-plugins", function() {
-                var KE = S.Editor;
-                //KE.Config.base = base + "build/";
+            window.editor = KE('#editor', {
+              pluginConfig: {
+                image: {
+                  upload: {
+                    serverUrl: '/code/upload/upload.jsp',
+                    serverParams: {},
+                    fileInput: 'Filedata',
+                  },
+                },
+                templates: [
+                  {
+                    demo: '模板1效果演示html',
+                    html: "<div style='border:1px solid red'>模板1效果演示html</div><p></p>",
+                  },
+                  {
+                    demo: '模板2效果演示html',
+                    html: "<div style='border:1px solid red'>模板2效果演示html</div>",
+                  },
+                ],
+                'font-size': {
+                  items: [
+                    {
+                      value: '14px',
+                      attrs: {
+                        style:
+                          'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                      },
+                      name:
+                        '' +
+                        " <span style='font-size:14px'>标准</span>" +
+                        "<span style='position:absolute;top:1px;right:3px;'>14px</span>",
+                    },
+                    {
+                      value: '16px',
+                      attrs: {
+                        style:
+                          'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                      },
+                      name:
+                        '' +
+                        " <span style='font-size:16px'>大</span>" +
+                        "<span style='position:absolute;top:1px;right:3px;'>16px</span>",
+                    },
+                    {
+                      value: '18px',
+                      attrs: {
+                        style:
+                          'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                      },
+                      name:
+                        '' +
+                        " <span style='font-size:18px'>特大</span>" +
+                        "<span style='position:absolute;top:1px;right:3px;'>18px</span>",
+                    },
+                    {
+                      value: '20px',
+                      attrs: {
+                        style:
+                          'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;',
+                      },
+                      name:
+                        '' +
+                        " <span style='font-size:20px'>极大</span>" +
+                        "<span style='position:absolute;top:1px;right:3px;'>20px</span>",
+                    },
+                  ],
+                  width: '115px',
+                },
+                //,"font-family":["song"]
+                'bangpai-upload': {
+                  holder: '#imgup1',
+                  serverUrl: '/code/upload/upload.jsp',
+                  serverParams: {},
+                },
+                'bangpai-video': {
+                  urlCfg: [
+                    {
+                      reg: /tudou\.com/i,
+                      url:
+                        'http://bangpai.daily.taobao.net/json/getTudouVideo.htm?' +
+                        'url=@url@&callback=@callback@', //"&rand=@rand@"
+                    },
+                  ],
+                },
+                draft: {
+                  interval: 5,
+                  limit: 10,
+                },
+              },
+            }).use(
+              'elementpaths,sourcearea,preview,' +
+                'templates,separator,' +
+                'undo,separator,removeformat,font,format,forecolor,bgcolor,separator,' +
+                'list,indent,justify,separator,link,image,flash,bangpai-video,music,bangpai-music,smiley,' +
+                'separator,table,resize,draft,bangpai-upload,pagebreak,separator,maximize',
+            );
 
-                window.editor = KE("#editor", {
-
-                    pluginConfig: {
-                        "image":{
-                            upload:{
-                                serverUrl:"/code/upload/upload.jsp",
-                                serverParams:{
-                                },
-                                fileInput:"Filedata"
-                            }
-                        },
-                        "templates": [
-                            {
-                                demo: "模板1效果演示html"  ,
-                                html: "<div style='border:1px solid red'>模板1效果演示html</div><p></p>"
-                            },
-                            {
-                                demo: "模板2效果演示html",
-                                html: "<div style='border:1px solid red'>模板2效果演示html</div>"
-                            }
-                        ],
-                        "font-size":{
-                            items:[
-                                {
-                                    value:"14px",
-                                    attrs:{
-                                        style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                    },
-                                    name:"" +
-                                            " <span style='font-size:14px'>标准</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>14px</span>"
-                                },
-                                {
-                                    value:"16px",
-                                    attrs:{
-                                        style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                    },
-                                    name:"" +
-                                            " <span style='font-size:16px'>大</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>16px</span>"
-                                },
-                                {
-                                    value:"18px",
-                                    attrs:{
-                                        style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                    },
-                                    name:"" +
-                                            " <span style='font-size:18px'>特大</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>18px</span>"
-                                },
-                                {
-                                    value:"20px",
-                                    attrs:{
-                                        style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                    },
-                                    name:"" +
-                                            " <span style='font-size:20px'>极大</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>20px</span>"
-                                }
-                            ],
-                            width:"115px"
-                        }
-                        //,"font-family":["song"]
-                        ,"bangpai-upload":{
-                            holder:"#imgup1",
-                            serverUrl:"/code/upload/upload.jsp",
-                            serverParams:{
-                            }
-                        },
-                        "bangpai-video":{
-                            urlCfg:[
-                                {
-                                    reg:/tudou\.com/i,
-                                    url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
-                                            "url=@url@&callback=@callback@"//"&rand=@rand@"
-                                }
-                            ]
-                        },
-                        "draft":{
-                            interval:5,
-                            limit:10
-                        }
-                    }
-                }).use("elementpaths,sourcearea,preview," +
-                        "templates,separator," +
-                        "undo,separator,removeformat,font,format,forecolor,bgcolor,separator," +
-                        "list,indent,justify,separator,link,image,flash,bangpai-video,music,bangpai-music,smiley," +
-                        "separator,table,resize,draft,bangpai-upload,pagebreak,separator,maximize"
-                        );
-
-
-                KE("#editor2", {
-                    disableObjectResizing:true,
-                    disableInlineTableEditing:true
-                }).use("undo,font,image,music");
-            });
+            KE('#editor2', {
+              disableObjectResizing: true,
+              disableInlineTableEditing: true,
+            }).use('undo,font,image,music');
+          });
         });
-    });
-
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

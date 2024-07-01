@@ -40,7 +40,7 @@ class Transition {
       return this.condition(input);
     }
     return {
-      count: 0
+      count: 0,
     };
   }
 }
@@ -61,9 +61,13 @@ const repeatAfter = new State('*>');
 const bBefore = new State('<b');
 const bAfter = new State('b>');
 
-bBefore.transitions.push(new Transition(bAfter, createMatchStringCondition('b')));
+bBefore.transitions.push(
+  new Transition(bAfter, createMatchStringCondition('b')),
+);
 
-aBefore.transitions.push(new Transition(aAfter, createMatchStringCondition('a')));
+aBefore.transitions.push(
+  new Transition(aAfter, createMatchStringCondition('a')),
+);
 aAfter.transitions.push(new Transition(aBefore));
 
 repeatBefore.transitions.push(new Transition(aBefore));
@@ -82,7 +86,7 @@ export function match(str) {
       return {
         match: [str.slice(input.startIndex, input.index)],
         index: input.startIndex,
-      }
+      };
     }
   }
   return null;

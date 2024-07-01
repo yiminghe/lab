@@ -1,59 +1,62 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>
-    textrange
-</title>
-<script type="text/javascript" src="textarea-editor.js">
-</script>
-
-</head>
-<body>
-<form action="a.cgi">
-    <textarea id="test" rows="10" cols="50"></textarea>
-    <br/>
-    <a href='#' id="add" value="得到选择区域" unselectable="off">得到选择区域</a>
-    <br/>
-    <input id="text" style="width:100px"/>
-    <input type="button" id="insert" value="光标处插入文本"/>
-    <br/>
-    开始位置：<input id="start" style="width:100px"/>
-    结束位置：<input id="end" style="width:100px"/>
-    <a href='#'
-           id="s" value="选择位置" unselectable="off">选择位置</a>
-    <br/>
-    <a value='获得焦点'
-       onclick="tx.focus();return false;"
-       href='#'
-       unselectable="off"/>获得焦点</a>
-
-</form>
-<p>结果：</p>
-<div style="border:1px solid red;" id="result"></div>
-<script type="text/javascript">
-    function $(id) {
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>textrange</title>
+    <script src="textarea-editor.js"></script>
+  </head>
+  <body>
+    <form action="a.cgi">
+      <textarea id="test" rows="10" cols="50"></textarea>
+      <br />
+      <a href="#" id="add" value="得到选择区域" unselectable="off"
+        >得到选择区域</a
+      >
+      <br />
+      <input id="text" style="width: 100px" />
+      <input type="button" id="insert" value="光标处插入文本" />
+      <br />
+      开始位置：<input id="start" style="width: 100px" /> 结束位置：<input
+        id="end"
+        style="width: 100px" />
+      <a href="#" id="s" value="选择位置" unselectable="off">选择位置</a>
+      <br />
+      <a
+        value="获得焦点"
+        onclick="tx.focus();return false;"
+        href="#"
+        unselectable="off"
+        >获得焦点</a
+      >
+    </form>
+    <p>结果：</p>
+    <div style="border: 1px solid red" id="result"></div>
+    <script>
+      function $(id) {
         return document.getElementById(id);
-    }
-    var tx = $("test"),te = new TextareaEditor(tx);
-    var re = $("result");
-    $("add").onclick = function() {
-
+      }
+      var tx = $('test'),
+        te = new TextareaEditor(tx);
+      var re = $('result');
+      $('add').onclick = function () {
         var pos = te.getSelection();
-        re.innerHTML = ("range : " + pos.selectionStart + " - " + pos.selectionEnd);
+        re.innerHTML =
+          'range : ' + pos.selectionStart + ' - ' + pos.selectionEnd;
         return false;
+      };
 
-    }
-
-    $("insert").onclick = function() {
-        te.insertData($("text").value);
+      $('insert').onclick = function () {
+        te.insertData($('text').value);
         return false;
-    }
+      };
 
-    $("s").onclick = function() {
-        te.setSelectionRange(parseInt($("start").value), parseInt($("end").value));
+      $('s').onclick = function () {
+        te.setSelectionRange(
+          parseInt($('start').value),
+          parseInt($('end').value),
+        );
         return false;
-    }
-</script>
-</body>
+      };
+    </script>
+  </body>
 </html>

@@ -1,33 +1,31 @@
-﻿
-
-form.formlite p {
-	margin:5px;
+﻿form.formlite p {
+  margin: 5px;
 }
 
 form.formlite .input_margin {
-	background-color:#FFFFFF;
-	border:1px solid #B9B9B9;
-	width:250px;
+  background-color: #ffffff;
+  border: 1px solid #b9b9b9;
+  width: 250px;
 }
 
 form.formlite label.input_label {
-	float:left;
-	width:12em;
-	padding-right:10px;
-	color:#6E6E6E;
-	font-size:12px;
-	text-align:right;
+  float: left;
+  width: 12em;
+  padding-right: 10px;
+  color: #6e6e6e;
+  font-size: 12px;
+  text-align: right;
 }
 
 form.formlite .validInput {
-	border:1px solid #00CC00;
+  border: 1px solid #00cc00;
 }
 
 form.formlite .invalidInput {
-	background:#FFFFFF url(../images/invalid_line.gif) repeat-x scroll center bottom;
-	border:1px solid #CC0000;
+  background: #ffffff url(../images/invalid_line.gif) repeat-x scroll center
+    bottom;
+  border: 1px solid #cc0000;
 }
-
 
 /*
 form.formlite input[type="text"]:focus,form.formlite textarea:focus {
@@ -43,50 +41,49 @@ form.formlite input[type="text"], form.formlite textarea {
 */
 
 form.formlite span.feedback {
-	visibility:hidden;
-	font-weight:bold;
-	color:#CC0000;
-	padding-left:30px;
-	width:10em;
+  visibility: hidden;
+  font-weight: bold;
+  color: #cc0000;
+  padding-left: 30px;
+  width: 10em;
 }
 
 form.formlite em.required {
-	font-size:0.85em;
-	color:#760000;
+  font-size: 0.85em;
+  color: #760000;
 }
 
 form.formlite label.gender {
-	padding:1em;
-	color:#6E6E6E;
-	font-size:12px;
+  padding: 1em;
+  color: #6e6e6e;
+  font-size: 12px;
 }
 
 form.formlite label.tip_input_label {
-	position:absolute;
-	color:#666;
-	left:0;
-	top:0;
+  position: absolute;
+  color: #666;
+  left: 0;
+  top: 0;
 }
 
 form.formlite .submit-area .error-slider {
-	background:red url(../images/arrow.png) no-repeat scroll left center;
-	color:white;
-	position:absolute;
-	left:0;
-	top:0;
+  background: red url(../images/arrow.png) no-repeat scroll left center;
+  color: white;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 form.formlite .submit-area {
-		position:relative;
-		text-align:center;
-		
+  position: relative;
+  text-align: center;
 }
 
 form.formlite .submit-area input {
-	vertical-align:middle;
+  vertical-align: middle;
 }
 
 form.formlite .submit-area .error-slider span {
-	display:block;
-	padding:1em;
+  display: block;
+  padding: 1em;
 }

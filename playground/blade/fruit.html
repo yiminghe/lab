@@ -1,51 +1,56 @@
 <style>
-    html, body {
-        padding: 0;
-        margin: 0;
-    }
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+  }
 
-    img {
-        position: absolute;
-        left: -9999px;
-        top: -9999px;
-    }
+  img {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+  }
 </style>
-<img src="sandia-1.png">
-<img src="sandia-2.png">
-<img src="sandia.png">
-<canvas id='c' width='800' height='500'></canvas>
-<button id="start" style="position: absolute;left:10px;top:10px;">restart</button>
+<img src="sandia-1.png" />
+<img src="sandia-2.png" />
+<img src="sandia.png" />
+<canvas id="c" width="800" height="500"></canvas>
+<button id="start" style="position: absolute; left: 10px; top: 10px">
+  restart
+</button>
 <script>
-// modified from hilo
-(function () {
+  // modified from hilo
+  (function () {
     var canvas = document.getElementById('c');
     var context = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     window.onresize = function () {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        drawFruit();
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFruit();
     };
 
     function getNormal(p1, p2) {
-        var dx = p2.x - p1.x, dy = p2.y - p1.y;
-        var length = Math.sqrt(dx * dx + dy * dy);
-        return {x: dx / length, y: dy / length};
+      var dx = p2.x - p1.x,
+        dy = p2.y - p1.y;
+      var length = Math.sqrt(dx * dx + dy * dy);
+      return { x: dx / length, y: dy / length };
     }
 
     function getAngle() {
-        var start = points[0];
-        var end = points[points.length - 1];
-        if (start && end && start !== end) {
-            var dx = end.x - start.x, dy = end.y - start.y;
-            var angle = Math.atan2(dy, dx) * 180 / Math.PI >> 0;
-            if (angle < 0) {
-                angle = angle + 360;
-            }
-            return angle;
+      var start = points[0];
+      var end = points[points.length - 1];
+      if (start && end && start !== end) {
+        var dx = end.x - start.x,
+          dy = end.y - start.y;
+        var angle = ((Math.atan2(dy, dx) * 180) / Math.PI) >> 0;
+        if (angle < 0) {
+          angle = angle + 360;
         }
-        return 0;
+        return angle;
+      }
+      return 0;
     }
 
     var sandia = document.createElement('img');
@@ -61,23 +66,32 @@
     var end = 0;
 
     function drawFruit() {
-        context.drawImage(sandia, window.innerWidth / 2 - 49, window.innerHeight / 2 - 42);
-        region = {
-            left: window.innerWidth / 2 - 49,
-            top: window.innerHeight / 2 - 42,
-            right: window.innerWidth / 2 + 49,
-            bottom: window.innerHeight / 2 + 43
-        }
+      context.drawImage(
+        sandia,
+        window.innerWidth / 2 - 49,
+        window.innerHeight / 2 - 42,
+      );
+      region = {
+        left: window.innerWidth / 2 - 49,
+        top: window.innerHeight / 2 - 42,
+        right: window.innerWidth / 2 + 49,
+        bottom: window.innerHeight / 2 + 43,
+      };
     }
 
     function isInRegion(p) {
-        return p.x >= region.left && p.x <= region.right && p.y >= region.top && p.y <= region.bottom;
+      return (
+        p.x >= region.left &&
+        p.x <= region.right &&
+        p.y >= region.top &&
+        p.y <= region.bottom
+      );
     }
 
     function isInRegions() {
-        return points.some(function (p) {
-            return isInRegion(p);
-        });
+      return points.some(function (p) {
+        return isInRegion(p);
+      });
     }
 
     var lastAngle;
@@ -85,40 +99,39 @@
     var restartTimer;
 
     function drawSlice(angle, points) {
-        lastAngle = angle;
-        lastPoints = points;
-        context.beginPath();
-        context.moveTo(points[0].x, points[0].y);
-        context.lineTo(points[points.length - 1].x, points[points.length - 1].y);
-        context.closePath();
-        context.stroke();
-        context.save();
-        context.translate(window.innerWidth / 2, window.innerHeight / 2);
-        // sandia-1 is almost vertical ...
-        angle += 80;
-        angle %= 360;
-        // make sandia-1 sandia-2 stable in original coordinate
-        if (angle > 90 && angle < 270) {
-            angle = angle - 180;
-        }
-        context.rotate(angle / 180 * Math.PI);
-        context.drawImage(sandia1, -49, -42);
-        context.drawImage(sandia2, -20, -42);
-        context.restore();
-        end = 1;
-        if (restartTimer) {
-            return;
-        }
-        restartTimer = setTimeout(restart, 1000);
+      lastAngle = angle;
+      lastPoints = points;
+      context.beginPath();
+      context.moveTo(points[0].x, points[0].y);
+      context.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+      context.closePath();
+      context.stroke();
+      context.save();
+      context.translate(window.innerWidth / 2, window.innerHeight / 2);
+      // sandia-1 is almost vertical ...
+      angle += 80;
+      angle %= 360;
+      // make sandia-1 sandia-2 stable in original coordinate
+      if (angle > 90 && angle < 270) {
+        angle = angle - 180;
+      }
+      context.rotate((angle / 180) * Math.PI);
+      context.drawImage(sandia1, -49, -42);
+      context.drawImage(sandia2, -20, -42);
+      context.restore();
+      end = 1;
+      if (restartTimer) {
+        return;
+      }
+      restartTimer = setTimeout(restart, 1000);
     }
-
 
     window.onload = restart;
     function restart() {
-        end = 0;
-        restartTimer = null;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        drawFruit();
+      end = 0;
+      restartTimer = null;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      drawFruit();
     }
     document.getElementById('start').onclick = restart;
 
@@ -132,98 +145,119 @@
     var record = 0;
 
     requestAnimationFrame(function () {
-        requestAnimationFrame(arguments.callee);
+      requestAnimationFrame(arguments.callee);
 
-        var len = points.length;
+      var len = points.length;
 
-        if (len === 0) {
-            return;
+      if (len === 0) {
+        return;
+      }
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      var now = Date.now();
+
+      //remove dead points
+      while (len && now - points[0].ts > pointLife) {
+        points.shift();
+        len--;
+      }
+
+      if (len > 2) {
+        var step = pointWidthStep,
+          sharp = endSharpRatio,
+          p = points[0],
+          normal,
+          pw,
+          flag = 1,
+          i = 1;
+
+        //draw path
+        context.beginPath();
+        context.moveTo(p.x, p.y);
+
+        while (i) {
+          p = points[i];
+          normal = p.normal;
+          pw = i * step;
+
+          context.lineTo(
+            p.x + flag * normal.y * pw,
+            p.y - flag * normal.x * pw,
+          );
+          if (i == len - 1 && flag > 0) {
+            //draw end sharp point
+            context.lineTo(
+              p.x + normal.x * pw * sharp,
+              p.y + normal.y * pw * sharp,
+            );
+            flag = -1;
+          } else {
+            i += flag;
+          }
         }
 
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.closePath();
 
-        var now = Date.now();
-
-
-        //remove dead points
-        while (len && (now - points[0].ts) > pointLife) {
-            points.shift();
-            len--;
+        //border style
+        if (borderWidth) {
+          context.lineWidth = borderWidth;
+          context.strokeStyle = borderStyle;
+          context.stroke();
         }
 
-        if (len > 2) {
+        //fill style
+        context.fillStyle = fillStyle;
+        context.fill();
+      }
 
-            var step = pointWidthStep, sharp = endSharpRatio,
-                    p = points[0], normal, pw, flag = 1, i = 1;
-
-            //draw path
-            context.beginPath();
-            context.moveTo(p.x, p.y);
-
-            while (i) {
-                p = points[i];
-                normal = p.normal;
-                pw = i * step;
-
-                context.lineTo(p.x + flag * normal.y * pw, p.y - flag * normal.x * pw);
-                if (i == len - 1 && flag > 0) {
-                    //draw end sharp point
-                    context.lineTo(p.x + normal.x * pw * sharp, p.y + normal.y * pw * sharp);
-                    flag = -1;
-                } else {
-                    i += flag;
-                }
-            }
-
-            context.closePath();
-
-            //border style
-            if (borderWidth) {
-                context.lineWidth = borderWidth;
-                context.strokeStyle = borderStyle;
-                context.stroke();
-            }
-
-            //fill style
-            context.fillStyle = fillStyle;
-            context.fill();
-        }
-
-        if (end) {
-            drawSlice(lastAngle, lastPoints);
-        } else if (len > 0 &&
-                // do not use isInRegion(points[points.length-1])
-                // mousemove is frequent than requestAnimationFrame
-                isInRegions()) {
-            drawSlice(getAngle(), points.concat());
-        } else {
-            drawFruit();
-        }
-
-
+      if (end) {
+        drawSlice(lastAngle, lastPoints);
+      } else if (
+        len > 0 &&
+        // do not use isInRegion(points[points.length-1])
+        // mousemove is frequent than requestAnimationFrame
+        isInRegions()
+      ) {
+        drawSlice(getAngle(), points.concat());
+      } else {
+        drawFruit();
+      }
     });
 
-    canvas.addEventListener('mousedown', function (e) {
+    canvas.addEventListener(
+      'mousedown',
+      function (e) {
         points = [];
         record = 1;
-    }, false);
-    canvas.addEventListener('mousemove', function (e) {
+      },
+      false,
+    );
+    canvas.addEventListener(
+      'mousemove',
+      function (e) {
         if (!record) {
-            return;
+          return;
         }
         var point = {
-            ts: Date.now(),
-            x: e.pageX,
-            y: e.pageY
+          ts: Date.now(),
+          x: e.pageX,
+          y: e.pageY,
         };
         var len = points.length;
         if (len > 0) {
-            point.normal = getNormal(points[len - 1], point);
+          point.normal = getNormal(points[len - 1], point);
         }
         points.push(point);
-    }, false);
-    canvas.addEventListener('mouseup', function (e) {
+      },
+      false,
+    );
+    canvas.addEventListener(
+      'mouseup',
+      function (e) {
         record = 0;
-    }, false);
-})();
+      },
+      false,
+    );
+  })();
 </script>

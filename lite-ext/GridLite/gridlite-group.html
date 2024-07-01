@@ -1,51 +1,58 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>GridLite测试</title>
-<!-- 以下三个基础库必须 -->
+  <head>
+    <title>GridLite测试</title>
+    <!-- 以下三个基础库必须 -->
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="../base/javascript/ext-core.js">
-</script>
-<!-- 以下为自定义组件-->
-<script type="text/javascript" src="javascript/gridlite.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../base/javascript/ext-core.js"></script>
+    <!-- 以下为自定义组件-->
+    <script src="javascript/gridlite.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../base/css/core.css" />
+    <link rel="stylesheet" href="../base/css/core.css" />
 
-<!-- 自定义组件的css-->
-<link rel="stylesheet" type="text/css" href="css/gridlite.css" />
+    <!-- 自定义组件的css-->
+    <link rel="stylesheet" href="css/gridlite.css" />
 
+    <script>
+      //<![CDATA[
 
-<script type="text/javascript">
-//<![CDATA[
-
-/**
+      /**
 author : yiminghe
 version : v1(20090424)
 Any problem contact hym_sunrise@126.com
 
 **/
-Ext.onReady(function() {
-	var grid=null;
-	
-	
-	function create(){
-		//可以初始设定数据
-		grid=new Ext.ux.GridLite({
-			title:'生成表格标题',
-			//grid 容器id,在该容器内添加 grid
-			id:'table_container_test',
-			//宽度，直接设css
-			width:'800px',
-			
-			//以哪列的数据进行分组显示
-			
-			groupCol:'t3.t4',
-			//标题头
-			headers:[{title:'我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们',id:'t1',show:true,width:'50px'},{title:'标题头2',id:'t2',show:true,
-			
-			/*
+      Ext.onReady(function () {
+        var grid = null;
+
+        function create() {
+          //可以初始设定数据
+          grid = new Ext.ux.GridLite({
+            title: '生成表格标题',
+            //grid 容器id,在该容器内添加 grid
+            id: 'table_container_test',
+            //宽度，直接设css
+            width: '800px',
+
+            //以哪列的数据进行分组显示
+
+            groupCol: 't3.t4',
+            //标题头
+            headers: [
+              {
+                title:
+                  '我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们',
+                id: 't1',
+                show: true,
+                width: '50px',
+              },
+              {
+                title: '标题头2',
+                id: 't2',
+                show: true,
+
+                /*
 			A value less than zero, if, according to your sort criteria, a is less than b and should appear before b in the sorted array.
 	
 	Zero, if a and b are equivalent for the purposes of this sort.
@@ -53,61 +60,60 @@ Ext.onReady(function() {
 	A value greater than zero, if a is greater than b for the purposes of the sort.
 	
 			*/
-			sortable:function(i1,i2){
-				return i1-i2;
-			},
-				renderer:function(val,cur){
-					return'<span>'+'x'+'</span>'+'<span>'+cur['t2']+'</span>';
-					},width:'200px'
-				},{title:'group',id:'t3.t4',show:true,sortable:true},{title:'标题头4',id:'t4',show:false,width:'50px'}],
-					
-			//url 用来ajax 提交数据时 数据源，返回数据为 下述 pageRecords 个数对象
-			url:'xx.jsp',
-			
-			numberLen:'18px',
-			
-			//数据 二维数组 ,直接渲染到表格，与下面pageSize无关
-			//可设置是否显示，按从左到右设置显示的开始设置
-			
-			pageRecords:{
-				datas:[ 
-				{t1:'我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们',
-					t2:11,
-					't3':{t4:'x'},
-					t4:41
-					},
-						{t1:1,
-					t2:2,
-					't3':{t4:'x'},
-					t4:42
-					},
-						{t1:1,
-					t2:3,
-					't3':{t4:'y'},
-					t4:43
-					},
-						{t1:1,
-					t2:4,
-					't3':{t4:'y'},
-					t4:44
-					}
-				],
-				
-				//分页参数,只是用来判断各个分页按钮的显示与否判断依据下面三个东西
-				//每页记录个数，没有这一项就不会有分页工具条
-				
-				pageSize:10,
-				
-				
-				//当前开始条数
-				fromNo:0,
-				//总共数据库中记录个数
-				totalRecord:2
-			}
-		});
-		
-		//可以后期设置
-		/*
+                sortable: function (i1, i2) {
+                  return i1 - i2;
+                },
+                renderer: function (val, cur) {
+                  return (
+                    '<span>' +
+                    'x' +
+                    '</span>' +
+                    '<span>' +
+                    cur['t2'] +
+                    '</span>'
+                  );
+                },
+                width: '200px',
+              },
+              { title: 'group', id: 't3.t4', show: true, sortable: true },
+              { title: '标题头4', id: 't4', show: false, width: '50px' },
+            ],
+
+            //url 用来ajax 提交数据时 数据源，返回数据为 下述 pageRecords 个数对象
+            url: 'xx.jsp',
+
+            numberLen: '18px',
+
+            //数据 二维数组 ,直接渲染到表格，与下面pageSize无关
+            //可设置是否显示，按从左到右设置显示的开始设置
+
+            pageRecords: {
+              datas: [
+                {
+                  t1: '我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们 我们',
+                  t2: 11,
+                  t3: { t4: 'x' },
+                  t4: 41,
+                },
+                { t1: 1, t2: 2, t3: { t4: 'x' }, t4: 42 },
+                { t1: 1, t2: 3, t3: { t4: 'y' }, t4: 43 },
+                { t1: 1, t2: 4, t3: { t4: 'y' }, t4: 44 },
+              ],
+
+              //分页参数,只是用来判断各个分页按钮的显示与否判断依据下面三个东西
+              //每页记录个数，没有这一项就不会有分页工具条
+
+              pageSize: 10,
+
+              //当前开始条数
+              fromNo: 0,
+              //总共数据库中记录个数
+              totalRecord: 2,
+            },
+          });
+
+          //可以后期设置
+          /*
 	  grid.loadData({
 	  	
 	 datas:[
@@ -137,9 +143,8 @@ Ext.onReady(function() {
 			totalRecord:4
 	  	});
 	  	*/
-	  	
-	  	
-	  	/*
+
+          /*
 	  	
 	  		ajax 模式的 获取数据方式，必须前面设置 url参数
 	  		grid.loadAjax({
@@ -147,10 +152,10 @@ Ext.onReady(function() {
 	  		});
 	  	
 	  	*/
-	  	
-	  	//监控翻页事件
-	  	
-	  	/*
+
+          //监控翻页事件
+
+          /*
 	  	grid.on('firstPage',function(el){
 	  		alert('firstPage');
 	  		
@@ -187,34 +192,30 @@ Ext.onReady(function() {
 	  		//alert('beforedestroy ....');
 	  	});
 	  	*/
-  	}
-  	
-  	Ext.get("dt").on('click',function(){
-  		//Ext.destroy(grid);
-  		grid.destroy();
-  		grid=null;
-  	});
-  	
-  	Ext.get("ct").on('click',function(){
-  		if(grid) {alert("only one 同时");return;}
-  		create();
-  	});
-       
-});
-//]]>
+        }
 
-</script>
+        Ext.get('dt').on('click', function () {
+          //Ext.destroy(grid);
+          grid.destroy();
+          grid = null;
+        });
 
-</head>
-<body>
-
-<button id="ct">create table</button>
-<button id="dt">destroy table</button>
-<div style="position:absolute;left:100px;top:100px" id='table_container_test'>
-
-</div>
-
-
-
-</body>
+        Ext.get('ct').on('click', function () {
+          if (grid) {
+            alert('only one 同时');
+            return;
+          }
+          create();
+        });
+      });
+      //]]>
+    </script>
+  </head>
+  <body>
+    <button id="ct">create table</button>
+    <button id="dt">destroy table</button>
+    <div
+      style="position: absolute; left: 100px; top: 100px"
+      id="table_container_test"></div>
+  </body>
 </html>

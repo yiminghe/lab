@@ -1,64 +1,60 @@
-﻿
-<!doctype html>
+﻿<!doctype html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <style>
-        #box1
-        {
-            background: #ccc;
-            /*
+      #box1 {
+        background: #ccc;
+        /*
                 http://www.w3.org/TR/CSS21/visuren.html#propdef-z-index
                 Positioned elements with ‘z-index: auto’ (in layer 6), floats (layer 4), 
                 inline blocks (layer 5), and inline tables (layer 5), 
                 are painted as if those elements generated new stacking contexts, 
                 except that their positioned descendants and any child stacking contexts take part in the current stacking context.
             */
-            /*
+        /*
                 z-index:auto;
-            */        
-            width: 330px;
-            height: 200px;
-            position: absolute;
-            top: 75px;
-            left: 5px;
-        }
-        
-        #box2
-        {
-            z-index: 20;
-            background: #0cc;
-            width: 210px;
-            height: 100px;
-            position: absolute;
-            top: 50px;
-            left: 80px;
-        }
-        
-        #box3
-        {
-            z-index: 15;
-            background: #cc0;
-            width: 300px;
-            height: 260px;
-            position: absolute;
-            left: 270px;
-            top: 35px;
-        }
-        
-        div { color: #000; padding: 5px; border: solid 3px #000; }
-    </style>
-</head>
-<body>
-    <div id="box1">
-    Box 1 (z-index: 10)
-    <div id="box2">
-        Box 2 (z-index: 20)
-    </div>
-</div>
+            */
+        width: 330px;
+        height: 200px;
+        position: absolute;
+        top: 75px;
+        left: 5px;
+      }
 
-<div id="box3">
-    Box 3 (z-index: 15)
-</div>
-</body>
+      #box2 {
+        z-index: 20;
+        background: #0cc;
+        width: 210px;
+        height: 100px;
+        position: absolute;
+        top: 50px;
+        left: 80px;
+      }
+
+      #box3 {
+        z-index: 15;
+        background: #cc0;
+        width: 300px;
+        height: 260px;
+        position: absolute;
+        left: 270px;
+        top: 35px;
+      }
+
+      div {
+        color: #000;
+        padding: 5px;
+        border: solid 3px #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box1">
+      Box 1 (z-index: 10)
+      <div id="box2">Box 2 (z-index: 20)</div>
+    </div>
+
+    <div id="box3">Box 3 (z-index: 15)</div>
+  </body>
 </html>

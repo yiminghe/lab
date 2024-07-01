@@ -1,76 +1,79 @@
-﻿<!DOCTYPE HTML>
+﻿<!doctype html>
 <html>
-<head>
-<!-- ie8 is not ok <absolute transform><absolute>wrong</absolute></absolute> -->
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
-<meta charset="utf-8">
-<style>
-    #t2 {
+  <head>
+    <!-- ie8 is not ok <absolute transform><absolute>wrong</absolute></absolute> -->
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta charset="utf-8" />
+    <style>
+      #t2 {
         background-image: url(http://img02.taobaocdn.com/tps/i2/T1Rj9TXeFsXXXXXXXX-375-75.png);
         width: 70px;
         height: 77px;
         position: absolute;
         bottom: 0px;
         cursor: move;
-    }
+      }
 
-    #t{
-        width:70px;
-        height:300px;
+      #t {
+        width: 70px;
+        height: 300px;
 
-        position:absolute;
-    }
+        position: absolute;
+      }
 
-    #l {
-        width:5px;
-        height:233px;
-        background:gray;
+      #l {
+        width: 5px;
+        height: 233px;
+        background: gray;
         margin: 0 auto;
-    }
-</style>
-</head>
-<body>
-
-sdfasdf
-<div style='position:absolute;left:500px;top:100px;'>
-    <div id='t'>
-        <div id="l">
-
-        </div>
-        <div id='t2'>
-
-        </div>
-    </div>
-    <!--
+      }
+    </style>
+  </head>
+  <body>
+    sdfasdf
+    <div style="position: absolute; left: 500px; top: 100px">
+      <div id="t">
+        <div id="l"></div>
+        <div id="t2"></div>
+      </div>
+      <!--
             <div style='width:20px;height:100px;background:green;position:absolute;'>
             </div>
             -->
-    <div style='width:75px;height:85px;border:1px solid green;position:absolute;left:200px;top:200px;' id='c'>
-
+      <div
+        style="
+          width: 75px;
+          height: 85px;
+          border: 1px solid green;
+          position: absolute;
+          left: 200px;
+          top: 200px;
+        "
+        id="c">
         sdfasdf
-
+      </div>
     </div>
-</div>
-<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-<script src='t.js'></script>
-<script>
-    KISSY.FpTransform(
-            // 线段 div
-            "#t",
-            // 下垂物体 div
-            "#t2",
-            // 先左摆还是右摆
-            1,
-            // 最大幅度角度
-            60,
-            // 每 30 毫秒前进一度
-            30,
-            // 放置容器
-            '#c',
-            // 放置后回调
-            function () {
-                alert("done");
-            });
-</script>
-</body>
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+    <script src="t.js"></script>
+    <script>
+      KISSY.FpTransform(
+        // 线段 div
+        '#t',
+        // 下垂物体 div
+        '#t2',
+        // 先左摆还是右摆
+        1,
+        // 最大幅度角度
+        60,
+        // 每 30 毫秒前进一度
+        30,
+        // 放置容器
+        '#c',
+        // 放置后回调
+        function () {
+          alert('done');
+        },
+      );
+    </script>
+  </body>
 </html>

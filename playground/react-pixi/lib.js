@@ -15,15 +15,11 @@ export function render(rootElement, container) {
     container._rootContainer = reconciler.createContainer(
       container,
       false,
-      false
+      false,
     );
   }
 
-  reconciler.updateContainer(
-    rootElement,
-    container._rootContainer
-  );
+  reconciler.updateContainer(rootElement, container._rootContainer);
 }
 
 export * from './nodes.js';
-

@@ -1,11 +1,14 @@
-<button onclick='document.domain=window.location.hostname;'>ÉèÖÃ hostname domain</button>
-<button onclick='document.domain=window.location.hostname.substring(window.location.hostname.indexOf(".")+1);'>
-	ÉèÖÃ ¶Ìdomain
+<button onclick="document.domain=window.location.hostname;">
+  ï¿½ï¿½ï¿½ï¿½ hostname domain
 </button>
-<button onclick='alert(document.domain);'>¶ÁÈ¡ domain</button>
-<button onclick='notify();'>µ÷ÓÃ¸¸¼¶</button>
+<button
+  onclick='document.domain=window.location.hostname.substring(window.location.hostname.indexOf(".")+1);'>
+  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½domain
+</button>
+<button onclick="alert(document.domain);">ï¿½ï¿½È¡ domain</button>
+<button onclick="notify();">ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½</button>
 <script>
-	function notify(){
-		parent.notify();
-	}
+  function notify() {
+    parent.notify();
+  }
 </script>

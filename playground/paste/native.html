@@ -1,38 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <meta charset="utf-8"/>
+  <head>
+    <meta charset="utf-8" />
     <title>textarea paste</title>
     <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
     <style>
-        #panel {
-            width: 100px;
-            height: 100px;
-            border: 1px solid red;;
-        }
+      #panel {
+        width: 100px;
+        height: 100px;
+        border: 1px solid red;
+      }
     </style>
-</head>
-<body>
-<textarea id="t">1234</textarea>
-<textarea id="t2">5678</textarea>
-</body>
-<script>
+  </head>
+  <body>
+    <textarea id="t">1234</textarea>
+    <textarea id="t2">5678</textarea>
+  </body>
+  <script>
     KISSY.ready(function (S) {
-        var $ = S.all;
+      var $ = S.all;
 
-        $('#t').on('copy', function (e) {
-            // must prevent native default action
-            e.preventDefault();
-            var originalEvent = e.originalEvent;
-            originalEvent.clipboardData.setData('text/plain', 'xx');
-        });
+      $('#t').on('copy', function (e) {
+        // must prevent native default action
+        e.preventDefault();
+        var originalEvent = e.originalEvent;
+        originalEvent.clipboardData.setData('text/plain', 'xx');
+      });
 
-        $('#t2').on('paste', function (e) {
-            var originalEvent = e.originalEvent;
-            S.log(originalEvent.clipboardData.getData('text/plain'));
-        });
+      $('#t2').on('paste', function (e) {
+        var originalEvent = e.originalEvent;
+        S.log(originalEvent.clipboardData.getData('text/plain'));
+      });
     });
-
-
-</script>
+  </script>
 </html>

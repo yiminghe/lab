@@ -1,50 +1,56 @@
-<script src='http://g.tbcdn.cn/kissy/third-party/0.1.0/benchmark.js'></script>
-<script src='http://g.tbcdn.cn/kissy/k/1.4.2/seed.js'></script>
-<script src='./trie.js'></script>
-<script src='./split-hash.js'></script>
+<script src="http://g.tbcdn.cn/kissy/third-party/0.1.0/benchmark.js"></script>
+<script src="http://g.tbcdn.cn/kissy/k/1.4.2/seed.js"></script>
+<script src="./trie.js"></script>
+<script src="./split-hash.js"></script>
 
 <script>
-var sep = 'In computer science, a trie, also called digital tree and sometimes radix tree or prefix tree (as they can be searched by prefixes), is an ordered tree data structure that is used to store a dynamic set or associative array where the keys are usually strings. Unlike a binary search tree, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated. All the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string. Values are normally not associated with every node, only with leaves and some inner nodes that correspond to keys of interest. For the space-optimized presentation of prefix tree, see compact prefix tree.';
-document.write('<p>'+sep+'</p>');
-str = sep;
+  var sep =
+    'In computer science, a trie, also called digital tree and sometimes radix tree or prefix tree (as they can be searched by prefixes), is an ordered tree data structure that is used to store a dynamic set or associative array where the keys are usually strings. Unlike a binary search tree, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated. All the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string. Values are normally not associated with every node, only with leaves and some inner nodes that correspond to keys of interest. For the space-optimized presentation of prefix tree, see compact prefix tree.';
+  document.write('<p>' + sep + '</p>');
+  str = sep;
 </script>
-<script src='./test.js'></script>
+<script src="./test.js"></script>
 <p>
-<label>repeat count: <input id='count' value='1' /></label> <button id='run'>run</button>
+  <label>repeat count: <input id="count" value="1" /></label>
+  <button id="run">run</button>
 </p>
 
-<div id='log'></div>
+<div id="log"></div>
 
-<script>  
-document.getElementById('run').onclick=function(){
-    this.disabled=true;
-    run(parseInt(document.getElementById('count').value))
-};    
-function run(count){
-    str = new Array(count+1).join(' '+sep+' ');
+<script>
+  document.getElementById('run').onclick = function () {
+    this.disabled = true;
+    run(parseInt(document.getElementById('count').value));
+  };
+  function run(count) {
+    str = new Array(count + 1).join(' ' + sep + ' ');
 
-    var log = function(str){
-        document.getElementById('log').innerHTML +='<p>'+str+'</p>';
+    var log = function (str) {
+      document.getElementById('log').innerHTML += '<p>' + str + '</p>';
     };
-    log('running... string length:'+str.length);
-    var suite = new Benchmark.Suite;
+    log('running... string length:' + str.length);
+    var suite = new Benchmark.Suite();
     // add tests
     suite
-    .add('split&hash count', function() {
-      splitHashCount(str);
-    })
-    .add('trie count', function() {
-      trieCount(str);
-    })
-    // add listeners
-    .on('cycle', function(event) {
-      log(String(event.target));
-    })
-    .on('complete', function() {
-      log('<span style="color:red">fastest is ' + this.filter('fastest').pluck('name')+'</span>');
-      document.getElementById('run').disabled=false;
-    })
-    // run async
-    .run({ 'async': true });
-}
+      .add('split&hash count', function () {
+        splitHashCount(str);
+      })
+      .add('trie count', function () {
+        trieCount(str);
+      })
+      // add listeners
+      .on('cycle', function (event) {
+        log(String(event.target));
+      })
+      .on('complete', function () {
+        log(
+          '<span style="color:red">fastest is ' +
+            this.filter('fastest').pluck('name') +
+            '</span>',
+        );
+        document.getElementById('run').disabled = false;
+      })
+      // run async
+      .run({ async: true });
+  }
 </script>

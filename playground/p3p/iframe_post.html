@@ -1,21 +1,25 @@
-<meta charset='utf-8'/>
-<script type="text/javascript" src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-<script type="text/javascript">
-    KISSY.ready(function(S) {
-        S.use("ua,dom", function(S, UA, DOM) {
-            var ok = S.get("#ok");
-            var action = "http://yiminghe.taobao.com:8080/upload/cookies"; // ?set=2 �Ḳ�� servlet post
-            if (UA.safari) {
-                var form = DOM.create("<form " +
-                        " method='post' " +
-                        "action='" + action + "'" +                       
-                        " style='position: absolute;left: -9999;top: -9999px'>");
-                DOM.append(form,document.body);
-                DOM.append(DOM.create("<input name='set' value='1'/>"), form);
-                form.submit();
-            } else {
-                window.location = action;
-            }
-        });
+<meta charset="utf-8" />
+<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+<script>
+  KISSY.ready(function (S) {
+    S.use('ua,dom', function (S, UA, DOM) {
+      var ok = S.get('#ok');
+      var action = 'http://yiminghe.taobao.com:8080/upload/cookies'; // ?set=2 �Ḳ�� servlet post
+      if (UA.safari) {
+        var form = DOM.create(
+          '<form ' +
+            " method='post' " +
+            "action='" +
+            action +
+            "'" +
+            " style='position: absolute;left: -9999;top: -9999px'>",
+        );
+        DOM.append(form, document.body);
+        DOM.append(DOM.create("<input name='set' value='1'/>"), form);
+        form.submit();
+      } else {
+        window.location = action;
+      }
     });
+  });
 </script>

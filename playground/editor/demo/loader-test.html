@@ -1,23 +1,29 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<title>KISSY Editor Test</title>
-<link href="../build/theme/base.css" rel="stylesheet"/>
-<!--[if lt IE 8]>
-<link href="../build/theme/cool/editor-pkg-min-mhtml.css" rel="stylesheet"/>
-<![endif]-->
-<!--[if gte IE 8]><!-->
-<link href="../build/theme/cool/editor-pkg-min-datauri.css" rel="stylesheet"/>
-<!--<![endif]-->
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <title>KISSY Editor Test</title>
+    <link href="../build/theme/base.css" rel="stylesheet" />
+    <!--[if lt IE 8]>
+      <link
+        href="../build/theme/cool/editor-pkg-min-mhtml.css"
+        rel="stylesheet" />
+    <![endif]-->
+    <!--[if gte IE 8]><!-->
+    <link
+      href="../build/theme/cool/editor-pkg-min-datauri.css"
+      rel="stylesheet" />
+    <!--<![endif]-->
+  </head>
+  <body>
+    <h1>KISSY Editor Demo</h1>
 
-<h1>KISSY Editor Demo</h1>
-
-<div style="width: 90%; margin: 0 auto">
-    <label for="editor">Editor Instance 1:</label>
-    <textarea id="editor" tabindex="1" style="width:100%;height:400px;margin:0 auto;">
+    <div style="width: 90%; margin: 0 auto">
+      <label for="editor">Editor Instance 1:</label>
+      <textarea
+        id="editor"
+        tabindex="1"
+        style="width: 100%; height: 400px; margin: 0 auto">
         <script>alert(1);</script>
         <p>
             我是虾米音乐
@@ -157,58 +163,59 @@
         <p>2</p>
         <p>3</p>
         <p>4</p>
-    </textarea>
-</div>
+    </textarea
+      >
+    </div>
 
-<div style="width: 60%; margin: 50px auto">
-    <label for="editor2">Editor Instance 2:</label>
-    <textarea id="editor2" style="width:100%;height:400px;margin:0 auto;"></textarea>
-</div>
+    <div style="width: 60%; margin: 50px auto">
+      <label for="editor2">Editor Instance 2:</label>
+      <textarea
+        id="editor2"
+        style="width: 100%; height: 400px; margin: 0 auto"></textarea>
+    </div>
 
-<script src="http://github.com/kissyteam/kissy/raw/master/build/kissy.js"></script>
-<script>
-    // just for test
-    var base = location.href.replace(/^(.*kissy-editor\/).*$/i, '$1'),
-            S = KISSY;
+    <script src="http://github.com/kissyteam/kissy/raw/master/build/kissy.js"></script>
+    <script>
+      // just for test
+      var base = location.href.replace(/^(.*kissy-editor\/).*$/i, '$1'),
+        S = KISSY;
 
-    S.Config.debug = true;
-    S.Config.base = base;
+      S.Config.debug = true;
+      S.Config.base = base;
 
-    S.add({
-        'editor': {
-            path: 'build/editor-core-pkg.js'
-        }
-    });
-    S.ready(function() {
+      S.add({
+        editor: {
+          path: 'build/editor-core-pkg.js',
+        },
+      });
+      S.ready(function () {
+        S.use('editor', function () {
+          var KE = KISSY.Editor;
+          KE.Config.base = base + 'src/';
 
+          KE('#editor', {
+            pluginConfig: {
+              templates: [
+                {
+                  demo: '模板1',
+                  html: "<div style='border: 1px solid #999'>边框线效果</div>",
+                },
+                {
+                  demo: '模板2',
+                  html: "<div style='background: #ffc'>背景色效果</div>",
+                },
+              ],
+            },
+          }).use(
+            'elementpaths,sourcearea,preview,' +
+              'templates,undo,removeformat,separator,font,format,forecolor,bgcolor,' +
+              'list,indent,justify,link,image,separator,flash,music,' +
+              'table,smiley,maximize',
+          );
 
-        S.use('editor', function() {
-
-            var KE = KISSY.Editor;
-            KE.Config.base = base + "src/";
-
-            KE("#editor", {
-                pluginConfig: {
-                    "templates": [
-                        {
-                            demo: "模板1",
-                            html: "<div style='border: 1px solid #999'>边框线效果</div>"
-                        },
-                        {
-                            demo: "模板2",
-                            html: "<div style='background: #ffc'>背景色效果</div>"
-                        }
-                    ]
-                }
-            }).use("elementpaths,sourcearea,preview," +
-                    "templates,undo,removeformat,separator,font,format,forecolor,bgcolor," +
-                    "list,indent,justify,link,image,separator,flash,music," +
-                    "table,smiley,maximize"
-                    );
-
-            KE("#editor2").use("elementpaths,sourcearea,undo,font");
+          KE('#editor2').use('elementpaths,sourcearea,undo,font');
         });
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

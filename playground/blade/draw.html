@@ -1,97 +1,122 @@
 <style>
-    html, body {
-        padding: 0;
-        margin: 0;
-    }
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+  }
 </style>
-<canvas id='c' width='800' height='500'></canvas>
+<canvas id="c" width="800" height="500"></canvas>
 <script>
-    // hilo from taobao
-    (function () {
-        var canvas = document.getElementById('c');
-        var context = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        window.onresize = function () {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
+  // hilo from taobao
+  (function () {
+    var canvas = document.getElementById('c');
+    var context = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.onresize = function () {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
 
-        function getNormal(p1, p2) {
-            var dx = p2.x - p1.x, dy = p2.y - p1.y;
-            var length = Math.sqrt(dx * dx + dy * dy);
-            return {x: dx / length, y: dy / length};
+    function getNormal(p1, p2) {
+      var dx = p2.x - p1.x,
+        dy = p2.y - p1.y;
+      var length = Math.sqrt(dx * dx + dy * dy);
+      return { x: dx / length, y: dy / length };
+    }
+
+    var points = [];
+    var pointLife = 300;
+    var pointWidthStep = 0.5;
+    var endSharpRatio = 2;
+    var fillStyle = '#000';
+    var borderWidth = 0;
+    var borderStyle = null;
+    canvas.addEventListener(
+      'mousedown',
+      function (e) {
+        points = [];
+      },
+      false,
+    );
+    canvas.addEventListener(
+      'mousemove',
+      function (e) {
+        var point = {
+          ts: Date.now(),
+          x: e.pageX,
+          y: e.pageY,
+        };
+        var len = points.length;
+        if (len > 0) {
+          point.normal = getNormal(points[len - 1], point);
+        }
+        points.push(point);
+      },
+      false,
+    );
+    canvas.addEventListener(
+      'mouseup',
+      function (e) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var now = Date.now();
+        var len = points.length;
+
+        //remove dead points
+
+        while (len && now - points[0].ts > pointLife) {
+          points.shift();
+          len--;
+        }
+        if (len < 2) return;
+
+        var step = pointWidthStep,
+          sharp = endSharpRatio,
+          p = points[0],
+          normal,
+          pw,
+          flag = 1,
+          i = 1;
+
+        //draw path
+        context.beginPath();
+        context.moveTo(p.x, p.y);
+
+        while (i) {
+          p = points[i];
+          normal = p.normal;
+          pw = i * step;
+
+          context.lineTo(
+            p.x + flag * normal.y * pw,
+            p.y - flag * normal.x * pw,
+          );
+          if (i == len - 1 && flag > 0) {
+            //draw end sharp point
+            context.lineTo(
+              p.x + normal.x * pw * sharp,
+              p.y + normal.y * pw * sharp,
+            );
+            flag = -1;
+          } else {
+            i += flag;
+          }
         }
 
-        var points = [];
-        var pointLife = 300;
-        var pointWidthStep = 0.5;
-        var endSharpRatio = 2;
-        var fillStyle = '#000';
-        var borderWidth = 0;
-        var borderStyle = null;
-        canvas.addEventListener('mousedown', function (e) {
-            points = [];
-        }, false);
-        canvas.addEventListener('mousemove', function (e) {
-            var point = {
-                ts: Date.now(),
-                x: e.pageX,
-                y: e.pageY
-            };
-            var len = points.length;
-            if (len > 0) {
-                point.normal = getNormal(points[len - 1], point);
-            }
-            points.push(point);
-        }, false);
-        canvas.addEventListener('mouseup', function (e) {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            var now = Date.now();
-            var len = points.length;
+        context.closePath();
 
-            //remove dead points
+        //border style
+        if (borderWidth) {
+          context.lineWidth = borderWidth;
+          context.strokeStyle = borderStyle;
+          context.stroke();
+        }
 
-            while (len && now - points[0].ts > pointLife) {
-                points.shift();
-                len--;
-            }
-            if (len < 2) return;
-
-            var step = pointWidthStep, sharp = endSharpRatio,
-                    p = points[0], normal, pw, flag = 1, i = 1;
-
-            //draw path
-            context.beginPath();
-            context.moveTo(p.x, p.y);
-
-            while (i) {
-                p = points[i];
-                normal = p.normal;
-                pw = i * step;
-
-                context.lineTo(p.x + flag * normal.y * pw, p.y - flag * normal.x * pw);
-                if (i == len - 1 && flag > 0) {
-                    //draw end sharp point
-                    context.lineTo(p.x + normal.x * pw * sharp, p.y + normal.y * pw * sharp);
-                    flag = -1;
-                } else {
-                    i += flag;
-                }
-            }
-
-            context.closePath();
-
-            //border style
-            if (borderWidth) {
-                context.lineWidth = borderWidth;
-                context.strokeStyle = borderStyle;
-                context.stroke();
-            }
-
-            //fill style
-            context.fillStyle = fillStyle;
-            context.fill();
-        }, false);
-    })();
+        //fill style
+        context.fillStyle = fillStyle;
+        context.fill();
+      },
+      false,
+    );
+  })();
 </script>

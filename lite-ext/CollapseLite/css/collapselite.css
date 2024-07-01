@@ -1,45 +1,46 @@
 .collapsed-control {
-	background-color:#D2E0F2;
-	border:1px solid #98C0F4;
-	width:20px;
-	padding-top:2px;
-	cursor:pointer;
+  background-color: #d2e0f2;
+  border: 1px solid #98c0f4;
+  width: 20px;
+  padding-top: 2px;
+  cursor: pointer;
 }
 
 .collapsed-control-over {
-	background-color:#D9E8FB;	
+  background-color: #d9e8fb;
 }
 
 .x-tool {
-	background-image: url(../../base/images/tool-sprites.gif) ;
-	cursor:pointer;
-	display:block;
-	height:15px;
-	margin-left:2px;
-	outline-color:-moz-use-text-color;
-	outline-style:none;
-	outline-width:0;
-	overflow:hidden;
-	text-indent:-9999px;
-	width:15px;
+  background-image: url(../../base/images/tool-sprites.gif);
+  cursor: pointer;
+  display: block;
+  height: 15px;
+  margin-left: 2px;
+  outline-color: -moz-use-text-color;
+  outline-style: none;
+  outline-width: 0;
+  overflow: hidden;
+  text-indent: -9999px;
+  width: 15px;
 }
 
-.collapsed-control .x-tool, .collapselite .x-tool {
-	float:none;
+.collapsed-control .x-tool,
+.collapselite .x-tool {
+  float: none;
 }
 
 a.layout-collapse-l {
-	background-position:0 -180px;
+  background-position: 0 -180px;
 }
 
 a.layout-collapse-l:hover {
-	background-position:-15px -180px;
+  background-position: -15px -180px;
 }
 
 a.layout-collapse-r {
-	background-position:0 -165px;
+  background-position: 0 -165px;
 }
 
 a.layout-collapse-r:hover {
-	background-position:-15px -165px;
+  background-position: -15px -165px;
 }

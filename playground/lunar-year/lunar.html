@@ -2,17 +2,16 @@
 <script src="lunar.js" charset="utf-8"></script>
 
 <body>
-<script>
-    
+  <script>
     for (var i = 1; i < 31; i++) {
-        var d = KISSY.getLunarDay(2010, 11, i);
-        var s = "2010-11-" + i + " : {<br/>";
-        for (var j in d) {
-            s += j + " : " + d[j] + "<br/>"
-        }
-        s += "}<br/>";
+      var d = KISSY.getLunarDay(2010, 11, i);
+      var s = '2010-11-' + i + ' : {<br/>';
+      for (var j in d) {
+        s += j + ' : ' + d[j] + '<br/>';
+      }
+      s += '}<br/>';
 
-        document.writeln(s);
+      document.writeln(s);
     }
-</script>
+  </script>
 </body>

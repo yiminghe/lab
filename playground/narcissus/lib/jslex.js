@@ -47,413 +47,424 @@
  * Lexical scanner.
  */
 
-Narcissus.lexer = (function() {
+Narcissus.lexer = (function () {
+  var definitions = Narcissus.definitions;
 
-    var definitions = Narcissus.definitions;
+  // Set constants in the local scope.
+  eval(definitions.consts);
 
-    // Set constants in the local scope.
-    eval(definitions.consts);
+  // Build up a trie of operator tokens.
+  var opTokens = {};
+  for (var op in definitions.opTypeNames) {
+    if (op === '\n' || op === '.') continue;
 
-    // Build up a trie of operator tokens.
-    var opTokens = {};
-    for (var op in definitions.opTypeNames) {
-        if (op === '\n' || op === '.')
-            continue;
-
-        var node = opTokens;
-        for (var i = 0; i < op.length; i++) {
-            var ch = op[i];
-            if (!(ch in node))
-                node[ch] = {};
-            node = node[ch];
-            node.op = op;
-        }
+    var node = opTokens;
+    for (var i = 0; i < op.length; i++) {
+      var ch = op[i];
+      if (!(ch in node)) node[ch] = {};
+      node = node[ch];
+      node.op = op;
     }
+  }
 
-    /*
-     * Tokenizer :: (source, filename, line number) -> Tokenizer
-     */
-    function Tokenizer(s, f, l) {
-        this.cursor = 0;
-        this.source = String(s);
-        this.tokens = [];
-        this.tokenIndex = 0;
-        this.lookahead = 0;
-        this.scanNewlines = false;
-        this.unexpectedEOF = false;
-        this.filename = f || "";
-        this.lineno = l || 1;
-    }
+  /*
+   * Tokenizer :: (source, filename, line number) -> Tokenizer
+   */
+  function Tokenizer(s, f, l) {
+    this.cursor = 0;
+    this.source = String(s);
+    this.tokens = [];
+    this.tokenIndex = 0;
+    this.lookahead = 0;
+    this.scanNewlines = false;
+    this.unexpectedEOF = false;
+    this.filename = f || '';
+    this.lineno = l || 1;
+  }
 
-    Tokenizer.prototype = {
-        get done() {
-            // We need to set scanOperand to true here because the first thing
-            // might be a regexp.
-            return this.peek(true) === END;
-        },
+  Tokenizer.prototype = {
+    get done() {
+      // We need to set scanOperand to true here because the first thing
+      // might be a regexp.
+      return this.peek(true) === END;
+    },
 
-        get token() {
-            return this.tokens[this.tokenIndex];
-        },
+    get token() {
+      return this.tokens[this.tokenIndex];
+    },
 
-        match: function (tt, scanOperand) {
-            return this.get(scanOperand) === tt || this.unget();
-        },
+    match: function (tt, scanOperand) {
+      return this.get(scanOperand) === tt || this.unget();
+    },
 
-        mustMatch: function (tt) {
-            if (!this.match(tt)) {
-                throw this.newSyntaxError("Missing " +
-                                          definitions.tokens[tt].toLowerCase());
-            }
-            return this.token;
-        },
+    mustMatch: function (tt) {
+      if (!this.match(tt)) {
+        throw this.newSyntaxError(
+          'Missing ' + definitions.tokens[tt].toLowerCase(),
+        );
+      }
+      return this.token;
+    },
 
-        peek: function (scanOperand) {
-            var tt, next;
-            if (this.lookahead) {
-                next = this.tokens[(this.tokenIndex + this.lookahead) & 3];
-                tt = (this.scanNewlines && next.lineno !== this.lineno)
-                     ? NEWLINE
-                     : next.type;
-            } else {
-                tt = this.get(scanOperand);
-                this.unget();
-            }
-            return tt;
-        },
+    peek: function (scanOperand) {
+      var tt, next;
+      if (this.lookahead) {
+        next = this.tokens[(this.tokenIndex + this.lookahead) & 3];
+        tt =
+          this.scanNewlines && next.lineno !== this.lineno
+            ? NEWLINE
+            : next.type;
+      } else {
+        tt = this.get(scanOperand);
+        this.unget();
+      }
+      return tt;
+    },
 
-        peekOnSameLine: function (scanOperand) {
-            this.scanNewlines = true;
-            var tt = this.peek(scanOperand);
-            this.scanNewlines = false;
-            return tt;
-        },
+    peekOnSameLine: function (scanOperand) {
+      this.scanNewlines = true;
+      var tt = this.peek(scanOperand);
+      this.scanNewlines = false;
+      return tt;
+    },
 
-        // Eat comments and whitespace.
-        skip: function () {
-            var input = this.source;
-            for (;;) {
-                var ch = input[this.cursor++];
-                var next = input[this.cursor];
-                if (ch === '\n' && !this.scanNewlines) {
-                    this.lineno++;
-                } else if (ch === '/' && next === '*') {
-                    this.cursor++;
-                    for (;;) {
-                        ch = input[this.cursor++];
-                        if (ch === undefined)
-                            throw this.newSyntaxError("Unterminated comment");
+    // Eat comments and whitespace.
+    skip: function () {
+      var input = this.source;
+      for (;;) {
+        var ch = input[this.cursor++];
+        var next = input[this.cursor];
+        if (ch === '\n' && !this.scanNewlines) {
+          this.lineno++;
+        } else if (ch === '/' && next === '*') {
+          this.cursor++;
+          for (;;) {
+            ch = input[this.cursor++];
+            if (ch === undefined)
+              throw this.newSyntaxError('Unterminated comment');
 
-                        if (ch === '*') {
-                            next = input[this.cursor];
-                            if (next === '/') {
-                                this.cursor++;
-                                break;
-                            }
-                        } else if (ch === '\n') {
-                            this.lineno++;
-                        }
-                    }
-                } else if (ch === '/' && next === '/') {
-                    this.cursor++;
-                    for (;;) {
-                        ch = input[this.cursor++];
-                        if (ch === undefined)
-                            return;
-
-                        if (ch === '\n') {
-                            this.lineno++;
-                            break;
-                        }
-                    }
-                } else if (ch !== ' ' && ch !== '\t') {
-                    this.cursor--;
-                    return;
-                }
-            }
-        },
-
-        // Lex the exponential part of a number, if present. Return true iff an
-        // exponential part was found.
-        lexExponent: function() {
-            var input = this.source;
-            var next = input[this.cursor];
-            if (next === 'e' || next === 'E') {
+            if (ch === '*') {
+              next = input[this.cursor];
+              if (next === '/') {
                 this.cursor++;
-                ch = input[this.cursor++];
-                if (ch === '+' || ch === '-')
-                    ch = input[this.cursor++];
-
-                if (ch < '0' || ch > '9')
-                    throw this.newSyntaxError("Missing exponent");
-
-                do {
-                    ch = input[this.cursor++];
-                } while (ch >= '0' && ch <= '9');
-                this.cursor--;
-
-                return true;
+                break;
+              }
+            } else if (ch === '\n') {
+              this.lineno++;
             }
+          }
+        } else if (ch === '/' && next === '/') {
+          this.cursor++;
+          for (;;) {
+            ch = input[this.cursor++];
+            if (ch === undefined) return;
 
-            return false;
-        },
+            if (ch === '\n') {
+              this.lineno++;
+              break;
+            }
+          }
+        } else if (ch !== ' ' && ch !== '\t') {
+          this.cursor--;
+          return;
+        }
+      }
+    },
 
-        lexZeroNumber: function (ch) {
-            var token = this.token, input = this.source;
-            token.type = NUMBER;
+    // Lex the exponential part of a number, if present. Return true iff an
+    // exponential part was found.
+    lexExponent: function () {
+      var input = this.source;
+      var next = input[this.cursor];
+      if (next === 'e' || next === 'E') {
+        this.cursor++;
+        ch = input[this.cursor++];
+        if (ch === '+' || ch === '-') ch = input[this.cursor++];
+
+        if (ch < '0' || ch > '9') throw this.newSyntaxError('Missing exponent');
+
+        do {
+          ch = input[this.cursor++];
+        } while (ch >= '0' && ch <= '9');
+        this.cursor--;
+
+        return true;
+      }
+
+      return false;
+    },
+
+    lexZeroNumber: function (ch) {
+      var token = this.token,
+        input = this.source;
+      token.type = NUMBER;
+
+      ch = input[this.cursor++];
+      if (ch === '.') {
+        do {
+          ch = input[this.cursor++];
+        } while (ch >= '0' && ch <= '9');
+        this.cursor--;
+
+        this.lexExponent();
+        token.value = parseFloat(token.start, this.cursor);
+      } else if (ch === 'x' || ch === 'X') {
+        do {
+          ch = input[this.cursor++];
+        } while (
+          (ch >= '0' && ch <= '9') ||
+          (ch >= 'a' && ch <= 'f') ||
+          (ch >= 'A' && ch <= 'F')
+        );
+        this.cursor--;
+
+        token.value = parseInt(input.substring(token.start, this.cursor));
+      } else if (ch >= '0' && ch <= '7') {
+        do {
+          ch = input[this.cursor++];
+        } while (ch >= '0' && ch <= '7');
+        this.cursor--;
+
+        token.value = parseInt(input.substring(token.start, this.cursor));
+      } else {
+        this.cursor--;
+        this.lexExponent(); // 0E1, &c.
+        token.value = 0;
+      }
+    },
+
+    lexNumber: function (ch) {
+      var token = this.token,
+        input = this.source;
+      token.type = NUMBER;
+
+      var floating = false;
+      do {
+        ch = input[this.cursor++];
+        if (ch === '.' && !floating) {
+          floating = true;
+          ch = input[this.cursor++];
+        }
+      } while (ch >= '0' && ch <= '9');
+
+      this.cursor--;
+
+      var exponent = this.lexExponent();
+      floating = floating || exponent;
+
+      var str = input.substring(token.start, this.cursor);
+      token.value = floating ? parseFloat(str) : parseInt(str);
+    },
+
+    lexDot: function (ch) {
+      var token = this.token,
+        input = this.source;
+      var next = input[this.cursor];
+      if (next >= '0' && next <= '9') {
+        do {
+          ch = input[this.cursor++];
+        } while (ch >= '0' && ch <= '9');
+        this.cursor--;
+
+        this.lexExponent();
+
+        token.type = NUMBER;
+        token.value = parseFloat(token.start, this.cursor);
+      } else {
+        token.type = DOT;
+        token.assignOp = null;
+        token.value = '.';
+      }
+    },
+
+    lexString: function (ch) {
+      var token = this.token,
+        input = this.source;
+      token.type = STRING;
+
+      var hasEscapes = false;
+      var delim = ch;
+      while ((ch = input[this.cursor++]) !== delim) {
+        if (this.cursor == input.length)
+          throw this.newSyntaxError('Unterminated string literal');
+        if (ch === '\\') {
+          hasEscapes = true;
+          if (++this.cursor == input.length)
+            throw this.newSyntaxError('Unterminated string literal');
+        }
+      }
+
+      token.value = hasEscapes
+        ? eval(input.substring(token.start, this.cursor))
+        : input.substring(token.start + 1, this.cursor - 1);
+    },
+
+    lexRegExp: function (ch) {
+      var token = this.token,
+        input = this.source;
+      token.type = REGEXP;
+
+      do {
+        ch = input[this.cursor++];
+        if (ch === '\\') {
+          this.cursor++;
+        } else if (ch === '[') {
+          do {
+            if (ch === undefined)
+              throw this.newSyntaxError('Unterminated character class');
+
+            if (ch === '\\') this.cursor++;
 
             ch = input[this.cursor++];
-            if (ch === '.') {
-                do {
-                    ch = input[this.cursor++];
-                } while (ch >= '0' && ch <= '9');
-                this.cursor--;
+          } while (ch !== ']');
+        } else if (ch === undefined) {
+          throw this.newSyntaxError('Unterminated regex');
+        }
+      } while (ch !== '/');
 
-                this.lexExponent();
-                token.value = parseFloat(token.start, this.cursor);
-            } else if (ch === 'x' || ch === 'X') {
-                do {
-                    ch = input[this.cursor++];
-                } while ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') ||
-                         (ch >= 'A' && ch <= 'F'));
-                this.cursor--;
+      do {
+        ch = input[this.cursor++];
+      } while (ch >= 'a' && ch <= 'z');
 
-                token.value = parseInt(input.substring(token.start, this.cursor));
-            } else if (ch >= '0' && ch <= '7') {
-                do {
-                    ch = input[this.cursor++];
-                } while (ch >= '0' && ch <= '7');
-                this.cursor--;
+      this.cursor--;
 
-                token.value = parseInt(input.substring(token.start, this.cursor));
-            } else {
-                this.cursor--;
-                this.lexExponent();     // 0E1, &c.
-                token.value = 0;
-            }
-        },
+      token.value = eval(input.substring(token.start, this.cursor));
+    },
 
-        lexNumber: function (ch) {
-            var token = this.token, input = this.source;
-            token.type = NUMBER;
+    lexOp: function (ch) {
+      var token = this.token,
+        input = this.source;
 
-            var floating = false;
-            do {
-                ch = input[this.cursor++];
-                if (ch === '.' && !floating) {
-                    floating = true;
-                    ch = input[this.cursor++];
-                }
-            } while (ch >= '0' && ch <= '9');
+      // A bit ugly, but it seems wasteful to write a trie lookup routine
+      // for only 3 characters...
+      var node = opTokens[ch];
+      var next = input[this.cursor];
+      if (next in node) {
+        node = node[next];
+        this.cursor++;
+        next = input[this.cursor];
+        if (next in node) {
+          node = node[next];
+          this.cursor++;
+          next = input[this.cursor];
+        }
+      }
 
-            this.cursor--;
+      var op = node.op;
+      if (definitions.assignOps[op] && input[this.cursor] === '=') {
+        this.cursor++;
+        token.type = ASSIGN;
+        token.assignOp = definitions.tokenIds[definitions.opTypeNames[op]];
+        op += '=';
+      } else {
+        token.type = definitions.tokenIds[definitions.opTypeNames[op]];
+        token.assignOp = null;
+      }
 
-            var exponent = this.lexExponent();
-            floating = floating || exponent;
+      token.value = op;
+    },
 
-            var str = input.substring(token.start, this.cursor);
-            token.value = floating ? parseFloat(str) : parseInt(str);
-        },
+    // FIXME: Unicode escape sequences
+    // FIXME: Unicode identifiers
+    lexIdent: function (ch) {
+      var token = this.token,
+        input = this.source;
 
-        lexDot: function (ch) {
-            var token = this.token, input = this.source;
-            var next = input[this.cursor];
-            if (next >= '0' && next <= '9') {
-                do {
-                    ch = input[this.cursor++];
-                } while (ch >= '0' && ch <= '9');
-                this.cursor--;
+      do {
+        ch = input[this.cursor++];
+      } while (
+        (ch >= 'a' && ch <= 'z') ||
+        (ch >= 'A' && ch <= 'Z') ||
+        (ch >= '0' && ch <= '9') ||
+        ch === '$' ||
+        ch === '_'
+      );
 
-                this.lexExponent();
+      this.cursor--; // Put the non-word character back.
 
-                token.type = NUMBER;
-                token.value = parseFloat(token.start, this.cursor);
-            } else {
-                token.type = DOT;
-                token.assignOp = null;
-                token.value = '.';
-            }
-        },
+      var id = input.substring(token.start, this.cursor);
+      token.type = definitions.keywords[id] || IDENTIFIER;
+      token.value = id;
+    },
 
-        lexString: function (ch) {
-            var token = this.token, input = this.source;
-            token.type = STRING;
+    /*
+     * Tokenizer.get :: void -> token type
+     *
+     * Consume input *only* if there is no lookahead.
+     * Dispatch to the appropriate lexing function depending on the input.
+     */
+    get: function (scanOperand) {
+      var token;
+      while (this.lookahead) {
+        --this.lookahead;
+        this.tokenIndex = (this.tokenIndex + 1) & 3;
+        token = this.tokens[this.tokenIndex];
+        if (token.type !== NEWLINE || this.scanNewlines) return token.type;
+      }
 
-            var hasEscapes = false;
-            var delim = ch;
-            while ((ch = input[this.cursor++]) !== delim) {
-                if (this.cursor == input.length)
-                    throw this.newSyntaxError("Unterminated string literal");
-                if (ch === '\\') {
-                    hasEscapes = true;
-                    if (++this.cursor == input.length)
-                        throw this.newSyntaxError("Unterminated string literal");
-                }
-            }
+      this.skip();
 
-            token.value = hasEscapes
-                          ? eval(input.substring(token.start, this.cursor))
-                          : input.substring(token.start + 1, this.cursor - 1);
-        },
+      this.tokenIndex = (this.tokenIndex + 1) & 3;
+      token = this.tokens[this.tokenIndex];
+      if (!token) this.tokens[this.tokenIndex] = token = {};
 
-        lexRegExp: function (ch) {
-            var token = this.token, input = this.source;
-            token.type = REGEXP;
+      var input = this.source;
+      if (this.cursor === input.length) return (token.type = END);
 
-            do {
-                ch = input[this.cursor++];
-                if (ch === '\\') {
-                    this.cursor++;
-                } else if (ch === '[') {
-                    do {
-                        if (ch === undefined)
-                            throw this.newSyntaxError("Unterminated character class");
+      token.start = this.cursor;
+      token.lineno = this.lineno;
 
-                        if (ch === '\\')
-                            this.cursor++;
+      var ch = input[this.cursor++];
+      if (
+        (ch >= 'a' && ch <= 'z') ||
+        (ch >= 'A' && ch <= 'Z') ||
+        ch === '$' ||
+        ch === '_'
+      ) {
+        this.lexIdent(ch);
+      } else if (scanOperand && ch === '/') {
+        this.lexRegExp(ch);
+      } else if (ch in opTokens) {
+        this.lexOp(ch);
+      } else if (ch === '.') {
+        this.lexDot(ch);
+      } else if (ch >= '1' && ch <= '9') {
+        this.lexNumber(ch);
+      } else if (ch === '0') {
+        this.lexZeroNumber(ch);
+      } else if (ch === '"' || ch === "'") {
+        this.lexString(ch);
+      } else if (this.scanNewlines && ch === '\n') {
+        token.type = NEWLINE;
+        token.value = '\n';
+        this.lineno++;
+      } else {
+        throw this.newSyntaxError('Illegal token');
+      }
 
-                        ch = input[this.cursor++];
-                    } while (ch !== ']');
-                } else if (ch === undefined) {
-                    throw this.newSyntaxError("Unterminated regex");
-                }
-            } while (ch !== '/');
+      token.end = this.cursor;
+      return token.type;
+    },
 
-            do {
-                ch = input[this.cursor++];
-            } while (ch >= 'a' && ch <= 'z');
+    /*
+     * Tokenizer.unget :: void -> undefined
+     *
+     * Match depends on unget returning undefined.
+     */
+    unget: function () {
+      if (++this.lookahead === 4) throw 'PANIC: too much lookahead!';
+      this.tokenIndex = (this.tokenIndex - 1) & 3;
+    },
 
-            this.cursor--;
+    newSyntaxError: function (m) {
+      var e = new SyntaxError(m, this.filename, this.lineno);
+      e.source = this.source;
+      e.cursor = this.lookahead
+        ? this.tokens[(this.tokenIndex + this.lookahead) & 3].start
+        : this.cursor;
+      return e;
+    },
+  };
 
-            token.value = eval(input.substring(token.start, this.cursor));
-        },
-
-        lexOp: function (ch) {
-            var token = this.token, input = this.source;
-
-            // A bit ugly, but it seems wasteful to write a trie lookup routine
-            // for only 3 characters...
-            var node = opTokens[ch];
-            var next = input[this.cursor];
-            if (next in node) {
-                node = node[next];
-                this.cursor++;
-                next = input[this.cursor];
-                if (next in node) {
-                    node = node[next];
-                    this.cursor++;
-                    next = input[this.cursor];
-                }
-            }
-
-            var op = node.op;
-            if (definitions.assignOps[op] && input[this.cursor] === '=') {
-                this.cursor++;
-                token.type = ASSIGN;
-                token.assignOp = definitions.tokenIds[definitions.opTypeNames[op]];
-                op += '=';
-            } else {
-                token.type = definitions.tokenIds[definitions.opTypeNames[op]];
-                token.assignOp = null;
-            }
-
-            token.value = op;
-        },
-
-        // FIXME: Unicode escape sequences
-        // FIXME: Unicode identifiers
-        lexIdent: function (ch) {
-            var token = this.token, input = this.source;
-
-            do {
-                ch = input[this.cursor++];
-            } while ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-                     (ch >= '0' && ch <= '9') || ch === '$' || ch === '_');
-
-            this.cursor--;  // Put the non-word character back.
-
-            var id = input.substring(token.start, this.cursor);
-            token.type = definitions.keywords[id] || IDENTIFIER;
-            token.value = id;
-        },
-
-        /*
-         * Tokenizer.get :: void -> token type
-         *
-         * Consume input *only* if there is no lookahead.
-         * Dispatch to the appropriate lexing function depending on the input.
-         */
-        get: function (scanOperand) {
-            var token;
-            while (this.lookahead) {
-                --this.lookahead;
-                this.tokenIndex = (this.tokenIndex + 1) & 3;
-                token = this.tokens[this.tokenIndex];
-                if (token.type !== NEWLINE || this.scanNewlines)
-                    return token.type;
-            }
-
-            this.skip();
-
-            this.tokenIndex = (this.tokenIndex + 1) & 3;
-            token = this.tokens[this.tokenIndex];
-            if (!token)
-                this.tokens[this.tokenIndex] = token = {};
-
-            var input = this.source;
-            if (this.cursor === input.length)
-                return token.type = END;
-
-            token.start = this.cursor;
-            token.lineno = this.lineno;
-
-            var ch = input[this.cursor++];
-            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch === '$' || ch === '_') {
-                this.lexIdent(ch);
-            } else if (scanOperand && ch === '/') {
-                this.lexRegExp(ch);
-            } else if (ch in opTokens) {
-                this.lexOp(ch);
-            } else if (ch === '.') {
-                this.lexDot(ch);
-            } else if (ch >= '1' && ch <= '9') {
-                this.lexNumber(ch);
-            } else if (ch === '0') {
-                this.lexZeroNumber(ch);
-            } else if (ch === '"' || ch === "'") {
-                this.lexString(ch);
-            } else if (this.scanNewlines && ch === '\n') {
-                token.type = NEWLINE;
-                token.value = '\n';
-                this.lineno++;
-            } else {
-                throw this.newSyntaxError("Illegal token");
-            }
-
-            token.end = this.cursor;
-            return token.type;
-        },
-
-        /*
-         * Tokenizer.unget :: void -> undefined
-         *
-         * Match depends on unget returning undefined.
-         */
-        unget: function () {
-            if (++this.lookahead === 4) throw "PANIC: too much lookahead!";
-            this.tokenIndex = (this.tokenIndex - 1) & 3;
-        },
-
-        newSyntaxError: function (m) {
-            var e = new SyntaxError(m, this.filename, this.lineno);
-            e.source = this.source;
-            e.cursor = this.lookahead
-                       ? this.tokens[(this.tokenIndex + this.lookahead) & 3].start
-                       : this.cursor;
-            return e;
-        },
-    };
-
-    return { Tokenizer: Tokenizer };
-
-}());
+  return { Tokenizer: Tokenizer };
+})();

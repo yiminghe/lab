@@ -1,106 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta charset="utf-8"/>
-<title>图片上传预览</title>
-<style>
-    #preview {
+  <head>
+    <meta charset="utf-8" />
+    <title>图片上传预览</title>
+    <style>
+      #preview {
         filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod = 'scale');
         height: 200px;
         width: 200px;
         overflow: hidden;
-    }
+      }
 
-    #preview img {
+      #preview img {
         /* scale well for non-ie */
         max-height: 200px;
         max-width: 200px;
-    }
-</style>
-</head>
-<body>
+      }
+    </style>
+  </head>
+  <body>
+    <h1>上传预览</h1>
 
-<h1> 上传预览 </h1>
-
-<label>选择图片：<input type="file" id='f'/></label>
-<div id="preview">
-
-</div>
-<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
-<script>
-
-    KISSY.ready(function(S) {
-        var $ = S.all,UA = S.UA;
-        var f = $("#f"),preview = $("#preview"),img;
+    <label>选择图片：<input type="file" id="f" /></label>
+    <div id="preview"></div>
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js"></script>
+    <script>
+      KISSY.ready(function (S) {
+        var $ = S.all,
+          UA = S.UA;
+        var f = $('#f'),
+          preview = $('#preview'),
+          img;
 
         function resize() {
+          var img = $(this),
+            width = img.prop('width'),
+            height = img.prop('height');
+          if (width > height) {
+            height = (height * 200) / width;
+            width = 200;
+          } else {
+            width = (width * 200) / height;
+            height = 200;
+          }
+          img.prop({
+            width: width,
+            height: height,
+          });
 
-            var img = $(this),
-                    width = img.prop("width"),
-                    height = img.prop("height");
-            if (width > height) {
-                height = height * 200 / width;
-                width = 200;
-            } else {
-                width = width * 200 / height;
-                height = 200;
-            }
-            img.prop({
-                        width:width,
-                        height:height
-                    });
-
-            S.log("image.size: " + img.prop("fileSize"));
+          S.log('image.size: ' + img.prop('fileSize'));
         }
 
-        f.on("change", function() {
-            var fileSize ,
-                    files = f.prop("files"),
-                    filePath = f.val();
-            S.log("original filePath : " + filePath);
-            // http://acidmartin.wordpress.com/2009/06/09/the-mystery-of-cfakepath-unveiled/
-            // fake path
-            if (UA.ie > 6) {
-                try {
-                    f[0].select();
-                    filePath = document.selection.createRange().text;
-                } catch(e) {
-                    S.log("createRange error :");
-                    S.log(e);
-                }
+        f.on('change', function () {
+          var fileSize,
+            files = f.prop('files'),
+            filePath = f.val();
+          S.log('original filePath : ' + filePath);
+          // http://acidmartin.wordpress.com/2009/06/09/the-mystery-of-cfakepath-unveiled/
+          // fake path
+          if (UA.ie > 6) {
+            try {
+              f[0].select();
+              filePath = document.selection.createRange().text;
+            } catch (e) {
+              S.log('createRange error :');
+              S.log(e);
             }
+          }
 
-            S.log("filePath : " + filePath);
+          S.log('filePath : ' + filePath);
 
-            if (files) {
-                // the standard way to detect size
-                fileSize = files[0].fileSize;
-                S.log("files[0].fileSize : " + fileSize);
-                var r = new FileReader();
-                r.onload = function(ev) {
-                    preview.html("<img src='" + ev.target.result + "'/>");
-                };
-                r.readAsDataURL(files[0]);
-                return;
+          if (files) {
+            // the standard way to detect size
+            fileSize = files[0].fileSize;
+            S.log('files[0].fileSize : ' + fileSize);
+            var r = new FileReader();
+            r.onload = function (ev) {
+              preview.html("<img src='" + ev.target.result + "'/>");
+            };
+            r.readAsDataURL(files[0]);
+            return;
+          }
+          // ie6 can detect image size/width/height to resize
+          if (UA.ie == 6) {
+            img && img.detach();
+            preview.html('');
+            img = $("<img src='" + filePath + "'/>").appendTo(preview);
+            if (img.prop('complete')) {
+              resize.call(img);
+              S.log('image.size: ' + img.prop('fileSize'));
+            } else {
+              img.on('load', resize);
             }
-            // ie6 can detect image size/width/height to resize
-            if (UA.ie == 6) {
-                img && img.detach();
-                preview.html("");
-                img = $("<img src='" + filePath + "'/>").appendTo(preview);
-                if (img.prop("complete")) {
-                    resize.call(img);
-                    S.log("image.size: " + img.prop("fileSize"));
-                } else {
-                    img.on("load", resize);
-                }
-                return
-            }
-            // ie>6 more security about image except filter ,can not detact image size or with or height
-            preview.prop('filters').item("DXImageTransform.Microsoft.AlphaImageLoader").src = filePath;
+            return;
+          }
+          // ie>6 more security about image except filter ,can not detact image size or with or height
+          preview
+            .prop('filters')
+            .item('DXImageTransform.Microsoft.AlphaImageLoader').src = filePath;
         });
-    });
-
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

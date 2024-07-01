@@ -1,61 +1,64 @@
-.treeLite ul,.treeLite li {
-	list-style-type:none;
-	padding:0;
-	margin:0;
+.treeLite ul,
+.treeLite li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .treeLite .indent {
-	display:inline-block;
-	background-repeat:no-repeat;
-	border:0 none;
-	height:18px;
-	margin:0;
-	padding:0;
-	vertical-align:top;
-	width:16px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  border: 0 none;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  width: 16px;
 }
 
-.treeLite .line{
-	background-image:url(../images/elbow-line.gif);
+.treeLite .line {
+  background-image: url(../images/elbow-line.gif);
 }
 
-.treeLite .end{
-	background-image:url(../images/elbow-end.gif);
+.treeLite .end {
+  background-image: url(../images/elbow-end.gif);
 }
 
-.treeLite .cross{
-	background-image:url(../images/elbow.gif);
+.treeLite .cross {
+  background-image: url(../images/elbow.gif);
 }
 .treeLite .tree-node-group {
-	display:inline-block;
-	background-repeat:no-repeat;
-	border:0 none;
-	height:18px;
-	margin:0;
-	padding:0;
-	vertical-align:top;
-	width:16px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  border: 0 none;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  width: 16px;
 }
 
-.treeLite .folder-open{
-	background-image:url(../images/folder-open.gif);
+.treeLite .folder-open {
+  background-image: url(../images/folder-open.gif);
 }
 
-.treeLite .folder{
-	background-image:url(../images/folder.gif);
+.treeLite .folder {
+  background-image: url(../images/folder.gif);
 }
 
 .treeLite a.tree-node-collapse {
-	background-image:url(../images/elbow-plus.gif);
+  background-image: url(../images/elbow-plus.gif);
 }
 
 .treeLite a.tree-node-expand {
-	background-image:url(../images/elbow-minus.gif);
+  background-image: url(../images/elbow-minus.gif);
 }
 
-.treeLite a.nodeItem:link,.treeLite a.nodeItem:visited {
-	text-decoration:none;
+.treeLite a.nodeItem:link,
+.treeLite a.nodeItem:visited {
+  text-decoration: none;
 }
-.treeLite a.nodeItem:hover,.treeLite a.nodeItem:active {
-	text-decoration:underline;
+.treeLite a.nodeItem:hover,
+.treeLite a.nodeItem:active {
+  text-decoration: underline;
 }

@@ -1,104 +1,102 @@
 .uploadImgEnhancement {
-	height:35px;
-	padding:10px 0 0px 10px;
-	position:fixed;
-	top:10px;
-	right:10px;
-	background-color:yellow;
-	width:100px;
+  height: 35px;
+  padding: 10px 0 0px 10px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: yellow;
+  width: 100px;
 }
 
 .overTip {
-	position:absolute;
-	right:30px;
-	top:10px;
-	-webkit-box-shadow: #CCC 10px 10px 10px;
-	background-color: yellow;
-	border: 2px solid gray;
-	border-bottom-left-radius: 10px 10px;
-	border-bottom-right-radius: 10px 10px;
-	border-top-left-radius: 10px 10px;
-	border-top-right-radius: 10px 10px;
-	padding: 5px 5px;
-	width: 150px;
+  position: absolute;
+  right: 30px;
+  top: 10px;
+  -webkit-box-shadow: #ccc 10px 10px 10px;
+  background-color: yellow;
+  border: 2px solid gray;
+  border-bottom-left-radius: 10px 10px;
+  border-bottom-right-radius: 10px 10px;
+  border-top-left-radius: 10px 10px;
+  border-top-right-radius: 10px 10px;
+  padding: 5px 5px;
+  width: 150px;
 }
 #tabpanel_test .panel img.loadingImg {
-	position:absolute;
-	visibility:hidden;
-	cursor: pointer;
+  position: absolute;
+  visibility: hidden;
+  cursor: pointer;
 }
-#tabpanel_test .panel img.realImg{
-	cursor: pointer;
+#tabpanel_test .panel img.realImg {
+  cursor: pointer;
 }
 #tabpanel_test .panel img.replaceImg {
-	width:100px;
-	height:100px;
-	display:block;
-	cursor: pointer;
-	margin:0 auto;
+  width: 100px;
+  height: 100px;
+  display: block;
+  cursor: pointer;
+  margin: 0 auto;
 }
 .windowContainer {
-	position:absolute;
+  position: absolute;
 }
 
-.window-header-l{
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/blue_skin.png);
-
+.window-header-l {
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/blue_skin.png);
 }
 
 .x-tool {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/tool-sprites.gif);
-	
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/tool-sprites.gif);
 }
 
 .window-body-mc {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/cols_stripe.gif);
-	
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/base/images/aol/cols_stripe.gif);
 }
-#tabpanel_test ul,#tabpanel_test li{
-	margin:0;
-	padding:0;
+#tabpanel_test ul,
+#tabpanel_test li {
+  margin: 0;
+  padding: 0;
 }
 #tabpanel_test ul.tabpanel_nav {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-strip-bg.gif);
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-strip-bg.gif);
 }
 
 #tabpanel_test .tabpanel_nav li a.tab_left {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
 #tabpanel_test .tabpanel_nav li em.tab_right {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
 #tabpanel_test .tabpanel_nav li span.tab_inner {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tabs-sprite.gif);
 }
 
 #tabpanel_test li.x-tab-strip-closable a.x-tab-strip-close {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-close.gif);
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/tab-close.gif);
 }
 
 #tabpanel_test .x-tab-scrolling a.x-tab-scroller-left {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-left.gif);
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-left.gif);
 }
 
 #tabpanel_test .x-tab-scrolling a.x-tab-scroller-right {
-	background-image:url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-right.gif);
+  background-image: url(http://lite-ext.googlecode.com/svn/trunk/lite-ext/TabPanelLite/images/scroll-right.gif);
 }
 #tabpanel_test .panels .panel {
-	padding:0;
-	background:none;
+  padding: 0;
+  background: none;
 }
 
 #tabpanel_test ol.upTip {
-	list-style-position:inside;
-	list-style-type:decimal;
+  list-style-position: inside;
+  list-style-type: decimal;
 }
 a.tool-help {
-  background-position:0 -300px;
+  background-position: 0 -300px;
 }
-  
+
 a.tool-help:hover {
-  background-position:-15px -300px;
+  background-position: -15px -300px;
 }
