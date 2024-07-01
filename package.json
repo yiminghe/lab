@@ -6,8 +6,8 @@
   "description": "my lab",
   "dependencies": {
     "husky": "9.x",
-    "pretty-quick": "3.x",
-    "prettier": "^3.0.3"
+    "pretty-quick": "4.x",
+    "prettier": "3.x"
   },
   "scripts": {
     "format": "prettier --config ./prettier.config.js --ignore-path ./.prettierignore ./ --write",

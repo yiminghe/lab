@@ -12,9 +12,9 @@
     "dist"
   ],
   "devDependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.4",
+    "react": "rc",
+    "react-dom": "rc",
+    "next": "rc",
     "ts-node": "10.x",
     "chunks-webpack-plugin": "11.x",
     "webpack-dev-server": "5.x",
