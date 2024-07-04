@@ -1,12 +1,12 @@
 {
   "name": "load-next-webpack-config",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./dist/cjs/index.js",
   "module": "./dist/mjs/index.js",
   "types": "./dist/cjs/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yiminghe/load-next-webpack-config"
+    "url": "https://github.com/yiminghe/lab/tree/master/playground/load-next-webpack-config"
   },
   "files": [
     "dist"
