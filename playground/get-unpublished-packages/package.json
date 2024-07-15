@@ -1,8 +1,9 @@
 {
-    "name":"@yiminghe/get-unpublished-packages",
-    "version": "0.0.1",
-    "main":"./index.js",
-    "dependencies": {
-      "@yiminghe/shell-exec":"0.0.1"
-    }
+  "name":"@yiminghe/get-unpublished-packages",
+  "version": "0.0.2",
+  "main":"./index.js",
+  "dependencies": {
+    "@manypkg/get-packages":"2.x",
+    "@yiminghe/shell-exec":"0.0.1"
   }
+}
