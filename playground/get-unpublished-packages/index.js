@@ -49,13 +49,13 @@ async function infoAllow404(packageJson) {
     return { published: false, pkgInfo: {} };
   }
   if (pkgInfo.error) {
-    error(
+    console.error(
       `Received an unknown error code: ${
         pkgInfo.error.code
       } for npm info ${`"${packageJson.name}"`}`,
     );
-    error(pkgInfo.error.summary);
-    if (pkgInfo.error.detail) error(pkgInfo.error.detail);
+    console.error(pkgInfo.error.summary);
+    if (pkgInfo.error.detail) console.error(pkgInfo.error.detail);
 
     throw new ExitError(1);
   }
