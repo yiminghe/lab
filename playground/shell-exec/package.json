@@ -1,6 +1,6 @@
 {
-    "name": "@yiminghe/shell-exec",
-    "version": "0.0.1",
-    "main": "./exec.js"
-  }
-  
+  "name": "@yiminghe/shell-exec",
+  "version": "0.0.2",
+  "main": "./exec.js",
+  "bin": "./bin.js"
+}
