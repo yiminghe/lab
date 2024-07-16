@@ -57,7 +57,7 @@ async function infoAllow404(packageJson) {
     console.error(pkgInfo.error.summary);
     if (pkgInfo.error.detail) console.error(pkgInfo.error.detail);
 
-    throw new ExitError(1);
+    throw new Error('1');
   }
   return { published: true, pkgInfo };
 }
