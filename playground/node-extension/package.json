@@ -1,0 +1,17 @@
+{
+  "name": "@yiminghe/node-extension",
+  "version": "0.0.2",
+  "files": [
+    "index.js",
+    "register.js"
+  ],
+  "dependencies": {
+    "resolve": "^1.22.8"
+  },
+  "devDependencies": {
+    "react": "^18.3.1"
+  },
+  "scripts": {
+    "test": "node --experimental-transform-types --import=./register.js tests/index"
+  }
+}
