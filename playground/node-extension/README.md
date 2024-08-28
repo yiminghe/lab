@@ -7,5 +7,5 @@ console.log(x);
 ```
 run:
 ```
-node --experimental-transform-types --import=@yiminghe/node-extension/register tests/index
+node --experimental-transform-types --import=@yiminghe/node-extension/register.js index
 ```
