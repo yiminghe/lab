@@ -45,7 +45,7 @@ export async function check({
   let repoRoot = process.cwd();
   try {
     repoRoot = await git.revparse(['--show-toplevel']);
-  } catch (e: any) {}
+  } catch (e: any) { }
 
   if (pull_number && owner && repo) {
     const { Octokit } = await import('octokit');
@@ -59,13 +59,26 @@ export async function check({
       pull_number,
     });
 
-    let lastCommit = pr.data.base.sha;
+    // let lastCommit = pr.data.base.sha;
     let currentCommit = pr.data.head.sha;
 
-    await ensureSha(lastCommit);
-    await ensureSha(currentCommit);
+    // await ensureSha(lastCommit);
+    // await ensureSha(currentCommit);
 
-    const diffString = await git.diff([lastCommit, currentCommit]);
+    // wrong: const diffString = await git.diff([lastCommit, currentCommit]);
+    // right: const diffString = shell.exec(`git diff ${lastCommit}...{currentCommit}`);
+    // better
+    const diffString = (
+      await octokit.rest.pulls.get({
+        owner,
+        repo,
+        pull_number,
+        mediaType: {
+          format: 'diff',
+        },
+      })
+    ).data as unknown as string;
+
     const diff = parseGitDiff(diffString);
 
     const fileInfo: Record<string, Set<number>> = {};
