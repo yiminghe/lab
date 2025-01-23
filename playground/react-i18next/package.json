@@ -1,0 +1,21 @@
+{
+  "name": "@yiminghe/react-i18next",
+  "version": "15.4.0",
+  "types": "./types/index.d.mts",
+  "module": "./es/index.js",
+  "files": ["es","types"],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+},
+  "dependencies": {
+    "html-parse-stringify": "^3.0.1"
+  },
+  "devDependencies": {
+    "@swc/cli":"0.4.x",
+    "@swc/core":"1.x",
+    "i18next":"24.x"
+  },
+  "scripts": {
+    "build":"rm -rf es dist && swc src -d dist --config-file ./scripts/es.json && mv dist/src es && rm -rf dist"
+  }
+}
