@@ -1,6 +1,14 @@
 {
   "name": "@yiminghe/shell-exec",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "./exec.js",
-  "bin": "./bin.js"
+  "bin": "./bin.js",
+  "types": "./exec.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@types/node": "22.x"
+  }
 }
