@@ -1,0 +1,26 @@
+{
+  "name": "@yiminghe/async-cache",
+  "version": "0.0.1",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "9.35.0",
+    "eslint": "9.35.0",
+    "eslint-config-next": "^15.0.0",
+    "next": "^15.5.6",
+    "ts-node": "10.x",
+    "typescript": "5.x"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "lint":"tsc --noEmit && eslint src",
+    "build": "rm -rf dist && tsc -p tsconfig-build.json && tsc -p tsconfig-build-cjs.json"
+  }
+}
