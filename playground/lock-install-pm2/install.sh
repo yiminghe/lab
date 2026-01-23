@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PWD_DIR=$(pwd)
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Create directory and install pm2
@@ -8,6 +9,8 @@ cp "$SCRIPT_DIR/pm2/package.json" ~/pm2/
 cp "$SCRIPT_DIR/pm2/package-lock.json" ~/pm2/
 cd ~/pm2
 npm install
+
+cd $PWD_DIR
 
 # Add ~/pm2/node_modules/.bin to PATH
 export PATH="$HOME/pm2/node_modules/.bin:$PATH"
