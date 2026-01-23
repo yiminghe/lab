@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "pm2-prom-module": "^2.7.1"
+  }
+}
