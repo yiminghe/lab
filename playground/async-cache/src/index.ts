@@ -13,7 +13,7 @@ export function getCacheItem<T = any>(key: string): CacheItem<T> | undefined {
   return globalCache.get(key);
 }
 
-export function cacheAsync<T extends (...args: any[]) => any>(
+export function cacheAsync<T extends (...args: any[]) => Promise<any>>(
   keyFn: (...args: Parameters<T>) => string,
   expire: number,
   fn: T,
@@ -42,6 +42,7 @@ export function cacheAsync<T extends (...args: any[]) => any>(
         }
       })
     }
+    // stale-while-invalidate
     return (cache.ok || cache.p) as Promise<any>;
   }
 
