@@ -14,5 +14,5 @@
     "format:staged": "pretty-quick --staged",
     "prepare": "husky"
   },
-  "packageManager": "pnpm@11.13.0"
+  "packageManager": "pnpm@11.18.0"
 }
